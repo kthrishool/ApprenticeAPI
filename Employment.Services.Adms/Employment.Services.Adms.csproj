@@ -1,0 +1,80 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>net5.0</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TargetFrameworkProfile />
+    <InfrastructurePackageVersion>9.0.0-alpha9</InfrastructurePackageVersion>
+  </PropertyGroup>
+    <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Employment.Services.Adms.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+    <NoWarn>1701;1702;1603</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Employment.Services.Adms.UnitTests, PublicKey=e459504b0a06bbb4</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Business\AdmsBusiness.cs" />
+    <Compile Include="Model\RelatedCode.cs" />
+    <Compile Include="Model\RelatedCodeRequest.cs" />
+    <Compile Include="Mapper\AdmsMaps.cs" />
+    <Compile Include="Controller\RelatedCodesV1Controller.cs" />
+    <Compile Include="Repository\IAdmsRepository.cs" />
+    <Compile Include="Repository\AdmsRepository.cs" />
+    <Compile Include="ServiceInterface\IAdmsService.cs" />
+    <Compile Include="Service\AdmsService.cs" />
+  </ItemGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="Employment.Infrastructure.Cache" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="Employment.Services.Infrastructure.Contract" Version="8.1.0" />
+		<PackageReference Include="Employment.Services.Infrastructure.Core" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="Employment.Services.Infrastructure.Data" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="Employment.Services.Infrastructure.Model" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="Employment.Services.Infrastructure.Service" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="Employment.Services.Infrastructure.WebApi" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="5.0.0" />
+		<PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
+		<PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
+		<PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+		<PackageReference Include="System.Net.Http.WinHttpHandler" Version="5.0.0" />
+		<PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
+		<PackageReference Include="System.Net.NetworkInformation" Version="4.3.0" />
+		<PackageReference Include="System.Net.Requests" Version="4.3.0" />
+		<PackageReference Include="System.Net.Security" Version="4.3.2" />
+		<PackageReference Include="System.Net.WebHeaderCollection" Version="4.3.0" />
+		<PackageReference Include="System.Security.Cryptography.OpenSsl" Version="5.0.0" />
+		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Employment.Services.Adms.Contract\Employment.Services.Adms.Contract.csproj">
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Employment.Services.Adms.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+</Project>

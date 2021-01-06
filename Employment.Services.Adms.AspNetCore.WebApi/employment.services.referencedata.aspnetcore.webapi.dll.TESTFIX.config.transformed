@@ -1,0 +1,191 @@
+<?xml version="1.0"?>
+<configuration>
+  <configSections>
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false"/>
+    <section name="employment.typeMapper" type="Employment.Services.Infrastructure.Core.Configuration.TypeMapperSection, Employment.Services.Infrastructure.Core"/>
+    <section name="employment.authorizationConfiguration" type="Employment.Infrastructure.Security.Config.AuthorizationConfigurationSection, Employment.Infrastructure.Security"/>
+    <section name="employment.webApiClient" type="Employment.Services.Infrastructure.WebApiClient.Configuration.WebApiClientSection, Employment.Services.Infrastructure.WebApiClient"/>
+    <section name="employment.swagger" type="Employment.Services.Infrastructure.WebApi.Documentation.Configuration.SwaggerSection, Employment.Services.Infrastructure.WebApi"/>
+    <section name="employment.webApi" type="Employment.Services.Infrastructure.WebApi.Configuration.WebApiSection, Employment.Services.Infrastructure.WebApi"/>
+    <section name="employment.serviceRequestMessages" type="Employment.Services.Infrastructure.Service.Configuration.ServiceRequestMessagesSection, Employment.Services.Infrastructure.Service"/>
+    <section name="employment.requestResponseLog" type="Employment.Services.Infrastructure.WebApi.Configuration.RequestResponseLogSection, Employment.Services.Infrastructure.WebApi"/>
+    <sectionGroup name="serviceLogging">
+      <section name="serviceLog" requirePermission="false" type="Employment.Services.Infrastructure.Logging.LoggingSectionHandler, Employment.Services.Infrastructure.Logging"/>
+    </sectionGroup>
+  </configSections>
+  <employment.requestResponseLog enabled="true" logAlways="false"
+  	logStatusCode="true" logMethod="true"
+  	logElapsedTime="true" logRequestUri="true"
+  	logRequestOnError="true" logResponseOnError="true"/>
+  <employment.swagger tryItOutEnabled="false" host="webapi.edc.hosts.testfixnetwork"/>
+  <serviceLogging>
+    <serviceLog level="error" type="Employment.Services.Infrastructure.Logging.ApiSqlServiceLog, Employment.Services.Infrastructure.Logging" connectionStringName="EALogging" applicationName="ReferenceData"/>
+  </serviceLogging>
+  <entityFramework>
+    <defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework">
+      <parameters>
+        <parameter value="v11.0"/>
+      </parameters>
+    </defaultConnectionFactory>
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer"/>
+    </providers>
+  </entityFramework>
+  <appSettings>
+      <add key="IgnoreVersionHeader" value="true" />
+	  <add key="aspnet:UseTaskFriendlySynchronizationContext" value="true"/>
+    <!-- Active Directory settings-->
+    <add key="SupportedContracts" value="EPS5,WDC5,DESA,DESB,NEI5,HLS5,NPA,JAP,CWCA"/>
+    <add key="Environment" value="TESTFIX"/>
+    <add key="EssUserCacheDurationMinutes" value="15"/>
+    <!-- minutes to keep the ess business objects for a user cached -->
+    <add key="DirectoryOnlyProfiling" value="false"/>
+    <!-- true = directory based only; false = mixed mode -->
+    <add key="UserCaching" value="true"/>
+    <!-- true = cache user objects; false = do not cahace user objects -->
+  </appSettings>
+  <connectionStrings>
+    <add name="Db_ConnADW" connectionString="Data Source=ESGSQLTF;Initial Catalog=ADW;Integrated Security=SSPI"
+      providerName="System.Data.SqlClient"/>
+    <add name="EALogging" connectionString="Data Source=ESGSQLTF;Initial Catalog=EALogging;Integrated Security=SSPI"
+      providerName="System.Data.SqlClient"/>
+    <add name="Db_ESam" connectionString="Data Source=ESGSQLTS;Initial Catalog=ESAM;Integrated Security=True"
+      providerName="System.Data.SqlClient"/>
+    <add name="EmpDbContext"
+      connectionString="Data Source=DRDMTPSQLTF.datasources.network;Initial Catalog=Emp;Integrated Security=SSPI;MultipleActiveResultSets=True;"
+      providerName="System.Data.SqlClient"/>
+    <add name="Igas" connectionString="Data Source=DRDSQLES47.datasources.devnetwork;Initial Catalog=iGasSearch;Integrated Security=SSPI"
+      providerName="System.Data.SqlClient"/>
+    <add name="IgasSpatial" connectionString="Data Source=DRDSQLES47.datasources.devnetwork;Initial Catalog=iGasSpatial;Integrated Security=SSPI"
+      providerName="System.Data.SqlClient"/>
+    <add name="InfrastructureStore"
+      connectionString="Data Source=ESGSQLTF;Initial Catalog=InfrastructureStore;Integrated Security=True;enlist=false"
+      providerName="System.Data.SqlClient"/>
+    <add name="RequestResponse"
+      connectionString="Data Source=ESGSQLTF;Initial Catalog=EALogging;Integrated Security=SSPI;Enlist=false"
+      providerName="System.Data.SqlClient"/>
+    <add name="RequestResponseRingBuffer"
+      connectionString="Data Source=ESGSQLTF;Initial Catalog=EALoggingMO;Integrated Security=SSPI;Enlist=false"
+      providerName="System.Data.SqlClient"/>
+    
+  </connectionStrings>
+  <employment.typeMapper>
+    <types>
+      <add name="Authoriser" type="Employment.Infrastructure.Security.Authorisation.IAuthoriser, Employment.Infrastructure.Security"
+        mapTo="Employment.Infrastructure.Security.Authorisation.PrincipalActivityAuthoriser, Employment.Infrastructure.Security"/>
+      <add name="ServiceRequestRepository"
+        type="Employment.Services.Infrastructure.Service.Interface.IServiceRequestMessageRepository`2, Employment.Services.Infrastructure.Service"
+        mapTo="Employment.Services.Infrastructure.Service.Repository.ServiceRequestMessageRepository`2, Employment.Services.Infrastructure.Service"/>
+      <add name="ReferenceDataService" type="Employment.Services.ReferenceData.ServiceInterface.IReferenceDataService, Employment.Services.ReferenceData" mapTo="Employment.Services.ReferenceData.Service.ReferenceDataService, Employment.Services.ReferenceData"/>
+      <add name="UserService" type="Employment.Services.ReferenceData.ServiceInterface.IUserService, Employment.Services.ReferenceData" mapTo="Employment.Services.ReferenceData.Service.UserService, Employment.Services.ReferenceData"/>
+      <add name="ReferenceDataRepository" type="Employment.Services.ReferenceData.Repository.IReferenceDataRepository, Employment.Services.ReferenceData" mapTo="Employment.Services.ReferenceData.Repository.ReferenceDataRepository, Employment.Services.ReferenceData"/>
+      <add name="UserRepository" type="Employment.Services.ReferenceData.Repository.IUserRepository, Employment.Services.ReferenceData"
+        mapTo="Employment.Services.ReferenceData.Repository.UserRepository, Employment.Services.ReferenceData"/>
+      <add name="EmploymentWebApiClient" type="Employment.Services.Infrastructure.Core.Interface.IEmploymentWebApiClient, Employment.Services.Infrastructure.Core" mapTo="Employment.Services.Infrastructure.WebApiClient.ApiClient.EmploymentWebApiClient, Employment.Services.Infrastructure.WebApiClient"/>
+      <add name="Logger" type="Employment.Services.Infrastructure.Core.Interface.ILogger, Employment.Services.Infrastructure.Core"
+        mapTo="Employment.Services.Infrastructure.Logging.XLogger, Employment.Services.Infrastructure.Logging"/>
+      <add name="User" type="Employment.Services.Infrastructure.Core.Interface.IUser, Employment.Services.Infrastructure.Core"
+        mapTo="Employment.Services.Infrastructure.Core.Identity.User, Employment.Services.Infrastructure.Core"/>
+      <!-- Features -->
+      <add name="FeatureToggle" type="Employment.Infrastructure.Feature.IFeatureToggle, Employment.Infrastructure.Feature" mapTo="Employment.Services.ReferenceData.Repository.FeatureToggleWrapper, Employment.Services.ReferenceData"/>
+      <add name="FeatureService" type="Employment.Services.ReferenceData.ServiceInterface.IFeatureService, Employment.Services.ReferenceData" mapTo="Employment.Services.ReferenceData.Service.FeatureService, Employment.Services.ReferenceData"/>
+      <add name="FeatureRepository" type="Employment.Services.ReferenceData.Repository.IFeatureRepository, Employment.Services.ReferenceData" mapTo="Employment.Services.ReferenceData.Repository.FeatureRepository, Employment.Services.ReferenceData"/>
+      <!-- Features -->
+      <add name="CustomerService" type="Employment.Services.ReferenceData.ServiceInterface.ICustomerService, Employment.Services.ReferenceData" mapTo="Employment.Services.ReferenceData.Service.CustomerService, Employment.Services.ReferenceData"/>
+      <add name="CustomerRepository" type="Employment.Services.ReferenceData.Repository.ICustomerRepository, Employment.Services.ReferenceData" mapTo="Employment.Services.ReferenceData.Repository.CustomerRepository, Employment.Services.ReferenceData"/>
+      <add name="CacheRepository" type="Employment.Infrastructure.Cache.ICacheRepository, Employment.Infrastructure.Cache" mapTo="Employment.Infrastructure.Cache.MemoryCacheRepository, Employment.Infrastructure.Cache"/>
+      <add name="CacheOutput" type="Employment.Infrastructure.Cache.ICacheOutput, Employment.Infrastructure.Cache" mapTo="Employment.Infrastructure.Cache.MemoryCacheRepository, Employment.Infrastructure.Cache"/>
+      <add name="AutocompleteAddress" type="Employment.Services.ReferenceData.ServiceInterface.IIgasService, Employment.Services.ReferenceData" mapTo="Employment.Services.ReferenceData.Service.IgasService, Employment.Services.ReferenceData"/>
+      <add name="IgasRepository" type="Employment.Services.ReferenceData.Repository.IIgasRepository, Employment.Services.ReferenceData" mapTo="Employment.Services.ReferenceData.Repository.IgasRepository, Employment.Services.ReferenceData"/>
+    </types>
+  </employment.typeMapper>
+  <employment.authorizationConfiguration>
+    <apiAuthorization authorizationOnly="true"/>
+  </employment.authorizationConfiguration>
+  <employment.webApiClient allowSpecifiedDateTime="true" throwAggregateException="true" usePerRequestCache="false" usePerRequestCacheIfFeatureEnabled="true" useConnectionTimeout="false" useConnectionTimeoutIfFeatureEnabled="true" useConnectionClose="false" useConnectionCloseIfFeatureEnabled="true" denySpecifiedDateTimeForSystemToSystem="false" denySpecifiedDateTimeForSystemToSystemIfFeatureEnabled="true">
+    <WebApiSecurity jwtEnabled="true">
+    </WebApiSecurity>
+    <WebApiResources>
+      <WebApiResource name="Configuration" uri="" functionalArea="Authorisation">
+        <Methods>
+          <Method name="Get" uri="/CurrentConfiguration" />
+        </Methods>
+      </WebApiResource>
+    </WebApiResources>
+    <FunctionalAreas>
+      <FunctionalArea name="Default" host="TestFix" url="/Default/api" /><FunctionalArea name="DocumentStore" host="TestFix" url="/DocumentStore/api"/><FunctionalArea name="JobSeeker" host="TestFix" url="/JobSeeker/api"/><FunctionalArea name="ReferralManagement" host="TestFix" url="/ReferralManagement/api"/><FunctionalArea name="Assessment" host="TestFix" url="/Assessment/api"/><FunctionalArea name="Payment" host="TestFix" url="/Payment/api"/><FunctionalArea name="Activity" host="TestFix" url="/Activity/api"/><FunctionalArea name="Contract" host="TestFix" url="/Contract/api"/>
+    </FunctionalAreas>
+    <Hosts>
+      <Host name="TestFix" url="http://webapi.edc.hosts.testfixnetwork/TESTFIX" />
+    </Hosts>
+  </employment.webApiClient>
+  <employment.webApi>
+    <unauthorizedException returnDetailedInformation="true"/>
+    <internalServerError returnDetailedInformation="true"/>
+    <userContext allowSpecifiedDateTime="true"
+      denySpecifiedDateTimeForSystemToSystem="false"
+      denySpecifiedDateTimeForSystemToSystemIfFeatureEnabled="false"/>
+    <corsContext allowCors="false"/>
+    <jwtSecurity enabled="true" federationMetadata="https://sts.dev.construction.enet/federationmetadata/2007-06/federationmetadata.xml">
+      <audiences>
+        <add audience="http://jobsearch.idc.hosts.testfixnetwork/" />
+<add audience="http://jobseekermobile.testfix.idc.hosts.network/testfix/rest/" />
+<add audience="urn:api:activity:testfix" />
+<add audience="urn:api:administration:testfix" />
+<add audience="urn:api:agreement:testfix" />
+<add audience="urn:api:assessment:testfix" />
+<add audience="urn:api:authorisation:testfix" />
+<add audience="urn:api:casemanagement:testfix" />
+<add audience="urn:api:claim:testfix" />
+<add audience="urn:api:communication:testfix" />
+<add audience="urn:api:compliance:testfix" />
+<add audience="urn:api:contentmanagement:testfix" />
+<add audience="urn:api:contract:testfix" />
+<add audience="urn:api:diary:testfix" />
+<add audience="urn:api:documentstore:testfix" />
+<add audience="urn:api:documenttransactions:testfix" />
+<add audience="urn:api:employer:testfix" />
+<add audience="urn:api:ess:testfix" />
+<add audience="urn:api:fund:testfix" />
+<add audience="urn:api:jobsearch:testfix" />
+<add audience="urn:api:jobseeker:testfix" />
+<add audience="urn:api:programassurance:testfix" />
+<add audience="urn:api:referencedata:testfix" />
+<add audience="urn:api:referralmanagement:testfix" />
+<add audience="urn:api:reports:testfix" />
+<add audience="urn:api:webapi:acd:testfix" />
+<add audience="urn:api:xapi:testfix" />
+<add audience="urn:asp:hydrafwh:testfix" />
+<add audience="urn:asp:jobsearchfwh:testfix" />
+<add audience="urn:dll:background:testfix" />
+<add audience="urn:dll:cagen:testfix" />
+<add audience="urn:dll:mqprocess:testfix" />
+<add audience="urn:dll:servicebus:testfix" />
+<add audience="urn:mcia:mcia:testfix" />
+<add audience="urn:mvc:esrportal:testfix" />
+<add audience="urn:mvc:essweb:testfix" />
+<add audience="urn:mvc:esswebinternal:testfix" />
+<add audience="urn:mvc:joacsecure:testfix" />
+<add audience="urn:mvc:jobsearch:testfix" />
+<add audience="urn:mvc:pat:testfix" />
+<add audience="urn:mvc:rjcp:testfix" />
+<add audience="urn:mvc:ess:testfix" />
+<add audience="urn:wcf:wcfinternal:testfix" />
+      </audiences>
+      <delegatedIssuers>
+        <add issuer="urn:iss:background:testfix" thumbprint="1BA3085C000DBD3A4BB4A02753C0352869972A7F" />
+<add issuer="urn:iss:cagen:testfix" thumbprint="A0C338025ABFE091EBAF568A27E5A63BBF6F2C5C" />
+<add issuer="urn:iss:fwh:testfix" thumbprint="CDB010E2D912B089EE7F244A4DC5F189E58B0922" />
+<add issuer="urn:iss:hydrafwh:testfix" thumbprint="16CDD247AD1AACDF6722454B4D4EE1E932825CE6" />
+<add issuer="urn:iss:joacsecure:testfix" thumbprint="8C9EFE6D0D8D8F8DF90EC44425CDAF53121E11C5" />
+<add issuer="urn:iss:jobsearchfwh:testfix" thumbprint="F6DA66FA724F175895044F0BCF8DB04F0252CE4C" />
+<add issuer="urn:iss:mcia:testfix" thumbprint="AB6743DE9230ED3A328FAF0E1A036847933114B7" />
+<add issuer="urn:iss:mqprocess:testfix" thumbprint="A0D2C07B8175F3C6DCB18ED01E23E715BC3BD79A" />
+<add issuer="urn:iss:rjcp:testfix" thumbprint="6A4CE5258FEDE59ED05675021BA27AC47FC4400D" />
+<add issuer="urn:iss:servicebus:testfix" thumbprint="B699C713C09425870441C57CE993ADA563B80B1A" />
+<add issuer="urn:iss:wcfinternal:testfix" thumbprint="ADEB3659F622C807F2F69EE40747EC1B0EBD7F30" />
+      </delegatedIssuers>
+    </jwtSecurity>
+  </employment.webApi>
+  <employment.serviceRequestMessages connectionStringName="Db_ConnADW"/>
+</configuration>

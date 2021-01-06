@@ -1,0 +1,149 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net5.0</TargetFrameworks>
+  </PropertyGroup>
+    <PropertyGroup>
+    <ProjectGuid>{B61292A3-D67D-42D0-AB40-AD220AF4024B}</ProjectGuid>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\Employment.Services.Adms.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <InfrastructurePackageVersion>9.0.0-alpha9</InfrastructurePackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Mapper\AdmsMapsTests.cs" />
+    <Compile Include="SwaggerTests.cs" />
+    <Compile Include="DiscoveryTests.cs" />
+    <Compile Include="MockContext.cs" />
+    <Compile Include="MockDataSource.cs" />
+    <Compile Include="Controller\RelatedCodesV1ControllerTests.cs" />
+    <Compile Include="MockAdmsRepository.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+		<PropertyGroup Condition="'$(TargetFramework)' == 'net5.0' ">
+		<DefineConstants>NET5_0</DefineConstants>
+	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1701;1702;1591;</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1591;</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1701;1702;1591;</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1591;</NoWarn>
+  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>1701;1702;1591;</NoWarn>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>1591;</NoWarn>
+	</PropertyGroup>
+	<ItemGroup>
+	  <PackageReference Include="System.Security.Cryptography.OpenSsl" Version="5.0.0" />
+	  <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Employment.Services.Adms.AspNetCore.WebApi\Employment.Services.Adms.AspNetCore.WebApi.csproj" />
+    <ProjectReference Include="..\Employment.Services.Adms.Contract\Employment.Services.Adms.Contract.csproj">
+    </ProjectReference>
+    <ProjectReference Include="..\Employment.Services.Adms\Employment.Services.Adms.csproj" />
+  </ItemGroup>
+
+
+
+
+	<ItemGroup>
+		<PackageReference Include="Employment.Infrastructure.Cache" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="Employment.Services.Infrastructure.Testing" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="Employment.Services.Infrastructure.Contract" Version="8.1.0" />
+		<PackageReference Include="Employment.Services.Infrastructure.Core" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="Employment.Services.Infrastructure.Data" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="Employment.Services.Infrastructure.Model" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="Employment.Services.Infrastructure.Service" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="EntityFramework" Version="6.4.4" />
+		<PackageReference Include="Castle.Core" Version="4.4.1" />
+		<!--<PackageReference Include="Moq" Version="4.14.5" />-->
+		<PackageReference Include="Microsoft.SqlServer.DacFx" Version="150.4897.1" />
+		<PackageReference Include="Microsoft.OpenApi" Version="1.2.3" />
+		<PackageReference Include="Microsoft.OpenApi.Readers" Version="1.2.3" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.8.0" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+		<PackageReference Include="SimpleInjector" Version="5.0.4" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
+		<PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
+		<PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.WebApiCompatShim" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0" />
+		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.0" />
+		<PackageReference Include="System.ServiceProcess.ServiceController" Version="5.0.0" />
+		<PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
+		<PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
+		<PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+		<PackageReference Include="System.Net.Http.WinHttpHandler" Version="5.0.0" />
+		<PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
+		<PackageReference Include="System.Net.NetworkInformation" Version="4.3.0" />
+		<PackageReference Include="System.Net.Requests" Version="4.3.0" />
+		<PackageReference Include="System.Net.Security" Version="4.3.2" />
+		<PackageReference Include="System.Net.WebHeaderCollection" Version="4.3.0" />
+		<PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+	</ItemGroup>
+
+
+
+
+	<ItemGroup>
+	  <Folder Include="Business\" />
+	</ItemGroup>
+	
+
+
+
+
+	<Target Name="CopyCustomContent1" AfterTargets="AfterBuild">
+		<Copy SourceFiles="app.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
+	</Target>
+	<Target Name="CopyCustomContent2" AfterTargets="AfterBuild">
+		<Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.x86.dll.config" />
+	</Target>
+	<Target Name="CopyCustomContent3" AfterTargets="AfterBuild">
+		<Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.x64.dll.config" />
+	</Target>
+
+</Project>

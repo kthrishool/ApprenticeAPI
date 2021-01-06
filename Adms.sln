@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D6BC9D08-270A-4264-A028-4A3F64D6E8C3}"
+	ProjectSection(SolutionItems) = preProject
+		Employment.Services.Adms.snk = Employment.Services.Adms.snk
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Employment.Services.Adms.Contract", "Employment.Services.Adms.Contract\Employment.Services.Adms.Contract.csproj", "{8BF4B537-382F-48E3-A65E-FA40DF018AB5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7A406BB8-9FC9-4703-8E3D-B82BE8CF6C49}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Employment.Services.Adms.UnitTests", "Employment.Services.Adms.UnitTests\Employment.Services.Adms.UnitTests.csproj", "{B61292A3-D67D-42D0-AB40-AD220AF4024B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Employment.Services.Adms", "Employment.Services.Adms\Employment.Services.Adms.csproj", "{6676E5FF-6814-43C0-AD24-57BD3836320F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Employment.Services.Adms.AspNetCore.WebApi", "Employment.Services.Adms.AspNetCore.WebApi\Employment.Services.Adms.AspNetCore.WebApi.csproj", "{3D8715C2-FA23-4FA5-B94E-B7AB21CC2F6A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8BF4B537-382F-48E3-A65E-FA40DF018AB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BF4B537-382F-48E3-A65E-FA40DF018AB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BF4B537-382F-48E3-A65E-FA40DF018AB5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8BF4B537-382F-48E3-A65E-FA40DF018AB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BF4B537-382F-48E3-A65E-FA40DF018AB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BF4B537-382F-48E3-A65E-FA40DF018AB5}.Release|x86.ActiveCfg = Release|Any CPU
+		{B61292A3-D67D-42D0-AB40-AD220AF4024B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B61292A3-D67D-42D0-AB40-AD220AF4024B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B61292A3-D67D-42D0-AB40-AD220AF4024B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B61292A3-D67D-42D0-AB40-AD220AF4024B}.Debug|x86.Build.0 = Debug|Any CPU
+		{B61292A3-D67D-42D0-AB40-AD220AF4024B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B61292A3-D67D-42D0-AB40-AD220AF4024B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B61292A3-D67D-42D0-AB40-AD220AF4024B}.Release|x86.ActiveCfg = Release|Any CPU
+		{B61292A3-D67D-42D0-AB40-AD220AF4024B}.Release|x86.Build.0 = Release|Any CPU
+		{6676E5FF-6814-43C0-AD24-57BD3836320F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6676E5FF-6814-43C0-AD24-57BD3836320F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6676E5FF-6814-43C0-AD24-57BD3836320F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6676E5FF-6814-43C0-AD24-57BD3836320F}.Debug|x86.Build.0 = Debug|Any CPU
+		{6676E5FF-6814-43C0-AD24-57BD3836320F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6676E5FF-6814-43C0-AD24-57BD3836320F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6676E5FF-6814-43C0-AD24-57BD3836320F}.Release|x86.ActiveCfg = Release|Any CPU
+		{6676E5FF-6814-43C0-AD24-57BD3836320F}.Release|x86.Build.0 = Release|Any CPU
+		{3D8715C2-FA23-4FA5-B94E-B7AB21CC2F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D8715C2-FA23-4FA5-B94E-B7AB21CC2F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D8715C2-FA23-4FA5-B94E-B7AB21CC2F6A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3D8715C2-FA23-4FA5-B94E-B7AB21CC2F6A}.Debug|x86.Build.0 = Debug|Any CPU
+		{3D8715C2-FA23-4FA5-B94E-B7AB21CC2F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D8715C2-FA23-4FA5-B94E-B7AB21CC2F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D8715C2-FA23-4FA5-B94E-B7AB21CC2F6A}.Release|x86.ActiveCfg = Release|Any CPU
+		{3D8715C2-FA23-4FA5-B94E-B7AB21CC2F6A}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FFCF3C0B-5ACC-4BAE-9342-BE57B8CE8EFF}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://esg-tfsserver:8080/tfs/esgcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Employment.Services.Adms\\Employment.Services.Adms.csproj
+		SccProjectName1 = Employment.Services.Adms
+		SccLocalPath1 = Employment.Services.Adms
+		SccProjectUniqueName2 = Employment.Services.Adms.AspNetCore.WebApi\\Employment.Services.Adms.AspNetCore.WebApi.csproj
+		SccProjectName2 = Employment.Services.Adms.AspNetCore.WebApi
+		SccLocalPath2 = Employment.Services.Adms.AspNetCore.WebApi
+		SccProjectUniqueName3 = Employment.Services.Adms.UnitTests\\Employment.Services.Adms.UnitTests.csproj
+		SccProjectName3 = Employment.Services.Adms.UnitTests
+		SccLocalPath3 = Employment.Services.Adms.UnitTests
+		SccProjectUniqueName4 = Employment.Services.Adms.Contract\\Employment.Services.Adms.Contract.csproj
+		SccProjectName4 = Employment.Services.Adms.Contract
+		SccLocalPath4 = Employment.Services.Adms.Contract
+	EndGlobalSection
+EndGlobal

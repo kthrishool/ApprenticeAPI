@@ -1,0 +1,514 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Employment.Services.ReferenceData.Contract</name>
+    </assembly>
+    <members>
+        <member name="T:Employment.Services.ReferenceData.Contract.AutocompleteAddressResponseV1">
+            <summary>
+            A possible match from an Autocomplete Address Search
+            </summary>
+            <remarks>Most data is source from the G-NAF dataset. Up to date descriptions of the G-NAF dataset can be found here: https://www.psma.com.au/products/g-naf </remarks>
+        </member>
+        <member name="M:Employment.Services.ReferenceData.Contract.AutocompleteAddressResponseV1.#ctor">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompleteAddressResponseV1.Id">
+            <summary>
+            The address identifier of the address
+            </summary>
+            <remarks>The address identifier is used within the iGas dataset as a short term primary key. Ongoing 
+            maintenance, for example, updating a source dataset - can cause identifiers for the same physical address
+            to change. As such the identifier should only be used for lookups occuring in relation to the same activity</remarks>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompleteAddressResponseV1.Confidence">
+            <summary>
+            The G-NAF Confidence rating
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompleteAddressResponseV1.SingleLineAddress">
+            <summary>
+            A single line representation of the address formatted according to the format specifier 
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompleteAddressResponseV1.StreetAddress">
+            <summary>
+            Any street related address informaiton including level, unit, and street if relevant
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompleteAddressResponseV1.Locality">
+            <summary>
+            A named geographical area defining a community or area of interest, which may be rural or urban in character.
+            Usually known as a Suburb in an urban area. The localities used in G-NAF are the gazetted localities as provided by the respective jurisdictions
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompleteAddressResponseV1.State">
+            <summary>
+            The two / three character abbriviated name of the state or territory
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompleteAddressResponseV1.Postcode">
+            <summary>
+            The postal Postcode as defined in AS:4590
+            </summary>
+        </member>
+        <member name="T:Employment.Services.ReferenceData.Contract.AutocompletePartialAddressResponseV1">
+            <summary>
+            A possible match from the Autocomplete Partial Address Search
+            </summary>
+            <remarks>Most data is source from the G-NAF dataset. Up to date descriptions of the G-NAF dataset can be found here: https://www.psma.com.au/products/g-naf </remarks>
+        </member>
+        <member name="M:Employment.Services.ReferenceData.Contract.AutocompletePartialAddressResponseV1.#ctor">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompletePartialAddressResponseV1.LocalitySearchId">
+            <summary>
+            The identifier of the Partial Address
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompletePartialAddressResponseV1.Locality">
+            <summary>
+            A named geographical area defining a community or area of interest, which may be rural or urban in character.
+            Usually known as a Suburb in an urban area. The localities used in G-NAF are the gazetted localities as provided by the respective jurisdictions.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompletePartialAddressResponseV1.State">
+            <summary>
+            The two / three character abbriviated name of the state or territory
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompletePartialAddressResponseV1.Postcode">
+            <summary>
+            The postal Postcode as defined in AS:4590
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompletePartialAddressResponseV1.Latitude">
+            <summary>
+            Latitude in decimal degrees
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompletePartialAddressResponseV1.Longitude">
+            <summary>
+            Longitude in decimal degrees
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompletePartialAddressResponseV1.FormattedLocality">
+            <summary>
+            The locality formatted for display
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.AutocompletePartialAddressResponseV1.AliasLocality">
+            <summary>
+            The matched alias locality
+            </summary>
+        </member>
+        <member name="T:Employment.Services.ReferenceData.Contract.BoundaryV1">
+            <summary>
+            Boundary property value
+            </summary>
+        </member>
+        <member name="M:Employment.Services.ReferenceData.Contract.BoundaryV1.#ctor">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.BoundaryV1.Name">
+            <summary>
+            The property name
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.BoundaryV1.Value">
+            <summary>
+            The property value
+            </summary>
+        </member>
+        <member name="T:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1">
+            <summary>
+            Address with detailed fields and boundary data
+            </summary>
+            <remarks>Most data is source from the G-NAF dataset. Up to date descriptions of the G-NAF dataset can be found here: https://www.psma.com.au/products/g-naf </remarks>
+        </member>
+        <member name="M:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.#ctor">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.AddressId">
+            <summary>
+            The identifer of the address.
+            </summary>
+            <remarks>The address identifier is used within the iGas dataset as a short term primary key. Ongoing 
+            maintenance, for example, updating a source dataset - can cause identifiers for the same physical address
+            to change. As such the identifier should only be used for lookups occuring in relation to the same activity</remarks>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.BuildingName">
+            <summary>
+            The name of the building
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.FormattedAddress">
+            <summary>
+            A single line representation of the address formatted according to the format specifier 
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.StreetAddress">
+            <summary>
+            The street address part of the address
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.StreetAddressLine1">
+            <summary>
+            The street address line 1 part of the address
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.StreetAddressLine2">
+            <summary>
+            The street address line 2 part of the address
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.StreetAddressLine3">
+            <summary>
+            The street address line 3 part of the address
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.Locality">
+            <summary>
+            A named geographical area defining a community or area of interest, which may be rural or urban in character.
+            Usually known as a Suburb in an urban area. The localities used in G-NAF are the gazetted localities as provided by the respective jurisdictions.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.State">
+            <summary>
+            The two / three character abbriviated name of the state or territory
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.Postcode">
+            <summary>
+            The postal Postcode as defined in AS:4590
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.GeocodeType">
+            <summary>
+            The type of address level geocode for an address e.g. PARCEL CENTROID. An address can have multiple types of address level geocodes
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.Latitude">
+            <summary>
+            Latitude in decimal degrees
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.Longitude">
+            <summary>
+            Longitude in decimal degrees
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.AddressSource">
+            <summary>
+            Which dataset the address comes from
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.AddressSourceId">
+            <summary>
+            The native identifier for the address within it's source
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.Confidence">
+            <summary>
+            The G-NAF Confidence rating
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.SubAddressCount">
+            <summary>
+            The number of sub addresses at this address. For example the number of apartments in a complex
+            </summary>
+            <remarks>not currently used</remarks>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.DetailAddressResponseV1.Boundaries">
+            <summary>
+            A collection of matched boundaries based on the requested set of boundary properties requested. 
+            </summary>
+        </member>
+        <member name="T:Employment.Services.ReferenceData.Contract.FeatureV1">
+            <remarks />
+        </member>
+        <member name="M:Employment.Services.ReferenceData.Contract.FeatureV1.#ctor">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.FeatureV1.Name">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.FeatureV1.IsActive">
+            <remarks />
+        </member>
+        <member name="T:Employment.Services.ReferenceData.Contract.CustomerV1">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.CustomerV1.Id">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.CustomerV1.FirstName">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.CustomerV1.LastName">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.CustomerV1.DateOfBirth">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.CustomerV1.DelayInMilliSeconds">
+            <remarks />
+        </member>
+        <member name="T:Employment.Services.ReferenceData.Contract.PartialAddressResponseV1">
+            <summary>
+            A partial address including Locality Postcode details
+            </summary>
+            <remarks>Most data is source from the G-NAF dataset. Up to date descriptions of the G-NAF dataset can be found here: https://www.psma.com.au/products/g-naf </remarks>
+        </member>
+        <member name="M:Employment.Services.ReferenceData.Contract.PartialAddressResponseV1.#ctor">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.PartialAddressResponseV1.Locality">
+            <summary>
+            A named geographical area defining a community or area of interest, which may be rural or urban in character.
+            Usually known as a Suburb in an urban area. The localities used in G-NAF are the gazetted localities as provided by the respective jurisdictions.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.PartialAddressResponseV1.State">
+            <summary>
+            The two / three character abbriviated name of the state or territory
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.PartialAddressResponseV1.Postcode">
+            <summary>
+            The postal Postcode as defined in AS:4590
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.PartialAddressResponseV1.Latitude">
+            <summary>
+            Latitude in decimal degrees
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.PartialAddressResponseV1.Longitude">
+            <summary>
+            Longitude in decimal degrees
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.PartialAddressResponseV1.Boundaries">
+            <summary>
+            A collection of matched boundaries based on the requested set of boundary properties requested. 
+            </summary>
+        </member>
+        <member name="T:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.SiteCode">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.AddressType">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.OfficeType">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.LocationName">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.AddressLine1">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.AddressLine2">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.AddressLine3">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.Locality">
+            <summary>
+            Suburb
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.StateCode">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.PostCode">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.AreaCode">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.PhoneNumber">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.FaxNumber">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.FreeCallNumber">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.EmailAddress">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.LastUpdated">
+            <remarks />
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.SiteAddressDetailsV1.WebsiteAddress">
+            <remarks />
+        </member>
+        <member name="T:Employment.Services.ReferenceData.Contract.UserV1">
+            <summary>
+            User.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.UserV1.UserID">
+            <summary>
+            User ID.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.UserV1.FirstName">
+            <summary>
+            First name.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.UserV1.LastName">
+            <summary>
+            Last name.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.UserV1.OrganisationCode">
+            <summary>
+            Organisation code.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.UserV1.SiteCode">
+            <summary>
+            Site code.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.UserV1.EmailAddress">
+            <summary>
+            Email Address.
+            </summary>
+        </member>
+        <member name="T:Employment.Services.ReferenceData.Contract.ListCodeResponseV1">
+            <summary>
+            Adw code
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.ListCodeResponseV1.Code">
+            <summary>
+            Adw code
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.ListCodeResponseV1.Description">
+            <summary>
+            Long description
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.ListCodeResponseV1.ShortDescription">
+            <summary>
+            Short description
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.ListCodeResponseV1.StartDate">
+            <summary>
+            Currency Start date time
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.ListCodeResponseV1.EndDate">
+            <summary>
+            Currency end date time
+            </summary>
+        </member>
+        <member name="T:Employment.Services.ReferenceData.Contract.PropertyResponseV1">
+            <summary>
+            Adw property type code.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.PropertyResponseV1.PropertyType">
+            <summary>
+            Adw property type code.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.PropertyResponseV1.CodeType">
+            <summary>
+            Adw code type.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.PropertyResponseV1.Code">
+            <summary>
+            Adw code.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.PropertyResponseV1.Value">
+            <summary>
+            Adw value.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.PropertyResponseV1.StartDate">
+            <summary>
+            Currency start date time.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.PropertyResponseV1.EndDate">
+            <summary>
+            Currency end date time.
+            </summary>
+        </member>
+        <member name="T:Employment.Services.ReferenceData.Contract.RelatedCodeResponseV1">
+            <summary>
+            Related ADW code
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.RelatedCodeResponseV1.RelatedCode">
+            <summary>
+            Related ADW code
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.RelatedCodeResponseV1.Dominant">
+            <summary>
+            Whether the code was retrieved with a dominant search.
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.RelatedCodeResponseV1.DominantCode">
+            <summary>
+            Dominant code
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.RelatedCodeResponseV1.DominantDescription">
+            <summary>
+            Dominant long description
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.RelatedCodeResponseV1.DominantShortDescription">
+            <summary>
+            Dominant short description
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.RelatedCodeResponseV1.SubordinateCode">
+            <summary>
+            Subordinate code
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.RelatedCodeResponseV1.SubordinateDescription">
+            <summary>
+            Subordinate long description
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.RelatedCodeResponseV1.SubordinateShortDescription">
+            <summary>
+            Subordinate short description
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.RelatedCodeResponseV1.StartDate">
+            <summary>
+            Currency Start date time
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.RelatedCodeResponseV1.EndDate">
+            <summary>
+            Currency end date time
+            </summary>
+        </member>
+        <member name="P:Employment.Services.ReferenceData.Contract.RelatedCodeResponseV1.Position">
+            <summary>
+            Position
+            </summary>
+        </member>
+    </members>
+</doc>
