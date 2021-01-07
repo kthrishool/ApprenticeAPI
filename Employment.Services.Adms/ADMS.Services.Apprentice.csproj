@@ -18,7 +18,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Employment.Services.Adms.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>ADMS.Services.Apprentice.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
@@ -31,15 +31,15 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="Business\AdmsBusiness.cs" />
+    <Compile Include="Business\ApprenticeBusiness.cs" />
     <Compile Include="Model\RelatedCode.cs" />
     <Compile Include="Model\RelatedCodeRequest.cs" />
     <Compile Include="Mapper\AdmsMaps.cs" />
     <Compile Include="Controller\RelatedCodesV1Controller.cs" />
-    <Compile Include="Repository\IAdmsRepository.cs" />
-    <Compile Include="Repository\AdmsRepository.cs" />
-    <Compile Include="ServiceInterface\IAdmsService.cs" />
-    <Compile Include="Service\AdmsService.cs" />
+    <Compile Include="Repository\IApprenticeRepository.cs" />
+    <Compile Include="Repository\ApprenticeRepository.cs" />
+    <Compile Include="ServiceInterface\IApprenticeService.cs" />
+    <Compile Include="Service\ApprenticeService.cs" />
   </ItemGroup>
 
 
@@ -68,13 +68,13 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Employment.Services.Adms.Contract\Employment.Services.Adms.Contract.csproj">
+    <ProjectReference Include="..\Employment.Services.Adms.Contract\ADMS.Services.Apprentice.Contract.csproj">
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Employment.Services.Adms.snk" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <None Include="ADMS.Services.Apprentice.snk" />
   </ItemGroup>
 </Project>

@@ -1,17 +1,10 @@
-﻿using Employment.Services.Infrastructure.Contract;
+﻿using Employment.Services.Adms.AspNetCore.WebApi;
 using Employment.Services.Infrastructure.UnitTesting;
-using Employment.Services.Adms.WebApi;
+using Microsoft.OpenApi.Readers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.OpenApi.Readers;
-using Employment.Services.Adms.AspNetCore.WebApi;
 
 namespace Employment.Services.Adms.UnitTests
 {

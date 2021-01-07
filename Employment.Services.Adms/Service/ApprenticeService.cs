@@ -1,25 +1,23 @@
-﻿using System.Threading.Tasks;
+﻿using ADMS.Services.Apprentice.Business;
+using ADMS.Services.Apprentice.Model;
+using ADMS.Services.Apprentice.ServiceInterface;
 using Employment.Services.Infrastructure.Core.Data;
-using Employment.Services.Infrastructure.Core.Delegates;
 using Employment.Services.Infrastructure.Core.Interface;
 using Employment.Services.Infrastructure.Service;
-using Employment.Services.Adms.Business;
-using Employment.Services.Adms.Model;
-using Employment.Services.Adms.ServiceInterface;
 using System.Collections.Generic;
-using System;
+using System.Threading.Tasks;
 
-namespace Employment.Services.Adms.Service
+namespace ADMS.Services.Apprentice.Service
 {
     /// <remarks />
-    public class AdmsService : ServiceBase, IAdmsService
+    public class ApprenticeService : ServiceBase, IApprenticeService
     {
-        private readonly AdmsBusiness _AdmsBusiness;
+        private readonly ApprenticeBusiness _AdmsBusiness;
 
         /// <remarks />
-        public AdmsService(IContext context) : base(context)
+        public ApprenticeService(IContext context) : base(context)
         {
-            _AdmsBusiness = new AdmsBusiness(context);
+            _AdmsBusiness = new ApprenticeBusiness(context);
         }
 
 

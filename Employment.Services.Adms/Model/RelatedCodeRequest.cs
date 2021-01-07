@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Employment.Services.Adms.Model
+namespace ADMS.Services.Apprentice.Model
 {
     /// <summary>
     /// Returns a list that contains all the related codes that meet the specified criteria.

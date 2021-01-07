@@ -1,7 +1,7 @@
-using Employment.Services.Adms.WebApi;
+using ADMS.Services.Apprentice.Model;
+using ADMS.Services.Apprentice.WebApi;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using Employment.Services.Adms.Model;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Employment.Services.Adms.UnitTests.Mapper

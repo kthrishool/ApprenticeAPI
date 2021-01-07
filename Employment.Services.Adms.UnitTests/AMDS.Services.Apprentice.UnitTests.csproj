@@ -17,7 +17,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\Employment.Services.Adms.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>ADMS.Services.Apprentice.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <InfrastructurePackageVersion>9.0.0-alpha9</InfrastructurePackageVersion>
@@ -33,6 +33,7 @@
     <Compile Include="MockAdmsRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ADMS.Services.Apprentice.snk" />
     <None Include="app.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -71,10 +72,10 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Employment.Services.Adms.AspNetCore.WebApi\Employment.Services.Adms.AspNetCore.WebApi.csproj" />
-    <ProjectReference Include="..\Employment.Services.Adms.Contract\Employment.Services.Adms.Contract.csproj">
+    <ProjectReference Include="..\Employment.Services.Adms.AspNetCore.WebApi\ADMS.Services.Apprentice.WebApi.csproj" />
+    <ProjectReference Include="..\Employment.Services.Adms.Contract\ADMS.Services.Apprentice.Contract.csproj">
     </ProjectReference>
-    <ProjectReference Include="..\Employment.Services.Adms\Employment.Services.Adms.csproj" />
+    <ProjectReference Include="..\Employment.Services.Adms\ADMS.Services.Apprentice.csproj" />
   </ItemGroup>
 
 

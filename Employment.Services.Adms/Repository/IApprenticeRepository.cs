@@ -1,15 +1,14 @@
-using System;
+using ADMS.Services.Apprentice.Model;
+using Employment.Services.Infrastructure.Core.Interface;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Employment.Services.Infrastructure.Core.Interface;
-using Employment.Services.Adms.Model;
 
-namespace Employment.Services.Adms.Repository
+namespace ADMS.Services.Apprentice.Repository
 {
     /// <summary>
     /// Repository class
     /// </summary>
-    public interface IAdmsRepository : IRepository
+    public interface IApprenticeRepository : IRepository
     {
 
         /// <remarks />

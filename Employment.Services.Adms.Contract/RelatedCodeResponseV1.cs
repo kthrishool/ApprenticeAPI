@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Employment.Services.Adms.Contract
+namespace ADMS.Services.Apprentice.Contract
 {
     /// <summary>
     /// Related ADW code

@@ -1,24 +1,22 @@
-﻿using System.Threading.Tasks;
+﻿using ADMS.Services.Apprentice.Model;
+using ADMS.Services.Apprentice.Repository;
 using Employment.Services.Infrastructure.Core.Business;
 using Employment.Services.Infrastructure.Core.Exceptions;
 using Employment.Services.Infrastructure.Core.Interface;
-using Employment.Services.Adms.Model;
-using Employment.Services.Adms.Repository;
 using System.Collections.Generic;
-using System;
-using Employment.Services.Infrastructure.Core.Validation;
+using System.Threading.Tasks;
 
-namespace Employment.Services.Adms.Business
+namespace ADMS.Services.Apprentice.Business
 {
     /// <remarks />
-    public class AdmsBusiness
+    public class ApprenticeBusiness
     {
         private readonly IContext _context;
         /// <remarks />
         protected ValidationException codeTypeException, relatedCodeTypeException, propertyTypeException, siteCodeException;
 
         /// <remarks />
-        public AdmsBusiness(IContext context)
+        public ApprenticeBusiness(IContext context)
         {
             _context = context;
             codeTypeException = new ValidationException(_context, BusinessValidationErrors.CreateRequiredFieldMissingValidationError("RDEV1", "CodeType"));
@@ -32,7 +30,7 @@ namespace Employment.Services.Adms.Business
         public async Task<IList<RelatedCode>> GetRelatedCodesAsync(RelatedCodeRequest request)
         {
             if (request.RelatedCodeType == null) throw relatedCodeTypeException;
-            IAdmsRepository AdmsRepository = _context.EnsureRepository<IAdmsRepository>();
+            IApprenticeRepository AdmsRepository = _context.EnsureRepository<IApprenticeRepository>();
             return await AdmsRepository.GetRelatedCodesAsync(request);
         }
 

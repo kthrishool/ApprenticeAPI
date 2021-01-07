@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ADMS.Services.Apprentice.Model;
+using ADMS.Services.Apprentice.Repository;
 using Employment.Services.Infrastructure.Core.Interface;
 using Employment.Services.Infrastructure.Repository;
-using Employment.Services.Adms.Model;
-using Employment.Services.Adms.Repository;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace Employment.Services.Adms.UnitTests
 {
     /// <summary> A mock reference data repository. </summary>
     [ExcludeFromCodeCoverage]
-    public class MockAdmsRepository : RepositoryBase, IAdmsRepository
+    public class MockAdmsRepository : RepositoryBase, IApprenticeRepository
     {
         public MockAdmsRepository(IContext context) : base(context) {}
 

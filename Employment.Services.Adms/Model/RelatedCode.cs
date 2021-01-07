@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Employment.Services.Adms.Model
+namespace ADMS.Services.Apprentice.Model
 {
     /// <summary>
     /// Related ADW code

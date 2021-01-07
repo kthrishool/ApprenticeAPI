@@ -1,23 +1,23 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using ADMS.Services.Apprentice.Model;
 using Employment.Services.Infrastructure.Core.Interface;
 using Employment.Services.Infrastructure.Repository;
-using Employment.Services.Adms.Model;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
-namespace Employment.Services.Adms.Repository
+namespace ADMS.Services.Apprentice.Repository
 {
     /// <summary>
     /// Reference Data Repository.
     /// </summary>
-    public class AdmsRepository : RepositoryBase, IAdmsRepository
+    public class ApprenticeRepository : RepositoryBase, IApprenticeRepository
     {
         private IDataSource _dataSource;
 
-        public AdmsRepository(IContext context) : base(context) { }
+        public ApprenticeRepository(IContext context) : base(context) { }
 
 
 

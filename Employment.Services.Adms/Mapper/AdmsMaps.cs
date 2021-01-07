@@ -1,7 +1,7 @@
-﻿using Employment.Services.Adms.Contract;
-using Employment.Services.Adms.Model;
+﻿using ADMS.Services.Apprentice.Contract;
+using ADMS.Services.Apprentice.Model;
 
-namespace Employment.Services.Adms.WebApi
+namespace ADMS.Services.Apprentice.WebApi
 {
     /// <remarks />
     public class AdmsMaps

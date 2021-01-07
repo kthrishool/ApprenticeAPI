@@ -1,15 +1,14 @@
-﻿using System;
+﻿using ADMS.Services.Apprentice.Contract;
+using Employment.Infrastructure.Security.Contract;
+using Employment.Services.Adms.AspNetCore.WebApi;
+using Employment.Services.Infrastructure.Core.Logging;
+using Employment.Services.Infrastructure.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
-using Employment.Infrastructure.Security.Contract;
-using Employment.Services.Infrastructure.Core.Logging;
-using Employment.Services.Infrastructure.UnitTesting;
-using Employment.Services.Adms.Contract;
-using Employment.Services.Adms.WebApi;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Employment.Services.Adms.AspNetCore.WebApi;
 
 namespace Employment.Services.Adms.UnitTests.Controller
 {

@@ -1,12 +1,12 @@
-using System.Threading.Tasks;
+using ADMS.Services.Apprentice.Model;
 using Employment.Services.Infrastructure.Core.Interface;
-using Employment.Services.Adms.Model;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace Employment.Services.Adms.ServiceInterface
+namespace ADMS.Services.Apprentice.ServiceInterface
 {
     /// <remarks />
-    public interface IAdmsService : IService
+    public interface IApprenticeService : IService
     {
 
         /// <remarks />

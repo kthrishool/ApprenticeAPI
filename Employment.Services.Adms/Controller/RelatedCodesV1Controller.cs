@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
 using Employment.Services.Infrastructure.Core.Logging;
 using Employment.Services.Infrastructure.WebApi;
-using Employment.Services.Adms.Contract;
-using Employment.Services.Adms.Model;
-using Employment.Services.Adms.ServiceInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Employment.Services.Infrastructure.WebApi.Documentation;
 using Employment.Services.Infrastructure.Contract;
+using ADMS.Services.Apprentice.Contract;
+using ADMS.Services.Apprentice.Model;
+using ADMS.Services.Apprentice.ServiceInterface;
 #if NETFRAMEWORK
 using System.Web;
 using System.Web.Http;
@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Http;
 #endif
 
 
-namespace Employment.Services.Adms.WebApi.Controllers
+namespace ADMS.Services.Apprentice.WebApi.Controllers
 {
     /// <remarks />
     [Public]
@@ -31,7 +31,7 @@ namespace Employment.Services.Adms.WebApi.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
 #endif
-    public class RelatedCodesV1Controller : InfrastructureController<IAdmsService> {
+    public class RelatedCodesV1Controller : InfrastructureController<IApprenticeService> {
 
 #if !NETFRAMEWORK
         /// <remarks />

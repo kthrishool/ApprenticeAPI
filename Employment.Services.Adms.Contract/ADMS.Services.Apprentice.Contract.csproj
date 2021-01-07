@@ -16,7 +16,7 @@
 		<SignAssembly>true</SignAssembly>
 	</PropertyGroup>
 	<PropertyGroup>
-		<AssemblyOriginatorKeyFile>..\Employment.Services.Adms.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>ADMS.Services.Apprentice.snk</AssemblyOriginatorKeyFile>
 		<Version Condition="'$(Configuration)' != 'Release'">8.0.0</Version>
 		<Version Condition="'$(Configuration)' == 'Release'">8.0.$([System.DateTime]::Now.ToString('yyyyMMdd')).$([System.DateTime]::Now.ToString('HHmmssfff'))</Version>
 		<AssemblyVersion>8.0.0.0</AssemblyVersion>
@@ -33,9 +33,7 @@
 		<Compile Include="RelatedCodeResponseV1.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="..\Employment.Services.Adms.snk">
-			<Link>Employment.Services.Adms.snk</Link>
-		</None>
+		<None Include="ADMS.Services.Apprentice.snk" />
 		<None Include="App.config" />
 	</ItemGroup>
 	<ItemGroup>
