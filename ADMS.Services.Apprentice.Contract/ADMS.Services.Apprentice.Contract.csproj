@@ -27,7 +27,7 @@
 		<Description>Adms API data contracts.</Description>
 	</PropertyGroup>
 	<PropertyGroup>
-		<DocumentationFile>Employment.Services.Adms.Contract.xml</DocumentationFile>
+		<DocumentationFile>AMDS.Services.Apprentice.Contract.xml</DocumentationFile>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="RelatedCodeResponseV1.cs" />

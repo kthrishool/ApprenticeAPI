@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Employment.Services.Adms.UnitTests
+namespace AMDS.Services.Apprentice.UnitTests
 {
     [ExcludeFromCodeCoverage]
     internal class MockDataSource : IDataSource

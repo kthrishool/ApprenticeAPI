@@ -30,7 +30,7 @@ namespace ADMS.Services.Apprentice.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddInfrastructure(new List<IApplicationModelConvention>() { new ApiExplorerGetsOnlyConvention() });
-            services.AddDocumentation("Employment.Services.Adms.XML");
+            services.AddDocumentation("ADMS.Services.Apprentice.XML");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

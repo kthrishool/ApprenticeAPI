@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ADMS.Services.Apprentice.Contract</name>
+    </assembly>
+    <members>
+        <member name="T:ADMS.Services.Apprentice.Contract.RelatedCodeResponseV1">
+            <summary>
+            Related ADW code
+            </summary>
+        </member>
+        <member name="P:ADMS.Services.Apprentice.Contract.RelatedCodeResponseV1.RelatedCode">
+            <summary>
+            Related ADW code
+            </summary>
+        </member>
+        <member name="P:ADMS.Services.Apprentice.Contract.RelatedCodeResponseV1.Dominant">
+            <summary>
+            Whether the code was retrieved with a dominant search.
+            </summary>
+        </member>
+        <member name="P:ADMS.Services.Apprentice.Contract.RelatedCodeResponseV1.DominantCode">
+            <summary>
+            Dominant code
+            </summary>
+        </member>
+        <member name="P:ADMS.Services.Apprentice.Contract.RelatedCodeResponseV1.DominantDescription">
+            <summary>
+            Dominant long description
+            </summary>
+        </member>
+        <member name="P:ADMS.Services.Apprentice.Contract.RelatedCodeResponseV1.DominantShortDescription">
+            <summary>
+            Dominant short description
+            </summary>
+        </member>
+        <member name="P:ADMS.Services.Apprentice.Contract.RelatedCodeResponseV1.SubordinateCode">
+            <summary>
+            Subordinate code
+            </summary>
+        </member>
+        <member name="P:ADMS.Services.Apprentice.Contract.RelatedCodeResponseV1.SubordinateDescription">
+            <summary>
+            Subordinate long description
+            </summary>
+        </member>
+        <member name="P:ADMS.Services.Apprentice.Contract.RelatedCodeResponseV1.SubordinateShortDescription">
+            <summary>
+            Subordinate short description
+            </summary>
+        </member>
+        <member name="P:ADMS.Services.Apprentice.Contract.RelatedCodeResponseV1.StartDate">
+            <summary>
+            Currency Start date time
+            </summary>
+        </member>
+        <member name="P:ADMS.Services.Apprentice.Contract.RelatedCodeResponseV1.EndDate">
+            <summary>
+            Currency end date time
+            </summary>
+        </member>
+        <member name="P:ADMS.Services.Apprentice.Contract.RelatedCodeResponseV1.Position">
+            <summary>
+            Position
+            </summary>
+        </member>
+    </members>
+</doc>

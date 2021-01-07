@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace Employment.Services.Adms.UnitTests
+namespace AMDS.Services.Apprentice.UnitTests
 {
     [ExcludeFromCodeCoverage]
     internal class MockContext : IContext

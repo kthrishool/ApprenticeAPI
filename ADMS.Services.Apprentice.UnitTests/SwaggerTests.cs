@@ -6,7 +6,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace Employment.Services.Adms.UnitTests
+namespace AMDS.Services.Apprentice.UnitTests
 {
     [ExcludeFromCodeCoverage]
     [TestClass]

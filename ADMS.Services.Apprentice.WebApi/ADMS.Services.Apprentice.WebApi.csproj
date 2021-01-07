@@ -77,8 +77,8 @@
     <ProjectReference Include="..\ADMS.Services.Apprentice\ADMS.Services.Apprentice.csproj" />
   </ItemGroup>
   <!--<Target Name="TransformEnvironmentWebConfig" AfterTargets="BeforeBuild">
-    <TransformXml Source="app.config" Transform="app.Template.config" Destination="Employment.Services.Adms.AspNetCore.WebApi.dll.Template.config.Transformed" />
-   <ConfigurationTransformTask SettingsPath="$(MSBuildProjectDirectory)\..\..\..\Configuration\" ConfigPath="$(MSBuildProjectDirectory)\" ConfigName="Employment.Services.Adms.AspNetCore.WebApi.dll.Template.config.Transformed" />
+    <TransformXml Source="app.config" Transform="app.Template.config" Destination="ADMS.Services.Apprentice.WebApi.dll.Template.config.Transformed" />
+   <ConfigurationTransformTask SettingsPath="$(MSBuildProjectDirectory)\..\..\..\Configuration\" ConfigPath="$(MSBuildProjectDirectory)\" ConfigName="ADMS.Services.Apprentice.WebApi.dll.Template.config.Transformed" />
   </Target>
   <Target Name="CopyAllWebConfigTransformFiles" Condition="'$(WebProjectOutputDir)'!=''" AfterTargets="TransformEnvironmentWebConfig">
     <ItemGroup>

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
-namespace Employment.Services.Adms.UnitTests
+namespace AMDS.Services.Apprentice.UnitTests
 {
     /// <summary> A mock reference data repository. </summary>
     [ExcludeFromCodeCoverage]

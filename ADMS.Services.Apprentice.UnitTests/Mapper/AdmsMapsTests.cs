@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Employment.Services.Adms.UnitTests.Mapper
+namespace AMDS.Services.Apprentice.UnitTests.Mapper
 {
     [TestClass]
     [ExcludeFromCodeCoverage]

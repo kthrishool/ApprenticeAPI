@@ -1,7 +1,7 @@
 using ADMS.Services.Apprentice.WebApi;
 using Employment.Services.Infrastructure.WebApi;
 
-namespace Employment.Services.Adms.Web
+namespace ADMS.Services.Apprentice.Web
 {
     /// <remarks />
     public class Program

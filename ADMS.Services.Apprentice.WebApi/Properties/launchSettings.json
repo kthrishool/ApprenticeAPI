@@ -14,7 +14,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Employment.Services.Adms.AspNetCore": {
+    "ADMS.Services.Apprentice": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
