@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Employment.Services.Adms.AspNetCore.WebApi
+namespace ADMS.Services.Apprentice.WebApi
 {
     /// <remarks />
     public class Startup 

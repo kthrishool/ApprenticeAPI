@@ -34,7 +34,7 @@
     <Compile Include="Business\ApprenticeBusiness.cs" />
     <Compile Include="Model\RelatedCode.cs" />
     <Compile Include="Model\RelatedCodeRequest.cs" />
-    <Compile Include="Mapper\AdmsMaps.cs" />
+    <Compile Include="Mapper\ApprenticeMaps.cs" />
     <Compile Include="Controller\RelatedCodesV1Controller.cs" />
     <Compile Include="Repository\IApprenticeRepository.cs" />
     <Compile Include="Repository\ApprenticeRepository.cs" />
@@ -66,15 +66,13 @@
 		<PackageReference Include="System.Security.Cryptography.OpenSsl" Version="5.0.0" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 	</ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Employment.Services.Adms.Contract\ADMS.Services.Apprentice.Contract.csproj">
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ADMS.Services.Apprentice.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ADMS.Services.Apprentice.Contract\ADMS.Services.Apprentice.Contract.csproj" />
   </ItemGroup>
 </Project>

@@ -8,15 +8,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Services.Apprentice.Contract", "Employment.Services.Adms.Contract\ADMS.Services.Apprentice.Contract.csproj", "{8BF4B537-382F-48E3-A65E-FA40DF018AB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Services.Apprentice.Contract", "ADMS.Services.Apprentice.Contract\ADMS.Services.Apprentice.Contract.csproj", "{8BF4B537-382F-48E3-A65E-FA40DF018AB5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7A406BB8-9FC9-4703-8E3D-B82BE8CF6C49}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AMDS.Services.Apprentice.UnitTests", "Employment.Services.Adms.UnitTests\AMDS.Services.Apprentice.UnitTests.csproj", "{B61292A3-D67D-42D0-AB40-AD220AF4024B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AMDS.Services.Apprentice.UnitTests", "ADMS.Services.Apprentice.UnitTests\AMDS.Services.Apprentice.UnitTests.csproj", "{B61292A3-D67D-42D0-AB40-AD220AF4024B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Services.Apprentice", "Employment.Services.Adms\ADMS.Services.Apprentice.csproj", "{6676E5FF-6814-43C0-AD24-57BD3836320F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Services.Apprentice", "ADMS.Services.Apprentice\ADMS.Services.Apprentice.csproj", "{6676E5FF-6814-43C0-AD24-57BD3836320F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Services.Apprentice.WebApi", "Employment.Services.Adms.AspNetCore.WebApi\ADMS.Services.Apprentice.WebApi.csproj", "{3D8715C2-FA23-4FA5-B94E-B7AB21CC2F6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Services.Apprentice.WebApi", "ADMS.Services.Apprentice.WebApi\ADMS.Services.Apprentice.WebApi.csproj", "{3D8715C2-FA23-4FA5-B94E-B7AB21CC2F6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

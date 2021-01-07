@@ -1,4 +1,4 @@
-using Employment.Services.Adms.AspNetCore.WebApi;
+using ADMS.Services.Apprentice.WebApi;
 using Employment.Services.Infrastructure.WebApi;
 
 namespace Employment.Services.Adms.Web

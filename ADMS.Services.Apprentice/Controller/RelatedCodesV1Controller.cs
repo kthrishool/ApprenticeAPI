@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Employment.Services.Infrastructure.WebApi.Documentation;
 using Employment.Services.Infrastructure.Contract;
-using ADMS.Services.Apprentice.Contract;
 using ADMS.Services.Apprentice.Model;
 using ADMS.Services.Apprentice.ServiceInterface;
+using ADMS.Services.Apprentice.Contract;
 #if NETFRAMEWORK
 using System.Web;
 using System.Web.Http;
@@ -75,7 +75,7 @@ namespace ADMS.Services.Apprentice.WebApi.Controllers
                 request.SearchCode = SearchCode;
                 request.EndDateInclusive = EndDateInclusive;
                 IList<RelatedCode> result = await ExecuteServiceMethodAsync(request, Service.GetRelatedCodesAsync);
-                IList<RelatedCodeResponseV1> response = result.Select(i => AdmsMaps.MapToRelatedCodeResponseV1(i)).ToList();
+                IList<RelatedCodeResponseV1> response = result.Select(i => ApprenticeMaps.MapToRelatedCodeResponseV1(i)).ToList();
                 return Ok(response);
             }
             catch (Exception ex)

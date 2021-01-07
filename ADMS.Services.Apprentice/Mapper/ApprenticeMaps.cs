@@ -4,7 +4,7 @@ using ADMS.Services.Apprentice.Model;
 namespace ADMS.Services.Apprentice.WebApi
 {
     /// <remarks />
-    public class AdmsMaps
+    public class ApprenticeMaps
     {
 
         /// <remarks />

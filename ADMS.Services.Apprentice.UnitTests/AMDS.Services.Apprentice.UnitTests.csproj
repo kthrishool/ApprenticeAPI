@@ -71,13 +71,6 @@
 	  <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Employment.Services.Adms.AspNetCore.WebApi\ADMS.Services.Apprentice.WebApi.csproj" />
-    <ProjectReference Include="..\Employment.Services.Adms.Contract\ADMS.Services.Apprentice.Contract.csproj">
-    </ProjectReference>
-    <ProjectReference Include="..\Employment.Services.Adms\ADMS.Services.Apprentice.csproj" />
-  </ItemGroup>
-
 
 
 
@@ -131,6 +124,13 @@
 
 	<ItemGroup>
 	  <Folder Include="Business\" />
+	</ItemGroup>
+
+
+
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ADMS.Services.Apprentice.WebApi\ADMS.Services.Apprentice.WebApi.csproj" />
 	</ItemGroup>
 	
 

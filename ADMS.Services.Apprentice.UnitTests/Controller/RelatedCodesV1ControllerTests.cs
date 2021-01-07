@@ -1,6 +1,6 @@
 ﻿using ADMS.Services.Apprentice.Contract;
+using ADMS.Services.Apprentice.WebApi;
 using Employment.Infrastructure.Security.Contract;
-using Employment.Services.Adms.AspNetCore.WebApi;
 using Employment.Services.Infrastructure.Core.Logging;
 using Employment.Services.Infrastructure.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 
-namespace Employment.Services.Adms.UnitTests.Controller
+namespace ADMS.Services.Apprentice.UnitTests.Controller
 {
     /// <summary> Unit tests for the RelatedCodesV1Controller class. </summary>
     [TestClass]

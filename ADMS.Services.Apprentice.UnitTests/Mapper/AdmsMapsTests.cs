@@ -15,7 +15,7 @@ namespace Employment.Services.Adms.UnitTests.Mapper
         [TestMethod]
         public void AdmsMaps_MapToRelatedCodeV1_Null()
         {
-            var result = AdmsMaps.MapToRelatedCodeResponseV1(null);
+            var result = ApprenticeMaps.MapToRelatedCodeResponseV1(null);
             Assert.IsTrue(result==null);
         }
         [TestMethod]
@@ -23,7 +23,7 @@ namespace Employment.Services.Adms.UnitTests.Mapper
         {
             RelatedCode model = new RelatedCode(){ };
 
-            var result = AdmsMaps.MapToRelatedCodeResponseV1(model);
+            var result = ApprenticeMaps.MapToRelatedCodeResponseV1(model);
 
             Assert.IsTrue(result != null);
             Assert.IsTrue(result.Dominant==model.Dominant);
@@ -56,7 +56,7 @@ namespace Employment.Services.Adms.UnitTests.Mapper
                 EndDate = new DateTime(2025,1,2), 
                  StartDate = new DateTime(2020,1,2)};
 
-            var result = AdmsMaps.MapToRelatedCodeResponseV1(model);
+            var result = ApprenticeMaps.MapToRelatedCodeResponseV1(model);
 
             Assert.IsTrue(result != null);
             Assert.IsTrue(result.Dominant==model.Dominant);
