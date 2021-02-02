@@ -1,8 +1,8 @@
 ﻿using ADMS.Services.Apprentice.Model;
 using ADMS.Services.Apprentice.Repository;
-using Employment.Services.Infrastructure.Core.Business;
-using Employment.Services.Infrastructure.Core.Exceptions;
-using Employment.Services.Infrastructure.Core.Interface;
+using ADMS.Services.Infrastructure.Core.Business;
+using ADMS.Services.Infrastructure.Core.Exceptions;
+using ADMS.Services.Infrastructure.Core.Interface;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

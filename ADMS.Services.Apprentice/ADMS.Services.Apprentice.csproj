@@ -44,13 +44,7 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="Employment.Infrastructure.Cache" Version="$(InfrastructurePackageVersion)" />
-		<PackageReference Include="Employment.Services.Infrastructure.Contract" Version="8.1.0" />
-		<PackageReference Include="Employment.Services.Infrastructure.Core" Version="$(InfrastructurePackageVersion)" />
-		<PackageReference Include="Employment.Services.Infrastructure.Data" Version="$(InfrastructurePackageVersion)" />
-		<PackageReference Include="Employment.Services.Infrastructure.Model" Version="$(InfrastructurePackageVersion)" />
-		<PackageReference Include="Employment.Services.Infrastructure.Service" Version="$(InfrastructurePackageVersion)" />
-		<PackageReference Include="Employment.Services.Infrastructure.WebApi" Version="$(InfrastructurePackageVersion)" />
+		<PackageReference Include="ADMS.Services.Infrastructure.WebApi" Version="1.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="5.0.0" />

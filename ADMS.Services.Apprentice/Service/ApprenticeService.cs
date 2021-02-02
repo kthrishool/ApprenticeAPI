@@ -1,9 +1,9 @@
 ﻿using ADMS.Services.Apprentice.Business;
 using ADMS.Services.Apprentice.Model;
 using ADMS.Services.Apprentice.ServiceInterface;
-using Employment.Services.Infrastructure.Core.Data;
-using Employment.Services.Infrastructure.Core.Interface;
-using Employment.Services.Infrastructure.Service;
+using ADMS.Services.Infrastructure.Core.Data;
+using ADMS.Services.Infrastructure.Core.Interface;
+using ADMS.Services.Infrastructure.Service;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

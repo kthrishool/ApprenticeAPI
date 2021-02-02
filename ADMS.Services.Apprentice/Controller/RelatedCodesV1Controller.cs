@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
-using Employment.Services.Infrastructure.Core.Logging;
-using Employment.Services.Infrastructure.WebApi;
+using ADMS.Services.Infrastructure.Core.Logging;
+using ADMS.Services.Infrastructure.WebApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Employment.Services.Infrastructure.WebApi.Documentation;
-using Employment.Services.Infrastructure.Contract;
+using ADMS.Services.Infrastructure.WebApi.Documentation;
+using ADMS.Services.Infrastructure.Contract;
 using ADMS.Services.Apprentice.Model;
 using ADMS.Services.Apprentice.ServiceInterface;
 using ADMS.Services.Apprentice.Contract;
@@ -13,7 +13,7 @@ using ADMS.Services.Apprentice.Contract;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Employment.Services.Infrastructure.WebApi.Compatibility;
+using ADMS.Services.Infrastructure.WebApi.Compatibility;
 #else
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;

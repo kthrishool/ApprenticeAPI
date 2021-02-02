@@ -39,6 +39,9 @@
 	<ItemGroup>
 		<Folder Include="Properties\" />
 	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="ADMS.Services.Infrastructure.Contract" Version="1.1.0" />
+	</ItemGroup>
 	<!--<ItemGroup Condition="'$(TargetFramework)' == 'net35'">
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" />
 		<PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" />
@@ -57,8 +60,4 @@
 		<PackageReference Include="Employment.Services.Infrastructure.Contract" Version="8.1.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	</ItemGroup>-->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
-		<PackageReference Include="Employment.Services.Infrastructure.Contract" Version="8.1.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-	</ItemGroup>
 </Project>
