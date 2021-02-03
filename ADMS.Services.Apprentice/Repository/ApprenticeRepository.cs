@@ -1,6 +1,6 @@
 ﻿using ADMS.Services.Apprentice.Model;
-using Employment.Services.Infrastructure.Core.Interface;
-using Employment.Services.Infrastructure.Repository;
+using ADMS.Services.Infrastructure.Core.Interface;
+using ADMS.Services.Infrastructure.Repository;
 using System;
 using System.Collections.Generic;
 using System.Data;

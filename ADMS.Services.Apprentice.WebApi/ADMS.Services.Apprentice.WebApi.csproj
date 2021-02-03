@@ -51,25 +51,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-	  <PackageReference Include="Employment.Infrastructure.Cache" Version="$(InfrastructurePackageVersion)" />
-	  <PackageReference Include="Employment.Services.Infrastructure.Contract" Version="8.1.0" />
-	  <PackageReference Include="Employment.Services.Infrastructure.Core" Version="$(InfrastructurePackageVersion)" />
-	  <PackageReference Include="Employment.Services.Infrastructure.Data" Version="$(InfrastructurePackageVersion)" />
-	  <PackageReference Include="Employment.Services.Infrastructure.Model" Version="$(InfrastructurePackageVersion)" />
-	  <PackageReference Include="Employment.Services.Infrastructure.Service" Version="$(InfrastructurePackageVersion)" />
-	  <PackageReference Include="Employment.Services.Infrastructure.Logging" Version="8.1.0" />
-	  <PackageReference Include="Employment.Services.Infrastructure.WebApi" Version="$(InfrastructurePackageVersion)" />
 	  <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
 	  <PackageReference Include="System.Net.Security" Version="4.3.2" />
 	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	  <PackageReference Include="System.Net.WebHeaderCollection" Version="4.3.0" />
 	  <PackageReference Include="System.Runtime" Version="4.3.1" />
 	  <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
-      <PackageReference Include="Esg.Analyzer.Config" Version="1.0.*" />
-    <PackageReference Include="Esg.Analyzer.CSharp" Version="1.0.*" />
-    <PackageReference Include="Esg.Build.NuGetTasks" Version="1.0.*" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Esg.Build.TransformTasks" Version="1.0.*" />
     <PackageReference Include="System.Security.Cryptography.OpenSsl" Version="5.0.0" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
   </ItemGroup>
@@ -87,10 +75,10 @@
     <CreateItem Include="%(WebConfigTransformFile.Identity)">
       <Output TaskParameter="Include" ItemName="Content" />
     </CreateItem>
-  </Target>-->
+  </Target>
   <Target Name="ValidateNuGetPackages" AfterTargets="AfterBuild">
     <NuGetValidateTask SolutionPath="$(SolutionDir)\Apprentice.sln" />
-  </Target>
+  </Target>-->
 
 	<Target Name="IncludeDocFile" BeforeTargets="PrepareForPublish">
 		<ItemGroup>

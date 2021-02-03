@@ -67,6 +67,7 @@
 		<NoWarn>1591;</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
+	  <PackageReference Include="ADMS.Services.Infrastructure.Testing" Version="1.0.0" />
 	  <PackageReference Include="System.Security.Cryptography.OpenSsl" Version="5.0.0" />
 	  <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 	</ItemGroup>
@@ -75,13 +76,6 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="Employment.Infrastructure.Cache" Version="$(InfrastructurePackageVersion)" />
-		<PackageReference Include="Employment.Services.Infrastructure.Testing" Version="$(InfrastructurePackageVersion)" />
-		<PackageReference Include="Employment.Services.Infrastructure.Contract" Version="8.1.0" />
-		<PackageReference Include="Employment.Services.Infrastructure.Core" Version="$(InfrastructurePackageVersion)" />
-		<PackageReference Include="Employment.Services.Infrastructure.Data" Version="$(InfrastructurePackageVersion)" />
-		<PackageReference Include="Employment.Services.Infrastructure.Model" Version="$(InfrastructurePackageVersion)" />
-		<PackageReference Include="Employment.Services.Infrastructure.Service" Version="$(InfrastructurePackageVersion)" />
 		<PackageReference Include="EntityFramework" Version="6.4.4" />
 		<PackageReference Include="Castle.Core" Version="4.4.1" />
 		<!--<PackageReference Include="Moq" Version="4.14.5" />-->

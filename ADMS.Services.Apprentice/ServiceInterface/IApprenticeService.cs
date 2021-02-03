@@ -1,5 +1,5 @@
 using ADMS.Services.Apprentice.Model;
-using Employment.Services.Infrastructure.Core.Interface;
+using ADMS.Services.Infrastructure.Core.Interface;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

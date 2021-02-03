@@ -1,10 +1,10 @@
-using Employment.Services.ReferenceData.WebApi.Controllers;
+using ADMS.Services.ReferenceData.WebApi.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Employment.Infrastructure.Security.Contract;
-using Employment.Services.Infrastructure.UnitTesting;
+using ADMS.Infrastructure.Security.Contract;
+using ADMS.Services.Infrastructure.UnitTesting;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Employment.Services.ReferenceData.UnitTests.Controller
