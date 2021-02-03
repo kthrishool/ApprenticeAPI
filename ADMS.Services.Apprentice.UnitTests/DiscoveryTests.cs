@@ -1,6 +1,6 @@
 ﻿using ADMS.Services.Apprentice.WebApi;
-using Employment.Services.Infrastructure.Contract;
-using Employment.Services.Infrastructure.UnitTesting;
+using ADMS.Services.Infrastructure.Contract;
+using ADMS.Services.Infrastructure.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System;

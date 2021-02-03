@@ -1,4 +1,4 @@
-﻿using Employment.Services.Infrastructure.Core.Interface;
+﻿using ADMS.Services.Infrastructure.Core.Interface;
 using System;
 using System.Collections.Generic;
 using System.Data;

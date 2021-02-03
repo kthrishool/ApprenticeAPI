@@ -1,7 +1,7 @@
 ﻿using ADMS.Services.Apprentice.Model;
 using ADMS.Services.Apprentice.Repository;
-using Employment.Services.Infrastructure.Core.Interface;
-using Employment.Services.Infrastructure.Repository;
+using ADMS.Services.Infrastructure.Core.Interface;
+using ADMS.Services.Infrastructure.Repository;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;

@@ -1,8 +1,8 @@
 ﻿using ADMS.Services.Apprentice.Contract;
 using ADMS.Services.Apprentice.WebApi;
-using Employment.Infrastructure.Security.Contract;
-using Employment.Services.Infrastructure.Core.Logging;
-using Employment.Services.Infrastructure.UnitTesting;
+using ADMS.Infrastructure.Security.Contract;
+using ADMS.Services.Infrastructure.Core.Logging;
+using ADMS.Services.Infrastructure.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
