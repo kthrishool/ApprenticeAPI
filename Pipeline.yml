@@ -14,5 +14,4 @@ stages:
   - template: Pipelines/website.yml@templates
     parameters:
       artifactFeed: d5f873fd-aea7-4b0f-956a-08364122d906/c8b90219-fc51-43a0-b803-dfc2d668ad9b
-      testFileSpec: ''
       calculateCoverage: false
