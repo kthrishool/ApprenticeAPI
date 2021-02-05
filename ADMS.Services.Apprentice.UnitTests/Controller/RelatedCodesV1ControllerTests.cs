@@ -41,7 +41,7 @@ namespace ADMS.Services.Apprentice.UnitTests.Controller
             HttpResponseMessage response;
             var results = base.ExecuteGet< List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=ORGF&SearchCode=AAAB", 1, out response);
 
-            Assert.IsTrue(results.Code == 200);
+            Assert.IsTrue(results.Code == 200, response.ToString());
             Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "CP20").Count() == 1);
             Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "NHMZ").Count() == 1);
         }
@@ -57,8 +57,7 @@ namespace ADMS.Services.Apprentice.UnitTests.Controller
             string uri = "/api/RelatedCodes";
             HttpResponseMessage response;
             var results = base.ExecuteGet<List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=ORGF&SearchCode=AAAB", 1, out response);
-
-            Assert.IsTrue(results.Code == 200);
+            Assert.IsTrue(results.Code == 200, response.ToString());
             Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "CP20").Count() == 1);
             Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "NHMZ").Count() == 1);
         }
@@ -73,7 +72,7 @@ namespace ADMS.Services.Apprentice.UnitTests.Controller
             HttpResponseMessage response;
             var results = base.ExecuteGet<List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=PANTS&SearchCode=PANTS", 1, out response);
 
-            Assert.IsTrue(results.Code == 200);
+            Assert.IsTrue(results.Code == 200, response.ToString());
             Assert.IsTrue(results.Data.Count==0);
         }
 
@@ -87,7 +86,7 @@ namespace ADMS.Services.Apprentice.UnitTests.Controller
             HttpResponseMessage response;
             var results = base.ExecuteGet<List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=", 1, out response);
 
-            Assert.IsTrue(results.Code == 400);
+            Assert.IsTrue(results.Code == 400, response.ToString());
             var content = response.Content.ReadAsStringAsync().Result;
             Assert.IsTrue(content.IndexOf("One or more validation errors occurred.", StringComparison.Ordinal)>=0, "Unexpected response: "+ content);
         }

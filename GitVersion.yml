@@ -1,0 +1,10 @@
+mode: ContinuousDeployment
+branches:
+  master:
+    regex: ^master$|^main$
+    tag: beta
+  hotfix:
+    tag: useBranchName
+  feature:
+    regex: ^feature$|^Infrastructure$
+    increment: Minor

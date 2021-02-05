@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D6BC9D08-270A-4264-A028-4A3F64D6E8C3}"
+	ProjectSection(SolutionItems) = preProject
+		GitVersion.yml = GitVersion.yml
+		Pipeline.yml = Pipeline.yml
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Services.Apprentice.Contract", "ADMS.Services.Apprentice.Contract\ADMS.Services.Apprentice.Contract.csproj", "{8BF4B537-382F-48E3-A65E-FA40DF018AB5}"
 EndProject
