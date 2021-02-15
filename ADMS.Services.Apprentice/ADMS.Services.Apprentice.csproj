@@ -4,6 +4,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <Configurations>Debug;Release;Dev;Uat;PreProd;Prod</Configurations>
   </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworks>net5.0</TargetFrameworks>

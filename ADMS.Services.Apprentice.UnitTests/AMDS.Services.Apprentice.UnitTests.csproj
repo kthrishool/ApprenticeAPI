@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net5.0</TargetFrameworks>
+    <Configurations>Debug;Release;Dev;Uat;PreProd;Prod</Configurations>
   </PropertyGroup>
     <PropertyGroup>
     <ProjectGuid>{B61292A3-D67D-42D0-AB40-AD220AF4024B}</ProjectGuid>
