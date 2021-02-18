@@ -39,11 +39,11 @@ namespace ADMS.Services.Apprentice.UnitTests.Controller
 
             string uri = "/api/RelatedCodes";
             HttpResponseMessage response;
-            var results = base.ExecuteGet< List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=ORGF&SearchCode=AAAB", 1, out response);
+            var results = base.ExecuteGet< List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=PCODSTAT&SearchCode=ACT", 1, out response);
 
             Assert.IsTrue(results.Code == 200, response.ToString());
-            Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "CP20").Count() == 1);
-            Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "NHMZ").Count() == 1);
+            Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "0200").Count() == 1);
+
         }
 
 
@@ -56,10 +56,9 @@ namespace ADMS.Services.Apprentice.UnitTests.Controller
 
             string uri = "/api/RelatedCodes";
             HttpResponseMessage response;
-            var results = base.ExecuteGet<List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=ORGF&SearchCode=AAAB", 1, out response);
+            var results = base.ExecuteGet<List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=PCODSTAT&SearchCode=ACT", 1, out response);
             Assert.IsTrue(results.Code == 200, response.ToString());
-            Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "CP20").Count() == 1);
-            Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "NHMZ").Count() == 1);
+            Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "0200").Count() == 1);
         }
 
 
@@ -70,7 +69,7 @@ namespace ADMS.Services.Apprentice.UnitTests.Controller
 
             string uri = "/api/RelatedCodes";
             HttpResponseMessage response;
-            var results = base.ExecuteGet<List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=PANTS&SearchCode=PANTS", 1, out response);
+            var results = base.ExecuteGet<List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=PCODSTAT&SearchCode=ACTS", 1, out response);
 
             Assert.IsTrue(results.Code == 200, response.ToString());
             Assert.IsTrue(results.Data.Count==0);
@@ -99,13 +98,12 @@ namespace ADMS.Services.Apprentice.UnitTests.Controller
             base.LogLevel = LogLevel.Debug;
             string uri = "/api/RelatedCodes";
             HttpResponseMessage response;
-            var results = base.ExecuteGet<List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=ORGF&SearchCode=AAAB", 1, out response);
+            var results = base.ExecuteGet<List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=PCODSTAT&SearchCode=ACT", 1, out response);
 
             Assert.IsTrue(results.Code == 200);
-            Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "CP20").Count() == 1);
-            Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "NHMZ").Count() == 1);
-            Assert.IsTrue(base.LogItems.Count>0);
-            Assert.IsTrue(base.LogContainsMessage("Request for RelatedCodeType: ORGF"));
+            Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "0200").Count() == 1);
+            Assert.IsTrue(base.LogItems.Count > 0);
+            Assert.IsTrue(base.LogContainsMessage("Request for RelatedCodeType: PCODSTAT"));
         }
         /// <summary> Test that debug entries are not logged when LogLevel==LogLevel.Error. </summary>
         [TestMethod]
@@ -115,12 +113,11 @@ namespace ADMS.Services.Apprentice.UnitTests.Controller
             base.LogLevel = LogLevel.Error;
             string uri = "/api/RelatedCodes";
             HttpResponseMessage response;
-            var results = base.ExecuteGet<List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=ORGF&SearchCode=AAAB", 1, out response);
+            var results = base.ExecuteGet<List<RelatedCodeResponseV1>>(uri + "?RelatedCodeType=PCODSTAT&SearchCode=ACT", 1, out response);
 
             Assert.IsTrue(results.Code == 200);
-            Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "CP20").Count() == 1);
-            Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "NHMZ").Count() == 1);
-            Assert.IsFalse(base.LogContainsMessage("Request for CodeType: STT"));//in error mode this should not be logged
+            Assert.IsTrue(results.Data.Where(r => r.SubordinateCode == "0200").Count() == 1);
+            Assert.IsFalse(base.LogContainsMessage("Request for CodeType: PCODSTAT"));//in error mode this should not be logged
         }
 
 

@@ -68,7 +68,7 @@
 		<NoWarn>1591;</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="ADMS.Services.Infrastructure.Testing" Version="1.0.0" />
+	  <PackageReference Include="ADMS.Services.Infrastructure.Testing" Version="1.0.1" />
 	  <PackageReference Include="System.Security.Cryptography.OpenSsl" Version="5.0.0" />
 	  <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 	</ItemGroup>

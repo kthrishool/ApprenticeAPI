@@ -39,11 +39,11 @@ namespace ADMS.Services.Apprentice.Repository
             }
 
             SqlConnection connection = _dataSource.Connection as SqlConnection;
-            using (SqlCommand command = new SqlCommand("up_ListRelatedCode", connection))
+            using (SqlCommand command = new SqlCommand("ReferenceData.ListRelatedCode", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Add(new SqlParameter { ParameterName = "@return_value", SqlDbType = SqlDbType.Int, Direction = ParameterDirection.ReturnValue });
-                command.Parameters.Add(new SqlParameter { ParameterName = "@RelationshipType", SqlDbType = SqlDbType.VarChar, Value = request.RelatedCodeType });
+                command.Parameters.Add(new SqlParameter { ParameterName = "@RelatedCodeType", SqlDbType = SqlDbType.VarChar, Value = request.RelatedCodeType });
                 command.Parameters.Add(new SqlParameter { ParameterName = "@SearchCode", SqlDbType = SqlDbType.VarChar, Value = !string.IsNullOrEmpty(request.SearchCode) ? request.SearchCode : string.Empty });
                 command.Parameters.Add(new SqlParameter { ParameterName = "@SearchType", SqlDbType = SqlDbType.Char, Value = request.DominantSearch ? "d" : "s" });
                 command.Parameters.Add(new SqlParameter { ParameterName = "@ListType", SqlDbType = SqlDbType.Char, Value = request.CurrentCodesOnly ? "c" : string.Empty });
@@ -52,7 +52,7 @@ namespace ADMS.Services.Apprentice.Repository
                 command.Parameters.Add(new SqlParameter { ParameterName = "@RowPosition", SqlDbType = SqlDbType.Int, Value = request.RowPosition });
 
 
-                command.Parameters.Add(new SqlParameter { ParameterName = "@Current_Date", SqlDbType = SqlDbType.DateTime, Value = currentDate });
+                command.Parameters.Add(new SqlParameter { ParameterName = "@CurrentDate", SqlDbType = SqlDbType.DateTime, Value = currentDate });
 
                 if (request.EndDateInclusive.HasValue && request.EndDateInclusive.Value)
                 {

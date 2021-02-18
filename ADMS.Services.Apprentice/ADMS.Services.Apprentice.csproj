@@ -45,7 +45,8 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="ADMS.Services.Infrastructure.WebApi" Version="1.0.4" />
+		<PackageReference Include="ADMS.Services.Infrastructure.Testing" Version="1.0.1" />
+		<PackageReference Include="ADMS.Services.Infrastructure.WebApi" Version="1.0.7" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="5.0.0" />
