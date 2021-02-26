@@ -32,7 +32,7 @@ namespace ADMS.Apprentice.Core.Entities
         public long AuditEventId { get; set; }
 
         public Profile()
-        {            
+        {
             ActiveFlag = true;
             DeceasedFlag = false;
             ProfileTypeCode = ProfileType.Apprentice.ToString();

@@ -13,6 +13,7 @@ using Adms.Shared.Filters;
 using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace ADMS.Apprentice.Api.Controllers
 {
@@ -41,9 +42,10 @@ namespace ADMS.Apprentice.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProfileModel>> Get(int id)
+        public  ActionResult<ProfileModel> Get(int id)
         {
-            Profile profile = await repository.Retrieve<Profile>().GetAsync(id);
+            var profiles =  repository.Retrieve<Profile>();
+            Profile profile =  profiles.FirstOrDefault();//await profiles.GetAsync(id);
             return Ok(new ProfileModel(profile));
         }
 
@@ -56,6 +58,9 @@ namespace ADMS.Apprentice.Api.Controllers
             paging.SetDefaultSorting("id", true);
             PagedList<Profile> profiles = await pagingHelper.ToPagedListAsync(repository.Retrieve<Profile>(), paging);
             IEnumerable<ProfileListModel> models = profiles.Results.Map(a => new ProfileListModel(a));
+
+            //IEnumerable<ProfileListModel> models = profiles.Results.Map(a => new ProfileListModel(a));
+
             return Ok(new PagedList<ProfileListModel>(profiles, models));
         }
 

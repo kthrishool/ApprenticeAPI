@@ -13,12 +13,12 @@ using LumenWorks.Framework.IO.Csv;
 namespace ADMS.Apprentice.Database.Seeders
 {
     #region NotInUse - no seeding at the moment
-    public class ClaimSubmissionSeeder : IDataSeeder
+    public class ProfileSeeder : IDataSeeder
     {
         private readonly IRepository repository;
         private readonly IEmbeddedResourceHelper embeddedResourceHelper;
 
-        public ClaimSubmissionSeeder(IRepository repository, IEmbeddedResourceHelper embeddedResourceHelper)
+        public ProfileSeeder(IRepository repository, IEmbeddedResourceHelper embeddedResourceHelper)
         {
             this.repository = repository;
             this.embeddedResourceHelper = embeddedResourceHelper;

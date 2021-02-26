@@ -25,6 +25,6 @@ namespace ADMS.Apprentice.Core.Messages
         [Required(ErrorMessage = "Birth date is required")]
         public DateTime BirthDate { get; init; }
 
-        public string GenderCode { get; init; }
+        //public string GenderCode { get; init; }
     }
 }
