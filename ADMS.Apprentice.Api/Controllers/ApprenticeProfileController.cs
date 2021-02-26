@@ -42,42 +42,29 @@ namespace ADMS.Apprentice.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public  ActionResult<ProfileModel> Get(int id)
-        {
-            var profiles =  repository.Retrieve<Profile>();
-            Profile profile =  profiles.FirstOrDefault();//await profiles.GetAsync(id);
+        public async Task<ActionResult<ProfileModel>> Get(int id)
+        {            
+            Profile profile =  await repository.Retrieve<Profile>().GetAsync(id);
             return Ok(new ProfileModel(profile));
         }
 
         [HttpGet]
         [SupportsPaging(null)]
         public async Task<ActionResult<PagedList<ProfileListModel>>> List(PagingInfo paging)
-        {
-            var b = repository.Retrieve<Profile>();
+        {            
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("id", true);
             PagedList<Profile> profiles = await pagingHelper.ToPagedListAsync(repository.Retrieve<Profile>(), paging);
             IEnumerable<ProfileListModel> models = profiles.Results.Map(a => new ProfileListModel(a));
-
-            //IEnumerable<ProfileListModel> models = profiles.Results.Map(a => new ProfileListModel(a));
-
             return Ok(new PagedList<ProfileListModel>(profiles, models));
         }
 
         [HttpPost]
         public async Task<ActionResult<ProfileModel>> Create([FromBody] ProfileMessage message)
-        {
-            //try
-            //{
-                Profile profile = await profileCreator.CreateAsync(message);
-                await repository.SaveAsync();
-                return Created($"/{profile.Id}", new ProfileModel(profile));
-            //}
-            //catch (Exception e)
-            //{
-            //    var a = e.Message;
-            //    return InternalServerError();
-            //}
+        {           
+            Profile profile = await profileCreator.CreateAsync(message);
+            await repository.SaveAsync();
+            return Created($"/{profile.Id}", new ProfileModel(profile));           
         }       
     }
 }
