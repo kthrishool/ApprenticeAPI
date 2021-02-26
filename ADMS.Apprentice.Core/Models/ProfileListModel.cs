@@ -19,7 +19,7 @@ namespace ADMS.Apprentice.Core.Models
         public string EducationLevelCode { get; }
         public string LeftSchoolMonthCode { get; }
         public string LeftSchoolYearCode { get; }
-        public ProfileType ProfileTypeCode { get; }
+        public string ProfileTypeCode { get; }
         public bool DeceasedFlag { get; }
         public bool ActiveFlag { get; }
 
@@ -35,22 +35,22 @@ namespace ADMS.Apprentice.Core.Models
             FirstName = apprentice.FirstName;
             OtherNames = apprentice.OtherNames;
             PreferredName = apprentice.PreferredName;
-            //GenderCode = apprentice.GenderCode;
-            //BirthDate = apprentice.BirthDate;
-            //EmailAddress = apprentice.EmailAddress;
-            //SelfAssessedDisabilityCode = apprentice.SelfAssessedDisabilityCode;
-            //IndigenousStatusCode = apprentice.IndigenousStatusCode;
-            //CitizenshipCode = apprentice.CitizenshipCode;
-            //EducationLevelCode = apprentice.EducationLevelCode;
-            //LeftSchoolMonthCode = apprentice.LeftSchoolMonthCode;
-            //LeftSchoolYearCode = apprentice.LeftSchoolYearCode;
-            //ProfileTypeCode = apprentice.ProfileTypeCode;
-            //DeceasedFlag = apprentice.DeceasedFlag;
-            //ActiveFlag = apprentice.ActiveFlag;
-            //CreatedOn = apprentice.CreatedOn;
-            //CreatedBy = apprentice.CreatedBy;
-            //UpdatedOn = apprentice.UpdatedOn;
-            //UpdatedBy = apprentice.UpdatedBy;
+            GenderCode = apprentice.GenderCode;
+            BirthDate = apprentice.BirthDate;
+            EmailAddress = apprentice.EmailAddress;
+            SelfAssessedDisabilityCode = apprentice.SelfAssessedDisabilityCode;
+            IndigenousStatusCode = apprentice.IndigenousStatusCode;
+            CitizenshipCode = apprentice.CitizenshipCode;
+            EducationLevelCode = apprentice.EducationLevelCode;
+            LeftSchoolMonthCode = apprentice.LeftSchoolMonthCode;
+            LeftSchoolYearCode = apprentice.LeftSchoolYearCode;
+            ProfileTypeCode = apprentice.ProfileTypeCode.ToString();
+            DeceasedFlag = apprentice.DeceasedFlag;
+            ActiveFlag = apprentice.ActiveFlag;
+            CreatedOn = apprentice.CreatedOn;
+            CreatedBy = apprentice.CreatedBy;
+            UpdatedOn = apprentice.UpdatedOn;
+            UpdatedBy = apprentice.UpdatedBy;
         }
     }
 }

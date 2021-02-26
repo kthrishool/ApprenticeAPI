@@ -12,12 +12,6 @@ namespace ADMS.Apprentice.Core.Messages
         //[Required(ErrorMessage = "Category is required")]
         //public ClaimCategory? Category { get; init; }
 
-        //[Required(ErrorMessage = "RegistrationId is required")]
-        //public int? RegistrationId { get; init; }
-
-        //[Required(ErrorMessage = "Id is required")]
-        //public int? Id { get; init; }
-
         [Required(ErrorMessage = "Surname is required")]
         public string Surname { get; init; }
 
@@ -28,9 +22,9 @@ namespace ADMS.Apprentice.Core.Messages
         
         public string PreferredName { get; init; }
 
-        //[Required(ErrorMessage = "Birth date is required")]
-        //public DateTime BirthDate { get; init; }
+        [Required(ErrorMessage = "Birth date is required")]
+        public DateTime BirthDate { get; init; }
 
-        //public string GenderCode { get; init; }
+        public string GenderCode { get; init; }
     }
 }
