@@ -34,9 +34,9 @@ namespace ADMS.Apprentice.Core.Models
             Surname = apprentice.Surname;
             FirstName = apprentice.FirstName;
             OtherNames = apprentice.OtherNames;
-            PreferredName = apprentice.PreferredName;
-            GenderCode = apprentice.GenderCode;
+            PreferredName = apprentice.PreferredName;            
             BirthDate = apprentice.BirthDate;
+            GenderCode = apprentice.GenderCode;
             EmailAddress = apprentice.EmailAddress;
             SelfAssessedDisabilityCode = apprentice.SelfAssessedDisabilityCode;
             IndigenousStatusCode = apprentice.IndigenousStatusCode;

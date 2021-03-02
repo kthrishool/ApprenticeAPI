@@ -29,8 +29,7 @@ namespace ADMS.Apprentice.Database.Mappings
                 .HasColumnName("PreferredName")
                 .HasMaxLength(50);
             entity.Property(e => e.GenderCode)
-                .HasColumnName("GenderCode")
-                .IsRequired();
+                .HasColumnName("GenderCode");                
             entity.Property(e => e.BirthDate)
                 .HasColumnName("BirthDate")
                 .HasColumnType("date")

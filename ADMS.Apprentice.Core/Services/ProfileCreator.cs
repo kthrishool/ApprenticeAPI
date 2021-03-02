@@ -16,7 +16,7 @@ namespace ADMS.Apprentice.Core.Services
         }
 
         public Task<Profile> CreateAsync(ProfileMessage message)
-        {
+        {            
             var profile = new Profile
             {
                 Surname = message.Surname,

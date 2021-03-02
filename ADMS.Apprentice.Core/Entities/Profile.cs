@@ -35,9 +35,7 @@ namespace ADMS.Apprentice.Core.Entities
         {
             ActiveFlag = true;
             DeceasedFlag = false;
-            ProfileTypeCode = ProfileType.Apprentice.ToString();
-            GenderCode = "X";
-            IndigenousStatusCode = "X";
+            ProfileTypeCode = ProfileType.Apprentice.ToString();       
         }
     }
 }

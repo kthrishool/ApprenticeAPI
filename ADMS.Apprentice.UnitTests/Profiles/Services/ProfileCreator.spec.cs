@@ -11,8 +11,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
     #region WhenCreatingAProfile
     [TestClass]
     public class WhenCreatingAProfile : GivenWhenThen<ProfileCreator>
-    {
-        private const int registrationId = 123;
+    {        
         private Profile profile;
         private ProfileMessage message;
 
@@ -45,12 +44,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         [TestMethod]
         public void ShouldSetTheName()
-        {
+        {           
             profile.FirstName.Should().Be(message.FirstName);
             profile.Surname.Should().Be(message.Surname);
-        }
+        }       
 
-        [TestMethod]
+            [TestMethod]
         public void ShouldSetTheBirthDate()
         {
             profile.BirthDate.Should().Be(message.BirthDate);
@@ -68,13 +67,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             profile.ProfileTypeCode.Should().Be(ProfileType.Apprentice.ToString());
         }
-
-        //[TestMethod]
-        //public void ShouldSetCreatedAndLastModifiedDates()
-        //{
-        //    profile.CreatedOn.Should().BeCloseTo(DateTime.Now);
-        //    profile.UpdatedOn.Should().BeCloseTo(DateTime.Now);
-        //}
+        
     }
 
     #endregion
