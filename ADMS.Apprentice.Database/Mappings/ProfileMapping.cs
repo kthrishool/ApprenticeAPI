@@ -27,13 +27,13 @@ namespace ADMS.Apprentice.Database.Mappings
                 .HasMaxLength(50);
             entity.Property(e => e.PreferredName)
                 .HasColumnName("PreferredName")
-                .HasMaxLength(50);
-            entity.Property(e => e.GenderCode)
-                .HasColumnName("GenderCode");                
+                .HasMaxLength(50);                    
             entity.Property(e => e.BirthDate)
                 .HasColumnName("BirthDate")
                 .HasColumnType("date")
                 .IsRequired();
+            entity.Property(e => e.GenderCode)
+                .HasColumnName("GenderCode");
             entity.Property(e => e.EmailAddress)
                 .HasColumnName("EmailAddress")                
                 .HasMaxLength(320);

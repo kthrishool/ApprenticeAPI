@@ -9,13 +9,16 @@ namespace ADMS.Apprentice.Core.Services
     public class ProfileCreator :  IProfileCreator
     {
         private readonly IRepository repository;
+        private readonly IProfileValidator profileValidator;
 
-        public ProfileCreator(IRepository repository)
+        public ProfileCreator(IRepository repository,
+            IProfileValidator profileValidator)
         {
             this.repository = repository;
+            this.profileValidator = profileValidator;
         }
 
-        public Task<Profile> CreateAsync(ProfileMessage message)
+        public async Task<Profile> CreateAsync(ProfileMessage message)
         {            
             var profile = new Profile
             {
@@ -25,9 +28,10 @@ namespace ADMS.Apprentice.Core.Services
                 PreferredName = message.PreferredName,
                 BirthDate = message.BirthDate             
             };
+            await profileValidator.ValidateAsync(profile);
             repository.Insert(profile);
             // doesn't need to be async just yet, but it will be once we start looking up TYIMS data etc
-            return Task.FromResult(profile);
+            return profile;
         }
     }
 }

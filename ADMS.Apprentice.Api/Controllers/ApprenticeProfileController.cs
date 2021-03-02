@@ -41,23 +41,24 @@ namespace ADMS.Apprentice.Api.Controllers
             this.profileCreator = profileCreator;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ProfileModel>> Get(int id)
-        {            
-            Profile profile =  await repository.Retrieve<Profile>().GetAsync(id);
-            return Ok(new ProfileModel(profile));
-        }
-
         [HttpGet]
         [SupportsPaging(null)]
         public async Task<ActionResult<PagedList<ProfileListModel>>> List(PagingInfo paging)
-        {            
+        {
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("id", true);
             PagedList<Profile> profiles = await pagingHelper.ToPagedListAsync(repository.Retrieve<Profile>(), paging);
             IEnumerable<ProfileListModel> models = profiles.Results.Map(a => new ProfileListModel(a));
             return Ok(new PagedList<ProfileListModel>(profiles, models));
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProfileModel>> Get(int id)
+        {            
+            Profile profile =  await repository.Retrieve<Profile>().GetAsync(id);
+            return Ok(new ProfileModel(profile));
+        }
+        
 
         [HttpPost]
         public async Task<ActionResult<ProfileModel>> Create([FromBody] ProfileMessage message)

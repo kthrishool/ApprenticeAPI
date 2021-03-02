@@ -43,6 +43,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
+        public void ValidatesTheProfileRequest()
+        {
+            Container.GetMock<IProfileValidator>().Verify(r => r.ValidateAsync(profile));
+        }
+
+        [TestMethod]
         public void ShouldSetTheName()
         {           
             profile.FirstName.Should().Be(message.FirstName);
