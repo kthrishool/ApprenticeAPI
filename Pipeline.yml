@@ -21,7 +21,7 @@ stages:
 
   - stage: Dev
     dependsOn: BuildApplication
-    #condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-deploy'))
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-deploy'))
     variables:
         - group: ServiceAccounts
         - group: DevSettings
