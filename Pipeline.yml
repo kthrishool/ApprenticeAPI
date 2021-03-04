@@ -21,7 +21,7 @@ stages:
 
   - stage: Dev
     dependsOn: BuildApplication
-    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-deploy'))
+    # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-deploy'))
     variables:
         - group: ServiceAccounts
         - group: DevSettings
@@ -56,16 +56,16 @@ stages:
               - download: current
                 artifact: drop
                 patterns: "**/*.zip"
-              - task: CmdLine@2
-                displayName: "Temp Delete ADMS Web"
-                inputs:
-                   script: 'C:\Windows\system32\inetsrv\appcmd.exe delete site "ADMS.Dev"'
-              - task: DeleteFiles@1
-                displayName: "Temporarily delete all files"
-                inputs:
-                   SourceFolder: "E:\\Inetpub\\content"
-                   contents: "**/*"
-                   RemoveSourceFolder: false
+              # - task: CmdLine@2
+              #   displayName: "Temp Delete ADMS Web"
+              #   inputs:
+              #      script: 'C:\Windows\system32\inetsrv\appcmd.exe delete site "ADMS.Dev"'
+              # - task: DeleteFiles@1
+              #   displayName: "Temporarily delete all files"
+              #   inputs:
+              #      SourceFolder: "E:\\Inetpub\\content"
+              #      contents: "**/*"
+              #      RemoveSourceFolder: false
               - template: Steps/Release/iiswebapplication.yml@templates
                 parameters:
                     xmlTransformation: false
