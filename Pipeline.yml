@@ -84,6 +84,10 @@ stages:
                 inputs:
                   script: 'C:\Windows\system32\inetsrv\appcmd.exe list sites'
               - task: CmdLine@2
+                displayName: "List Apps"
+                inputs:
+                  script: 'C:\Windows\system32\inetsrv\appcmd.exe list apps'                  
+              - task: CmdLine@2
                 displayName: "List App Pools"
                 inputs:
                   script: 'C:\Windows\system32\inetsrv\appcmd.exe list apppools'
