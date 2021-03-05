@@ -43,7 +43,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public void ValidatesTheProfileRequest()
+        public void ShouldValidatesTheProfileRequest()
         {
             Container.GetMock<IProfileValidator>().Verify(r => r.ValidateAsync(profile));
         }

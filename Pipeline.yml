@@ -2,17 +2,100 @@ trigger:
   branches:
     include: [ '*' ] # Trigger on all commits in all branches
   tags:
-    include: [ v* ] # Trigger on v* tags
+    include: [ 'v*', '*deploy*' ] # Trigger on v* tags and *deploy* tags
 
 resources:
   repositories:
     - repository: templates
       type: git
       name: DevOpsManagement/PipelineTemplates
+      ref: refs/heads/features/5615_PipelineSupportForWebApplications
 
 stages:
   - template: Pipelines/website.yml@templates
     parameters:
       artifactFeed: d5f873fd-aea7-4b0f-956a-08364122d906/c8b90219-fc51-43a0-b803-dfc2d668ad9b
-      testFileSpec: ''
-      calculateCoverage: false
+      testFileSpec: '**/*UnitTests*.csproj'      
+      calculateCoverage: true
+
+  - stage: Dev
+    dependsOn: BuildApplication
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-deploy'))
+    variables:
+        - group: ServiceAccounts
+        - group: DevSettings
+        - name: System.Debug
+          value: true
+        - name: "OurDatabaseSettings.MigrateDatabaseOnStartup"
+          value: false
+        - name: "OurDatabaseSettings.SeedSampleData"
+          value: true
+        - name: "OurDatabaseSettings.DatabaseConnectionString"
+          value: '$(AdmsApprenticeConnectionString)'
+        - name: port
+          value: "80"
+        - name: hostname
+          value: "admsapi.edc.hosts.devnetwork"
+        - name: admsApplicationName
+          value: "apprenticeapi"
+    jobs:
+    - deployment: CreateWebsites
+      workspace:
+        clean: all
+      displayName: Deploy to Development
+      environment:
+        name: Backend_Dev
+        resourceType: VirtualMachine
+      strategy:
+        rolling:
+          maxParallel: 100%
+          deploy:
+            steps:
+              - download: none # this line is required
+              - download: current
+                artifact: drop
+                patterns: "**/*.zip"
+              # - task: CmdLine@2
+              #   displayName: "Temp Delete ADMS Web"
+              #   inputs:
+              #      script: 'C:\Windows\system32\inetsrv\appcmd.exe delete site "ADMS.Dev"'
+              # - task: DeleteFiles@1
+              #   displayName: "Temporarily delete all files"
+              #   inputs:
+              #      SourceFolder: "E:\\Inetpub\\content"
+              #      contents: "**/*"
+              #      RemoveSourceFolder: false
+              - template: Steps/Release/iiswebapplication.yml@templates
+                parameters:
+                    xmlTransformation: false
+                    xmlVarSubstitution: false
+                    websiteName: '$(admsWebsiteName)'
+                    installDir: $(admsInstallDir)
+                    takeAppOffline: true
+                    hostName: ${{ variables.hostName}}
+                    userName: "$(ApprenticeAPI_ENETDEV)"
+                    password: "$(ApprenticeAPIPassword_ENETDEV)"
+                    anonymousAuthentication: true
+                    windowsAuthentication: false
+                    webApplicationName: '$(admsApplicationName)'  # new parameter              
+              - task: CmdLine@2
+                displayName: "List sites"
+                inputs:
+                  script: 'C:\Windows\system32\inetsrv\appcmd.exe list sites'
+              - task: CmdLine@2
+                displayName: "List Apps"
+                inputs:
+                  script: 'C:\Windows\system32\inetsrv\appcmd.exe list apps'                  
+              - task: CmdLine@2
+                displayName: "List App Pools"
+                inputs:
+                  script: 'C:\Windows\system32\inetsrv\appcmd.exe list apppools'
+              - task: CmdLine@2
+                displayName: "List Folders"
+                inputs:
+                  script: 'tree /f E:\\Inetpub\\Content'
+# Uncomment this for debugging purposes to confirm the settings for an environment
+              # - task: CmdLine@2
+              #   displayName: "Print Appsettings.json"
+              #   inputs:
+              #     script: 'type E:\\Inetpub\\Content\\ADMS.Dev\\apprenticeapi\\appsettings.json'
