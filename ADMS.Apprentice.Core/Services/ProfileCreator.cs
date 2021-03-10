@@ -26,7 +26,8 @@ namespace ADMS.Apprentice.Core.Services
                 FirstName = message.FirstName,
                 OtherNames = message.OtherNames,
                 PreferredName = message.PreferredName,
-                BirthDate = message.BirthDate             
+                BirthDate = message.BirthDate,
+                EmailAddress =  message.EmailAddress
             };
             await profileValidator.ValidateAsync(profile);
             repository.Insert(profile);

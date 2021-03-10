@@ -11,6 +11,7 @@ using ADMS.Apprentice.Core.Models;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using ADMS.Apprentice.UnitTests.Constants;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -20,21 +21,33 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
     {
         private Profile profile;
         private ActionResult<ProfileModel> profileResult;
-        private ProfileMessage message;       
+        private ProfileMessage message;
+
+
+        private ProfileMessage CreateNewProfileMessage(string surName,
+            String firstName,
+            DateTime dob,
+            String email = null)
+        {
+            return new ProfileMessage
+            {
+                Surname = surName,
+                FirstName = firstName,
+                BirthDate = dob,
+                EmailAddress = email
+            };
+        }
+
         protected override void Given()
         {
-            message = new ProfileMessage
-            {
-                Surname = "Bob",
-                FirstName = "Alex",
-                BirthDate = DateTime.Now.AddYears(-25)
-            };
-
+             
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, ProfileConstants.Birthdate, ProfileConstants.Emailaddress);
             profile = new Profile
             {
                 Surname = message.Surname,
                 FirstName = message.FirstName,
                 BirthDate = message.BirthDate,
+                EmailAddress = message.EmailAddress
             };
             
             Container
@@ -58,16 +71,14 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldReturnValidationErrorIfNameNotValid()
         {
-            message = new ProfileMessage
-            {
-                Surname = "Bob$",
-                FirstName = "Alex",
-                BirthDate = DateTime.Now.AddYears(-25)
-            };
+ 
+            message  = CreateNewProfileMessage("Bob$", ProfileConstants.Firstname, DateTime.Now.AddYears(-25));
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(1);
             lstErrors[0].ErrorMessage.Should().StartWith("Surname must contain only letters, spaces, hyphens and apostrophies");            
         }
+
+       
 
         [TestMethod]
         public void ShouldReturnNoValidationErrorIfNameIsValid()
@@ -83,8 +94,38 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             Validator.TryValidateObject(model, ctx, validationResults, true);
             return validationResults;
         }
+#region EmailAddressTests
+
+        
+        [TestMethod]
+        public void ShouldReturnNoValidationErrorIfEmailIsNull()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25));
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+        [TestMethod]
+        public void ShouldReturnValidationErrorIfEmailIsInvalid()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25),"test");
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(1);
+            lstErrors[0].ErrorMessage.Should().StartWith("Invalid Email Address");
+        }
+
+        [TestMethod]
+        public void ShouldReturnValidationErrorIfEmailLenghtExceedsMax()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, 
+                ProfileConstants.Birthdate,ProfileConstants.Emailaddressmax256 + ProfileConstants.RandomString(100));
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(1);
+            lstErrors[0].ErrorMessage.Should().StartWith("Email Address Exceeds 256 Characters");
+        }
 
     }
+#endregion
+   
 
-    #endregion
+#endregion
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Models;
+using ADMS.Apprentice.UnitTests.Constants;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -19,16 +20,15 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             profile = new Profile
             {
                 Id = 123,
-                FirstName = "Bob",
-                Surname = "Alex",
-                OtherNames = "Charlie",
-                BirthDate = DateTime.Now.AddYears(-25),
-                //GenderCode = "X",
-                //ProfileTypeCode = "Apprentice",
-                CreatedOn = DateTime.Now.AddMinutes(-3),            
-                CreatedBy = "User1",
-                UpdatedOn = DateTime.Now,
-                UpdatedBy = "User2",
+                FirstName = ProfileConstants.Surname,
+                Surname = ProfileConstants.Firstname,
+                OtherNames = ProfileConstants.Secondname,
+                BirthDate = ProfileConstants.Birthdate,
+               EmailAddress = ProfileConstants.Emailaddress,
+               CreatedOn = ProfileConstants.Createdon,            
+                CreatedBy = ProfileConstants.Createdby,
+                UpdatedOn = ProfileConstants.Updatedon,
+                UpdatedBy = ProfileConstants.Updatedby
             };
         }
 
@@ -42,19 +42,22 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
         {
             model.Should().NotBeNull();
         }
-
+        /// <summary>
+        /// Sets all the properties for the models.
+        /// </summary>
         [TestMethod]
         public void SetsPropertiesOnModel()
         {
             model.Id.Should().Be(123);
-            model.FirstName.Should().Be("Bob");
-            model.Surname.Should().Be("Alex");
-            model.OtherNames.Should().Be("Charlie");
-            model.BirthDate.Should().BeCloseTo(DateTime.Now.AddYears(-25));
-            model.CreatedOn.Should().BeCloseTo(DateTime.Now.AddMinutes(-3));            
-            model.UpdatedOn.Should().BeCloseTo(DateTime.Now);
-            model.CreatedBy.Should().Be("User1");
-            model.UpdatedBy.Should().Be("User2");
+            model.FirstName.Should().Be(ProfileConstants.Surname);
+            model.Surname.Should().Be(ProfileConstants.Firstname);
+            model.OtherNames.Should().Be(ProfileConstants.Secondname);
+            model.BirthDate.Should().BeCloseTo(ProfileConstants.Birthdate);
+            model.EmailAddress.Should().Be(ProfileConstants.Emailaddress);
+            model.CreatedOn.Should().BeCloseTo(ProfileConstants.Createdon);            
+            model.UpdatedOn.Should().BeCloseTo(ProfileConstants.Updatedon);
+            model.CreatedBy.Should().Be(ProfileConstants.Createdby);
+            model.UpdatedBy.Should().Be(ProfileConstants.Updatedby);
         }
     }
     #endregion

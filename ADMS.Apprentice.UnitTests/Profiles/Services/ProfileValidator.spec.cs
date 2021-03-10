@@ -9,6 +9,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using ADMS.Apprentice.UnitTests.Constants;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -25,20 +26,23 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             validProfile = new Profile
             {
-                Surname = "Bob",
-                FirstName = "Alex",
-                BirthDate = DateTime.Now.AddYears(-25)
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                EmailAddress = ProfileConstants.Emailaddress
             };
             invalidProfile = new Profile
             {
-                Surname = "Bob",
-                FirstName = "Alex",
-                BirthDate = DateTime.Now.AddYears(-2)
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = DateTime.Now.AddYears(-10),
+                EmailAddress =  ProfileConstants.RandomString(64) +"@" + ProfileConstants.RandomString(256) + "." + ProfileConstants.RandomString(50)
             };
+
             validationException = new ValidationException(null, (ValidationError)null);
             Container
                 .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidApprenticeAge))
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidApprenticeAge ))
                 .Returns(validationException);
         }
 
@@ -56,13 +60,42 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Should().Throw<ValidationException>();
         }
 
+        /// <summary>
+        /// Insert a profile record and check if the email has been updated .
+        /// </summary>
+
+
+        [TestMethod]
+        public async Task DoesNothingIfEmailIsEmpty()
+        {
+            invalidProfile = new Profile
+            {
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = DateTime.Now.AddYears(-14)
+            };
+
+            await ClassUnderTest.ValidateAsync(validProfile);
+
+        }
+
         [TestMethod]
         public void GetsTheValidationExceptionFromTheExceptionFactory()
         {
+
+            invalidProfile = new Profile
+            {
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = DateTime.Now.AddYears(-10),
+                EmailAddress = ProfileConstants.RandomString(64) + "@" + ProfileConstants.RandomString(256) + "." + ProfileConstants.RandomString(50)
+            };
+
             ClassUnderTest
                 .Invoking(async c => await c.ValidateAsync(invalidProfile))
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
+      
 
     }
 

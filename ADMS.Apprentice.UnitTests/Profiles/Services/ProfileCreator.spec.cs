@@ -2,6 +2,7 @@
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services;
+using ADMS.Apprentice.UnitTests.Constants;
 using Adms.Shared;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,9 +20,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             message = new ProfileMessage
             {
-                Surname = "Bob",
-                FirstName = "Alex",
-                BirthDate = DateTime.Now.AddYears(-25)
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                EmailAddress = ProfileConstants.Emailaddress
+
             };
         }
 
@@ -73,7 +76,16 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             profile.ProfileTypeCode.Should().Be(ProfileType.Apprentice.ToString());
         }
-        
+
+        /// <summary>
+        /// Insert a profile record and check if the email has been updated .
+        /// </summary>
+        [TestMethod]
+        public void CheckIfDataBasedHasBeenUpdated()
+        {
+            profile.EmailAddress.Should().Be(message.EmailAddress);
+        }
+
     }
 
     #endregion
