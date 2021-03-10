@@ -20,7 +20,7 @@ namespace ADMS.Apprentice.Database.Seeders
         private readonly IRepository repository;
         private readonly ITfnDetailCreator tfnDetailCreator;
 
-        public TfnDetailSeeder(IRepository repository, ITfnDetailCreator tfnDetailCreator)
+        public TfnDetailSeeder(IRepository repository,  ITfnDetailCreator tfnDetailCreator)
         {
             this.repository = repository;
             this.tfnDetailCreator = tfnDetailCreator;
@@ -30,6 +30,7 @@ namespace ADMS.Apprentice.Database.Seeders
 
         public async Task SeedAsync()
         {
+
             if (!repository.Retrieve<TfnDetail>().Any())
             {
                 await tfnDetailCreator.CreateTfnDetailAsync(new TfnCreateMessage

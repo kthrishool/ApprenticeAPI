@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace ADMS.Apprentice.Core.Entities
 {
-    public class TfnDetail : IAmAnAggregateRoot<int>, ITimestampEnabled
+    public class TfnDetail : IAmAnAggregateRoot<int>, ITimestampEnabled, IAuditable
     {
         public int Id { get; set; }
         public int ApprenticeId { get; set; }

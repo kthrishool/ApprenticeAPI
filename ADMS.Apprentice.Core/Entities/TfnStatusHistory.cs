@@ -3,7 +3,7 @@ using ADMS.Services.Infrastructure.Model.Interface;
 
 namespace ADMS.Apprentice.Core.Entities
 {
-    public class TfnStatusHistory: ITimestampEnabled
+    public class TfnStatusHistory: ITimestampEnabled, IAuditable
     {
         public int Id { get; set; }
         public int TfnDetailId { get; set; }
