@@ -25,15 +25,18 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
     {
         private readonly IRepository repository;
         private readonly ITfnDetailCreator tfnDetailCreator;
+        private readonly ITfnDetailRetreiver tfnDetailRetreiver;
 
         public TfnDetailController(
             IHttpContextAccessor contextAccessor, 
-            IRepository repository, 
-            ITfnDetailCreator tfnDetailCreator
+            IRepository repository,
+            ITfnDetailCreator tfnDetailCreator,
+            ITfnDetailRetreiver tfnDetailRetreiver
             ) : base(contextAccessor)
         {
             this.repository = repository;
             this.tfnDetailCreator = tfnDetailCreator;
+            this.tfnDetailRetreiver = tfnDetailRetreiver;
         }
 
         /// <summary>
@@ -44,10 +47,8 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         [HttpGet("{id}")]
         public async Task<ActionResult<TfnDetailModel>> Get(int id)
         {
-            TfnDetail tfnDetail = await repository
-                .Retrieve<TfnDetail>()
-                .GetAsync(id);
-            return Ok(new TfnDetailModel(tfnDetail));
+            var tfnDetail = await tfnDetailRetreiver.Get(id);
+            return Ok(tfnDetail);
         }
 
 
@@ -60,11 +61,10 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         /// <param name="message">Details of the tfn to be created</param>
         /// <response code="201">Returns newly created tfn</response>
         [HttpPost("post.{format}"), FormatFilter]
-        [DbWrite]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<TfnDetailModel>> Create(TfnCreateMessage message)
+        public async Task<ActionResult<TfnDetailModel>> Create([FromBody] TfnCreateMessage message)
         {
             var model = await tfnDetailCreator.CreateTfnDetailAsync(message);
+            await repository.SaveAsync();
 
             return Created($"/{model.Id}", model);
         }

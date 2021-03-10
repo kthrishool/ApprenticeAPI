@@ -36,13 +36,13 @@ namespace ADMS.Apprentice.Database.Seeders
                 await tfnDetailCreator.CreateTfnDetailAsync(new TfnCreateMessage
                 {
                     ApprenticeId = 1,
-                    TFN = "123456789",
+                    TaxFileNumber = "123456789",
                     Status = TfnStatus.New
                 });
                 await tfnDetailCreator.CreateTfnDetailAsync(new TfnCreateMessage
                 {
                     ApprenticeId = 2,
-                    TFN = "123456789",
+                    TaxFileNumber = "456564645",
                     Status = TfnStatus.New
                 });
             }

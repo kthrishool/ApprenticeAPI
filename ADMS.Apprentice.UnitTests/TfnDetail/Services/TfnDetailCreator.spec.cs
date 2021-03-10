@@ -20,7 +20,7 @@ namespace ADMS.Apprentice.UnitTests.TfnDetails.Services
             message = new TfnCreateMessage
             {
                 ApprenticeId = 1,
-                TFN = "123456789"
+                TaxFileNumber = "123456789"
             };
         }
 
@@ -42,9 +42,9 @@ namespace ADMS.Apprentice.UnitTests.TfnDetails.Services
         }
 
         [TestMethod]
-        public void ShouldSetTheTfn()
+        public void ShouldEncryptTheTFNn()
         {
-            tfnDetail.TFN.Should().Be(message.TFN);
+            Container.GetMock<ICryptography>().Verify(r => r.EncryptTFN(message.ApprenticeId.ToString(), message.TaxFileNumber));
         }
 
         [TestMethod]

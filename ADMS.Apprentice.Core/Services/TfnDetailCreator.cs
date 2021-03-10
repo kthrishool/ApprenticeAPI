@@ -8,22 +8,28 @@ namespace ADMS.Apprentice.Core.Services
     public class TfnDetailCreator : ITfnDetailCreator
     {
         private readonly IRepository repository;
- 
+        private readonly ICryptography cryptography;
+
+
         public TfnDetailCreator (
-            IRepository repository
+            IRepository repository,
+            ICryptography cryptography
             )
         {
             this.repository = repository;
+            this.cryptography = cryptography;
         }
 
         public async Task<TfnDetail> CreateTfnDetailAsync(TfnCreateMessage message)
         {
             var tfnDetail = new TfnDetail { 
                 ApprenticeId = message.ApprenticeId,
-                TFN = message.TFN,
+                TFN = cryptography.EncryptTFN(message.ApprenticeId.ToString(), message.TaxFileNumber),
                 Status = TfnStatus.New
             };
 
+            repository.Insert(tfnDetail);
+            await repository.SaveAsync();
 
             tfnDetail.TfnStatusHistories.Add(new TfnStatusHistory
             {
@@ -31,7 +37,6 @@ namespace ADMS.Apprentice.Core.Services
                 Status = tfnDetail.Status
             });
 
-            await Task.Run(()=> repository.Insert(tfnDetail));
             return tfnDetail;
         }
     }

@@ -159,6 +159,53 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "post apprentice profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fb92ab03-0238-4022-8433-4dc9b05127a1",
+								"type": "text/javascript",
+								"exec": [
+									"eval(pm.variables.get(\"PostmanBDD\"));",
+									"",
+									"it(\"returns status 201\", () => {",
+									"   response.should.have.status(201);",
+									"});",
+									"",
+									"it(\"returns JSON\", () => {",
+									"   response.should.be.json; ",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Surname\": \"Brown\",\r\n    \"FirstName\": \"Emmit\",\r\n    \"OtherNames\": \"Joseph\",\r\n    \"PreferredName\": \"Doc\",\r\n    \"BirthDate\":\"10-04-1960\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apprentice}}/apprentice-profile",
+							"host": [
+								"{{apprentice}}"
+							],
+							"path": [
+								"apprentice-profile"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"event": [
@@ -229,14 +276,65 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{apprentice}}/Apprentices/1/TFN",
+							"raw": "{{apprentice}}/Apprentices/{{application-id}}/TFN/1",
 							"host": [
 								"{{apprentice}}"
 							],
 							"path": [
 								"Apprentices",
-								"1",
-								"TFN"
+								"{{application-id}}",
+								"TFN",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post tfn",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0340617-6fe6-49dc-b2c8-dd2a7fb8323a",
+								"type": "text/javascript",
+								"exec": [
+									"eval(pm.variables.get(\"PostmanBDD\"));",
+									"",
+									"it(\"returns status 201\", () => {",
+									"   response.should.have.status(201);",
+									"});",
+									"",
+									"it(\"returns JSON\", () => {",
+									"   response.should.be.json; ",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"taxFileNumber\": \"1232123213\",\r\n    \"apprenticeId\": {{application-id}}\r\n}"
+						},
+						"url": {
+							"raw": "{{apprentice}}/Apprentices/{{application-id}}/TFN/post.json",
+							"host": [
+								"{{apprentice}}"
+							],
+							"path": [
+								"Apprentices",
+								"{{application-id}}",
+								"TFN",
+								"post.json"
 							]
 						}
 					},

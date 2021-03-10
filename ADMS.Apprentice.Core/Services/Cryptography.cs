@@ -53,14 +53,16 @@ namespace ADMS.Apprentice.Core.Services
             iTotal = cryptographyHelper.GetKeySum(strClientId);
 
             //// Determine which encryption strings to use
-            iEncryptionMerge = dateTimeHelper.GetDateTimeNow().Second % 6;
+            var seconds = dateTimeHelper.GetDateTimeNow().Second;
+
+            iEncryptionMerge = seconds % 6;
             if (iEncryptionMerge == 0)
             {
                 iEncryptionMerge = 6;
             }
 
             // Get the merged encryption strings
-            iReverseFlag = (dateTimeHelper.GetDateTimeNow().Second * iTotal) % 2;
+            iReverseFlag = (seconds * iTotal) % 2;
             strMergedString = cryptographyHelper.MergeKeyStrings(iEncryptionMerge, (iReverseFlag == 0));
 
             // Calculate encryption key and get the multiplier from that key
