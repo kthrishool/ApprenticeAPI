@@ -29,14 +29,16 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
-                EmailAddress = ProfileConstants.Emailaddress
+                EmailAddress = ProfileConstants.Emailaddress,
+                ProfileTypeCode = ProfileConstants.Profiletype
             };
             invalidProfile = new Profile
             {
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = DateTime.Now.AddYears(-10),
-                EmailAddress =  ProfileConstants.RandomString(64) +"@" + ProfileConstants.RandomString(256) + "." + ProfileConstants.RandomString(50)
+                EmailAddress =  ProfileConstants.RandomString(64) +"@" + ProfileConstants.RandomString(256) + "." + ProfileConstants.RandomString(50),
+                ProfileTypeCode = ProfileConstants.Profiletype
             };
 
             validationException = new ValidationException(null, (ValidationError)null);
@@ -72,10 +74,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             {
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
-                BirthDate = DateTime.Now.AddYears(-14)
+                BirthDate = DateTime.Now.AddYears(-14),
+                ProfileTypeCode =  ProfileConstants.Profiletype
             };
 
-            await ClassUnderTest.ValidateAsync(validProfile);
+            await ClassUnderTest.ValidateAsync(invalidProfile);
 
         }
 
@@ -95,8 +98,37 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Invoking(async c => await c.ValidateAsync(invalidProfile))
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
-      
 
+        /// <summary>
+        /// check if the ProfileType Is invalid
+        /// </summary>
+        [TestMethod]
+        public void ThrowsValidationExceptionIfProfileTypeIsInvalid()
+        {
+
+
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType))
+                .Returns(validationException);
+
+
+            invalidProfile = new Profile
+            {
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = DateTime.Now.AddYears(-10),
+                EmailAddress = ProfileConstants.RandomString(64) + "@" + ProfileConstants.RandomString(256) + "." + ProfileConstants.RandomString(50),
+                ProfileTypeCode = "app"
+            };
+
+
+
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(invalidProfile))
+                .Should().Throw<ValidationException>().Where(e => e == validationException);
+
+        }
     }
 
     #endregion

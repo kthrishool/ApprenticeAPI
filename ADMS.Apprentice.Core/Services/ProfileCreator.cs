@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using Adms.Shared;
+using System.Linq;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -19,7 +20,8 @@ namespace ADMS.Apprentice.Core.Services
         }
 
         public async Task<Profile> CreateAsync(ProfileMessage message)
-        {            
+        {
+           
             var profile = new Profile
             {
                 Surname = message.Surname,
@@ -27,7 +29,8 @@ namespace ADMS.Apprentice.Core.Services
                 OtherNames = message.OtherNames,
                 PreferredName = message.PreferredName,
                 BirthDate = message.BirthDate,
-                EmailAddress =  message.EmailAddress
+                EmailAddress =  message.EmailAddress,
+                ProfileTypeCode = Enum.IsDefined(typeof(ProfileType), message?.ProfileType)?message.ProfileType:null
             };
             await profileValidator.ValidateAsync(profile);
             repository.Insert(profile);

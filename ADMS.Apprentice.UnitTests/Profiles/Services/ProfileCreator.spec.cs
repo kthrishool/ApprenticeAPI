@@ -23,8 +23,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
-                EmailAddress = ProfileConstants.Emailaddress
-
+                EmailAddress = ProfileConstants.Emailaddress,
+                ProfileType = ProfileConstants.Profiletype
             };
         }
 
@@ -74,7 +74,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldSetProfileType()
         {
-            profile.ProfileTypeCode.Should().Be(ProfileType.Apprentice.ToString());
+            profile.ProfileTypeCode.Should().Be(ProfileConstants.Profiletype);
         }
 
         /// <summary>

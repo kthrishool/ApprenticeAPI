@@ -32,5 +32,10 @@ namespace ADMS.Apprentice.Core.Messages
         [MaxLength(256, ErrorMessage = "Email Address Exceeds 256 Characters")]
         public string EmailAddress { get; init; }
 
+        [Display(Name = "Profile Type")]
+        [MaxLength(10, ErrorMessage = "Profile Type Exceeds 10 Characters")]
+        [Required(ErrorMessage = "Profile Type is required")]
+        public string ProfileType { get; init; }
+
     }
 }

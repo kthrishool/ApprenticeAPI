@@ -25,6 +25,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 OtherNames = ProfileConstants.Secondname,
                 BirthDate = ProfileConstants.Birthdate,
                EmailAddress = ProfileConstants.Emailaddress,
+               ProfileTypeCode = ProfileConstants.Profiletype,
                CreatedOn = ProfileConstants.Createdon,            
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,

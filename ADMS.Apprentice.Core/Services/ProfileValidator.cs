@@ -21,7 +21,8 @@ namespace ADMS.Apprentice.Core.Services
             if (!ValidateAge(profile.BirthDate))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeAge);
             // making this async because I think we will be wanting to look in the database for duplicates
-            
+            if(!(profile.ProfileTypeCode != null && Enum.IsDefined(typeof(ProfileType),  profile.ProfileTypeCode)))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType);
             return Task.CompletedTask;
         }
 

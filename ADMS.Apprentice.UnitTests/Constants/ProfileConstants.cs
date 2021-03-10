@@ -11,7 +11,9 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static string Surname = "Bob";
         public static DateTime Birthdate = DateTime.Now.AddYears(-25);
         public static string Emailaddress = "test@test.com";
-        public static string Emailaddressmax256 =  "nljflkjdljflksdjflksdjflkjsdfkljsdkljflksdjfldjsfkljsdnljflkjdljflksdjflksdjflkjsdfklfjklsdjfklldsjfhsdkhfkhfjkhsdkfhsdjkhfkhjkfhsdjkh@jklfsdhkhfksdhfjkshdfjkhsdkjfhjksdhfjkhsdfkjhkdsjhfjksdhfkjhkjhfkjsdhfkjsdhfjkhsdjkhfjksdhfjk.hjkfshdkfhskdjhfkjsdhfjkshfsdhjkfhsdjkfhkjsdfhjksdhfjkhsdjkfhksjdhfjsdhfhfsdfhkshkbddvcjhrjkw";
+        public static string Emailaddressmax256 =  RandomString(247) + "@test.com";
+
+        public static string Profiletype = "Apprentice";
         public static DateTime Createdon = DateTime.Now.AddMinutes(-3);
         public static DateTime Updatedon = DateTime.Now;
         public static string Createdby = "User1";
