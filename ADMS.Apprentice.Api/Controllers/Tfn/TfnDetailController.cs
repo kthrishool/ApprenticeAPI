@@ -16,6 +16,7 @@ using ADMS.Apprentice.Api.Filters;
 namespace ADMS.Apprentice.Api.Controllers.Tfn
 {
     [ApiVersion(Version = "1", Latest = "1")]
+    [Route("api/v1/Apprentices/{ApprenticeId}/TFN")]
     [Route("api/Apprentices/{ApprenticeId}/TFN")]
     [Public]
     [Produces("application/json")]

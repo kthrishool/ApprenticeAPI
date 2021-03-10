@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    
     <ProjectReference Include="..\ADMS.Apprentice.Api\ADMS.Apprentice.Api.csproj" />
     <ProjectReference Include="..\ADMS.Apprentice.Core\ADMS.Apprentice.Core.csproj" />
   </ItemGroup>
