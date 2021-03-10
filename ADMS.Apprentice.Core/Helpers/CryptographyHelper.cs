@@ -5,18 +5,6 @@ using System.Text;
 namespace ADMS.Apprentice.Core.Helpers
 {
 
-    public interface ICryptographyHelper
-    {
-        string MergeKeyStrings(int iMerge, bool blnEven);
-        int GetKeySum(string strClientId);
-        int MergeAddCount(string strClientId, int iTotal);
-        string MergeAdd(string strClientId, int iTotal, string strMergedString, string strEncryptedTFN);
-        string GetKey(string strClientId, int iTotal, int iDecryptMultiplier);
-        char Chr(int CharCode);
-        int Asc(string String);
-
-    }
-
     public class CryptographyHelper : ICryptographyHelper
     {
         private const string mstrModuleName = "mdlClientTFN";
@@ -230,9 +218,11 @@ namespace ADMS.Apprentice.Core.Helpers
                 iModTest = 13;
             }
 
+            var seconds = dateTimeHelper.GetDateTimeNow().Second;
+
             if (iDecryptMultiplier == -1)
             {
-                iMultiplier = ((dateTimeHelper.GetDateTimeNow().Second * iTotal) % iModTest) % 10;
+                iMultiplier = ((seconds * iTotal) % iModTest) % 10;
 
                 if (iMultiplier == 0)
                 {

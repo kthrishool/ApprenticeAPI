@@ -1,5 +1,6 @@
 ﻿using Adms.Shared;
 using ADMS.Services.Infrastructure.Model.Interface;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,6 +20,7 @@ namespace ADMS.Apprentice.Core.Entities
         public string UpdatedBy { get; set; }
         public byte[] Version { get; set; }
 
+        [JsonIgnore] 
         public virtual ICollection<TfnStatusHistory> TfnStatusHistories { get; }
 
         public TfnDetail()

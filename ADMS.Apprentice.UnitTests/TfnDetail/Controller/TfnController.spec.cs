@@ -26,7 +26,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             message = new TfnCreateMessage
             {
                 ApprenticeId =1,
-                TFN = "123456789"
+                TaxFileNumber = "123456789"
             };
 
             profile = new TfnDetail
