@@ -47,14 +47,9 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         [HttpGet]
         public async Task<ActionResult<ApprenticeTFNV1>> Get(int apprenticeId)
         {
-            ApprenticeTFN tfnDetail = await repository
-                .Retrieve<ApprenticeTFN>().FirstOrDefaultAsync(x => x.ApprenticeId == apprenticeId);
+            var m =  await tfnDetailRetreiver.Get(apprenticeId);
 
-            return Ok(new ApprenticeTFNV1
-            {
-                ApprenticeId = tfnDetail.ApprenticeId,
-                TaxFileNumber = tfnDetail.TaxFileNumber
-            });
+            return  Ok(m);
         }
 
 
