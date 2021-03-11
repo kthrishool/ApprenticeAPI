@@ -5,9 +5,9 @@ using ADMS.Apprentice.Core.Models;
 namespace ADMS.Apprentice.Core.Services
 {
     [RegisterWithIocContainer]
-	public interface ITfnDetailRetreiver
+	public interface IApprenticeTFNRetreiver
 	{
-		Task<TfnDetailModel> Get(int Id);
+		Task<ApprenticeTFNModel> Get(int Id);
 
 	}
 }

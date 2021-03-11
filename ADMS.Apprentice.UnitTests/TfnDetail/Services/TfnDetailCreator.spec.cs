@@ -6,18 +6,18 @@ using Adms.Shared;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ADMS.Apprentice.UnitTests.TfnDetails.Services
+namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 {
-    #region WhenCreatingATfnDetail
+    #region WhenCreatingAApprenticeTFN
     [TestClass]
-    public class WhenCreatingATfnDetail : GivenWhenThen<TfnDetailCreator>
+    public class WhenCreatingAApprenticeTFN : GivenWhenThen<ApprenticeTFNCreator>
     {        
-        private TfnDetail tfnDetail;
-        private TFNV1 message;
+        private ApprenticeTFN tfnDetail;
+        private ApprenticeTFNV1 message;
 
         protected override void Given()
         {
-            message = new TFNV1
+            message = new ApprenticeTFNV1
             {
                 ApprenticeId = 1,
                 TaxFileNumber = "123456789"
@@ -26,17 +26,17 @@ namespace ADMS.Apprentice.UnitTests.TfnDetails.Services
 
         protected override void When()
         {
-            tfnDetail = ClassUnderTest.CreateTfnDetailAsync(message).Result;
+            tfnDetail = ClassUnderTest.CreateAsync(message).Result;
         }
 
         [TestMethod]
-        public void ShouldReturnTfnDetail()
+        public void ShouldReturnApprenticeTFN()
         {
             tfnDetail.Should().NotBeNull();
         }
 
         [TestMethod]
-        public void ShouldAddTheTfnDetailToTheDatabase()
+        public void ShouldAddTheApprenticeTFNToTheDatabase()
         {
             Container.GetMock<IRepository>().Verify(r => r.Insert(tfnDetail));
         }
@@ -56,16 +56,8 @@ namespace ADMS.Apprentice.UnitTests.TfnDetails.Services
         [TestMethod]
         public void ShouldSetDefaultValues()
         {
-            tfnDetail.Status.Should().Be(TFNStatus.New);
+            tfnDetail.StatusCode.Should().Be(TFNStatus.New);
         }
-
-        [TestMethod]
-        public void ShouldCreateOneStatusHistoryRecord()
-        {
-            tfnDetail.TfnStatusHistories.Count.Should().Be(1);
-        }
-
-
 
     }
 

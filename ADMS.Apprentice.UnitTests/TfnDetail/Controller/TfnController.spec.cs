@@ -16,29 +16,29 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
     #region WhenCreatingAProfile
     [TestClass]
-    public class WhenCreatingTfgnDetailUsingTheApi: GivenWhenThen<TfnDetailController>
+    public class WhenCreatingTfgnDetailUsingTheApi: GivenWhenThen<ApprenticeTFNController>
     {
-        private TfnDetail profile;
-        private ActionResult<TFNV1> result;
-        private TFNV1 message;       
+        private ApprenticeTFN profile;
+        private ActionResult<ApprenticeTFNV1> result;
+        private ApprenticeTFNV1 message;       
         protected override void Given()
         {
-            message = new TFNV1
+            message = new ApprenticeTFNV1
             {
                 ApprenticeId =1,
                 TaxFileNumber = "123456789"
             };
 
-            profile = new TfnDetail
+            profile = new ApprenticeTFN
             {
                 Id = 1,
                 ApprenticeId = 1,
-                TFN = "123456789"
+                TaxFileNumber = "123456789"
             };
 
             Container
-               .GetMock<ITfnDetailCreator>()
-               .Setup(r => r.CreateTfnDetailAsync(message))
+               .GetMock<IApprenticeTFNCreator>()
+               .Setup(r => r.CreateAsync(message))
                .Returns(Task.FromResult(profile));
 
         }

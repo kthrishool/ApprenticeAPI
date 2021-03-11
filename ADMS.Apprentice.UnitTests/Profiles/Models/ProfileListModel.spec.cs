@@ -22,7 +22,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 FirstName = "Bob",
                 Surname = "Alex",
                 OtherNames = "Charlie",
-                BirthDate = DateTime.Now.AddYears(-25),
+                BirthDate = DateTime.Today.AddYears(-25),
                 //GenderCode = "X",
                 //ProfileTypeCode = "Apprentice",
                 CreatedOn = DateTime.Now.AddMinutes(-3),            
@@ -50,7 +50,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.FirstName.Should().Be("Bob");
             model.Surname.Should().Be("Alex");
             model.OtherNames.Should().Be("Charlie");
-            model.BirthDate.Should().BeCloseTo(DateTime.Now.AddYears(-25));
+            model.BirthDate.Should().BeCloseTo(DateTime.Today.AddYears(-25));
             model.CreatedOn.Should().BeCloseTo(DateTime.Now.AddMinutes(-3));            
             model.UpdatedOn.Should().BeCloseTo(DateTime.Now);
             model.CreatedBy.Should().Be("User1");
