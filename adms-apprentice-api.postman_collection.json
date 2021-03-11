@@ -242,7 +242,7 @@
 			]
 		},
 		{
-			"name": "tfn",
+			"name": "ApprenticeTFN",
 			"description": null,
 			"item": [
 				{
@@ -276,15 +276,14 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{apprentice}}/Apprentices/{{application-id}}/TFN/1",
+							"raw": "{{apprentice}}/Apprentices/{{application-id}}/TFN",
 							"host": [
 								"{{apprentice}}"
 							],
 							"path": [
 								"Apprentices",
 								"{{application-id}}",
-								"TFN",
-								"1"
+								"TFN"
 							]
 						}
 					},
