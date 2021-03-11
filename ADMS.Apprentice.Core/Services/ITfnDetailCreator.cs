@@ -8,7 +8,7 @@ namespace ADMS.Apprentice.Core.Services
     [RegisterWithIocContainer]
 	public interface ITfnDetailCreator
 	{
-		Task<TfnDetail> CreateTfnDetailAsync(TfnCreateMessage message);
+		Task<TfnDetail> CreateTfnDetailAsync(TFNV1 message);
 
 	}
 }

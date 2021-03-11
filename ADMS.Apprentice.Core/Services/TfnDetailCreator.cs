@@ -20,12 +20,12 @@ namespace ADMS.Apprentice.Core.Services
             this.cryptography = cryptography;
         }
 
-        public async Task<TfnDetail> CreateTfnDetailAsync(TfnCreateMessage message)
+        public async Task<TfnDetail> CreateTfnDetailAsync(TFNV1 message)
         {
             var tfnDetail = new TfnDetail { 
                 ApprenticeId = message.ApprenticeId,
                 TFN = cryptography.EncryptTFN(message.ApprenticeId.ToString(), message.TaxFileNumber),
-                Status = TfnStatus.New
+                Status = TFNStatus.New
             };
 
             repository.Insert(tfnDetail);

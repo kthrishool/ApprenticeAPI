@@ -20,7 +20,7 @@ namespace ADMS.Apprentice.Database.Mappings
                 .IsRequired();
             entity.Property(e => e.Status)
                 .HasColumnName("Status")
-                .HasConversion(new EnumToStringConverter<TfnStatus>())
+                .HasConversion(new EnumToStringConverter<TFNStatus>())
                 .IsRequired()
                 .HasMaxLength(FieldLength.Short);
             entity.Property(e => e.Version)

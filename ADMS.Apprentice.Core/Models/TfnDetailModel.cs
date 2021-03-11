@@ -10,7 +10,7 @@ namespace ADMS.Apprentice.Core.Models
         public int Id { get; set; }
         public int ApprenticeId { get; set; }
         public string TFN { get; set; }
-        public TfnStatus Status { get; set; }
+        public TFNStatus Status { get; set; }
 
 
         public TfnDetailModel() { }

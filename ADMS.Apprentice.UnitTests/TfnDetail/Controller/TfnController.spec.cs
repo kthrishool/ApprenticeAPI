@@ -19,11 +19,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
     public class WhenCreatingTfgnDetailUsingTheApi: GivenWhenThen<TfnDetailController>
     {
         private TfnDetail profile;
-        private ActionResult<TfnDetailModel> result;
-        private TfnCreateMessage message;       
+        private ActionResult<TFNV1> result;
+        private TFNV1 message;       
         protected override void Given()
         {
-            message = new TfnCreateMessage
+            message = new TFNV1
             {
                 ApprenticeId =1,
                 TaxFileNumber = "123456789"
@@ -45,7 +45,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override async void When()
         {             
-            result = await ClassUnderTest.Create(message);
+            result = await ClassUnderTest.Create(1, message);
         }
 
         [TestMethod]

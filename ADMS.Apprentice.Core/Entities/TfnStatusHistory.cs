@@ -7,7 +7,7 @@ namespace ADMS.Apprentice.Core.Entities
     {
         public int Id { get; set; }
         public int TfnDetailId { get; set; }
-        public TfnStatus Status { get; set; }
+        public TFNStatus Status { get; set; }
 
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }
