@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
@@ -13,7 +12,6 @@ using Adms.Shared.Filters;
 using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace ADMS.Apprentice.Api.Controllers
 {
@@ -30,11 +28,11 @@ namespace ADMS.Apprentice.Api.Controllers
         private readonly IProfileCreator profileCreator;
 
         public ApprenticeProfileController(
-            IHttpContextAccessor contextAccessor, 
-            IRepository repository, 
+            IHttpContextAccessor contextAccessor,
+            IRepository repository,
             IPagingHelper pagingHelper,
             IProfileCreator profileCreator
-            ) : base(contextAccessor)
+        ) : base(contextAccessor)
         {
             this.repository = repository;
             this.pagingHelper = pagingHelper;
@@ -54,18 +52,18 @@ namespace ADMS.Apprentice.Api.Controllers
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfileModel>> Get(int id)
-        {            
-            Profile profile =  await repository.Retrieve<Profile>().GetAsync(id);
+        {
+            Profile profile = await repository.GetAsync<Profile>(id);
             return Ok(new ProfileModel(profile));
         }
-        
+
 
         [HttpPost]
         public async Task<ActionResult<ProfileModel>> Create([FromBody] ProfileMessage message)
-        {           
+        {
             Profile profile = await profileCreator.CreateAsync(message);
             await repository.SaveAsync();
-            return Created($"/{profile.Id}", new ProfileModel(profile));           
-        }       
+            return Created($"/{profile.Id}", new ProfileModel(profile));
+        }
     }
 }

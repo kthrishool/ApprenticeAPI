@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using ADMS.Apprentice.Api.Controllers.Tfn;
+using Adms.Shared.Testing;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {

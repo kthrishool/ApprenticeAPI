@@ -32,6 +32,8 @@ stages:
           value: true
         - name: "OurDatabaseSettings.DatabaseConnectionString"
           value: '$(AdmsApprenticeConnectionString)'
+        - name: "ADMS.Services.ReferenceData.IndirectReferenceDataRepository.BaseUri" #app config variable
+          value: '$(ReferenceDataEndpointBaseUrl)'
         - name: port
           value: "80"
         - name: hostname
@@ -68,7 +70,7 @@ stages:
               - template: Steps/Release/iiswebapplication.yml@templates
                 parameters:
                     xmlTransformation: false
-                    xmlVarSubstitution: false
+                    xmlVarSubstitution: true
                     websiteName: '$(admsWebsiteName)'
                     installDir: $(admsInstallDir)
                     takeAppOffline: true
@@ -99,3 +101,8 @@ stages:
               #   displayName: "Print Appsettings.json"
               #   inputs:
               #     script: 'type E:\\Inetpub\\Content\\ADMS.Dev\\apprenticeapi\\appsettings.json'
+
+              #- task: CmdLine@2
+              #  displayName: "Print app.config"
+              #  inputs:
+              #    script: 'type E:\\Inetpub\\Content\\ADMS.Dev\\apprenticeapi\\app.config'

@@ -44,7 +44,7 @@ namespace ADMS.Apprentice.Core.Models
             EducationLevelCode = apprentice.EducationLevelCode;
             LeftSchoolMonthCode = apprentice.LeftSchoolMonthCode;
             LeftSchoolYearCode = apprentice.LeftSchoolYearCode;
-            ProfileTypeCode = apprentice.ProfileTypeCode.ToString();
+            ProfileTypeCode = apprentice?.ProfileTypeCode?.ToString();
             DeceasedFlag = apprentice.DeceasedFlag;
             ActiveFlag = apprentice.ActiveFlag;
             CreatedOn = apprentice.CreatedOn;

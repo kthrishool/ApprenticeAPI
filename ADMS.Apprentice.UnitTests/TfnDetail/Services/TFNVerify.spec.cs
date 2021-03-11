@@ -2,6 +2,7 @@
 using ADMS.Apprentice.UnitTests;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

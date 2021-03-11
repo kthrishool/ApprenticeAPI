@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Services.Infrastructure.Core.Exceptions;
+using Adms.Shared.Exceptions;
 
 namespace ADMS.Apprentice.Core.Services
 {

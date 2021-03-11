@@ -1,17 +1,19 @@
-﻿using System;
-using ADMS.Apprentice.Core.Entities;
+﻿using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services;
+using ADMS.Apprentice.UnitTests.Constants;
 using Adms.Shared;
+using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
     #region WhenCreatingAProfile
+
     [TestClass]
     public class WhenCreatingAProfile : GivenWhenThen<ProfileCreator>
-    {        
+    {
         private Profile profile;
         private ProfileMessage message;
 
@@ -19,9 +21,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             message = new ProfileMessage
             {
-                Surname = "Bob",
-                FirstName = "Alex",
-                BirthDate = DateTime.Now.AddYears(-25)
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                EmailAddress = ProfileConstants.Emailaddress,
+                ProfileType = ProfileConstants.Profiletype
             };
         }
 
@@ -50,12 +54,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         [TestMethod]
         public void ShouldSetTheName()
-        {           
+        {
             profile.FirstName.Should().Be(message.FirstName);
             profile.Surname.Should().Be(message.Surname);
-        }       
+        }
 
-            [TestMethod]
+        [TestMethod]
         public void ShouldSetTheBirthDate()
         {
             profile.BirthDate.Should().Be(message.BirthDate);
@@ -65,15 +69,23 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ShouldSetDefaultValues()
         {
             profile.DeceasedFlag.Should().BeFalse();
-            profile.ActiveFlag.Should().BeTrue();            
+            profile.ActiveFlag.Should().BeTrue();
         }
 
         [TestMethod]
         public void ShouldSetProfileType()
         {
-            profile.ProfileTypeCode.Should().Be(ProfileType.Apprentice.ToString());
+            profile.ProfileTypeCode.Should().Be(ProfileConstants.Profiletype);
         }
-        
+
+        /// <summary>
+        /// Insert a profile record and check if the email has been updated .
+        /// </summary>
+        [TestMethod]
+        public void CheckIfDataBasedHasBeenUpdated()
+        {
+            profile.EmailAddress.Should().Be(message.EmailAddress);
+        }
     }
 
     #endregion
