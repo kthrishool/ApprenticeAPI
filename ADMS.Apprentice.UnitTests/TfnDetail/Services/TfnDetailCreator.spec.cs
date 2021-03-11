@@ -13,11 +13,11 @@ namespace ADMS.Apprentice.UnitTests.TfnDetails.Services
     public class WhenCreatingATfnDetail : GivenWhenThen<TfnDetailCreator>
     {        
         private TfnDetail tfnDetail;
-        private TfnCreateMessage message;
+        private TFNV1 message;
 
         protected override void Given()
         {
-            message = new TfnCreateMessage
+            message = new TFNV1
             {
                 ApprenticeId = 1,
                 TaxFileNumber = "123456789"
@@ -56,7 +56,7 @@ namespace ADMS.Apprentice.UnitTests.TfnDetails.Services
         [TestMethod]
         public void ShouldSetDefaultValues()
         {
-            tfnDetail.Status.Should().Be(TfnStatus.New);
+            tfnDetail.Status.Should().Be(TFNStatus.New);
         }
 
         [TestMethod]

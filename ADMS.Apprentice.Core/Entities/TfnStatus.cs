@@ -2,7 +2,8 @@
 
 namespace ADMS.Apprentice.Core.Entities
 {
-	public enum TfnStatus
+	// TODO These statuses would be configured in ADW
+	public enum TFNStatus
 	{
 		[Description("New")]
 		New,

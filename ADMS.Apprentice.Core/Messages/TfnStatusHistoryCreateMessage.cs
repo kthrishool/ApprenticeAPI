@@ -7,7 +7,7 @@ namespace ADMS.Apprentice.Core.Messages
     public class TfnStatusHistoryCreateMessage 
     {
         [Required(ErrorMessage = "Status is required")]
-        public TfnStatus Status { get; init; }
+        public TFNStatus Status { get; init; }
 
         [Required(ErrorMessage = "TFN Id required")]
         public int TfnId { get; set; }
