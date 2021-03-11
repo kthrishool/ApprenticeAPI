@@ -11,6 +11,7 @@ namespace ADMS.Apprentice.Core.Models
         public int ApprenticeId { get; set; }
         public string TFN { get; set; }
         public TFNStatus Status { get; set; }
+        public string StatusReason { get; set; }
 
 
         public ApprenticeTFNModel() { }
@@ -21,6 +22,7 @@ namespace ADMS.Apprentice.Core.Models
             ApprenticeId = Tfn.ApprenticeId;
             Status = Tfn.StatusCode;
             TFN = Tfn.TaxFileNumber;
+            StatusReason = Tfn.StatusReasonCode;
 
         }
 
