@@ -27,5 +27,11 @@ namespace ADMS.Apprentice.Core.Exceptions
                 .Select(attr => new ValidationError(attr.ValidationRuleId, attr.Message));
             return new ValidationException(contextRetriever.GetContext(), validationErrors);
         }
+
+
+        public NotFoundException CreateNotFoundException(string resourceType, string resourceKey)
+        {
+            return new NotFoundException(contextRetriever.GetContext(), resourceType, resourceKey);
+        }
     }
 }

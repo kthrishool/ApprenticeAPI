@@ -7,5 +7,7 @@ namespace ADMS.Apprentice.Core.Exceptions
     public interface IExceptionFactory
     {
         ValidationException CreateValidationException(ValidationExceptionType exceptionType, params ValidationExceptionType[] additionalExceptionTypes);
+
+        NotFoundException CreateNotFoundException(string resourceType, string resourceKey);
     }
 }
