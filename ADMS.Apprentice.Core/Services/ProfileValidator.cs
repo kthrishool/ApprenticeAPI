@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
+using Adms.Shared.Exceptions;
 
 namespace ADMS.Apprentice.Core.Services
 {

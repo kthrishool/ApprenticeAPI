@@ -1,18 +1,19 @@
-﻿using System;
-using ADMS.Apprentice.Core.Entities;
+﻿using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services;
 using ADMS.Apprentice.UnitTests.Constants;
 using Adms.Shared;
+using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
     #region WhenCreatingAProfile
+
     [TestClass]
     public class WhenCreatingAProfile : GivenWhenThen<ProfileCreator>
-    {        
+    {
         private Profile profile;
         private ProfileMessage message;
 
@@ -53,12 +54,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         [TestMethod]
         public void ShouldSetTheName()
-        {           
+        {
             profile.FirstName.Should().Be(message.FirstName);
             profile.Surname.Should().Be(message.Surname);
-        }       
+        }
 
-            [TestMethod]
+        [TestMethod]
         public void ShouldSetTheBirthDate()
         {
             profile.BirthDate.Should().Be(message.BirthDate);
@@ -68,7 +69,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ShouldSetDefaultValues()
         {
             profile.DeceasedFlag.Should().BeFalse();
-            profile.ActiveFlag.Should().BeTrue();            
+            profile.ActiveFlag.Should().BeTrue();
         }
 
         [TestMethod]
@@ -85,7 +86,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             profile.EmailAddress.Should().Be(message.EmailAddress);
         }
-
     }
 
     #endregion

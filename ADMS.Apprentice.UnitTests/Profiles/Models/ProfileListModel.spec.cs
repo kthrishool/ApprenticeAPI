@@ -1,7 +1,7 @@
-﻿using System;
-using ADMS.Apprentice.Core.Entities;
+﻿using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Models;
 using ADMS.Apprentice.UnitTests.Constants;
+using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -43,6 +43,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
         {
             model.Should().NotBeNull();
         }
+
         /// <summary>
         /// Sets all the properties for the models.
         /// </summary>
@@ -55,11 +56,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.OtherNames.Should().Be(ProfileConstants.Secondname);
             model.BirthDate.Should().BeCloseTo(ProfileConstants.Birthdate);
             model.EmailAddress.Should().Be(ProfileConstants.Emailaddress);
-            model.CreatedOn.Should().BeCloseTo(ProfileConstants.Createdon);            
+            model.CreatedOn.Should().BeCloseTo(ProfileConstants.Createdon);
             model.UpdatedOn.Should().BeCloseTo(ProfileConstants.Updatedon);
             model.CreatedBy.Should().Be(ProfileConstants.Createdby);
             model.UpdatedBy.Should().Be(ProfileConstants.Updatedby);
         }
     }
+
     #endregion
 }

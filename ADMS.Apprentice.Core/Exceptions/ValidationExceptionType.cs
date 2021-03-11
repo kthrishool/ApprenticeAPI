@@ -1,4 +1,6 @@
-﻿namespace ADMS.Apprentice.Core.Exceptions
+﻿using Adms.Shared.Exceptions;
+
+namespace ADMS.Apprentice.Core.Exceptions
 {
     public enum ValidationExceptionType
     {
