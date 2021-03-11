@@ -5,7 +5,7 @@ using System;
 
 namespace ADMS.Apprentice.Core.Models
 {
-    public record TfnDetailModel 
+    public record ApprenticeTFNModel 
     {
         public int Id { get; set; }
         public int ApprenticeId { get; set; }
@@ -13,18 +13,18 @@ namespace ADMS.Apprentice.Core.Models
         public TFNStatus Status { get; set; }
 
 
-        public TfnDetailModel() { }
+        public ApprenticeTFNModel() { }
 
-        public TfnDetailModel(TfnDetail Tfn) 
+        public ApprenticeTFNModel(ApprenticeTFN Tfn) 
         {
             Id = Tfn.Id;
             ApprenticeId = Tfn.ApprenticeId;
-            Status = Tfn.Status;
-            TFN = Tfn.TFN;
+            Status = Tfn.StatusCode;
+            TFN = Tfn.TaxFileNumber;
 
         }
 
-        public TfnDetailModel(TfnDetail Tfn, IApiUrlBuilder apiUrlBuilder, string currentUrl) : this(Tfn)
+        public ApprenticeTFNModel(ApprenticeTFN Tfn, IApiUrlBuilder apiUrlBuilder, string currentUrl) : this(Tfn)
         {
             var uri = new Uri(currentUrl);
         }

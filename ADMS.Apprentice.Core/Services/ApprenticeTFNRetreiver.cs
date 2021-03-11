@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace ADMS.Apprentice.Core.Services
 {
-    public class TfnDetailRetreiver : ITfnDetailRetreiver
+    public class ApprenticeTFNRetreiver : IApprenticeTFNRetreiver
     {
         private readonly IRepository repository;
         private readonly ICryptography cryptography;
 
 
-        public TfnDetailRetreiver(
+        public ApprenticeTFNRetreiver(
             IRepository repository,
             ICryptography cryptography
             )
@@ -22,13 +22,13 @@ namespace ADMS.Apprentice.Core.Services
             this.cryptography = cryptography;
         }
 
-        public async Task<TfnDetailModel> Get(int id)
+        public async Task<ApprenticeTFNModel> Get(int id)
         {
-            TfnDetail tfnDetail = await repository
-                           .Retrieve<TfnDetail>()
+            ApprenticeTFN tfnDetail = await repository
+                           .Retrieve<ApprenticeTFN>()
                            .GetAsync(id);
 
-            var model = new TfnDetailModel(tfnDetail);
+            var model = new ApprenticeTFNModel(tfnDetail);
 
             model.TFN = cryptography.DecryptTFN(model.ApprenticeId.ToString(), model.TFN);
 

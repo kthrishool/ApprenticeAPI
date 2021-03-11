@@ -22,21 +22,21 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
     [Public]
     [Produces("application/json")]
     [Consumes("application/json")]
-    public class TfnDetailController : AdmsController
+    public class ApprenticeTFNController : AdmsController
     {
         private readonly IRepository repository;
-        private readonly ITfnDetailCreator tfnDetailCreator;
-        private readonly ITfnDetailRetreiver tfnDetailRetreiver;
+        private readonly IApprenticeTFNCreator apprenticeTFNCreator;
+        private readonly IApprenticeTFNRetreiver tfnDetailRetreiver;
 
-        public TfnDetailController(
+        public ApprenticeTFNController(
             IHttpContextAccessor contextAccessor, 
             IRepository repository,
-            ITfnDetailCreator tfnDetailCreator,
-            ITfnDetailRetreiver tfnDetailRetreiver
+            IApprenticeTFNCreator apprenticeTFNCreator,
+            IApprenticeTFNRetreiver tfnDetailRetreiver
             ) : base(contextAccessor)
         {
             this.repository = repository;
-            this.tfnDetailCreator = tfnDetailCreator;
+            this.apprenticeTFNCreator = apprenticeTFNCreator;
             this.tfnDetailRetreiver = tfnDetailRetreiver;
         }
 
@@ -45,15 +45,15 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         /// </summary>
         /// <param name="apprenticeId">Id of the Apprentice.</param>
         [HttpGet]
-        public async Task<ActionResult<TFNV1>> Get(int apprenticeId)
+        public async Task<ActionResult<ApprenticeTFNV1>> Get(int apprenticeId)
         {
-            TfnDetail tfnDetail = await repository
-                .Retrieve<TfnDetail>().FirstOrDefaultAsync(x => x.ApprenticeId == apprenticeId);
+            ApprenticeTFN tfnDetail = await repository
+                .Retrieve<ApprenticeTFN>().FirstOrDefaultAsync(x => x.ApprenticeId == apprenticeId);
 
-            return Ok(new TFNV1
+            return Ok(new ApprenticeTFNV1
             {
                 ApprenticeId = tfnDetail.ApprenticeId,
-                TaxFileNumber = tfnDetail.TFN
+                TaxFileNumber = tfnDetail.TaxFileNumber
             });
         }
 
@@ -69,10 +69,10 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         /// <response code="201">Returns newly created tfn</response>
         [HttpPost("post.{format}"), FormatFilter]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<TFNV1>> Create(int apprenticeId, [FromBody] TFNV1 message)
+        public async Task<ActionResult<ApprenticeTFNV1>> Create(int apprenticeId, [FromBody] ApprenticeTFNV1 message)
         {
             message.ApprenticeId = apprenticeId;
-            var model = await tfnDetailCreator.CreateTfnDetailAsync(message);
+            var model = await apprenticeTFNCreator.CreateAsync(message);
             await repository.SaveAsync();
 
             return Created($"/{model.Id}", model);

@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Adms.Shared.Attributes;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
-using Adms.Shared.Attributes;
 
 namespace ADMS.Apprentice.Core.Services
 {
     [RegisterWithIocContainer]
-	public interface ITfnDetailCreator
+	public interface IApprenticeTFNCreator
 	{
-		Task<TfnDetail> CreateTfnDetailAsync(TFNV1 message);
+		Task<ApprenticeTFN> CreateAsync(ApprenticeTFNV1 message);
 
 	}
 }
