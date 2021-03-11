@@ -3,6 +3,7 @@ using Adms.Shared.Extensions;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace ADMS.Apprentice.Core.Services
@@ -23,10 +24,10 @@ namespace ADMS.Apprentice.Core.Services
         }
 
         public async Task<ApprenticeTFNModel> Get(int id)
-        {
-            ApprenticeTFN tfnDetail = await repository
-                           .Retrieve<ApprenticeTFN>()
-                           .GetAsync(id);
+        { 
+            ApprenticeTFN tfnDetail = (await repository
+                .Retrieve<ApprenticeTFN>()
+                .FirstOrDefaultAsync(x => x.ApprenticeId == id));
 
             var model = new ApprenticeTFNModel(tfnDetail);
 
