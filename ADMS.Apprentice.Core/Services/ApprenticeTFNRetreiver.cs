@@ -1,11 +1,10 @@
 ﻿using Adms.Shared;
-using Adms.Shared.Extensions;
 using ADMS.Apprentice.Core.Entities;
-using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using ADMS.Apprentice.Core.Exceptions;
+using Adms.Shared.Exceptions;
+using Adms.Shared.Database;
 using ADMS.Services.Infrastructure.Core.Exceptions;
 
 namespace ADMS.Apprentice.Core.Services
@@ -15,16 +14,19 @@ namespace ADMS.Apprentice.Core.Services
         private readonly IRepository repository;
         private readonly ICryptography cryptography;
         private readonly IExceptionFactory exceptionFactory;
-
+        private readonly IContextRetriever contextRetriever;
 
         public ApprenticeTFNRetreiver(
             IRepository repository,
             ICryptography cryptography, 
-            IExceptionFactory exceptionFactory)
+            IExceptionFactory exceptionFactory,
+            IContextRetriever contextRetriever
+            )
         {
             this.repository = repository;
             this.cryptography = cryptography;
             this.exceptionFactory = exceptionFactory;
+            this.contextRetriever = contextRetriever;
         }
 
         public async Task<ApprenticeTFNModel> Get(int id)
@@ -35,7 +37,7 @@ namespace ADMS.Apprentice.Core.Services
 
             if (tfnEntity == null)
             {
-                throw exceptionFactory.CreateNotFoundException("TFN", $"apprenticeId {id}");
+                throw new ValidationException(contextRetriever.GetContext(), new ADMS.Services.Infrastructure.Core.Validation.ValidationError ("TFN", $"apprenticeId {id}"));
             }
 
             var model = new ApprenticeTFNModel(tfnEntity);

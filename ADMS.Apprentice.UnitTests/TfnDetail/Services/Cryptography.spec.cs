@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Xml.Linq;
-using Adms.Shared;
 using ADMS.Apprentice.Core.Helpers;
 using ADMS.Apprentice.Core.Services;
-using ADMS.Apprentice.UnitTests;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Adms.Shared.Testing;
 
 // ReSharper disable UnusedMember.Local
 
