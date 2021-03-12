@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Xml.Linq;
+using Adms.Shared;
 using ADMS.Apprentice.Core.Helpers;
 using ADMS.Apprentice.Core.Services;
+using ADMS.Apprentice.UnitTests;
+using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
