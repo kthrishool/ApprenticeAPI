@@ -1,14 +1,11 @@
 ﻿using Adms.Shared;
-using Adms.Shared.Extensions;
 using ADMS.Apprentice.Core.Entities;
-using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Adms.Shared.Exceptions;
 using Adms.Shared.Database;
 using ADMS.Services.Infrastructure.Core.Exceptions;
-using Adms.Shared.Exceptions;
 
 namespace ADMS.Apprentice.Core.Services
 {
