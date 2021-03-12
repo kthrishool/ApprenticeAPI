@@ -38,7 +38,8 @@ namespace ADMS.Apprentice.Api
             {
                 JsonSerialisationConfiguration.Configure(options.SerializerSettings);
                 options.SerializerSettings.Converters.Add(new SortedListConverter());
-            });
+            }).AddXmlSerializerFormatters();
+            
 
             SettingsConfiguration.Configure(services, Configuration);
             DependencyInjectionConfiguration.ConfigureServices(services);

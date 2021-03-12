@@ -6,7 +6,6 @@ using Adms.Shared;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Adms.Shared.Testing;
 
 namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 {

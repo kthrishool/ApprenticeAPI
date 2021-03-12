@@ -20,8 +20,8 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
     [Route("api/v1/apprentices/{apprenticeId}/TFN")]
     [Route("api/apprentices/{apprenticeId}/TFN")]
     [Public]
-    [Produces("application/json")]
-    [Consumes("application/json")]
+    [Produces("application/json","text/xml")]
+    [Consumes("application/json","text/xml")]
     public class ApprenticeTFNController : AdmsController
     {
         private readonly IRepository repository;
@@ -62,9 +62,32 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         /// <param name="apprenticeId"></param>
         /// <param name="message">Details of the tfn to be created</param>
         /// <response code="201">Returns newly created tfn</response>
-        [HttpPost("post.{format}"), FormatFilter]
+        [HttpPost]
+        [Consumes("application/json")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<ApprenticeTFNV1>> Create(int apprenticeId, [FromBody] ApprenticeTFNV1 message)
+        public async Task<ActionResult<ApprenticeTFNV1>> Post(int apprenticeId, [FromBody] ApprenticeTFNV1 message)
+        {
+            message.ApprenticeId = apprenticeId;
+            var model = await apprenticeTFNCreator.CreateAsync(message);
+            await repository.SaveAsync();
+
+            return Created($"/{model.Id}", model);
+        }
+        /// <summary>
+        /// Create a new tfnDetail record
+        /// </summary>
+        /// <remarks>
+        /// Create a new tfn and return all details.
+        /// </remarks>
+        /// <param name="apprenticeId"></param>
+        /// <param name="message">Details of the tfn to be created</param>
+        /// <response code="201">Returns newly created tfn</response>
+        [HttpPost("PostTyims")]
+        [Consumes("text/xml")]
+        [Produces("text/xml")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<ApprenticeTFNV1>> PostTyims(int apprenticeId, [FromBody] ApprenticeTFNV1 message)
         {
             message.ApprenticeId = apprenticeId;
             var model = await apprenticeTFNCreator.CreateAsync(message);

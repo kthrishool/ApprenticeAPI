@@ -276,13 +276,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{apprentice}}/Apprentices/{{application-id}}/TFN",
+							"raw": "{{apprentice}}/Apprentices/4/TFN",
 							"host": [
 								"{{apprentice}}"
 							],
 							"path": [
 								"Apprentices",
-								"{{application-id}}",
+								"4",
 								"TFN"
 							]
 						}
@@ -310,6 +310,16 @@
 									""
 								]
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0715e8cb-1f27-4f2a-9be1-763ab087e1a0",
+								"type": "text/javascript",
+								"exec": [
+									"pm.variables.set(\"application-id\",4);"
+								]
+							}
 						}
 					],
 					"request": {
@@ -325,15 +335,65 @@
 							"raw": "{\r\n    \"taxFileNumber\": \"1232123213\",\r\n    \"apprenticeId\": {{application-id}}\r\n}"
 						},
 						"url": {
-							"raw": "{{apprentice}}/Apprentices/{{application-id}}/TFN/post.json",
+							"raw": "{{apprentice}}/Apprentices/{{application-id}}/TFN",
 							"host": [
 								"{{apprentice}}"
 							],
 							"path": [
 								"Apprentices",
 								"{{application-id}}",
+								"TFN"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post tfn xml",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0340617-6fe6-49dc-b2c8-dd2a7fb8323a",
+								"type": "text/javascript",
+								"exec": [
+									"eval(pm.variables.get(\"PostmanBDD\"));",
+									"",
+									"it(\"returns status 201\", () => {",
+									"   response.should.have.status(201);",
+									"});",
+									"",
+									"it(\"returns JSON\", () => {",
+									"   response.should.be.json; ",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml",
+								"description": "xml from TYIMS"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<ApprenticeTFNV1 xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/ADMS.Apprentice.Core.Messages\">\r\n\t<ApprenticeId>6</ApprenticeId>\r\n\t<TaxFileNumber>123456789</TaxFileNumber>\r\n\t<StatusCode>New</StatusCode>\r\n\t<StatusReasonCode>New</StatusReasonCode>\r\n</ApprenticeTFNV1>\r\n\r\n"
+						},
+						"url": {
+							"raw": "{{apprentice}}/Apprentices/6/TFN/PostTyims",
+							"host": [
+								"{{apprentice}}"
+							],
+							"path": [
+								"Apprentices",
+								"6",
 								"TFN",
-								"post.json"
+								"PostTyims"
 							]
 						}
 					},
