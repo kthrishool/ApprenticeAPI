@@ -197,7 +197,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         [TestMethod]
         public void ShouldDecryptTheTFNn()
         {
-            Container.GetMock<ICryptography>().Verify(r => r.DecryptTFN(message.ApprenticeId.ToString(), message.TaxFileNumber));
+            Container.GetMock<ICryptography>().Verify(r => r.DecryptTFN(message.ApprenticeId.ToString(), message.TaxFileNumber.ToString()));
         }
 
         [TestMethod]

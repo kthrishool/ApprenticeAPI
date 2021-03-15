@@ -12,7 +12,7 @@ namespace ADMS.Apprentice.Core.Messages
         public int ApprenticeId { get; set; }
 
         [Required(ErrorMessage = "TFN is required")]
-        public string TaxFileNumber { get; set; }
+        public long TaxFileNumber { get; set; }
 
         public TFNStatus StatusCode { get; set; }
         public DateTime StatusDate { get; set; }

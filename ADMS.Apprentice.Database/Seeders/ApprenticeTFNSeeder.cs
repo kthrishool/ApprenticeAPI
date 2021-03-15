@@ -33,7 +33,7 @@ namespace ADMS.Apprentice.Database.Seeders
                 await ApprenticeTFNCreator.CreateAsync(new ApprenticeTFNV1
                 {
                     ApprenticeId = 1,
-                    TaxFileNumber = "123456789",
+                    TaxFileNumber = 123456789,
                     StatusCode = TFNStatus.New,
                     StatusReasonCode = TFNStatus.New.ToString(),
                     StatusDate = DateTime.Now,
@@ -42,7 +42,7 @@ namespace ADMS.Apprentice.Database.Seeders
                 await ApprenticeTFNCreator.CreateAsync(new ApprenticeTFNV1
                 {
                     ApprenticeId = 2,
-                    TaxFileNumber = "456564645",
+                    TaxFileNumber = 456564645,
                     StatusCode = TFNStatus.New,
                     StatusReasonCode = TFNStatus.New.ToString(),
                     StatusDate = DateTime.Now,
