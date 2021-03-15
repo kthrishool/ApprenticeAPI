@@ -37,6 +37,11 @@ namespace ADMS.Apprentice.Core.Services
                 exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeId);
             }
 
+            if (message.TaxFileNumber <= 0)
+            {
+                exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidTFN);
+            }
+
             var apprenticeProfile = repository.Get<Profile>(message.ApprenticeId);
 
             if (apprenticeProfile == null)

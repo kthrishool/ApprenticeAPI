@@ -12,7 +12,9 @@ namespace ADMS.Apprentice.Core.Exceptions
         [ExceptionDetails("AP-VAL-0003", "ApprenticeId is not valid")]
         InvalidApprenticeId,
         [ExceptionDetails("AP-VAL-0004", "TFN already recorded for this apprentice.")]
-        TFNAlreadyExists
+        TFNAlreadyExists,
+        [ExceptionDetails("AP-VAL-0005", "TFN is not valid")]
+        InvalidTFN
 
     }
 }
