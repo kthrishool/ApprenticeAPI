@@ -45,9 +45,9 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         /// </summary>
         /// <param name="apprenticeId">Id of the Apprentice.</param>
         [HttpGet]
-        public async Task<ActionResult<ApprenticeTFNV1>> Get(int apprenticeId)
+        public ActionResult<ApprenticeTFNV1> Get(int apprenticeId)
         {
-            var m =  await tfnDetailRetreiver.Get(apprenticeId);
+            var m =  tfnDetailRetreiver.Get(apprenticeId);
 
             return  Ok(m);
         }

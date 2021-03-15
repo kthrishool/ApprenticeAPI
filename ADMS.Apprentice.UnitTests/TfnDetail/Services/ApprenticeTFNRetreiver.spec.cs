@@ -16,6 +16,8 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query;
+using Adms.Shared.Exceptions;
+using Adms.Shared.Database;
 
 namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 {
@@ -114,58 +116,51 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 
     #region WhenRetreivingAApprenticeTFN
     [TestClass]
-    public class WhenRetreivingAApprenticeTFN : GivenWhenThen<ApprenticeTFNRetreiver>
+    public class WhenRetreivingApprenticeTFN : GivenWhenThen<ApprenticeTFNRetreiver>
     {
         private ApprenticeTFNModel tfnDetail;
-        private ApprenticeTFNV1 message;
         private const int apprenticeId = 111;
 
+        protected readonly Mock<ICryptography> ctx2 = new Mock<ICryptography>();
+
+        internal static Mock<DbSet<T>> GetMockDbSet<T>(ICollection<T> entities) where T : class
+        {
+            var mockSet = new Mock<DbSet<T>>();
+            mockSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(entities.AsQueryable().Provider);
+            mockSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(entities.AsQueryable().Expression);
+            mockSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(entities.AsQueryable().ElementType);
+            mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(entities.AsQueryable().GetEnumerator());
+            mockSet.Setup(m => m.Add(It.IsAny<T>())).Callback<T>(entities.Add);
+            return mockSet;
+        }
 
         internal static Mock<DbSet<ApprenticeTFN>> SingleApprenticeTFN()
         {
-            var ApprenticeTfn3 = new ApprenticeTFN
-            {
-                ApprenticeId = apprenticeId + 2,
-                TaxFileNumber = "999888777",
-                StatusCode = TFNStatus.New,
-                StatusReasonCode = "New"
-            };
-
-           var data = new List<ApprenticeTFN> {
-                    new ApprenticeTFN
-                    {
-                        ApprenticeId = apprenticeId,
-                        TaxFileNumber = "123456789",
-                        StatusCode = TFNStatus.New,
-                        StatusReasonCode = "New"
-                    },
+            var data = new List<ApprenticeTFN> {
+                new ApprenticeTFN
+                {
+                    ApprenticeId = apprenticeId,
+                    TaxFileNumber = "123456789",
+                    StatusCode = TFNStatus.New,
+                    StatusReasonCode = "New"
+                },
                 new ApprenticeTFN
                 {
                     ApprenticeId = apprenticeId + 1,
                     TaxFileNumber = "999888777",
                     StatusCode = TFNStatus.New,
                     StatusReasonCode = "New"
+                },
+                new ApprenticeTFN
+                {
+                    ApprenticeId = apprenticeId + 2,
+                    TaxFileNumber = "999888777",
+                    StatusCode = TFNStatus.New,
+                    StatusReasonCode = "New"
                 }
             };
 
-            IQueryable<ApprenticeTFN> caList = new List<ApprenticeTFN>(data).AsQueryable();
-
-            var mockDbSet = new Mock<DbSet<ApprenticeTFN>>();
-
-            mockDbSet.As<IQueryable<ApprenticeTFN>>()
-                .Setup(x => x.GetEnumerator())
-                .Returns(caList.GetEnumerator());
-
-            mockDbSet.As<IQueryable<ApprenticeTFN>>()
-                .Setup(x => x.Provider)
-                .Returns(new AsyncQueryProvider<ApprenticeTFN>(caList.Provider));
-
-            mockDbSet.As<IQueryable<ApprenticeTFN>>()
-                .Setup(x => x.Expression)
-                .Returns(caList.Expression);
-
-            CancellationToken cancellationToken = default;
-
+            var mockDbSet = GetMockDbSet<ApprenticeTFN>(data);
             return mockDbSet;
         }
 
@@ -178,18 +173,21 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 
         protected override void When()
         {
-            Mock<DbSet<ApprenticeTFN>> mockDbSet = SingleApprenticeTFN();
+            var mockDbSet = SingleApprenticeTFN();
+            var ctx = new Mock<IRepository>();
+            var ctx3 = new Mock<IExceptionFactory>();
+            var ctx4 = new Mock<IContextRetriever>();
 
-            var mockCtx = new Mock<IRepository>();
-           // mockCtx.SetupGet(c => c.Retrieve<ApprenticeTFN>).Returns(mockDbSet.Object);
+            ctx.Setup(c => c.Retrieve<ApprenticeTFN>()).Returns(mockDbSet.Object);
+            IApprenticeTFNRetreiver service = new ApprenticeTFNRetreiver (ctx.Object,ctx2.Object, ctx3.Object, ctx4.Object);
 
-            tfnDetail = ClassUnderTest.Get(apprenticeId).Result;
+
+            tfnDetail = service.Get(apprenticeId);
         }
 
         [TestMethod]
-        public async Task ShouldReturnApprenticeTFN()
+        public void ShouldReturnApprenticeTFN()
         {
-            tfnDetail = await ClassUnderTest.Get(apprenticeId);
 
             tfnDetail.Should().NotBeNull();
         }
@@ -197,13 +195,13 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         [TestMethod]
         public void ShouldDecryptTheTFNn()
         {
-            Container.GetMock<ICryptography>().Verify(r => r.DecryptTFN(message.ApprenticeId.ToString(), message.TaxFileNumber.ToString()));
+            ctx2.Verify(r => r.DecryptTFN(tfnDetail.ApprenticeId.ToString(), It.IsAny<string>()));
         }
 
         [TestMethod]
         public void ShouldSetTheApprenticeId()
         {
-            tfnDetail.ApprenticeId.Should().Be(message.ApprenticeId);
+            tfnDetail.ApprenticeId.Should().Be(tfnDetail.ApprenticeId);
         }
 
         [TestMethod]

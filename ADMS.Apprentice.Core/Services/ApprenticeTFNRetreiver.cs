@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Adms.Shared.Exceptions;
 using Adms.Shared.Database;
 using ADMS.Services.Infrastructure.Core.Exceptions;
+using System.Linq;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -29,11 +30,11 @@ namespace ADMS.Apprentice.Core.Services
             this.contextRetriever = contextRetriever;
         }
 
-        public async Task<ApprenticeTFNModel> Get(int id)
+        public ApprenticeTFNModel Get(int id)
         {
-            var tfnEntity = await repository
-                .Retrieve<ApprenticeTFN>()
-                .FirstOrDefaultAsync(x => x.ApprenticeId == id);
+            var r = repository
+                .Retrieve<ApprenticeTFN>();
+            var tfnEntity =    r.FirstOrDefault(x => x.ApprenticeId == id);
 
             if (tfnEntity == null)
             {

@@ -7,7 +7,6 @@ namespace ADMS.Apprentice.Core.Services
     [RegisterWithIocContainer]
 	public interface IApprenticeTFNRetreiver
 	{
-		Task<ApprenticeTFNModel> Get(int Id);
-
+		ApprenticeTFNModel Get(int id);
 	}
 }
