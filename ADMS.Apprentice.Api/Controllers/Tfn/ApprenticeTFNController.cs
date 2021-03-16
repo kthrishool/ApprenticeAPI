@@ -45,6 +45,7 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         /// </summary>
         /// <param name="apprenticeId">Id of the Apprentice.</param>
         [HttpGet]
+        [Produces("application/json", "application/xml")]
         public ActionResult<ApprenticeTFNV1> Get(int apprenticeId)
         {
             var m =  tfnDetailRetreiver.Get(apprenticeId);
@@ -63,31 +64,10 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         /// <param name="message">Details of the tfn to be created</param>
         /// <response code="201">Returns newly created tfn</response>
         [HttpPost]
-        [Consumes("application/json")]
-        [Produces("application/json")]
+        [Consumes("application/json", "application/xml", "text/xml")]
+        [Produces("application/json", "application/xml")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<ApprenticeTFNV1>> Post(int apprenticeId, [FromBody] ApprenticeTFNV1 message)
-        {
-            message.ApprenticeId = apprenticeId;
-            var model = await apprenticeTFNCreator.CreateAsync(message);
-            await repository.SaveAsync();
-
-            return Created($"/{model.Id}", model);
-        }
-        /// <summary>
-        /// Create a new tfnDetail record
-        /// </summary>
-        /// <remarks>
-        /// Create a new tfn and return all details.
-        /// </remarks>
-        /// <param name="apprenticeId"></param>
-        /// <param name="message">Details of the tfn to be created</param>
-        /// <response code="201">Returns newly created tfn</response>
-        [HttpPost("PostTyims")]
-        [Consumes("text/xml")]
-        [Produces("text/xml")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<ApprenticeTFNV1>> PostTyims(int apprenticeId, [FromBody] ApprenticeTFNV1 message)
         {
             message.ApprenticeId = apprenticeId;
             var model = await apprenticeTFNCreator.CreateAsync(message);
