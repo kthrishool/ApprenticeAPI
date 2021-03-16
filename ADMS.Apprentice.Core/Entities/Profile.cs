@@ -1,13 +1,13 @@
 ﻿using System;
-using Adms.Shared;
+using System.Collections.Generic;
 using ADMS.Services.Infrastructure.Model.Interface;
+using Adms.Shared;
 
 namespace ADMS.Apprentice.Core.Entities
 {
-    public class Profile: IAmAnAggregateRoot<int>, IAuditableIdentifier, ITimestampEnabled
+    public class Profile : IAmAnAggregateRoot<int>, IAuditableIdentifier, ITimestampEnabled
     {
-
-        public int Id { get; set; }        
+        public int Id { get; set; }
         public string Surname { get; set; }
         public string FirstName { get; set; }
         public string OtherNames { get; set; }
@@ -31,11 +31,15 @@ namespace ADMS.Apprentice.Core.Entities
         public byte[] Version { get; set; }
         public long AuditEventId { get; set; }
 
+
+        public virtual ICollection<Phone> Phones { get; set; }
+
         public Profile()
         {
             ActiveFlag = true;
             DeceasedFlag = false;
-            ProfileTypeCode = ProfileType.Apprentice.ToString();       
+            ProfileTypeCode = ProfileType.Apprentice.ToString();
+            Phones = new List<Phone>();
         }
     }
 }

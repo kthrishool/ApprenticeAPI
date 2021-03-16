@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using Adms.Shared;
-using System.Linq;
 
 namespace ADMS.Apprentice.Core.Services
 {
-    public class ProfileCreator :  IProfileCreator
+    public class ProfileCreator : IProfileCreator
     {
         private readonly IRepository repository;
         private readonly IProfileValidator profileValidator;
@@ -21,7 +21,6 @@ namespace ADMS.Apprentice.Core.Services
 
         public async Task<Profile> CreateAsync(ProfileMessage message)
         {
-           
             var profile = new Profile
             {
                 Surname = message.Surname,
@@ -29,8 +28,11 @@ namespace ADMS.Apprentice.Core.Services
                 OtherNames = message.OtherNames,
                 PreferredName = message.PreferredName,
                 BirthDate = message.BirthDate,
-                EmailAddress =  message.EmailAddress,
-                ProfileTypeCode = Enum.IsDefined(typeof(ProfileType), message?.ProfileType)?message.ProfileType:null
+                EmailAddress = message.EmailAddress,
+                ProfileTypeCode =
+                    Enum.IsDefined(typeof(ProfileType), message?.ProfileType) ? message.ProfileType : null,
+                Phones = message?.PhoneNumbers?.Select(c => new Phone()
+                    {PhoneNumber = c, PhoneTypeCode = PhoneType.LandLine.ToString()}).ToList()
             };
             await profileValidator.ValidateAsync(profile);
             repository.Insert(profile);

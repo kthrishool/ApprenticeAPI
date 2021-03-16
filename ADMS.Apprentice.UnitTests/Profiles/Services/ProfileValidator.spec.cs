@@ -37,7 +37,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = DateTime.Now.AddYears(-10),
-                EmailAddress =  ProfileConstants.RandomString(64) +"@" + ProfileConstants.RandomString(256) + "." + ProfileConstants.RandomString(50),
+                EmailAddress = ProfileConstants.RandomString(64) + "@" + ProfileConstants.RandomString(256) + "." + ProfileConstants.RandomString(50),
                 ProfileTypeCode = ProfileConstants.Profiletype
             };
 
@@ -73,11 +73,39 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = DateTime.Now.AddYears(-14),
-                ProfileTypeCode =  ProfileConstants.Profiletype
+                ProfileTypeCode = ProfileConstants.Profiletype
             };
 
             await ClassUnderTest.ValidateAsync(invalidProfile);
+        }
 
+        private async Task GetsTheValidationExceptionIfEmailIsInvalid(string EmailAddress)
+        {
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidEmailAddress))
+                .Returns(validationException);
+
+            validProfile.EmailAddress = EmailAddress;
+            //  await ClassUnderTest.ValidateAsync(invalidProfile);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().Throw<ValidationException>().Where(e => e == validationException);
+        }
+
+        [TestMethod]
+        public void GetValidationExceptionForEmails()
+        {
+            // onlyDomainName
+            GetsTheValidationExceptionIfEmailIsInvalid("@.com");
+            // onlyDomainName
+            GetsTheValidationExceptionIfEmailIsInvalid("@test.com");
+            // No .com
+            GetsTheValidationExceptionIfEmailIsInvalid("turtjfhfhgfhg@jkhjkhjkhjk");
+            // No Domain Name
+            GetsTheValidationExceptionIfEmailIsInvalid("ghjghjg@.comjjj");
+            // No @symbol
+            GetsTheValidationExceptionIfEmailIsInvalid("ghjghjg.comjjj");
         }
 
         [TestMethod]
@@ -102,8 +130,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsValidationExceptionIfProfileTypeIsInvalid()
         {
-
-
             Container
                 .GetMock<IExceptionFactory>()
                 .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType))
@@ -120,11 +146,64 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             };
 
 
-
             ClassUnderTest
                 .Invoking(async c => await c.ValidateAsync(invalidProfile))
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
+        }
 
+
+        [TestMethod]
+        public void DoesNothingIfThePhoneNumberIsValid()
+        {
+            var phones = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = "0212345678"};
+
+            validProfile.Phones.Add(phones);
+            ClassUnderTest.ValidateAsync(validProfile);
+        }
+
+        private void PhoneContainerError(string phones)
+        {
+            var number = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = phones};
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidPhoneNumber))
+                .Returns(validationException);
+
+            validProfile.Phones.Add(number);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().Throw<ValidationException>().Where(e => e == validationException);
+        }
+
+        private void PhoneContainerPositive(string phones)
+        {
+            var number = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = phones};
+
+            validProfile.Phones.Add(number);
+            ClassUnderTest.ValidateAsync(validProfile);
+        }
+
+        [TestMethod]
+        public void ThrowExceptonforInValidPhoneNumbers()
+        {
+            // total Lenght is Less than 10 chars
+            PhoneContainerError("021234567");
+            // Area code is not valid 
+            PhoneContainerError("9911234567");
+            //Phone Number With Extension
+            PhoneContainerError("0212457896#1234");
+        }
+
+
+        [TestMethod]
+        public void DoNothingWhenaValidPhoneNumberisEntered()
+        {
+            // total Lenght is Less than 10 chars
+            PhoneContainerPositive("+61212457896");
+            // Area code is not valid 
+            PhoneContainerPositive("(02) 1245 7896");
+            PhoneContainerPositive("1300 777 777");
+            PhoneContainerPositive("0212457896");
         }
     }
 

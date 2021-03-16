@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Api.Controllers;
 using ADMS.Apprentice.Core.Entities;
@@ -29,7 +30,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             String firstName,
             DateTime dob,
             String email = null,
-            string ProfileType = null)
+            string profileType = null,
+            string[] phoneNumbers = null)
         {
             return new ProfileMessage
             {
@@ -37,13 +39,13 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 FirstName = firstName,
                 BirthDate = dob,
                 EmailAddress = email,
-                ProfileType = ProfileType
+                ProfileType = profileType,
+                PhoneNumbers = phoneNumbers?.ToList()
             };
         }
 
         protected override void Given()
         {
-             
             message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, ProfileConstants.Birthdate, ProfileConstants.Emailaddress, ProfileConstants.Profiletype);
             profile = new Profile
             {
@@ -51,7 +53,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 FirstName = message.FirstName,
                 BirthDate = message.BirthDate,
                 EmailAddress = message.EmailAddress,
-                ProfileTypeCode  = message.ProfileType
+                ProfileTypeCode = message.ProfileType
             };
 
             Container
@@ -74,8 +76,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldReturnValidationErrorIfNameNotValid()
         {
- 
-            message  = CreateNewProfileMessage("Bob$", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
+            message = CreateNewProfileMessage("Bob$", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(1);
             lstErrors[0].ErrorMessage.Should().StartWith("Surname must contain only letters, spaces, hyphens and apostrophies");
@@ -103,31 +104,29 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldReturnNoValidationErrorIfEmailIsNull()
         {
-            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25),null, ProfileConstants.Profiletype);
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), "", ProfileConstants.Profiletype);
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(0);
         }
 
-        [TestMethod]
-        public void ShouldReturnValidationErrorIfEmailIsInvalid()
-        {
-            
-
-            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25),"test", ProfileConstants.Profiletype);
-          //  var proptype = Enum.IsDefined(typeof(ProfileType), message.ProfileType) ? message.ProfileType : null;
-            var lstErrors = ValidateModel(message);
-            lstErrors.Should().HaveCount(1);
-            lstErrors[0].ErrorMessage.Should().StartWith("Invalid Email Address");
-        }
 
         [TestMethod]
         public void ShouldReturnValidationErrorIfEmailLenghtExceedsMax()
         {
-            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, 
-                ProfileConstants.Birthdate,ProfileConstants.Emailaddressmax256 + ProfileConstants.RandomString(100), ProfileConstants.Profiletype);
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname,
+                ProfileConstants.Birthdate, ProfileConstants.Emailaddressmax256 + ProfileConstants.RandomString(100), ProfileConstants.Profiletype);
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(1);
             lstErrors[0].ErrorMessage.Should().StartWith("Email Address Exceeds 256 Characters");
+        }
+
+        [TestMethod]
+        public void ShouldReturnNoErrorPhoneNumberisNull()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname,
+                ProfileConstants.Birthdate, "", ProfileConstants.Profiletype);
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
         }
     }
 

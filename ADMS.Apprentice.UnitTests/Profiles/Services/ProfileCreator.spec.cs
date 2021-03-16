@@ -25,7 +25,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
-                ProfileType = ProfileConstants.Profiletype
+                ProfileType = ProfileConstants.Profiletype,
+                PhoneNumbers = ProfileConstants.PhoneNumbers
             };
         }
 
@@ -82,7 +83,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         /// Insert a profile record and check if the email has been updated .
         /// </summary>
         [TestMethod]
-        public void CheckIfDataBasedHasBeenUpdated()
+        public void ShouldSetEmailAddress()
         {
             profile.EmailAddress.Should().Be(message.EmailAddress);
         }

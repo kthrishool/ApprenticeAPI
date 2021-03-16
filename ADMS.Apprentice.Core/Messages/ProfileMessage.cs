@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ADMS.Apprentice.Core.Entities;
 
 namespace ADMS.Apprentice.Core.Messages
 {
     public record ProfileMessage
-    {        
+    {
         [Required(ErrorMessage = "Surname is required")]
         [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Surname must contain only letters, spaces, hyphens and apostrophies")]
         [MaxLength(50, ErrorMessage = "Surname Exceeds 50 Characters")]
@@ -28,7 +28,6 @@ namespace ADMS.Apprentice.Core.Messages
         public DateTime BirthDate { get; init; }
 
         [Display(Name = "Email address")]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         [MaxLength(256, ErrorMessage = "Email Address Exceeds 256 Characters")]
         public string EmailAddress { get; init; }
 
@@ -37,5 +36,7 @@ namespace ADMS.Apprentice.Core.Messages
         [Required(ErrorMessage = "Profile Type is required")]
         public string ProfileType { get; init; }
 
+        [Display(Name = "Phone Type")]
+        public List<string> PhoneNumbers { get; init; }
     }
 }

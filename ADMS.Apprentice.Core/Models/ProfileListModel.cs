@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ADMS.Apprentice.Core.Entities;
 
 namespace ADMS.Apprentice.Core.Models
@@ -22,7 +23,7 @@ namespace ADMS.Apprentice.Core.Models
         public string ProfileTypeCode { get; }
         public bool DeceasedFlag { get; }
         public bool ActiveFlag { get; }
-
+        public ICollection<Phone> Phones { get; set; }
         public DateTime? CreatedOn { get; }
         public string CreatedBy { get; }
         public DateTime? UpdatedOn { get; }
@@ -34,7 +35,7 @@ namespace ADMS.Apprentice.Core.Models
             Surname = apprentice.Surname;
             FirstName = apprentice.FirstName;
             OtherNames = apprentice.OtherNames;
-            PreferredName = apprentice.PreferredName;            
+            PreferredName = apprentice.PreferredName;
             BirthDate = apprentice.BirthDate;
             GenderCode = apprentice.GenderCode;
             EmailAddress = apprentice.EmailAddress;

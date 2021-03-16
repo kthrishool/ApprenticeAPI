@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ADMS.Apprentice.UnitTests.Constants
@@ -11,8 +12,8 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static string Surname = "Bob";
         public static DateTime Birthdate = DateTime.Now.AddYears(-25);
         public static string Emailaddress = "test@test.com";
-        public static string Emailaddressmax256 =  RandomString(247) + "@test.com";
-
+        public static string Emailaddressmax256 = RandomString(247) + "@test.com";
+        public static List<string> PhoneNumbers = new List<string>() {"0212345678"};
         public static string Profiletype = "Apprentice";
         public static DateTime Createdon = DateTime.Now.AddMinutes(-3);
         public static DateTime Updatedon = DateTime.Now;
@@ -20,16 +21,11 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static string Updatedby = "User2";
 
 
-
-      
         public static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-
-
-             
     }
 }

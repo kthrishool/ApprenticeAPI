@@ -1,10 +1,8 @@
-﻿using System.Linq;
-using ADMS.Apprentice.Core;
+﻿using ADMS.Apprentice.Core;
 using ADMS.Apprentice.Database.Mappings;
 using Adms.Shared.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-
 
 namespace ADMS.Apprentice.Database
 {
@@ -24,6 +22,7 @@ namespace ADMS.Apprentice.Database
         {
             modelBuilder.ApplyConfiguration(new ProfileMapping());
             modelBuilder.ApplyConfiguration(new ApprenticeTFNMapping());
+            modelBuilder.ApplyConfiguration(new PhoneMapping());
         }
     }
 }
