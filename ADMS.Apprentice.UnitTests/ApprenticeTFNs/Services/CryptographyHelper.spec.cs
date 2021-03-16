@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Xml.Linq;
-using Adms.Shared;
 using ADMS.Apprentice.Core.Helpers;
-using ADMS.Apprentice.Core.Services;
-using ADMS.Apprentice.UnitTests;
-using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 // ReSharper disable UnusedMember.Local
 
-namespace Adms.Shared.UnitTests.Services
+namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 {
     public class CryptographyHelperTestsBase
     {

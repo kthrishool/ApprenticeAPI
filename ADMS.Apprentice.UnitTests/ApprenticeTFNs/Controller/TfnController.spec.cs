@@ -13,11 +13,11 @@ using System.Collections.Generic;
 using ADMS.Apprentice.Api.Controllers.Tfn;
 using Adms.Shared.Testing;
 
-namespace ADMS.Apprentice.UnitTests.Profiles.Services
+namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 {
-    #region WhenCreatingAProfile
+    #region WhenCreatingApprenticeTfn
     [TestClass]
-    public class WhenCreatingTfgnDetailUsingTheApi: GivenWhenThen<ApprenticeTFNController>
+    public class WhenCreatingApprenticeTfnUsingTheApi: GivenWhenThen<ApprenticeTFNController>
     {
         private ApprenticeTFN profile;
         private ActionResult<ApprenticeTFNV1> result;

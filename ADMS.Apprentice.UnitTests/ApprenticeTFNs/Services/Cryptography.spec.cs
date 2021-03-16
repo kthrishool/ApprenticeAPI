@@ -38,15 +38,14 @@ namespace ADMS.Apprentice.UnitTests.Services
         [TestMethod]
         public void WhenEncryptingBlankClientId()
         {
-            cryptography.EncryptTFN("", tfn1).Should().Be("\0");
+            cryptography.EncryptTFN("", tfn1).Should().Be("\u0001\u0006\u0000");
         }
 
         [TestMethod]
         public void WhenEncryptingBlankTfn()
         {
-            cryptography.EncryptTFN("", tfn1).Should().Be("\0");
+            cryptography.EncryptTFN("", tfn1).Should().Be("\u0001\u0006\u0000");
         }
-
     }
 
     # endregion
@@ -55,8 +54,6 @@ namespace ADMS.Apprentice.UnitTests.Services
 
     public class TFNDecryptorTests : CryptographyBase
     {
-        protected const string clientId1 = "3431";
-        protected const string clientId2 = "98765";
         protected const int keySum1 = 11;
         protected const int keySum2 = 35;
 

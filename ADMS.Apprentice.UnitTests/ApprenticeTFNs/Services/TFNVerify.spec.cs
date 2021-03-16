@@ -1,15 +1,11 @@
 ﻿using ADMS.Apprentice.Core.Services;
-using ADMS.Apprentice.UnitTests;
-using System.Collections.Generic;
-using System.Xml.Linq;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Adms.Shared.Testing;
 
 // ReSharper disable UnusedMember.Local
 
-namespace Adms.Shared.UnitTests.Services
+namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 {
     #region WhenVerifyingATfn
 
