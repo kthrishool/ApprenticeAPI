@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f416717e-e5b6-4f2b-8e3f-436eabd508f3",
+		"_postman_id": "4f47cff4-f9c2-4af8-a12e-b21db09eb4e8",
 		"name": "adms-apprentice-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -276,13 +276,62 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{apprentice}}/Apprentices/4/TFN",
+							"raw": "{{apprentice}}/Apprentices/2/TFN",
 							"host": [
 								"{{apprentice}}"
 							],
 							"path": [
 								"Apprentices",
-								"4",
+								"2",
+								"TFN"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "single tfn details XML",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "69a5ca13-73aa-4d04-ad22-8bb9c91697a4",
+								"exec": [
+									"eval(pm.variables.get(\"PostmanBDD\"));\r",
+									"\r",
+									"it(\"returns status 200\", () => {\r",
+									"   response.should.have.status(200);\r",
+									"});\r",
+									"\r",
+									"it(\"returns JSON\", () => {\r",
+									"   response.should.be.json; \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{apprentice}}/Apprentices/1/TFN",
+							"host": [
+								"{{apprentice}}"
+							],
+							"path": [
+								"Apprentices",
+								"1",
 								"TFN"
 							]
 						}
@@ -332,16 +381,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"taxFileNumber\": \"1232123213\",\r\n    \"apprenticeId\": {{application-id}}\r\n}"
+							"raw": "{\r\n    \"taxFileNumber\": \"654543432\",\r\n\t\"StatusCode\": \"New\",\r\n\t\"StatusReasonCode\":\"New\"\r\n}"
 						},
 						"url": {
-							"raw": "{{apprentice}}/Apprentices/{{application-id}}/TFN",
+							"raw": "{{apprentice}}/Apprentices/1/TFN",
 							"host": [
 								"{{apprentice}}"
 							],
 							"path": [
 								"Apprentices",
-								"{{application-id}}",
+								"1",
 								"TFN"
 							]
 						}
@@ -376,24 +425,23 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "text/xml",
+								"value": "application/xml",
 								"description": "xml from TYIMS"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "<ApprenticeTFNV1 xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/ADMS.Apprentice.Core.Messages\">\r\n\t<ApprenticeId>6</ApprenticeId>\r\n\t<TaxFileNumber>123456789</TaxFileNumber>\r\n\t<StatusCode>New</StatusCode>\r\n\t<StatusReasonCode>New</StatusReasonCode>\r\n</ApprenticeTFNV1>\r\n\r\n"
+							"raw": "<ApprenticeTFNV1>\r\n\t<TaxFileNumber>123456789</TaxFileNumber>\r\n\t<StatusCode>New</StatusCode>\r\n\t<StatusReasonCode>New</StatusReasonCode>\r\n</ApprenticeTFNV1>\r\n\r\n"
 						},
 						"url": {
-							"raw": "{{apprentice}}/Apprentices/6/TFN/PostTyims",
+							"raw": "{{apprentice}}/Apprentices/2/TFN",
 							"host": [
 								"{{apprentice}}"
 							],
 							"path": [
 								"Apprentices",
-								"6",
-								"TFN",
-								"PostTyims"
+								"2",
+								"TFN"
 							]
 						}
 					},

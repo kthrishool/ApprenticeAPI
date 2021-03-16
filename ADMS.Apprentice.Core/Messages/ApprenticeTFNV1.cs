@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Adms.Shared.Attributes;
 using ADMS.Apprentice.Core.Entities;
 
 // ReSharper disable InconsistentNaming
@@ -18,7 +19,5 @@ namespace ADMS.Apprentice.Core.Messages
         public DateTime StatusDate { get; set; }
         public string StatusReasonCode { get; set; }
         public Guid MessageQueueCorrelationId { get; set; }
-
-
     }
 }
