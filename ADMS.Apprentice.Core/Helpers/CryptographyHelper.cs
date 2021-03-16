@@ -267,38 +267,6 @@ namespace ADMS.Apprentice.Core.Helpers
         public char Chr(int CharCode)
         {
             return Microsoft.VisualBasic.Strings.ChrW(CharCode);
-
-            if (CharCode < (int)short.MinValue || CharCode > (int)ushort.MaxValue)
-                throw new ArgumentException("Argument_RangeTwoBytes1", "CharCode");
-
-            if (CharCode >= 0 && CharCode <= (int)sbyte.MaxValue)
-                return Convert.ToChar(CharCode);
-            try
-            {
-                Encoding encoding = Encoding.Default;
-                if (encoding.IsSingleByte && (CharCode < 0 || CharCode > (int)byte.MaxValue))
-                    throw new Exception();
-
-                char[] chars = new char[2];
-                byte[] bytes = new byte[2];
-                Decoder decoder = encoding.GetDecoder();
-                if (CharCode >= 0 && CharCode <= (int)byte.MaxValue)
-                {
-                    bytes[0] = checked((byte)(CharCode & (int)byte.MaxValue));
-                    decoder.GetChars(bytes, 0, 1, chars, 0);
-                }
-                else
-                {
-                    bytes[0] = checked((byte)((CharCode & 65280) >> 8));
-                    bytes[1] = checked((byte)(CharCode & (int)byte.MaxValue));
-                    decoder.GetChars(bytes, 0, 2, chars, 0);
-                }
-                return chars[0];
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
 
         /// <summary>
