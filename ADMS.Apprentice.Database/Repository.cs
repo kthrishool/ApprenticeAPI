@@ -23,6 +23,7 @@ namespace ADMS.Apprentice.Database
         protected override void ApplyMappings(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProfileMapping());
+            modelBuilder.ApplyConfiguration(new ApprenticeTFNMapping());
         }
     }
 }

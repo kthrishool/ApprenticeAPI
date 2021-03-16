@@ -8,13 +8,15 @@
 
   <ItemGroup>
     <PackageReference Include="ADMS.Services.Infrastructure.Testing" Version="1.0.1" />
-    <PackageReference Include="Adms.Shared" Version="2.1.0" />
+    <PackageReference Include="Adms.Shared" Version="2.1.2" />
     <PackageReference Include="coverlet.msbuild" Version="3.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="MockQueryable.EntityFrameworkCore" Version="5.0.0" />
+    <PackageReference Include="MockQueryable.Moq" Version="5.0.0" />
     <PackageReference Include="Moq" Version="4.16.0" />
     <PackageReference Include="Moq.AutoMock" Version="2.3.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
@@ -23,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    
     <ProjectReference Include="..\ADMS.Apprentice.Api\ADMS.Apprentice.Api.csproj" />
     <ProjectReference Include="..\ADMS.Apprentice.Core\ADMS.Apprentice.Core.csproj" />
   </ItemGroup>
