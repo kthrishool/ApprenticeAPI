@@ -53,7 +53,8 @@ namespace ADMS.Apprentice.Core.Models
             CreatedBy = apprentice.CreatedBy;
             UpdatedOn = apprentice.UpdatedOn;
             UpdatedBy = apprentice.UpdatedBy;
-            Phones = apprentice.Phones.Select(c => c.PhoneNumber).ToList();
+            if (apprentice?.Phones?.Count() > 0)
+                Phones = apprentice.Phones.Select(c => c.PhoneNumber).ToList();
         }
     }
 }

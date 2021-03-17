@@ -24,9 +24,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 Surname = ProfileConstants.Firstname,
                 OtherNames = ProfileConstants.Secondname,
                 BirthDate = ProfileConstants.Birthdate,
-               EmailAddress = ProfileConstants.Emailaddress,
-               ProfileTypeCode = ProfileConstants.Profiletype,
-               CreatedOn = ProfileConstants.Createdon,            
+                EmailAddress = ProfileConstants.Emailaddress,
+                ProfileTypeCode = ProfileConstants.Profiletype,
+                CreatedOn = ProfileConstants.Createdon,
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,
                 UpdatedBy = ProfileConstants.Updatedby
@@ -60,6 +60,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.UpdatedOn.Should().BeCloseTo(ProfileConstants.Updatedon);
             model.CreatedBy.Should().Be(ProfileConstants.Createdby);
             model.UpdatedBy.Should().Be(ProfileConstants.Updatedby);
+            model.Phones = null;
         }
     }
 
