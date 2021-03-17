@@ -102,13 +102,19 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         #region EmailAddressTests
 
         [TestMethod]
+        public void ShouldReturnNoValidationErrorIfEmailIsEmpty()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
         public void ShouldReturnNoValidationErrorIfEmailIsNull()
         {
             message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), "", ProfileConstants.Profiletype);
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(0);
         }
-
 
         [TestMethod]
         public void ShouldReturnValidationErrorIfEmailLenghtExceedsMax()

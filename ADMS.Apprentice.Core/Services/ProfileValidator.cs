@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
@@ -19,6 +20,7 @@ namespace ADMS.Apprentice.Core.Services
 
         public Task ValidateAsync(Profile profile)
         {
+            var preferredPhoneFlag = false;
             if (!ValidateAge(profile.BirthDate))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeAge);
             // making this async because I think we will be wanting to look in the database for duplicates
@@ -26,11 +28,26 @@ namespace ADMS.Apprentice.Core.Services
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType);
             if (!EmailValidation(profile.EmailAddress))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidEmailAddress);
-            foreach (var PhoneNumbers in profile.Phones)
+
+            if (profile.Phones != null)
             {
-                var ErrorMessage = ValidationExceptionType.InvalidPhoneNumber;
-                if (!PhoneValidator.ValidatePhone(PhoneNumbers.PhoneNumber, ErrorMessage))
-                    throw exceptionFactory.CreateValidationException(ErrorMessage);
+                var newPhone = new List<Phone>();
+                foreach (Phone phoneNumbers in profile?.Phones)
+                {
+                    if (phoneNumbers == null || phoneNumbers?.PhoneNumber?.Length == 0) continue;
+                    var ErrorMessage = ValidationExceptionType.InvalidPhoneNumber;
+                    string formattedPhone = phoneNumbers.PhoneNumber;
+                    if (!PhoneValidator.ValidatePhone(ref formattedPhone, ErrorMessage))
+                        throw exceptionFactory.CreateValidationException(ErrorMessage);
+                    newPhone.Add(new Phone()
+                    {
+                        PhoneNumber = formattedPhone,
+                        PhoneTypeCode = PhoneType.LandLine.ToString(),
+                        PreferredPhoneFlag = !preferredPhoneFlag
+                    });
+                    preferredPhoneFlag = true;
+                }
+                profile.Phones = newPhone;
             }
             return Task.CompletedTask;
         }
@@ -42,13 +59,16 @@ namespace ADMS.Apprentice.Core.Services
                 return true;
             if (!(new EmailAddressAttribute().IsValid(emailAddress)))
                 return false;
-            if (emailAddress.IndexOf('@') < 0)
+            if (emailAddress != null && emailAddress.IndexOf('@') < 0)
                 return false;
 
             // check domain name in Email
-            var domainName = emailAddress.Substring(emailAddress.LastIndexOf('@') + 1);
-            if (domainName.IndexOf('.') < 1)
-                return false;
+            if (emailAddress != null)
+            {
+                var domainName = emailAddress.Substring(emailAddress.LastIndexOf('@') + 1);
+                if (domainName.IndexOf('.') < 1)
+                    return false;
+            }
             return true;
         }
 

@@ -7,7 +7,7 @@ namespace ADMS.Apprentice.Core.Services
     {
         private static readonly string[] StartingCode = {"02", "03", "04", "07", "08", "13", "18"};
 
-        public static bool ValidatePhone(string phoneNumber, ValidationExceptionType errorMessage)
+        public static bool ValidatePhone(ref string phoneNumber, ValidationExceptionType errorMessage)
         {
             phoneNumber = new string(phoneNumber.ToCharArray().Where(char.IsDigit).ToArray());
             if ((phoneNumber.Length == 11) && phoneNumber.Substring(0, 2) == "61")

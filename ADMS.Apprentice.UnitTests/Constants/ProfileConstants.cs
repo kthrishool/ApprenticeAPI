@@ -13,8 +13,9 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static DateTime Birthdate = DateTime.Now.AddYears(-25);
         public static string Emailaddress = "test@test.com";
         public static string Emailaddressmax256 = RandomString(247) + "@test.com";
-        public static List<string> PhoneNumbers = new List<string>() {"0212345678"};
-        public static string Profiletype = "Apprentice";
+        public static List<string> PhoneNumbers = new List<string>() {"0212345678", "+61 2 1234 1111"};
+        public static List<string> InvalidPhoneNumbers = new List<string>() {"0212345678", "+61 2 1234 1111"};
+        public static string Profiletype = "APPR";
         public static DateTime Createdon = DateTime.Now.AddMinutes(-3);
         public static DateTime Updatedon = DateTime.Now;
         public static string Createdby = "User1";

@@ -38,7 +38,7 @@ namespace ADMS.Apprentice.Core.Entities
         {
             ActiveFlag = true;
             DeceasedFlag = false;
-            ProfileTypeCode = ProfileType.Apprentice.ToString();
+            ProfileTypeCode = ProfileType.APPR.ToString();
             Phones = new List<Phone>();
         }
     }

@@ -36,7 +36,7 @@ namespace ADMS.Apprentice.Core.Messages
         [Required(ErrorMessage = "Profile Type is required")]
         public string ProfileType { get; init; }
 
-        [Display(Name = "Phone Type")]
+        [Display(Name = "Phone number")]
         public List<string> PhoneNumbers { get; init; }
     }
 }

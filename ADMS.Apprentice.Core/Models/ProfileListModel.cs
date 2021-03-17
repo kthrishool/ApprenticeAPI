@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ADMS.Apprentice.Core.Entities;
 
 namespace ADMS.Apprentice.Core.Models
@@ -23,7 +24,7 @@ namespace ADMS.Apprentice.Core.Models
         public string ProfileTypeCode { get; }
         public bool DeceasedFlag { get; }
         public bool ActiveFlag { get; }
-        public ICollection<Phone> Phones { get; set; }
+        public List<string> Phones { get; set; }
         public DateTime? CreatedOn { get; }
         public string CreatedBy { get; }
         public DateTime? UpdatedOn { get; }
@@ -52,6 +53,7 @@ namespace ADMS.Apprentice.Core.Models
             CreatedBy = apprentice.CreatedBy;
             UpdatedOn = apprentice.UpdatedOn;
             UpdatedBy = apprentice.UpdatedBy;
+            Phones = apprentice.Phones.Select(c => c.PhoneNumber).ToList();
         }
     }
 }

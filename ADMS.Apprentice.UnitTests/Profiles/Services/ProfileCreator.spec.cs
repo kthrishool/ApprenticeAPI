@@ -1,4 +1,5 @@
-﻿using ADMS.Apprentice.Core.Entities;
+﻿using System.Linq;
+using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services;
 using ADMS.Apprentice.UnitTests.Constants;
@@ -87,6 +88,18 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             profile.EmailAddress.Should().Be(message.EmailAddress);
         }
+
+        [TestMethod]
+        public void ShouldSetPhoneNumber()
+        {
+            profile.Phones.Select(c => c.PhoneNumber).Should().Contain(message.PhoneNumbers[0]);
+        }
+
+        //[TestMethod]
+        //public void ShouldConvertPhoneNumber()
+        //{
+        //    profile.Phones.Select(c => c.PhoneNumber).Should().NotContain(message.PhoneNumbers[1]);
+        //}
     }
 
     #endregion

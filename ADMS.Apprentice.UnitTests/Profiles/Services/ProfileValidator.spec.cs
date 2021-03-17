@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
@@ -79,7 +80,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             await ClassUnderTest.ValidateAsync(invalidProfile);
         }
 
-        private async Task GetsTheValidationExceptionIfEmailIsInvalid(string EmailAddress)
+        private void GetsTheValidationExceptionIfEmailIsInvalid(string EmailAddress)
         {
             Container
                 .GetMock<IExceptionFactory>()
@@ -107,6 +108,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             // No @symbol
             GetsTheValidationExceptionIfEmailIsInvalid("ghjghjg.comjjj");
         }
+
 
         [TestMethod]
         public void GetsTheValidationExceptionFromTheExceptionFactory()
@@ -151,9 +153,27 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
+        [TestMethod]
+        public void DoesNothingIfForPhonePositiveTesting()
+        {
+            // Phone Number is null
+            var phones = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = "0212345678"};
+
+            validProfile.Phones = null; //.Add(phones);
+            ClassUnderTest.ValidateAsync(validProfile);
+        }
 
         [TestMethod]
-        public void DoesNothingIfThePhoneNumberIsValid()
+        public void ThrowsValidationExceptionIfThePhoneNumberIsValid()
+        {
+            var phones = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = "0212345678"};
+
+            validProfile.Phones.Add(phones);
+            ClassUnderTest.ValidateAsync(validProfile);
+        }
+
+        [TestMethod]
+        public void DoesNothingIfThePhoneNumberIsNull()
         {
             var phones = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = "0212345678"};
 
@@ -175,12 +195,16 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
-        private void PhoneContainerPositive(string phones)
+        private void PhoneContainerPositive(string phones, Boolean needsConversion)
         {
             var number = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = phones};
 
             validProfile.Phones.Add(number);
             ClassUnderTest.ValidateAsync(validProfile);
+            if (needsConversion)
+                validProfile.Phones.Select(c => c.PhoneNumber).Should().NotContain(phones);
+            else
+                validProfile.Phones.Select(c => c.PhoneNumber).Should().Contain(phones);
         }
 
         [TestMethod]
@@ -199,11 +223,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void DoNothingWhenaValidPhoneNumberisEntered()
         {
             // total Lenght is Less than 10 chars
-            PhoneContainerPositive("+61212457896");
+            PhoneContainerPositive("+61212457896", true);
             // Area code is not valid 
-            PhoneContainerPositive("(02) 1245 7896");
-            PhoneContainerPositive("1300 777 777");
-            PhoneContainerPositive("0212457896");
+            PhoneContainerPositive("(02) 1245 7896", true);
+            PhoneContainerPositive("1300 777 777", true);
+            PhoneContainerPositive("0212457896", false);
         }
     }
 
