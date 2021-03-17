@@ -25,7 +25,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private ActionResult<ProfileModel> profileResult;
         private ProfileMessage message;
 
-
+        //message
         private ProfileMessage CreateNewProfileMessage(string surName,
             String firstName,
             DateTime dob,
