@@ -35,7 +35,6 @@
 
   <ItemGroup>
     <PackageReference Include="ADMS.Services.Infrastructure.Contract" Version="1.1.0" />
-    <PackageReference Include="ADMS.Services.Infrastructure.WebApi" Version="1.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
