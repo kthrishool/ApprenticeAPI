@@ -35,7 +35,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         [TestMethod]
         public void WhenEncryptingDifferentValidTfnForClient2()
         {
-            cryptography.EncryptTFN(clientId2, "345345345").Should().Be("+­)#MN.-\"");
+            cryptography.EncryptTFN(clientId2, "987456369").Should().Be("+­)#!MN/.&");
         }
 
         [TestMethod]
