@@ -10,11 +10,9 @@ namespace ADMS.Apprentice.Core.Helpers
         private const string mstrModuleName = "mdlClientTFN";
         private const int giTFNFieldSize = 20;  // Size of the varchar TaxFileNumber field on the CLIENTTFN table
         private const int giTFNMaxSize = 9;     // Maximum size of a Tax File Number string (assuming no spaces)
-        private readonly IDateTimeHelper dateTimeHelper;
 
-        public CryptographyHelper(IDateTimeHelper dateTimeHelper)
+        public CryptographyHelper()
         {
-            this.dateTimeHelper = dateTimeHelper;
         }
 
 
@@ -32,21 +30,21 @@ namespace ADMS.Apprentice.Core.Helpers
             string strKey4;
             string strTempKey;
 
-            var key1 = new[] {Chr(172), Chr(35), Chr(115), Chr(23) , Chr(97) , Chr(12) ,
-                   Chr(219) , Chr(138) , Chr(242) , Chr(161) , Chr(51) , Chr(163) ,
-                   Chr(212) , Chr(231) , Chr(45) , Chr(148) , Chr(168) , Chr(187)};
+            var key1 = new[] {ChrW(172), ChrW(35), ChrW(115), ChrW(23) , ChrW(97) , ChrW(12) ,
+                   ChrW(219) , ChrW(138) , ChrW(242) , ChrW(161) , ChrW(51) , ChrW(163) ,
+                   ChrW(212) , ChrW(231) , ChrW(45) , ChrW(148) , ChrW(168) , ChrW(187)};
 
-            var key2 = new[] {Chr(6) , Chr(76) , Chr(246) , Chr(171) , Chr(226) , Chr(237) ,
-                   Chr(170) , Chr(5) , Chr(207) , Chr(46) , Chr(209) , Chr(221) ,
-                   Chr(71) , Chr(33) , Chr(69) , Chr(220) , Chr(123) , Chr(37) };
+            var key2 = new[] {ChrW(6) , ChrW(76) , ChrW(246) , ChrW(171) , ChrW(226) , ChrW(237) ,
+                   ChrW(170) , ChrW(5) , ChrW(207) , ChrW(46) , ChrW(209) , ChrW(221) ,
+                   ChrW(71) , ChrW(33) , ChrW(69) , ChrW(220) , ChrW(123) , ChrW(37) };
 
-            var key3 = new[] {Chr(136) , Chr(107) , Chr(10) , Chr(3) , Chr(139) , Chr(195) ,
-                   Chr(29) , Chr(215) , Chr(75) , Chr(243) , Chr(32) , Chr(197) ,
-                   Chr(180) , Chr(119) , Chr(157) , Chr(175) , Chr(147) , Chr(201) };
+            var key3 = new[] {ChrW(136) , ChrW(107) , ChrW(10) , ChrW(3) , ChrW(139) , ChrW(195) ,
+                   ChrW(29) , ChrW(215) , ChrW(75) , ChrW(243) , ChrW(32) , ChrW(197) ,
+                   ChrW(180) , ChrW(119) , ChrW(157) , ChrW(175) , ChrW(147) , ChrW(201) };
 
-            var key4 = new[] {Chr(7) , Chr(53) , Chr(186) , Chr(41) , Chr(81) , Chr(42) ,
-                   Chr(156) , Chr(128) , Chr(150) , Chr(137) , Chr(190) , Chr(24) ,
-                   Chr(218) , Chr(77) , Chr(227) , Chr(30) , Chr(200) , Chr(173) };
+            var key4 = new[] {ChrW(7) , ChrW(53) , ChrW(186) , ChrW(41) , ChrW(81) , ChrW(42) ,
+                   ChrW(156) , ChrW(128) , ChrW(150) , ChrW(137) , ChrW(190) , ChrW(24) ,
+                   ChrW(218) , ChrW(77) , ChrW(227) , ChrW(30) , ChrW(200) , ChrW(173) };
 
             strKey1 = new string(key1);
             strKey2 = new string(key2);
@@ -151,7 +149,9 @@ namespace ADMS.Apprentice.Core.Helpers
 
         public int MergeAddCount(string strClientId, int iTotal)
         {
-            return ((strClientId.Length * iTotal) / 13) % (giTFNFieldSize - giTFNMaxSize - 3);
+            int part1 = (int)Math.Round(((strClientId.Length * iTotal) / 13.0));
+            int part2 = (giTFNFieldSize - giTFNMaxSize - 3);
+            return part1 % part2;
         }
 
         ////**************************************************************************
@@ -218,7 +218,7 @@ namespace ADMS.Apprentice.Core.Helpers
                 iModTest = 13;
             }
 
-            var seconds = dateTimeHelper.GetDateTimeNow().Second;
+            var seconds = 24;
 
             if (iDecryptMultiplier == -1)
             {
@@ -264,7 +264,7 @@ namespace ADMS.Apprentice.Core.Helpers
         /// Returns the character associated with the specified character code.
         /// </returns>
         /// <param name="CharCode">Required. An Integer expression representing the <paramref name="code point"/>, or character code, for the character.</param><exception cref="T:System.ArgumentException"><paramref name="CharCode"/> &lt; 0 or &gt; 255 for Chr.</exception><filterpriority>1</filterpriority>
-        public char Chr(int CharCode)
+        public char ChrW(int CharCode)
         {
             return Microsoft.VisualBasic.Strings.ChrW(CharCode);
         }
@@ -279,7 +279,7 @@ namespace ADMS.Apprentice.Core.Helpers
         /// <param name="String">Required. Any valid Char or String expression. If <paramref name="String"/> is a String expression, only the first character of the string is used for input. 
         /// If <paramref name="String"/> is Nothing or contains no characters, an <see cref="T:System.ArgumentException"/> error occurs.</param><filterpriority>1</filterpriority>
         /// 
-        public int Asc(string String)
+        public int AscW(string String)
         {
 
             if (String == null || String.Length == 0)

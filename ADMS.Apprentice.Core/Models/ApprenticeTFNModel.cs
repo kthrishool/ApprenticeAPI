@@ -9,7 +9,7 @@ namespace ADMS.Apprentice.Core.Models
     {
         public int Id { get; set; }
         public int ApprenticeId { get; set; }
-        public string TFN { get; set; }
+        public string TaxFileNumber { get; set; }
         public TFNStatus Status { get; set; }
         public string StatusReason { get; set; }
 
@@ -21,7 +21,7 @@ namespace ADMS.Apprentice.Core.Models
             Id = Tfn.Id;
             ApprenticeId = Tfn.ApprenticeId;
             Status = Tfn.StatusCode;
-            TFN = Tfn.TaxFileNumber;
+            TaxFileNumber = Tfn.TaxFileNumber;
             StatusReason = Tfn.StatusReasonCode;
 
         }

@@ -1,11 +1,8 @@
 ﻿using Adms.Shared;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 using Adms.Shared.Exceptions;
 using Adms.Shared.Database;
-using ADMS.Services.Infrastructure.Core.Exceptions;
 using System.Linq;
 
 namespace ADMS.Apprentice.Core.Services
@@ -15,19 +12,16 @@ namespace ADMS.Apprentice.Core.Services
         private readonly IRepository repository;
         private readonly ICryptography cryptography;
         private readonly IExceptionFactory exceptionFactory;
-        private readonly IContextRetriever contextRetriever;
 
         public ApprenticeTFNRetreiver(
             IRepository repository,
             ICryptography cryptography, 
-            IExceptionFactory exceptionFactory,
-            IContextRetriever contextRetriever
+            IExceptionFactory exceptionFactory
             )
         {
             this.repository = repository;
             this.cryptography = cryptography;
             this.exceptionFactory = exceptionFactory;
-            this.contextRetriever = contextRetriever;
         }
 
         public ApprenticeTFNModel Get(int id)
@@ -38,12 +32,11 @@ namespace ADMS.Apprentice.Core.Services
 
             if (tfnEntity == null)
             {
-                throw new ValidationException(contextRetriever.GetContext(), new ADMS.Services.Infrastructure.Core.Validation.ValidationError ("TFN", $"apprenticeId {id}"));
+                throw exceptionFactory.CreateNotFoundException("TaxFileNumber", $"ApprenticeId {id}");
             }
 
             var model = new ApprenticeTFNModel(tfnEntity);
-
-            model.TFN = cryptography.DecryptTFN(model.ApprenticeId.ToString(), model.TFN);
+            model.TaxFileNumber = cryptography.DecryptTFN(model.ApprenticeId.ToString(), model.TaxFileNumber);
 
             return model;
         }

@@ -77,7 +77,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         [TestMethod]
         public void ShouldSetDefaultValues()
         {
-            tfnDetail.StatusCode.Should().Be(TFNStatus.New);
+            tfnDetail.StatusCode.Should().Be(TFNStatus.TBVE);
             tfnDetail.StatusDate.Should().BeOnOrBefore(currentDate);
         }
 

@@ -10,8 +10,8 @@ namespace ADMS.Apprentice.Core.Helpers
         int MergeAddCount(string strClientId, int iTotal);
         string MergeAdd(string strClientId, int iTotal, string strMergedString, string strEncryptedTFN);
         string GetKey(string strClientId, int iTotal, int iDecryptMultiplier);
-        char Chr(int CharCode);
-        int Asc(string String);
+        char ChrW(int CharCode);
+        int AscW(string String);
 
     }
 }

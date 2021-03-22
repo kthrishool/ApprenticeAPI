@@ -6,15 +6,12 @@ namespace ADMS.Apprentice.Core.Services
     public class Cryptography : ICryptography
     {
         private readonly ICryptographyHelper cryptographyHelper;
-        private readonly IDateTimeHelper dateTimeHelper;
 
         public Cryptography(
-            ICryptographyHelper cryptographyHelper,
-            IDateTimeHelper dateTimeHelper
+            ICryptographyHelper cryptographyHelper
             )
         {
             this.cryptographyHelper = cryptographyHelper;
-            this.dateTimeHelper = dateTimeHelper;
         }
 
         ////************************************************************************************
@@ -53,7 +50,7 @@ namespace ADMS.Apprentice.Core.Services
             iTotal = cryptographyHelper.GetKeySum(strClientId);
 
             //// Determine which encryption strings to use
-            var seconds = dateTimeHelper.GetDateTimeNow().Second;
+            var seconds = 24; 
 
             iEncryptionMerge = seconds % 6;
             if (iEncryptionMerge == 0)
@@ -74,13 +71,14 @@ namespace ADMS.Apprentice.Core.Services
             // Store the multiplier, merge option and merge reverse flag in the
             // middle of the encrypted TFN string for an even lengthed ClientID
             // and at the start for an odd one
+            var mmm = new string(new[] { cryptographyHelper.ChrW(iMultiplier), cryptographyHelper.ChrW(iEncryptionMerge + iTotal), cryptographyHelper.ChrW(iReverseFlag + iTotal) });
             if (blnEven)
             {
                 strEncryptedTFN = "";
             }
             else
             {
-                strEncryptedTFN = new string(new[] { cryptographyHelper.Chr(iMultiplier), cryptographyHelper.Chr(iEncryptionMerge + iTotal), cryptographyHelper.Chr(iReverseFlag + iTotal) });
+                strEncryptedTFN = mmm;
             }
 
             iTFNLength = strTFN.Length;
@@ -95,7 +93,7 @@ namespace ADMS.Apprentice.Core.Services
                 {
                     if (iLoop == (iTFNLength / 2))
                     {
-                        strEncryptedTFN += new string(new[] { cryptographyHelper.Chr(iMultiplier), cryptographyHelper.Chr(iEncryptionMerge + iTotal), cryptographyHelper.Chr(iReverseFlag + iTotal) });
+                        strEncryptedTFN += mmm;
                     }
                 }
 
@@ -108,8 +106,8 @@ namespace ADMS.Apprentice.Core.Services
 
                 int.TryParse(strTFN.Substring(iLoop - 1, 1), out iOut);
                 var c = strMergedString.Substring(iMergeStringPosition - 1, 1);
-                var d = cryptographyHelper.Asc(c);
-                var e = cryptographyHelper.Chr(d + iOut);
+                var d = cryptographyHelper.AscW(c);
+                var e = cryptographyHelper.ChrW(d + iOut);
 
                 strEncryptedTFN += e;
 
@@ -195,9 +193,9 @@ namespace ADMS.Apprentice.Core.Services
                     iExtractPosition = 1;
                     strNewEncryptedTFN = "";
                 }
-                iMultiplier = cryptographyHelper.Asc(strTemp.Substring(iExtractPosition - 1, 1));
-                iEncryptionMerge = cryptographyHelper.Asc(strTemp.Substring(iExtractPosition, 1)) - iTotal;
-                iReverseFlag = cryptographyHelper.Asc(strTemp.Substring(iExtractPosition + 1, 1)) - iTotal;
+                iMultiplier = cryptographyHelper.AscW(strTemp.Substring(iExtractPosition - 1, 1));
+                iEncryptionMerge = cryptographyHelper.AscW(strTemp.Substring(iExtractPosition, 1)) - iTotal;
+                iReverseFlag = cryptographyHelper.AscW(strTemp.Substring(iExtractPosition + 1, 1)) - iTotal;
                 strNewEncryptedTFN += strTemp.Substring(iExtractPosition + 2);
                 iTFNLength = strNewEncryptedTFN.Length;
 
@@ -222,9 +220,9 @@ namespace ADMS.Apprentice.Core.Services
                     }
 
                     var mid1 = strNewEncryptedTFN.Substring(iLoop, 1);
-                    var asc1 = cryptographyHelper.Asc(mid1);
+                    var asc1 = cryptographyHelper.AscW(mid1);
                     var mid2 = strMergedString.Substring(iMergeStringPosition - 1, 1);
-                    var asc2 = cryptographyHelper.Asc(mid2);
+                    var asc2 = cryptographyHelper.AscW(mid2);
 
                     strTFN = (asc1 - asc2).ToString() + strTFN;
 

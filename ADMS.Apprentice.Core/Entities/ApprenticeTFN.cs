@@ -22,4 +22,5 @@ namespace ADMS.Apprentice.Core.Entities
 
         public long AuditEventId { get; set; }
     }
+
 }

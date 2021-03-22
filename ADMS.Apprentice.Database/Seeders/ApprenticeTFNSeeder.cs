@@ -34,8 +34,7 @@ namespace ADMS.Apprentice.Database.Seeders
                 {
                     ApprenticeId = 1,
                     TaxFileNumber = 123456789,
-                    StatusCode = TFNStatus.New,
-                    StatusReasonCode = TFNStatus.New.ToString(),
+                    StatusCode = TFNStatus.TBVE,
                     StatusDate = DateTime.Now,
                     MessageQueueCorrelationId = new Guid()
                 });
@@ -43,8 +42,7 @@ namespace ADMS.Apprentice.Database.Seeders
                 {
                     ApprenticeId = 2,
                     TaxFileNumber = 456564645,
-                    StatusCode = TFNStatus.New,
-                    StatusReasonCode = TFNStatus.New.ToString(),
+                    StatusCode = TFNStatus.TBVE,
                     StatusDate = DateTime.Now,
                     MessageQueueCorrelationId = new Guid()
                 });
