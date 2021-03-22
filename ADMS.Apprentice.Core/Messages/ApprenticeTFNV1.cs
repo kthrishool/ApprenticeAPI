@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 using Adms.Shared.Attributes;
 using ADMS.Apprentice.Core.Entities;
 

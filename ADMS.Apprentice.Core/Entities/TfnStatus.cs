@@ -5,16 +5,15 @@ namespace ADMS.Apprentice.Core.Entities
 	// TODO These statuses would be configured in ADW
 	public enum TFNStatus
 	{
-		[Description("New")]
-		New,
-
-		[Description("Awaiting verification")]
-		Await,
-
-		[Description("Verified")]
-		Verified,
-
-		[Description("Failed")]
-		Failed
+		[Description("To be verified")] 
+		TBVE,
+		[Description("Submitted for verification")]
+		SBMT,
+		[Description("Verified")] 
+		MTCH,
+		[Description("Verification failed no match")] 
+		NOCH,
+		[Description("Verification system error")] 
+		TERR,
 	}
 }

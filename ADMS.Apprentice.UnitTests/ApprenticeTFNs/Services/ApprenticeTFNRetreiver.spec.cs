@@ -141,22 +141,20 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
                 {
                     ApprenticeId = apprenticeId,
                     TaxFileNumber = "123456789",
-                    StatusCode = TFNStatus.New,
-                    StatusReasonCode = "New"
+                    StatusCode = TFNStatus.TBVE
                 },
                 new ApprenticeTFN
                 {
                     ApprenticeId = apprenticeId + 1,
                     TaxFileNumber = "999888777",
-                    StatusCode = TFNStatus.New,
-                    StatusReasonCode = "New"
+                    StatusCode = TFNStatus.TBVE
                 },
                 new ApprenticeTFN
                 {
                     ApprenticeId = apprenticeId + 2,
                     TaxFileNumber = "999888777",
-                    StatusCode = TFNStatus.New,
-                    StatusReasonCode = "New"
+                    StatusCode = TFNStatus.NOCH,
+                    StatusReasonCode = "No Match"
                 }
             };
 
@@ -176,10 +174,9 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
             var mockDbSet = SingleApprenticeTFN();
             var ctx = new Mock<IRepository>();
             var ctx3 = new Mock<IExceptionFactory>();
-            var ctx4 = new Mock<IContextRetriever>();
 
             ctx.Setup(c => c.Retrieve<ApprenticeTFN>()).Returns(mockDbSet.Object);
-            IApprenticeTFNRetreiver service = new ApprenticeTFNRetreiver (ctx.Object,ctx2.Object, ctx3.Object, ctx4.Object);
+            IApprenticeTFNRetreiver service = new ApprenticeTFNRetreiver (ctx.Object,ctx2.Object, ctx3.Object);
 
 
             tfnDetail = service.Get(apprenticeId);
@@ -207,7 +204,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         [TestMethod]
         public void ShouldSetDefaultValues()
         {
-            tfnDetail.Status.Should().Be(TFNStatus.New);
+            tfnDetail.Status.Should().Be(TFNStatus.TBVE);
         }
 
     }

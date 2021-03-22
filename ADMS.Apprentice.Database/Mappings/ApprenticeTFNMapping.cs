@@ -21,6 +21,7 @@ namespace ADMS.Apprentice.Database.Mappings
             entity.Property(e => e.TaxFileNumber)
                 .HasColumnName("TaxFileNumber")
                 .IsRequired()
+                .IsUnicode()
                 .HasMaxLength(20);
             entity.Property(e => e.StatusCode)
                 .HasColumnName("StatusCode")

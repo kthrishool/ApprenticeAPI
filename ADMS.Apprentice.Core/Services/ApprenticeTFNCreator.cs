@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Exceptions;
 using Adms.Shared.Database;
 using Adms.Shared.Exceptions;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -61,12 +63,11 @@ namespace ADMS.Apprentice.Core.Services
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.TFNAlreadyExists);
             }
 
-
             var apprenticeTFN = new ApprenticeTFN
             {
                 ApprenticeId = message.ApprenticeId,
                 TaxFileNumber = cryptography.EncryptTFN(message.ApprenticeId.ToString(), message.TaxFileNumber.ToString()),
-                StatusCode = TFNStatus.New,
+                StatusCode = TFNStatus.TBVE,
                 MessageQueueCorrelationId = Guid.NewGuid(),
                 StatusDate = contextRetriever.GetContext().DateTimeContext,
             };

@@ -1,18 +1,11 @@
-﻿using ADMS.Apprentice.Core.Entities;
-using ADMS.Apprentice.Core.Messages;
-using ADMS.Apprentice.Core.Models;
+﻿using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services;
 using ADMS.Services.Infrastructure.WebApi;
 using ADMS.Services.Infrastructure.WebApi.Documentation;
 using Adms.Shared;
-using Adms.Shared.Extensions;
-using Adms.Shared.Helpers;
-using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using ADMS.Apprentice.Api.Filters;
-using Microsoft.EntityFrameworkCore;
 
 namespace ADMS.Apprentice.Api.Controllers.Tfn
 {

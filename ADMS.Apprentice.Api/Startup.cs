@@ -11,10 +11,6 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using System.Xml.Serialization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters.Xml;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable MemberCanBeProtected.Global
@@ -38,16 +34,6 @@ namespace ADMS.Apprentice.Api
             services.AddDocumentation("ADMS.Apprentice.Api.XML");
             services.AddControllers();
 
-            //services.Configure<MvcOptions>(options =>
-            //{
-            //    var xmlInputFormatting = new IBatchCollectionXmlSerializer(options);
-            //    var jsonInputFormatting = new JsonSerialisationConfiguration
-
-            //    options.InputFormatters.Clear();
-            //    options.InputFormatters.Add(jsonInputFormatting);
-            //    options.InputFormatters.Add(xmlInputFormatting);
-            //});
-
             services.AddMvcCore().AddNewtonsoftJson(options =>
             {
                 JsonSerialisationConfiguration.Configure(options.SerializerSettings);
@@ -69,17 +55,5 @@ namespace ADMS.Apprentice.Api
             app.UseInfrastructure(env, loggerFactory, svp);
         }
 
-    }
-    public class IBatchCollectionXmlSerializer : XmlSerializerInputFormatter
-    {
-        public IBatchCollectionXmlSerializer(MvcOptions options) : base(options)
-        {
-        }
-
-        protected override XmlSerializer CreateSerializer(Type type)
-        {
-var                serializer = base.CreateSerializer(type);
-            return serializer;
-        }
     }
 }

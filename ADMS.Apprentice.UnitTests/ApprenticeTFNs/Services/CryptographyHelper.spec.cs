@@ -9,21 +9,16 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 {
     public class CryptographyHelperTestsBase
     {
-        protected Mock<IDateTimeHelper> mockDateTimeHelper;
         protected CryptographyHelper cryptographyHelper;
 
-        protected const string clientId1 = "3431";
+        protected const string clientId1 = "1";
         protected const string clientId2 = "98765";
-        protected const int keySum1 = 11;
+        protected const int keySum1 = 1;
         protected const int keySum2 = 35;
 
         public CryptographyHelperTestsBase()
         {
-            mockDateTimeHelper = new Mock<IDateTimeHelper>();
-            cryptographyHelper = new CryptographyHelper(mockDateTimeHelper.Object);
-
-            var fakeDate = new DateTime(2018, 05, 15, 12, 53, 24);
-            mockDateTimeHelper.Setup(o => o.GetDateTimeNow()).Returns(fakeDate);
+            cryptographyHelper = new CryptographyHelper();
         }
     }
 
@@ -35,7 +30,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         {
             var s = "�";
 
-            var result = cryptographyHelper.Asc(s);
+            var result = cryptographyHelper.AscW(s);
 
             Assert.AreEqual(65533, result);
         }
@@ -44,7 +39,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         {
             var s = "�X";
 
-            var result = cryptographyHelper.Asc(s);
+            var result = cryptographyHelper.AscW(s);
 
             Assert.AreEqual(65533, result);
         }
@@ -53,7 +48,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         {
             var s = "";
 
-            var result = Assert.ThrowsException<ArgumentException>(() => cryptographyHelper.Asc(s));
+            var result = Assert.ThrowsException<ArgumentException>(() => cryptographyHelper.AscW(s));
 
             Assert.AreEqual("Argument_LengthGTZero1", result.Message);
         }
@@ -61,21 +56,21 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         [TestMethod]
         public void Chr()
         {
-            var result = cryptographyHelper.Chr(65533);
+            var result = cryptographyHelper.ChrW(65533);
 
             Assert.AreEqual('�', result);
         }
         [TestMethod]
         public void AscB()
         {
-            var result = cryptographyHelper.Asc("B");
+            var result = cryptographyHelper.AscW("B");
 
             Assert.AreEqual(66, result);
         }
         [TestMethod]
         public void ChrB()
         {
-            var result = cryptographyHelper.Chr(66);
+            var result = cryptographyHelper.ChrW(66);
 
             Assert.AreEqual('B', result);
         }
@@ -100,14 +95,14 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         }
 
         [TestMethod]
-        public void GetKeyClient1()
+        public void GetKeyClient1ForDecryption()
         {
             var result = cryptographyHelper.GetKey(clientId1, keySum1, 2);
 
-            Assert.AreEqual("22686991018", result);
+            Assert.AreEqual("22222222222", result);
         }
         [TestMethod]
-        public void GetKeyClient2()
+        public void GetKeyClient2ForDecryption()
         {
             var result = cryptographyHelper.GetKey(clientId2, keySum2, 11);
 
@@ -130,25 +125,20 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         }
 
         [TestMethod]
+        public void GetKeyClient1ForEncryption()
+        {
+            var result = cryptographyHelper.GetKey(clientId1, keySum1, -1);
+
+            Assert.AreEqual("11111111111", result);
+        }
+
+        [TestMethod]
         public void GetKeyClient2ForEncryption()
         {
             var result = cryptographyHelper.GetKey(clientId2, keySum2, -1);
 
             Assert.AreEqual("81942779305", result);
         }
-
-        [TestMethod]
-        public void GetKeyClient2ForEncryptionDifferentTime()
-        {
-            var fakeDate = new DateTime(2018, 05, 15, 12, 53, 33);
-            mockDateTimeHelper.Setup(o => o.GetDateTimeNow()).Returns(fakeDate);
-
-            var result = cryptographyHelper.GetKey(clientId2, keySum2, -1);
-
-            Assert.AreNotEqual("81942779305", result);
-        }
-
-
     }
 
 }
