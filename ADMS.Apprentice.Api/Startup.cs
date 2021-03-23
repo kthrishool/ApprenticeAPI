@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-
+using ADMS.Apprentice.Api.HttpClients;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable UnusedMemberHierarchy.Global
@@ -41,6 +41,7 @@ namespace ADMS.Apprentice.Api
             }).AddXmlSerializerFormatters();
 
             SettingsConfiguration.Configure(services, Configuration);
+            HttpClientConfiguration.Configure(services, Configuration);
             DependencyInjectionConfiguration.ConfigureServices(services);
         }
 
@@ -55,5 +56,5 @@ namespace ADMS.Apprentice.Api
             app.UseInfrastructure(env, loggerFactory, svp);
         }
 
-    }
+    }    
 }

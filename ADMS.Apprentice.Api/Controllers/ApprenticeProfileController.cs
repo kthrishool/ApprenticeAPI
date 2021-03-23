@@ -12,6 +12,7 @@ using Adms.Shared.Filters;
 using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ADMS.Apprentice.Api.HttpClients.ReferenceDataApi;
 
 namespace ADMS.Apprentice.Api.Controllers
 {
@@ -26,17 +27,20 @@ namespace ADMS.Apprentice.Api.Controllers
         private readonly IRepository repository;
         private readonly IPagingHelper pagingHelper;
         private readonly IProfileCreator profileCreator;
+        private readonly IReferenceDataClient referenceDataClient;
 
         public ApprenticeProfileController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
             IPagingHelper pagingHelper,
-            IProfileCreator profileCreator
+            IProfileCreator profileCreator,
+            IReferenceDataClient referenceDataClient
         ) : base(contextAccessor)
         {
             this.repository = repository;
             this.pagingHelper = pagingHelper;
             this.profileCreator = profileCreator;
+            this.referenceDataClient = referenceDataClient;
         }
 
         [HttpGet]
@@ -52,7 +56,7 @@ namespace ADMS.Apprentice.Api.Controllers
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfileModel>> Get(int id)
-        {
+        {            
             Profile profile = await repository.GetAsync<Profile>(id);
             return Ok(new ProfileModel(profile));
         }
