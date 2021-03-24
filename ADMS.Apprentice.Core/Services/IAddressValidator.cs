@@ -5,8 +5,8 @@ using Adms.Shared.Attributes;
 namespace ADMS.Apprentice.Core.Services
 {
     [RegisterWithIocContainer]
-    public interface IProfileValidator
+    public interface IAddressValidator
     {
-        Task ValidateAsync(Profile profile);
+        Task<Address> ManualAddressValidator(Address message);
     }
 }

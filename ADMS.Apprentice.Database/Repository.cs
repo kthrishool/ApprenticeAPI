@@ -23,6 +23,7 @@ namespace ADMS.Apprentice.Database
             modelBuilder.ApplyConfiguration(new ProfileMapping());
             modelBuilder.ApplyConfiguration(new ApprenticeTFNMapping());
             modelBuilder.ApplyConfiguration(new PhoneMapping());
+            modelBuilder.ApplyConfiguration(new AddressMapping());
         }
     }
 }

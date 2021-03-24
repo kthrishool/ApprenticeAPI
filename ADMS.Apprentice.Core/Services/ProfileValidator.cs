@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -12,10 +13,13 @@ namespace ADMS.Apprentice.Core.Services
     public class ProfileValidator : IProfileValidator
     {
         private readonly IExceptionFactory exceptionFactory;
+        private readonly IAddressValidator addressValidator;
 
-        public ProfileValidator(IExceptionFactory exceptionFactory)
+        public ProfileValidator(IExceptionFactory exceptionFactory,
+            IAddressValidator addressValidator)
         {
             this.exceptionFactory = exceptionFactory;
+            this.addressValidator = addressValidator;
         }
 
         public Task ValidateAsync(Profile profile)
@@ -32,22 +36,36 @@ namespace ADMS.Apprentice.Core.Services
             if (profile.Phones != null)
             {
                 var newPhone = new List<Phone>();
-                foreach (Phone phoneNumbers in profile?.Phones)
-                {
-                    if (phoneNumbers == null || phoneNumbers?.PhoneNumber?.Length == 0) continue;
-                    var ErrorMessage = ValidationExceptionType.InvalidPhoneNumber;
-                    string formattedPhone = phoneNumbers.PhoneNumber;
-                    if (!PhoneValidator.ValidatePhone(ref formattedPhone, ErrorMessage))
-                        throw exceptionFactory.CreateValidationException(ErrorMessage);
-                    newPhone.Add(new Phone()
+                if (profile?.Phones != null)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                    foreach (Phone phoneNumbers in profile?.Phones)
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                     {
-                        PhoneNumber = formattedPhone,
-                        PhoneTypeCode = PhoneType.LandLine.ToString(),
-                        PreferredPhoneFlag = !preferredPhoneFlag
-                    });
-                    preferredPhoneFlag = true;
-                }
+                        if (phoneNumbers == null || phoneNumbers?.PhoneNumber?.Length == 0) continue;
+                        var ErrorMessage = ValidationExceptionType.InvalidPhoneNumber;
+                        string? formattedPhone = phoneNumbers?.PhoneNumber;
+                        if (!PhoneValidator.ValidatePhone(ref formattedPhone, ErrorMessage))
+                            throw exceptionFactory.CreateValidationException(ErrorMessage);
+                        newPhone.Add(new Phone()
+                        {
+                            PhoneNumber = formattedPhone,
+                            PhoneTypeCode = PhoneType.LandLine.ToString(),
+                            PreferredPhoneFlag = !preferredPhoneFlag
+                        });
+                        preferredPhoneFlag = true;
+                    }
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 profile.Phones = newPhone;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            }
+            // Address validation
+            if (profile.Addresses != null)
+            {
+                foreach (Address LocalAddress in profile.Addresses)
+                {
+                    //commented for now
+                    // addressValidator.ManualAddressValidator(LocalAddress);
+                }
             }
             return Task.CompletedTask;
         }
@@ -74,7 +92,7 @@ namespace ADMS.Apprentice.Core.Services
 
         private bool ValidateAge(DateTime birthDate)
         {
-            //identify the age from DOB and check atleast 12 years old.
+            //identify the age from DOB and check at least 12 years old.
             var age = DateTime.Now.Year - birthDate.Year;
             if (DateTime.Now.DayOfYear < birthDate.DayOfYear) age--;
             return age >= 12;

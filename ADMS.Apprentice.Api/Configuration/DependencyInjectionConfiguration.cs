@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using ADMS.Apprentice.Core;
+using ADMS.Apprentice.Core.Services;
 using ADMS.Apprentice.Database;
 using Adms.Shared;
 using Adms.Shared.Helpers;
@@ -25,7 +26,9 @@ namespace ADMS.Apprentice.Api.Configuration
 
             // interfaces which live in a different assembly to their implementation get registered manually here
             services.AddTransient<ISharedSettings, SharedSettings>();
-            services.AddScoped<IRepository, Repository>();            
+            services.AddScoped<IRepository, Repository>();
+            services.AddScoped<ITyimsRepository, TyimsRepository>();
+
         }
     }
 }

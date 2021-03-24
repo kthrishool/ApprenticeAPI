@@ -61,6 +61,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.CreatedBy.Should().Be(ProfileConstants.Createdby);
             model.UpdatedBy.Should().Be(ProfileConstants.Updatedby);
             model.Phones = null;
+            model.ResidentialAddress = null;
+            model.PostalAddress = null;
         }
     }
 

@@ -27,7 +27,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
                 ProfileType = ProfileConstants.Profiletype,
-                PhoneNumbers = ProfileConstants.PhoneNumbers
+                PhoneNumbers = ProfileConstants.PhoneNumbers,
+                ResidentialAddress = ProfileConstants.ResidentialAddress,
+                PostalAddress = ProfileConstants.PostalAddress,
             };
         }
 
@@ -95,11 +97,39 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.Phones.Select(c => c.PhoneNumber).Should().Contain(message.PhoneNumbers[0]);
         }
 
-        //[TestMethod]
-        //public void ShouldConvertPhoneNumber()
-        //{
-        //    profile.Phones.Select(c => c.PhoneNumber).Should().NotContain(message.PhoneNumbers[1]);
-        //}
+        [TestMethod]
+        public void ShouldSetResidentialAddress()
+        {
+            profile.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString())
+                .Select(c => new ProfileAddressMessage()
+                {
+                    Postcode = c.Postcode,
+                    StateCode = c.StateCode,
+                    SingleLineAddress = c.SingleLineAddress,
+                    Locality = c.Locality,
+                    StreetAddress1 = c.StreetAddress1,
+                    StreetAddress2 = c.StreetAddress2,
+                    StreetAddress3 = c.StreetAddress3
+                })
+                .Should().Contain(message.ResidentialAddress);
+        }
+
+        [TestMethod]
+        public void ShouldSetPostalAddress()
+        {
+            profile.Addresses.Where(c => c.AddressTypeCode == AddressType.POST.ToString())
+                .Select(c => new ProfileAddressMessage()
+                {
+                    Postcode = c.Postcode,
+                    StateCode = c.StateCode,
+                    SingleLineAddress = c.SingleLineAddress,
+                    Locality = c.Locality,
+                    StreetAddress1 = c.StreetAddress1,
+                    StreetAddress2 = c.StreetAddress2,
+                    StreetAddress3 = c.StreetAddress3
+                })
+                .Should().Contain(message.PostalAddress);
+        }
     }
 
     #endregion

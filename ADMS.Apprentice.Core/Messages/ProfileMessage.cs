@@ -38,5 +38,11 @@ namespace ADMS.Apprentice.Core.Messages
 
         [Display(Name = "Phone number")]
         public List<string> PhoneNumbers { get; init; }
+
+        [Display(Name = "Residential Address")]
+        public ProfileAddressMessage ResidentialAddress { get; init; }
+
+        [Display(Name = "Postal Address")]
+        public ProfileAddressMessage PostalAddress { get; init; }
     }
 }

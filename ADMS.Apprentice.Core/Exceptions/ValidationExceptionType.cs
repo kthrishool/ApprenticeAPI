@@ -26,6 +26,15 @@ namespace ADMS.Apprentice.Core.Exceptions
         InvalidPhoneNumber,
 
         [ExceptionDetails("AP-VAL-0008", "Invalid Email address")]
-        InvalidEmailAddress
+        InvalidEmailAddress,
+
+        [ExceptionDetails("AP-VAL-0008", "Invalid Postcode")]
+        InvalidPostcode,
+
+        [ExceptionDetails("AP-VAL-0009", "Invalid Address details")]
+        AddressRecordNotFound,
+
+        [ExceptionDetails("AP-VAL-0010", "State selected in Invalid for the postcode selected")]
+        PostCodeStateCodeMissmatch
     }
 }

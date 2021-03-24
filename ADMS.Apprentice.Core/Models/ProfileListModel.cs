@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ADMS.Apprentice.Core.Entities;
+using ADMS.Apprentice.Core.Messages;
 
 namespace ADMS.Apprentice.Core.Models
 {
@@ -25,6 +26,10 @@ namespace ADMS.Apprentice.Core.Models
         public bool DeceasedFlag { get; }
         public bool ActiveFlag { get; }
         public List<string> Phones { get; set; }
+
+        public ProfileAddressMessage ResidentialAddress { get; set; }
+        public ProfileAddressMessage PostalAddress { get; set; }
+
         public DateTime? CreatedOn { get; }
         public string CreatedBy { get; }
         public DateTime? UpdatedOn { get; }
@@ -55,6 +60,28 @@ namespace ADMS.Apprentice.Core.Models
             UpdatedBy = apprentice.UpdatedBy;
             if (apprentice?.Phones?.Count() > 0)
                 Phones = apprentice.Phones.Select(c => c.PhoneNumber).ToList();
+            if (apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
+                ResidentialAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).Select(c => new ProfileAddressMessage
+                {
+                    Postcode = c.Postcode,
+                    StateCode = c.StateCode,
+                    SingleLineAddress = c.SingleLineAddress,
+                    Locality = c.Locality,
+                    StreetAddress1 = c.StreetAddress1,
+                    StreetAddress2 = c.StreetAddress2,
+                    StreetAddress3 = c.StreetAddress3
+                }).SingleOrDefault();
+            if (apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.POST.ToString()))
+                PostalAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.POST.ToString()).Select(c => new ProfileAddressMessage
+                {
+                    Postcode = c.Postcode,
+                    StateCode = c.StateCode,
+                    SingleLineAddress = c.SingleLineAddress,
+                    Locality = c.Locality,
+                    StreetAddress1 = c.StreetAddress1,
+                    StreetAddress2 = c.StreetAddress2,
+                    StreetAddress3 = c.StreetAddress3
+                }).SingleOrDefault();
         }
     }
 }

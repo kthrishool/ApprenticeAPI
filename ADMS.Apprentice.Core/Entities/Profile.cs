@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ADMS.Services.Infrastructure.Model.Interface;
 using Adms.Shared;
 
@@ -33,6 +34,7 @@ namespace ADMS.Apprentice.Core.Entities
 
 
         public virtual ICollection<Phone> Phones { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; }
 
         public Profile()
         {
@@ -40,6 +42,7 @@ namespace ADMS.Apprentice.Core.Entities
             DeceasedFlag = false;
             ProfileTypeCode = ProfileType.APPR.ToString();
             Phones = new List<Phone>();
+            Addresses = new Collection<Address>();
         }
     }
 }
