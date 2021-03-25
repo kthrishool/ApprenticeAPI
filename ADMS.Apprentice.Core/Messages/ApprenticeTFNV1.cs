@@ -15,10 +15,5 @@ namespace ADMS.Apprentice.Core.Messages
 
         [Required(ErrorMessage = "TFN is required")]
         public long TaxFileNumber { get; set; }
-
-        public TFNStatus StatusCode { get; set; }
-        public DateTime StatusDate { get; set; }
-        public string StatusReasonCode { get; set; }
-        public Guid MessageQueueCorrelationId { get; set; }
     }
 }

@@ -26,6 +26,9 @@ namespace ADMS.Apprentice.Core.Exceptions
         InvalidPhoneNumber,
 
         [ExceptionDetails("AP-VAL-0008", "Invalid Email address")]
-        InvalidEmailAddress
+        InvalidEmailAddress,
+
+        [ExceptionDetails("AP-VAL-0009", "TFN does not exist for this apprentice.")]
+        TFNDoesNotExist,
     }
 }

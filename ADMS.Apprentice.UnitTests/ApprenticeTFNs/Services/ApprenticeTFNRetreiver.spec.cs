@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query;
 using Adms.Shared.Exceptions;
 using Adms.Shared.Database;
+using ADMS.Services.Infrastructure.Core.Exceptions;
 
 namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 {
@@ -116,10 +117,72 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 
     #region WhenRetreivingAApprenticeTFN
     [TestClass]
-    public class WhenRetreivingApprenticeTFN : GivenWhenThen<ApprenticeTFNRetreiver>
+    public class WhenRetreivingApprenticeTFN : ApprenticeTFNRetreiverBase
     {
-        private ApprenticeTFNModel tfnDetail;
-        private const int apprenticeId = 111;
+        protected override void When()
+        {
+            var mockDbSet = SingleApprenticeTFN();
+            var ctx = new Mock<IRepository>();
+            var ctx3 = new Mock<IExceptionFactory>();
+
+            ctx.Setup(c => c.Retrieve<ApprenticeTFN>()).Returns(mockDbSet.Object);
+            IApprenticeTFNRetreiver service = new ApprenticeTFNRetreiver (ctx.Object,ctx2.Object, ctx3.Object);
+
+
+            tfnDetail = service.Get(apprenticeId);
+        }
+
+        [TestMethod]
+        public void ShouldReturnApprenticeTFN()
+        {
+
+            tfnDetail.Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public void ShouldDecryptTheTFNn()
+        {
+            ctx2.Verify(r => r.DecryptTFN(tfnDetail.ApprenticeId.ToString(), It.IsAny<string>()));
+        }
+
+        [TestMethod]
+        public void ShouldSetTheApprenticeId()
+        {
+            tfnDetail.ApprenticeId.Should().Be(tfnDetail.ApprenticeId);
+        }
+
+        [TestMethod]
+        public void ShouldSetDefaultValues()
+        {
+            tfnDetail.Status.Should().Be(TFNStatus.TBVE);
+        }
+
+    }
+
+    [TestClass]
+    public class WhenRetreivingNullApprenticeTFN : ApprenticeTFNRetreiverBase
+    {
+
+        [TestMethod]
+        public void ShouldCallExceptionFactory()
+        {
+            var mockDbSet = SingleApprenticeTFN();
+            var ctx = new Mock<IRepository>();
+            var ctx3 = new Mock<IExceptionFactory>();
+
+            ctx.Setup(c => c.Retrieve<ApprenticeTFN>()).Returns(mockDbSet.Object);
+            IApprenticeTFNRetreiver service = new ApprenticeTFNRetreiver(ctx.Object, ctx2.Object, ctx3.Object);
+
+            var result = Assert.ThrowsException<NullReferenceException>(() => service.Get(apprenticeId - 1));
+        }
+
+
+    }
+
+    public class ApprenticeTFNRetreiverBase : GivenWhenThen<ApprenticeTFNRetreiver>
+    {
+        protected ApprenticeTFNModel tfnDetail;
+        protected const int apprenticeId = 111;
 
         protected readonly Mock<ICryptography> ctx2 = new Mock<ICryptography>();
 
@@ -168,46 +231,6 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 
 
         }
-
-        protected override void When()
-        {
-            var mockDbSet = SingleApprenticeTFN();
-            var ctx = new Mock<IRepository>();
-            var ctx3 = new Mock<IExceptionFactory>();
-
-            ctx.Setup(c => c.Retrieve<ApprenticeTFN>()).Returns(mockDbSet.Object);
-            IApprenticeTFNRetreiver service = new ApprenticeTFNRetreiver (ctx.Object,ctx2.Object, ctx3.Object);
-
-
-            tfnDetail = service.Get(apprenticeId);
-        }
-
-        [TestMethod]
-        public void ShouldReturnApprenticeTFN()
-        {
-
-            tfnDetail.Should().NotBeNull();
-        }
-
-        [TestMethod]
-        public void ShouldDecryptTheTFNn()
-        {
-            ctx2.Verify(r => r.DecryptTFN(tfnDetail.ApprenticeId.ToString(), It.IsAny<string>()));
-        }
-
-        [TestMethod]
-        public void ShouldSetTheApprenticeId()
-        {
-            tfnDetail.ApprenticeId.Should().Be(tfnDetail.ApprenticeId);
-        }
-
-        [TestMethod]
-        public void ShouldSetDefaultValues()
-        {
-            tfnDetail.Status.Should().Be(TFNStatus.TBVE);
-        }
-
     }
-
     #endregion
 }

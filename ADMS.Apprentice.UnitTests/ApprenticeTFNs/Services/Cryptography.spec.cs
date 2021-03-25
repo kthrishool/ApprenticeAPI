@@ -49,6 +49,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         {
             cryptography.EncryptTFN("", tfn1).Should().Be("\u0001\u0006\u0000");
         }
+
     }
 
     # endregion
@@ -90,6 +91,12 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         public void WhenDecryptingTheTFNForClient4WithTheWrongClientId()
         {
             cryptography.DecryptTFN("4406685", "!­& µ&½¸1").Should().Be("121061471521011051071");
+        }
+
+        [TestMethod]
+        public void WhenDecryptingTheTFNThrows()
+        {
+            Assert.ThrowsException<Exception>(() =>  cryptography.DecryptTFN("4406685", "12345"));
         }
     }
     #endregion
