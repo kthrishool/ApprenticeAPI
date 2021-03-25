@@ -35,7 +35,9 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         [TestMethod]
         public void WhenEncryptingDifferentValidTfnForClient2()
         {
-            cryptography.EncryptTFN(clientId2, "987456369").Should().Be("+­)#!MN/.&");
+            var key = @"+­)#!MN/.&";
+
+            cryptography.EncryptTFN(clientId2, "987456369").Should().Be(key);
         }
 
         [TestMethod]
@@ -50,6 +52,15 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
             cryptography.EncryptTFN("", tfn1).Should().Be("\u0001\u0006\u0000");
         }
 
+
+        [TestMethod]
+        public void WhenEncryptingLongTfn()
+        {
+            var key = "L\f#!%Q\u008fS&\n\t\u0003SR\u0010%!#M\u0089";
+            var tfn = "12345678987654321";
+            var result = cryptography.EncryptTFN("12", tfn);
+            result.Should().Be(key);
+        }
     }
 
     # endregion
@@ -93,6 +104,15 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
             cryptography.DecryptTFN("4406685", "!­& µ&½¸1").Should().Be("121061471521011051071");
         }
 
+        [TestMethod]
+        public void WhenDecryptingLongTfn()
+        {
+            var key = "L\f#!%Q\u008fS&\n\t\u0003SR\u0010%!#M\u0089";
+            var tfn = "12345678987654321";
+            var result = cryptography.DecryptTFN("12", key);
+            result.Should().Be(tfn);
+        }
+        
         [TestMethod]
         public void WhenDecryptingTheTFNThrows()
         {
