@@ -82,7 +82,7 @@ namespace ADMS.Apprentice.Api.Controllers
             
         }
 
-        [HttpGet]
+        [HttpGet("test")]
         public async Task<ActionResult<AutocompleteAddressModel>> Test([FromBody] ProfileMessage message)
         {
             //try
