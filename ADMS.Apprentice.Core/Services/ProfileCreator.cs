@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using Adms.Shared;
+using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -12,12 +13,15 @@ namespace ADMS.Apprentice.Core.Services
         private readonly IRepository repository;
 
         private readonly IProfileValidator profileValidator;
+        private readonly IReferenceDataClient referenceDataClient;
 
         public ProfileCreator(IRepository repository,
-            IProfileValidator profileValidator)
+            IProfileValidator profileValidator,
+            IReferenceDataClient referenceDataClient)
         {
             this.repository = repository;
             this.profileValidator = profileValidator;
+            this.referenceDataClient = referenceDataClient;
         }
 
         public async Task<Profile> CreateAsync(ProfileMessage message)
@@ -65,6 +69,8 @@ namespace ADMS.Apprentice.Core.Services
                 });
             }
 
+            //var b = await referenceDataClient.AutocompleteAddress(message.ResidentialAddress.SingleLineAddress);
+            var c = await referenceDataClient.AutocompleteAddress(message.ResidentialAddress.SingleLineAddress);
             await profileValidator.ValidateAsync(profile);
             repository.Insert(profile);
            

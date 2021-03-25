@@ -12,6 +12,8 @@ using Adms.Shared.Filters;
 using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
+using System;
 
 namespace ADMS.Apprentice.Api.Controllers
 {
@@ -25,18 +27,21 @@ namespace ADMS.Apprentice.Api.Controllers
     {
         private readonly IRepository repository;
         private readonly IPagingHelper pagingHelper;
-        private readonly IProfileCreator profileCreator;        
+        private readonly IProfileCreator profileCreator;
+        private readonly IReferenceDataClient referenceDataClient;
 
         public ApprenticeProfileController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
             IPagingHelper pagingHelper,
-            IProfileCreator profileCreator            
+            IProfileCreator profileCreator,
+            IReferenceDataClient referenceDataClient
         ) : base(contextAccessor)
         {
             this.repository = repository;
             this.pagingHelper = pagingHelper;
-            this.profileCreator = profileCreator;            
+            this.profileCreator = profileCreator;
+            this.referenceDataClient = referenceDataClient;
         }
 
         [HttpGet]
@@ -61,9 +66,39 @@ namespace ADMS.Apprentice.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ProfileModel>> Create([FromBody] ProfileMessage message)
         {
-            Profile profile = await profileCreator.CreateAsync(message);
-            await repository.SaveAsync();
-            return Created($"/{profile.Id}", new ProfileModel(profile));
+            try
+            {
+                var b = await referenceDataClient.AutocompleteAddress("79 percy begg cct");
+                Profile profile = await profileCreator.CreateAsync(message);
+                await repository.SaveAsync();
+                return Created($"/{profile.Id}", new ProfileModel(profile));
+            }
+            catch (Exception e)
+            {
+                var b = e.Message;
+                throw;
+            }
+        
+            
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<AutocompleteAddressModel>> Test([FromBody] ProfileMessage message)
+        {
+            //try
+            //{
+                var b = await referenceDataClient.AutocompleteAddress("79 percy begg cct");
+                //Profile profile = await profileCreator.CreateAsync(message);
+                //await repository.SaveAsync();
+                return Ok(b[0]);
+            //}
+            //catch (Exception e)
+            //{
+            //    var b = e.Message;
+            //    throw;
+            //}
+
+
         }
     }
 }

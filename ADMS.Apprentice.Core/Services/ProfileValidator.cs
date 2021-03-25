@@ -13,7 +13,7 @@ namespace ADMS.Apprentice.Core.Services
     public class ProfileValidator : IProfileValidator
     {
         private readonly IExceptionFactory exceptionFactory;
-        private readonly IAddressValidator addressValidator;       
+        private readonly IAddressValidator addressValidator;
 
         public ProfileValidator(IExceptionFactory exceptionFactory,
             IAddressValidator addressValidator)
@@ -22,7 +22,7 @@ namespace ADMS.Apprentice.Core.Services
             this.addressValidator = addressValidator;
         }
 
-        public async Task<Task> ValidateAsync(Profile profile)
+        public Task ValidateAsync(Profile profile)
         {
             var preferredPhoneFlag = false;
             if (!ValidateAge(profile.BirthDate))

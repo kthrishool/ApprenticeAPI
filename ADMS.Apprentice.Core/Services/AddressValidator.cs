@@ -30,26 +30,26 @@ namespace ADMS.Apprentice.Core.Services
             this.referenceDataClient = referenceDataClient;
         }
 
-        public List<Address> Validate(Profile message)
+        public async Task<Task> Validate(Profile message)
         {
             var validatedAddress = new List<Address>();
 
             foreach (Address messageAddress in message.Addresses)
             {
-                validatedAddress.Add(ValidateDefaultCodes(messageAddress));
+                validatedAddress.Add(await ValidateDefaultCodesAsync(messageAddress));
             }
 
-
-            return validatedAddress;
+            message.Addresses = validatedAddress;
+            return Task.CompletedTask;
         }
 
-        private Address ValidateDefaultCodes(Address message)
+        private async Task<Address> ValidateDefaultCodesAsync(Address message)
         {
             if (message == null)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
             // if the singleLine is Present then we need to check it first.
             if (!string.IsNullOrWhiteSpace(message.SingleLineAddress))
-                return ValidateSingleLineAddress(message);
+                return await ValidateSingleLineAddressAsync(message);
             else
             {
                 // is the single line code is empty we need to check if other details are valid.
@@ -76,15 +76,17 @@ namespace ADMS.Apprentice.Core.Services
             return message;
         }
 
-        private Address ValidateSingleLineAddress(Address message)
+        private async Task<Address> ValidateSingleLineAddressAsync(Address address)
         {
             //Verify the address using iGas
             //If it is a valid single line address, iGas will return just one record only
+            
+
             AutocompleteAddressModel[] autocompleteAddress =  await referenceDataClient.AutocompleteAddress(address.SingleLineAddress);
             if (autocompleteAddress.Count() != 1) throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
 
             //Get detailed address including geo location from the addressId. At this point we are sure that there is only one item in the autocompleteAddress array 
-            DetailAddressModel detailAddress = await referenceDataClient.GetDetailAddressById(autocompleteAddress[0].Id);
+            DetailAddressModel detailAddress =  await referenceDataClient.GetDetailAddressById(autocompleteAddress[0].Id);
             //no chance to have detail address to be null, but in case of reasons..
             if (detailAddress == null) throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
 
