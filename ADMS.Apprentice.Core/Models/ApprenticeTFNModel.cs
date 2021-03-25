@@ -7,11 +7,11 @@ namespace ADMS.Apprentice.Core.Models
 {
     public record ApprenticeTFNModel 
     {
-        public int Id { get; set; }
-        public int ApprenticeId { get; set; }
-        public string TaxFileNumber { get; set; }
-        public TFNStatus Status { get; set; }
-        public string StatusReason { get; set; }
+        public int Id;
+        public int ApprenticeId;
+        public string TaxFileNumber;
+        public TFNStatus Status;
+        public string StatusReason;
 
 
         public ApprenticeTFNModel() { }
@@ -23,13 +23,6 @@ namespace ADMS.Apprentice.Core.Models
             Status = Tfn.StatusCode;
             TaxFileNumber = Tfn.TaxFileNumber;
             StatusReason = Tfn.StatusReasonCode;
-
-        }
-
-        public ApprenticeTFNModel(ApprenticeTFN Tfn, IApiUrlBuilder apiUrlBuilder, string currentUrl) : this(Tfn)
-        {
-            var uri = new Uri(currentUrl);
         }
     }
-
 }

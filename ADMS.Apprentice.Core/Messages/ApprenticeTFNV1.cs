@@ -11,9 +11,9 @@ namespace ADMS.Apprentice.Core.Messages
     public record ApprenticeTFNV1 
     {
         [Required(ErrorMessage = "ApprenticeId is required")]
-        public int ApprenticeId { get; set; }
+        public int ApprenticeId;
 
         [Required(ErrorMessage = "TFN is required")]
-        public long TaxFileNumber { get; set; }
+        public long TaxFileNumber;
     }
 }
