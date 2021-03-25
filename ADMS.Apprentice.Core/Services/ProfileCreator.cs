@@ -67,7 +67,7 @@ namespace ADMS.Apprentice.Core.Services
 
             await profileValidator.ValidateAsync(profile);
             repository.Insert(profile);
-            // doesn't need to be async just yet, but it will be once we start looking up TYIMS data etc
+           
             return profile;
         }
     }

@@ -6,6 +6,7 @@ using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
+using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -14,16 +15,19 @@ namespace ADMS.Apprentice.Core.Services
         private readonly ITyimsRepository tyimsRepository;
         private readonly IRepository repository;
         private readonly IExceptionFactory exceptionFactory;
+        private readonly IReferenceDataClient referenceDataClient;
 
         public AddressValidator(
             IRepository repository,
             ITyimsRepository tyimsRepository,
-            IExceptionFactory exceptionFactory
+            IExceptionFactory exceptionFactory,
+            IReferenceDataClient referenceDataClient
         )
         {
             this.tyimsRepository = tyimsRepository;
             this.repository = repository;
             this.exceptionFactory = exceptionFactory;
+            this.referenceDataClient = referenceDataClient;
         }
 
         public List<Address> Validate(Profile message)
@@ -74,8 +78,29 @@ namespace ADMS.Apprentice.Core.Services
 
         private Address ValidateSingleLineAddress(Address message)
         {
-            throw new NotImplementedException("Validation Not Implemented");
-            // profileAddress will not be null as its only internally called .
+            //Verify the address using iGas
+            //If it is a valid single line address, iGas will return just one record only
+            AutocompleteAddressModel[] autocompleteAddress =  await referenceDataClient.AutocompleteAddress(address.SingleLineAddress);
+            if (autocompleteAddress.Count() != 1) throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
+
+            //Get detailed address including geo location from the addressId. At this point we are sure that there is only one item in the autocompleteAddress array 
+            DetailAddressModel detailAddress = await referenceDataClient.GetDetailAddressById(autocompleteAddress[0].Id);
+            //no chance to have detail address to be null, but in case of reasons..
+            if (detailAddress == null) throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
+
+            //populate geo location + postcode suburb details to profile address from detailsAddress component                                  
+            address.SingleLineAddress = detailAddress.FormattedAddress;
+            address.StreetAddress1 = detailAddress.StreetAddressLine1;
+            address.StreetAddress2 = detailAddress.StreetAddressLine2;
+            address.StreetAddress3 = detailAddress.StreetAddressLine3;
+            address.Locality = detailAddress.Locality;            
+            address.StateCode = detailAddress.State;
+            address.Postcode = detailAddress.Postcode;
+            address.GeocodeType = detailAddress.GeocodeType;
+            address.Latitude = detailAddress.Latitude;
+            address.Longitude = detailAddress.Longitude;
+            address.Confidence = detailAddress.Confidence;
+            return address;            
         }
 
         private async Task<Address> CheckAddressWithTyimsAsync(Address message)

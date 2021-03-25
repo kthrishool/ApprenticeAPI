@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ADMS.Apprentice.Api.HttpClients;
+using ADMS.Apprentice.Core.HttpClients;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable UnusedMemberHierarchy.Global

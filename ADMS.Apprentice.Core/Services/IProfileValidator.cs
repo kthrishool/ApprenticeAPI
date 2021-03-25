@@ -7,6 +7,6 @@ namespace ADMS.Apprentice.Core.Services
     [RegisterWithIocContainer]
     public interface IProfileValidator
     {
-        Task ValidateAsync(Profile profile);
+        Task<Task> ValidateAsync(Profile profile);
     }
 }

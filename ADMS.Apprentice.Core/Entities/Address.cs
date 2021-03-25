@@ -21,9 +21,9 @@ namespace ADMS.Apprentice.Core.Entities
 
         public string GeocodeType { get; set; }
 
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
-        public string Confidence { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
+        public int Confidence { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
