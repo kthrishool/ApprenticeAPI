@@ -35,6 +35,18 @@ namespace ADMS.Apprentice.Core.Exceptions
         AddressRecordNotFound,
 
         [ExceptionDetails("AP-VAL-0010", "State selected in Invalid for the postcode selected")]
-        PostCodeStateCodeMissmatch
+        PostCodeStateCodeMissmatch,
+
+        [ExceptionDetails("AP-VAL-0011", "Invalid State Code")]
+        InvalidStateCode,
+
+        [ExceptionDetails("AP-VAL-0012", "Street Address Line Exceeds 80 Characters")]
+        StreetAddressExceedsMaxLength,
+
+        [ExceptionDetails("AP-VAL-0013", "Suburb name Exceeds 40 Characters")]
+        SuburbExceedsMaxLength,
+
+        [ExceptionDetails("AP-VAL-0014", "Street Address Line cannot be null")]
+        StreetAddressLine1CannotBeNull
     }
 }

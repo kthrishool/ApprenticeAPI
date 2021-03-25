@@ -26,41 +26,62 @@ namespace ADMS.Apprentice.Core.Services
             this.exceptionFactory = exceptionFactory;
         }
 
-        public async Task<Address> ManualAddressValidator(Address message)
+        public List<Address> Validate(Profile message)
         {
-            await ValidateDefaultCodes(message);
+            var validatedAddress = new List<Address>();
 
-            return new Address();
+            foreach (Address messageAddress in message.Addresses)
+            {
+                validatedAddress.Add(ValidateDefaultCodes(messageAddress));
+            }
+
+
+            return validatedAddress;
         }
 
-        public async Task ValidateDefaultCodes(Address message)
+        private Address ValidateDefaultCodes(Address message)
         {
             if (message == null)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
             // if the singleLine is Present then we need to check it first.
             if (!string.IsNullOrWhiteSpace(message.SingleLineAddress))
-                ValidateSingleLineAddress(message);
+                return ValidateSingleLineAddress(message);
             else
             {
                 // is the single line code is empty we need to check if other details are valid.
                 // if the postcode is there then validate it first
                 if (string.IsNullOrWhiteSpace(message.Postcode) ||
-                    string.IsNullOrWhiteSpace(message.Locality))
+                    string.IsNullOrWhiteSpace(message.Locality) ||
+                    string.IsNullOrWhiteSpace(message.StateCode))
                     throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
-
-                await CheckAddressWithTyimsAsync(message);
+                if (message.Postcode?.Length != 4)
+                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPostcode);
+                if (message.StateCode?.Length > 10)
+                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidStateCode);
+                if (message.StreetAddress1 == null)
+                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressLine1CannotBeNull);
+                if (message.StreetAddress1?.Length > 80)
+                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
+                if (message.StreetAddress2?.Length > 80)
+                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
+                if (message.StreetAddress3?.Length > 80)
+                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
+                if (message.Locality?.Length > 40)
+                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.SuburbExceedsMaxLength);
             }
+            return message;
         }
 
-        private void ValidateSingleLineAddress(Address message)
+        private Address ValidateSingleLineAddress(Address message)
         {
             throw new NotImplementedException("Validation Not Implemented");
             // profileAddress will not be null as its only internally called .
         }
 
-        private async Task CheckAddressWithTyimsAsync(Address message)
+        private async Task<Address> CheckAddressWithTyimsAsync(Address message)
         {
-            List<CodeLocalityPostcodesState> locationForPostCode = await tyimsRepository.GetPostCodeAsync(message.Postcode.Trim());
+            // change the code to use reference data
+            var locationForPostCode = await tyimsRepository.GetPostCodeAsync(message.Postcode.Trim());
             // first check if the postcode is valid
             if (locationForPostCode.Any())
             {
@@ -74,6 +95,7 @@ namespace ADMS.Apprentice.Core.Services
             }
             else
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.PostCodeStateCodeMissmatch); //    Address will not be null as its only internally called.
+            return new Address();
         }
     }
 }

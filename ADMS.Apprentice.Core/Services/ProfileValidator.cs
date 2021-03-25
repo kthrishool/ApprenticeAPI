@@ -61,11 +61,8 @@ namespace ADMS.Apprentice.Core.Services
             // Address validation
             if (profile.Addresses != null)
             {
-                foreach (Address LocalAddress in profile.Addresses)
-                {
-                    //commented for now
-                    // addressValidator.ManualAddressValidator(LocalAddress);
-                }
+                // validation needs to happen
+                addressValidator.Validate(profile);
             }
             return Task.CompletedTask;
         }
