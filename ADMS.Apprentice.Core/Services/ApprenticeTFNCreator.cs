@@ -36,12 +36,12 @@ namespace ADMS.Apprentice.Core.Services
         {
             if (message.ApprenticeId <= 0)
             {
-                exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeId);
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeId);
             }
 
             if (message.TaxFileNumber <= 0)
             {
-                exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidTFN);
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidTFN);
             }
 
             var apprenticeProfile = repository.Get<Profile>(message.ApprenticeId);

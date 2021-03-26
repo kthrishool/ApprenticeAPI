@@ -33,18 +33,12 @@ namespace ADMS.Apprentice.Database.Seeders
                 await ApprenticeTFNCreator.CreateAsync(new ApprenticeTFNV1
                 {
                     ApprenticeId = 1,
-                    TaxFileNumber = 123456789,
-                    StatusCode = TFNStatus.TBVE,
-                    StatusDate = DateTime.Now,
-                    MessageQueueCorrelationId = new Guid()
+                    TaxFileNumber = 123456789
                 });
                 await ApprenticeTFNCreator.CreateAsync(new ApprenticeTFNV1
                 {
                     ApprenticeId = 2,
-                    TaxFileNumber = 456564645,
-                    StatusCode = TFNStatus.TBVE,
-                    StatusDate = DateTime.Now,
-                    MessageQueueCorrelationId = new Guid()
+                    TaxFileNumber = 456564645
                 });
             }
         }

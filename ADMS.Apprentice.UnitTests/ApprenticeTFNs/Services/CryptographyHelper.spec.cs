@@ -54,6 +54,16 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
         }
 
         [TestMethod]
+        public void AscNull()
+        {
+            string s = null;
+
+            var result = Assert.ThrowsException<ArgumentException>(() => cryptographyHelper.AscW(s));
+
+            Assert.AreEqual("Argument_LengthGTZero1", result.Message);
+        }
+
+        [TestMethod]
         public void Chr()
         {
             var result = cryptographyHelper.ChrW(65533);
@@ -123,6 +133,13 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 
             Assert.AreNotEqual("113120899195", result);
         }
+        [TestMethod]
+        public void GetKeyClient1iTotal13()
+        {
+            var result = cryptographyHelper.GetKey(clientId1, 13, 2);
+
+            Assert.AreEqual("22995544113", result);
+        }
 
         [TestMethod]
         public void GetKeyClient1ForEncryption()
@@ -138,6 +155,33 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
             var result = cryptographyHelper.GetKey(clientId2, keySum2, -1);
 
             Assert.AreEqual("81942779305", result);
+        }
+
+        [TestMethod]
+        public void MergeKeyStrings1Even()
+        {
+            var key = "%¨Ü-!ÔÝ3.òÛía«sL¬";
+
+            var result = cryptographyHelper.MergeKeyStrings(1, true);
+
+            Assert.AreEqual(key, result);
+        }
+        [TestMethod]
+        public void MergeKeyStrings4False()
+        {
+            var key= "\u0088L\n«\u008bí\u001d\u0005K. Ý´!\u009dÜ\u0093%";
+
+            var result = cryptographyHelper.MergeKeyStrings(4, false);
+
+            Assert.AreEqual(key, result);
+        }
+        [TestMethod]
+        public void MergeKeyStrings6Even()
+        {
+            var key= "­\u0093\u001e\u009dM´\u0018 \u0089K\u0080\u001d*\u008b)\n5\u0088";
+            var result = cryptographyHelper.MergeKeyStrings(6, true);
+
+            Assert.AreEqual(key, result);
         }
     }
 

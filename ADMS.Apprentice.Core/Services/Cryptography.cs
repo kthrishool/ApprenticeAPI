@@ -111,13 +111,13 @@ namespace ADMS.Apprentice.Core.Services
 
                 strEncryptedTFN += e;
 
-                if (iKeyPosition == iKeyLength)
+                if (iKeyPosition == iKeyLength - 1)
                 {
                     iKeyPosition = 1;
                 }
                 else
                 {
-                    iKeyPosition += 1;
+                    iKeyPosition++;
                 }
             }
 
@@ -232,7 +232,7 @@ namespace ADMS.Apprentice.Core.Services
                     }
                     else
                     {
-                        iKeyPosition = iKeyPosition + 1;
+                        iKeyPosition++;
                     }
                 }
             }
