@@ -9,6 +9,7 @@ using Adms.Shared.Exceptions;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -105,12 +106,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
 
                 ClassUnderTest
-                    .Invoking(c => c.Validate(newProfile))
+                    .Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
                     .Should().Throw<ValidationException>();
             }
             else
             {
-                ClassUnderTest.Validate(newProfile);
+                ClassUnderTest.ValidateAsync(newProfile.Addresses.ToList());
             }
 
             return localAddress;
@@ -118,13 +119,13 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override async void When()
         {
-            ClassUnderTest.Validate(newProfile);
+            ClassUnderTest.ValidateAsync(newProfile.Addresses.ToList());
         }
 
         [TestMethod]
         public void DoesNothingIfTheAddressIsValid()
         {
-            ClassUnderTest.Validate(newProfile);
+            ClassUnderTest.ValidateAsync(newProfile.Addresses.ToList());
         }
 
         [TestMethod]
@@ -132,7 +133,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             newProfile.Addresses = new List<Address>();
             newProfile.Addresses.Add(invalidAddress);
-            ClassUnderTest.Invoking(c => c.Validate(newProfile))
+            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
                 .Should().Throw<ValidationException>();
         }
 

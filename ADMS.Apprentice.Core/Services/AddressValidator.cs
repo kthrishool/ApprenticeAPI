@@ -6,6 +6,7 @@ using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
+using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -14,68 +15,95 @@ namespace ADMS.Apprentice.Core.Services
         private readonly ITyimsRepository tyimsRepository;
         private readonly IRepository repository;
         private readonly IExceptionFactory exceptionFactory;
+        private readonly IReferenceDataClient referenceDataClient;
 
         public AddressValidator(
             IRepository repository,
             ITyimsRepository tyimsRepository,
-            IExceptionFactory exceptionFactory
+            IExceptionFactory exceptionFactory,
+            IReferenceDataClient referenceDataClient
         )
         {
             this.tyimsRepository = tyimsRepository;
             this.repository = repository;
             this.exceptionFactory = exceptionFactory;
+            this.referenceDataClient = referenceDataClient;
         }
 
-        public List<Address> Validate(Profile message)
+        public async Task<List<Address>> ValidateAsync(List<Address> addresses)
         {
             var validatedAddress = new List<Address>();
 
-            foreach (Address messageAddress in message.Addresses)
+            foreach (Address address in addresses)
             {
-                validatedAddress.Add(ValidateDefaultCodes(messageAddress));
+                if (!string.IsNullOrEmpty(address.SingleLineAddress))
+                {
+                    validatedAddress.Add(await ValidateSingleLineAddressAsync(address));
+                }                   
+                else
+                {
+                    validatedAddress.Add( ValidateDefaultCodesAsync(address));
+                }                    
             }
-
-
+            
             return validatedAddress;
         }
 
-        private Address ValidateDefaultCodes(Address message)
+        private Address ValidateDefaultCodesAsync(Address address)
         {
-            if (message == null)
+            if (address == null)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);            
+           
+            // is the single line code is empty we need to check if other details are valid.
+            // if the postcode is there then validate it first
+            if (string.IsNullOrWhiteSpace(address.Postcode) ||
+                string.IsNullOrWhiteSpace(address.Locality) ||
+                string.IsNullOrWhiteSpace(address.StateCode))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
-            // if the singleLine is Present then we need to check it first.
-            if (!string.IsNullOrWhiteSpace(message.SingleLineAddress))
-                return ValidateSingleLineAddress(message);
-            else
-            {
-                // is the single line code is empty we need to check if other details are valid.
-                // if the postcode is there then validate it first
-                if (string.IsNullOrWhiteSpace(message.Postcode) ||
-                    string.IsNullOrWhiteSpace(message.Locality) ||
-                    string.IsNullOrWhiteSpace(message.StateCode))
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
-                if (message.Postcode?.Length != 4)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPostcode);
-                if (message.StateCode?.Length > 10)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidStateCode);
-                if (message.StreetAddress1 == null)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressLine1CannotBeNull);
-                if (message.StreetAddress1?.Length > 80)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
-                if (message.StreetAddress2?.Length > 80)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
-                if (message.StreetAddress3?.Length > 80)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
-                if (message.Locality?.Length > 40)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.SuburbExceedsMaxLength);
-            }
-            return message;
+            if (address.Postcode?.Length != 4)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPostcode);
+            if (address.StateCode?.Length > 10)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidStateCode);
+            if (address.StreetAddress1 == null)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressLine1CannotBeNull);
+            if (address.StreetAddress1?.Length > 80)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
+            if (address.StreetAddress2?.Length > 80)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
+            if (address.StreetAddress3?.Length > 80)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
+            if (address.Locality?.Length > 40)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.SuburbExceedsMaxLength);
+           
+            return address;
         }
 
-        private Address ValidateSingleLineAddress(Address message)
+        private async Task<Address> ValidateSingleLineAddressAsync(Address address)
         {
-            throw new NotImplementedException("Validation Not Implemented");
-            // profileAddress will not be null as its only internally called .
+            //Verify the address using iGas
+            //If it is a valid single line address, iGas will return just one record only            
+
+            AutocompleteAddressModel[] autocompleteAddress =  await referenceDataClient.AutocompleteAddress(address.SingleLineAddress);
+            if (autocompleteAddress.Count() != 1) throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
+
+            //Get detailed address including geo location from the addressId. At this point we are sure that there is only one item in the autocompleteAddress array 
+            DetailAddressModel detailAddress =  await referenceDataClient.GetDetailAddressById(autocompleteAddress[0].Id);
+            //no chance to have detail address to be null, but in case of reasons..
+            if (detailAddress == null) throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
+
+            //populate geo location + postcode suburb details to profile address from detailsAddress component                                  
+            address.SingleLineAddress = detailAddress.FormattedAddress;
+            address.StreetAddress1 = detailAddress.StreetAddressLine1;
+            address.StreetAddress2 = detailAddress.StreetAddressLine2;
+            address.StreetAddress3 = detailAddress.StreetAddressLine3;
+            address.Locality = detailAddress.Locality;            
+            address.StateCode = detailAddress.State;
+            address.Postcode = detailAddress.Postcode;
+            address.GeocodeType = detailAddress.GeocodeType;
+            address.Latitude = detailAddress.Latitude;
+            address.Longitude = detailAddress.Longitude;
+            address.Confidence = detailAddress.Confidence;
+            return address;            
         }
 
         private async Task<Address> CheckAddressWithTyimsAsync(Address message)

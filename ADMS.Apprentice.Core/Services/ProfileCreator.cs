@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using Adms.Shared;
+using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 
 namespace ADMS.Apprentice.Core.Services
 {
     public class ProfileCreator : IProfileCreator
     {
         private readonly IRepository repository;
-
-        private readonly IProfileValidator profileValidator;
+        private readonly IProfileValidator profileValidator;       
 
         public ProfileCreator(IRepository repository,
             IProfileValidator profileValidator)
         {
             this.repository = repository;
-            this.profileValidator = profileValidator;
+            this.profileValidator = profileValidator;            
         }
 
         public async Task<Profile> CreateAsync(ProfileMessage message)
@@ -40,34 +40,34 @@ namespace ADMS.Apprentice.Core.Services
             {
                 profile.Addresses.Add(new Address()
                 {
-                    StateCode = message.ResidentialAddress.StateCode,
-                    Postcode = message.ResidentialAddress.Postcode,
-                    AddressTypeCode = AddressType.RESD.ToString(),
                     SingleLineAddress = message.ResidentialAddress.SingleLineAddress,
-                    Locality = message.ResidentialAddress.Locality,
                     StreetAddress1 = message.ResidentialAddress.StreetAddress1,
                     StreetAddress2 = message.ResidentialAddress.StreetAddress2,
-                    StreetAddress3 = message.ResidentialAddress.StreetAddress3
+                    StreetAddress3 = message.ResidentialAddress.StreetAddress3,
+                    Locality = message.ResidentialAddress.Locality,
+                    StateCode = message.ResidentialAddress.StateCode,
+                    Postcode = message.ResidentialAddress.Postcode,
+                    AddressTypeCode = AddressType.RESD.ToString(),               
                 });
             }
             if (message.PostalAddress != null)
             {
                 profile.Addresses.Add(new Address()
                 {
-                    StateCode = message.PostalAddress.StateCode,
-                    Postcode = message.PostalAddress.Postcode,
-                    AddressTypeCode = AddressType.POST.ToString(),
                     SingleLineAddress = message.PostalAddress.SingleLineAddress,
-                    Locality = message.PostalAddress.Locality,
                     StreetAddress1 = message.PostalAddress.StreetAddress1,
                     StreetAddress2 = message.PostalAddress.StreetAddress2,
-                    StreetAddress3 = message.PostalAddress.StreetAddress3
+                    StreetAddress3 = message.PostalAddress.StreetAddress3,
+                    Locality = message.PostalAddress.Locality,
+                    StateCode = message.PostalAddress.StateCode,
+                    Postcode = message.PostalAddress.Postcode,
+                    AddressTypeCode = AddressType.POST.ToString(),     
                 });
             }
-
+            
             await profileValidator.ValidateAsync(profile);
             repository.Insert(profile);
-            // doesn't need to be async just yet, but it will be once we start looking up TYIMS data etc
+           
             return profile;
         }
     }

@@ -14,7 +14,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
-    #region WhenValidatingAClaimSubmission
+    #region WhenValidatingAProfile
 
     [TestClass]
     public class WhenValidatingAProfile : GivenWhenThen<ProfileValidator>

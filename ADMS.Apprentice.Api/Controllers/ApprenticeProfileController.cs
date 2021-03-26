@@ -12,7 +12,8 @@ using Adms.Shared.Filters;
 using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ADMS.Apprentice.Api.HttpClients.ReferenceDataApi;
+using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
+using System;
 
 namespace ADMS.Apprentice.Api.Controllers
 {
@@ -64,10 +65,10 @@ namespace ADMS.Apprentice.Api.Controllers
 
         [HttpPost]
         public async Task<ActionResult<ProfileModel>> Create([FromBody] ProfileMessage message)
-        {
+        {               
             Profile profile = await profileCreator.CreateAsync(message);
             await repository.SaveAsync();
-            return Created($"/{profile.Id}", new ProfileModel(profile));
-        }
+            return Created($"/{profile.Id}", new ProfileModel(profile));            
+        }        
     }
 }

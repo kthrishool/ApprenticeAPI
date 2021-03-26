@@ -7,6 +7,7 @@ using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 using Adms.Shared.Exceptions;
 using Castle.Core.Internal;
+using System.Linq;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -22,7 +23,7 @@ namespace ADMS.Apprentice.Core.Services
             this.addressValidator = addressValidator;
         }
 
-        public Task ValidateAsync(Profile profile)
+        public async Task<Profile> ValidateAsync(Profile profile)
         {
             var preferredPhoneFlag = false;
             if (!ValidateAge(profile.BirthDate))
@@ -62,9 +63,9 @@ namespace ADMS.Apprentice.Core.Services
             if (profile.Addresses != null)
             {
                 // validation needs to happen
-                addressValidator.Validate(profile);
+                profile.Addresses = await addressValidator.ValidateAsync(profile.Addresses.ToList());
             }
-            return Task.CompletedTask;
+            return profile;
         }
 
         // All email Validations are done in this function
