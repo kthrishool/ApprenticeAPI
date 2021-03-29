@@ -30,8 +30,8 @@ namespace ADMS.Apprentice.Core.Services
                 BirthDate = message.BirthDate,
                 EmailAddress = message.EmailAddress,
                 IndigenousStatusCode = message.IndigenousStatusCode,
-                SelfAssessedDisabilityCode =  message.SelfAssessedDisabilityCode.ToUpper(),
-                CitizenshipCode = message.CitizenshipCode.ToUpper(),
+                SelfAssessedDisabilityCode =  message.SelfAssessedDisabilityCode?.ToUpper(),
+                CitizenshipCode = message.CitizenshipCode?.ToUpper(),
                 ProfileTypeCode =
                     Enum.IsDefined(typeof(ProfileType), message?.ProfileType) ? message.ProfileType : null,
                 Phones = message?.PhoneNumbers?.Select(c => new Phone()
