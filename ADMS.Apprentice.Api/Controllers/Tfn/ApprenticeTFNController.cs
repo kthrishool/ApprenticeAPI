@@ -20,17 +20,20 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         private readonly IRepository repository;
         private readonly IApprenticeTFNCreator apprenticeTFNCreator;
         private readonly IApprenticeTFNRetreiver tfnDetailRetreiver;
+        private readonly IApprenticeTFNUpdater apprenticeTFNUpdater;
 
         public ApprenticeTFNController(
             IHttpContextAccessor contextAccessor, 
             IRepository repository,
             IApprenticeTFNCreator apprenticeTFNCreator,
-            IApprenticeTFNRetreiver tfnDetailRetreiver
+            IApprenticeTFNRetreiver tfnDetailRetreiver,
+            IApprenticeTFNUpdater apprenticeTFNUpdater
             ) : base(contextAccessor)
         {
             this.repository = repository;
             this.apprenticeTFNCreator = apprenticeTFNCreator;
             this.tfnDetailRetreiver = tfnDetailRetreiver;
+            this.apprenticeTFNUpdater = apprenticeTFNUpdater;
         }
 
         /// <summary>
@@ -48,10 +51,10 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
 
 
         /// <summary>
-        /// Create a new tfnDetail record
+        /// Create a new ApprenticeTFN record
         /// </summary>
         /// <remarks>
-        /// Create a new tfn and return all details.
+        /// Create a new ApprenticeTFN record and return details.
         /// </remarks>
         /// <param name="apprenticeId"></param>
         /// <param name="message">Details of the tfn to be created</param>
@@ -64,9 +67,29 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         {
             message.ApprenticeId = apprenticeId;
             var model = await apprenticeTFNCreator.CreateAsync(message);
-            await repository.SaveAsync();
 
-            return Created($"/{model.Id}", model);
+            return Created($"/{message.ApprenticeId}", message);
+        }
+
+        /// <summary>
+        /// Patch an ApprenticeTFN record
+        /// </summary>
+        /// <remarks>
+        /// patch an existing ApprenticeTFN record and return all details.
+        /// </remarks>
+        /// <param name="apprenticeId"></param>
+        /// <param name="message">Details of the tfn to be patched</param>
+        /// <response code="201">Returns newly created tfn</response>
+        [HttpPatch]
+        [Consumes("application/json", "application/xml", "text/xml")]
+        [Produces("application/json", "application/xml")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<ApprenticeTFNV1>> Patch(int apprenticeId, [FromBody] ApprenticeTFNV1 message)
+        {
+            message.ApprenticeId = apprenticeId;
+            await apprenticeTFNUpdater.Update(message);
+
+            return Created($"/{message.ApprenticeId}", message);
         }
     }
 }
