@@ -19,6 +19,7 @@ namespace ADMS.Apprentice.Core.Entities
         public string SelfAssessedDisabilityCode { get; set; }
         public string IndigenousStatusCode { get; set; }
         public string CitizenshipCode { get; set; }
+        public bool? InterpretorRequiredFlag { get; set; }
         public string EducationLevelCode { get; set; }
         public string LeftSchoolMonthCode { get; set; }
         public string LeftSchoolYearCode { get; set; }

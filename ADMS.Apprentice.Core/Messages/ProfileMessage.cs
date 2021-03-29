@@ -54,11 +54,13 @@ namespace ADMS.Apprentice.Core.Messages
         
         [RegularExpression("[ANOano]", ErrorMessage = "Invalid Citizenship code. " +
             "Valid values are A - Aus citizen or PR, N - NZ passport holder who has been resident in Australia 6 months or more , O - Other")]
-        public string CitizenshipCode { get; init; }
-        
+        public string CitizenshipCode { get; init; }        
 
         [Display(Name = "Gender")]
         [RegularExpression("[MFUmfu]", ErrorMessage = "Gender Code is Invalid")]
-        public String GenderCode { get; init; }
+        public String GenderCode { get; init; }        
+
+        [Display(Name = "InterpretorRequired")]        
+        public bool? InterpretorRequiredFlag { get; init; }
     }
 }

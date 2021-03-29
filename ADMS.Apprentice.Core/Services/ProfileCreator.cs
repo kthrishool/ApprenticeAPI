@@ -31,6 +31,7 @@ namespace ADMS.Apprentice.Core.Services
                 EmailAddress = message.EmailAddress,
                 IndigenousStatusCode = message.IndigenousStatusCode,
                 SelfAssessedDisabilityCode =  message.SelfAssessedDisabilityCode?.ToUpper(),
+                InterpretorRequiredFlag = message.InterpretorRequiredFlag,
                 CitizenshipCode = message.CitizenshipCode?.ToUpper(),
                 ProfileTypeCode =
                     Enum.IsDefined(typeof(ProfileType), message?.ProfileType) ? message.ProfileType : null,

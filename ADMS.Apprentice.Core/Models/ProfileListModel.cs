@@ -18,6 +18,7 @@ namespace ADMS.Apprentice.Core.Models
         public string EmailAddress { get; }
         public string SelfAssessedDisabilityCode { get; }
         public string IndigenousStatusCode { get; }
+        public bool? InterpretorRequiredFlag { get; }
         public string CitizenshipCode { get; }
         public string EducationLevelCode { get; }
         public string LeftSchoolMonthCode { get; }
@@ -48,6 +49,7 @@ namespace ADMS.Apprentice.Core.Models
             SelfAssessedDisabilityCode = apprentice.SelfAssessedDisabilityCode;
             IndigenousStatusCode = apprentice.IndigenousStatusCode;
             CitizenshipCode = apprentice.CitizenshipCode;
+            InterpretorRequiredFlag = apprentice.InterpretorRequiredFlag;
             EducationLevelCode = apprentice.EducationLevelCode;
             LeftSchoolMonthCode = apprentice.LeftSchoolMonthCode;
             LeftSchoolYearCode = apprentice.LeftSchoolYearCode;

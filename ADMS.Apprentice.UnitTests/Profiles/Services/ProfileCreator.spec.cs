@@ -33,7 +33,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 IndigenousStatusCode = ProfileConstants.IndigenousStatusCode,
                 SelfAssessedDisabilityCode = ProfileConstants.SelfAssessedDisabilityCode,
                 CitizenshipCode = ProfileConstants.CitizenshipCode,
-                GenderCode = ProfileConstants.GenderCode
+                GenderCode = ProfileConstants.GenderCode,
+                InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
             };
         }
 
@@ -111,6 +112,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ShouldSetCitizenshipCode()
         {
             profile.CitizenshipCode.Should().Be(message.CitizenshipCode);
+        }
+
+        [TestMethod]
+        public void ShouldSetInterpretorRequiredFlag()
+        {
+            profile.InterpretorRequiredFlag.Should().Be(message.InterpretorRequiredFlag);
         }
 
 

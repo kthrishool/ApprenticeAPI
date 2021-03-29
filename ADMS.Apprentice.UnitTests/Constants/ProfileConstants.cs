@@ -19,7 +19,8 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static string Profiletype = "APPR";
         public static string IndigenousStatusCode = "@";
         public static string SelfAssessedDisabilityCode = "Y";
-        public static string CitizenshipCode = "01";
+        public static string CitizenshipCode = "A";
+        public static bool? InterpretorRequiredFlag = true;
         public static DateTime Createdon = DateTime.Now.AddMinutes(-3);
         public static DateTime Updatedon = DateTime.Now;
         public static string Createdby = "User1";
