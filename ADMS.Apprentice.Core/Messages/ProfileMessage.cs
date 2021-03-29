@@ -43,7 +43,19 @@ namespace ADMS.Apprentice.Core.Messages
         public ProfileAddressMessage ResidentialAddress { get; init; }
 
         [Display(Name = "Postal Address")]
-        public ProfileAddressMessage PostalAddress { get; init; }
+        public ProfileAddressMessage PostalAddress { get; init; }        
+        
+        [RegularExpression("[@1234]", ErrorMessage = "Invalid Indigenous status code. " +
+            "Valid values are @ - Not stated, 1 - Aboriginal, 2 - Torres Strait Islander, 3 - Aboriginal and Torres Strait Islander, 4 - Not Aboriginal OR Torres Strait Islander")]
+        public string IndigenousStatusCode { get; init; }
+        
+        [RegularExpression("[@NYny]", ErrorMessage = "Invalid Self assessed disability code. Valid values are @ - Not stated, N - No, Y - Yes")]
+        public string SelfAssessedDisabilityCode { get; init; }
+        
+        [RegularExpression("[ANOano]", ErrorMessage = "Invalid Citizenship code. " +
+            "Valid values are A - Aus citizen or PR, N - NZ passport holder who has been resident in Australia 6 months or more , O - Other")]
+        public string CitizenshipCode { get; init; }
+        
 
         [Display(Name = "Gender")]
         [RegularExpression("[MFUmfu]", ErrorMessage = "Gender Code is Invalid")]

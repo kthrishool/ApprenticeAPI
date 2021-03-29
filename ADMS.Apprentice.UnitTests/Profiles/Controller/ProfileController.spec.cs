@@ -36,9 +36,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private ProfileMessage CreateNewProfileMessage(string surName,
             String firstName,
             DateTime dob,
-            String email = null,
+            String email = null,            
             string profileType = null,
             string[] phoneNumbers = null,
+            string indigenousStatusCode = null,
+            string selfAssessedDisabilityCode = null,
+            string citizenshipCode = null,                
             string gender = null)
         {
             return new ProfileMessage
@@ -49,10 +52,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 EmailAddress = email,
                 ProfileType = profileType,
                 PhoneNumbers = phoneNumbers?.ToList(),
-                GenderCode = gender
+                IndigenousStatusCode = indigenousStatusCode,               
+                SelfAssessedDisabilityCode = selfAssessedDisabilityCode,
+                CitizenshipCode = citizenshipCode,
+                GenderCode = gender,
             };
         }
-
         private ProfileMessage GetValidMessage()
         {
             return new ProfileMessage
@@ -153,6 +158,33 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             lstErrors.Should().HaveCount(0);
         }
 
+        [TestMethod]
+        public void ShouldReturnValidationErrorIfATSINotValid()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, "InvalidCode");
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(1);
+            lstErrors[0].ErrorMessage.Should().StartWith("Invalid Indigenous status code");
+        }
+
+        [TestMethod]
+        public void ShouldReturnValidationErrorIfDisabiliyyStatusCodeNotValid()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, "@", "InvalidCode");
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(1);
+            lstErrors[0].ErrorMessage.Should().StartWith("Invalid Self assessed disability code");
+        }
+
+        [TestMethod]
+        public void ShouldReturnValidationErrorIfCitizenshipCodeValid()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, null, null, "InvalidCode");
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(1);
+            lstErrors[0].ErrorMessage.Should().StartWith("Invalid Citizenship code");
+        }
+
         public IList<ValidationResult> ValidateModel(object model)
         {
             var validationResults = new List<ValidationResult>();
@@ -212,7 +244,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ShowValidationExceptionWhenGenderIsInvalid()
         {
-            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, "MQ");
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, null, null, null, "MQ");
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(1);
             lstErrors[0].ErrorMessage.Should().StartWith("Gender Code is Invalid");

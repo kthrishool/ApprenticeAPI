@@ -30,6 +30,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PhoneNumbers = ProfileConstants.PhoneNumbers,
                 ResidentialAddress = ProfileConstants.ResidentialAddress,
                 PostalAddress = ProfileConstants.PostalAddress,
+                IndigenousStatusCode = ProfileConstants.IndigenousStatusCode,
+                SelfAssessedDisabilityCode = ProfileConstants.SelfAssessedDisabilityCode,
+                CitizenshipCode = ProfileConstants.CitizenshipCode,
                 GenderCode = ProfileConstants.GenderCode
             };
         }
@@ -91,6 +94,25 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             profile.EmailAddress.Should().Be(message.EmailAddress);
         }
+
+        [TestMethod]
+        public void ShouldSetIndigenousStatusCode()
+        {
+            profile.IndigenousStatusCode.Should().Be(message.IndigenousStatusCode);
+        }
+
+        [TestMethod]
+        public void ShouldSetDisabilityStatusCode()
+        {
+            profile.SelfAssessedDisabilityCode.Should().Be(message.SelfAssessedDisabilityCode);
+        }
+
+        [TestMethod]
+        public void ShouldSetCitizenshipCode()
+        {
+            profile.CitizenshipCode.Should().Be(message.CitizenshipCode);
+        }
+
 
         [TestMethod]
         public void ShouldSetPhoneNumber()

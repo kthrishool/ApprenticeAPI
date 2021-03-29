@@ -36,8 +36,8 @@ namespace ADMS.Apprentice.Database.Mappings
 
             entity.Property(e => e.Locality)
                 .HasColumnName("Locality")
-                .HasMaxLength(50);
-                //.IsRequired();
+                .HasMaxLength(50)
+                .IsRequired();
             entity.Property(e => e.StateCode)
                 .HasColumnName("StateCode")
                 .HasMaxLength(10)
