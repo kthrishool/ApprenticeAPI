@@ -26,6 +26,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
                 ProfileTypeCode = ProfileConstants.Profiletype,
+                GenderCode = ProfileConstants.GenderCode,
                 CreatedOn = ProfileConstants.Createdon,
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,
@@ -63,6 +64,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.Phones = null;
             model.ResidentialAddress = null;
             model.PostalAddress = null;
+            model.GenderCode.Should().Be(ProfileConstants.GenderCode);
         }
     }
 

@@ -38,7 +38,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             DateTime dob,
             String email = null,
             string profileType = null,
-            string[] phoneNumbers = null)
+            string[] phoneNumbers = null,
+            string gender = null)
         {
             return new ProfileMessage
             {
@@ -47,7 +48,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 BirthDate = dob,
                 EmailAddress = email,
                 ProfileType = profileType,
-                PhoneNumbers = phoneNumbers?.ToList()
+                PhoneNumbers = phoneNumbers?.ToList(),
+                GenderCode = gender
             };
         }
 
@@ -62,7 +64,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 ProfileType = ProfileConstants.Profiletype,
                 PhoneNumbers = ProfileConstants.PhoneNumbers.ToList(),
                 ResidentialAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = "14 Mort Street, Braddon,ACT -2601"},
-                PostalAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = "14 Mort Street, Braddon,ACT -2601"}
+                PostalAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = "14 Mort Street, Braddon,ACT -2601"},
+                GenderCode = "M"
             };
         }
 
@@ -192,6 +195,27 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 ProfileConstants.Birthdate, "", ProfileConstants.Profiletype);
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(0);
+        }
+
+        #endregion
+
+        #region Gender
+
+        [TestMethod]
+        public void DoNothingWhenGenderIsValid()
+        {
+            message = GetValidMessage();
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        [TestMethod]
+        public void ShowValidationExceptionWhenGenderIsInvalid()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, "MQ");
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(1);
+            lstErrors[0].ErrorMessage.Should().StartWith("Gender Code is Invalid");
         }
 
         #endregion

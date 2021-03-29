@@ -30,6 +30,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PhoneNumbers = ProfileConstants.PhoneNumbers,
                 ResidentialAddress = ProfileConstants.ResidentialAddress,
                 PostalAddress = ProfileConstants.PostalAddress,
+                GenderCode = ProfileConstants.GenderCode
             };
         }
 
@@ -129,6 +130,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                     StreetAddress3 = c.StreetAddress3
                 })
                 .Should().Contain(message.PostalAddress);
+        }
+
+        [TestMethod]
+        public void ShouldSetGenderCode()
+        {
+            profile.GenderCode.Should().Contain(ProfileConstants.GenderCode);
         }
     }
 

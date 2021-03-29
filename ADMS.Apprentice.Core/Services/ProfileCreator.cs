@@ -4,20 +4,19 @@ using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using Adms.Shared;
-using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 
 namespace ADMS.Apprentice.Core.Services
 {
     public class ProfileCreator : IProfileCreator
     {
         private readonly IRepository repository;
-        private readonly IProfileValidator profileValidator;       
+        private readonly IProfileValidator profileValidator;
 
         public ProfileCreator(IRepository repository,
             IProfileValidator profileValidator)
         {
             this.repository = repository;
-            this.profileValidator = profileValidator;            
+            this.profileValidator = profileValidator;
         }
 
         public async Task<Profile> CreateAsync(ProfileMessage message)
@@ -33,8 +32,13 @@ namespace ADMS.Apprentice.Core.Services
                 ProfileTypeCode =
                     Enum.IsDefined(typeof(ProfileType), message?.ProfileType) ? message.ProfileType : null,
                 Phones = message?.PhoneNumbers?.Select(c => new Phone()
-                    {PhoneNumber = c, PhoneTypeCode = PhoneType.LandLine.ToString()}).ToList(),
+                    {PhoneNumber = c, PhoneTypeCode = PhoneType.LandLine.ToString()}).ToList()
+               
             };
+            if(message?.GenderCode !=null)
+            {
+                profile.GenderCode = Enum.IsDefined(typeof(GenderType), message?.GenderCode.ToUpper()) ? message.GenderCode.ToUpper() : null;
+            }
             //List<CodeLocalityPostcodesState> postcodeValidations = new List<CodeLocalityPostcodesState>();
             if (message.ResidentialAddress != null)
             {
@@ -47,7 +51,7 @@ namespace ADMS.Apprentice.Core.Services
                     Locality = message.ResidentialAddress.Locality,
                     StateCode = message.ResidentialAddress.StateCode,
                     Postcode = message.ResidentialAddress.Postcode,
-                    AddressTypeCode = AddressType.RESD.ToString(),               
+                    AddressTypeCode = AddressType.RESD.ToString(),
                 });
             }
             if (message.PostalAddress != null)
@@ -61,13 +65,13 @@ namespace ADMS.Apprentice.Core.Services
                     Locality = message.PostalAddress.Locality,
                     StateCode = message.PostalAddress.StateCode,
                     Postcode = message.PostalAddress.Postcode,
-                    AddressTypeCode = AddressType.POST.ToString(),     
+                    AddressTypeCode = AddressType.POST.ToString(),
                 });
             }
-            
+
             await profileValidator.ValidateAsync(profile);
             repository.Insert(profile);
-           
+
             return profile;
         }
     }

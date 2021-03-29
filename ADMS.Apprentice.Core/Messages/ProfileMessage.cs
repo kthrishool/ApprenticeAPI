@@ -44,5 +44,9 @@ namespace ADMS.Apprentice.Core.Messages
 
         [Display(Name = "Postal Address")]
         public ProfileAddressMessage PostalAddress { get; init; }
+
+        [Display(Name = "Gender")]
+        [RegularExpression("[MFUmfu]", ErrorMessage = "Gender Code is Invalid")]
+        public String GenderCode { get; init; }
     }
 }

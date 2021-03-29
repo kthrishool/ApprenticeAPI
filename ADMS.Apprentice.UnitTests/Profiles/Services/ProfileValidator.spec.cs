@@ -43,9 +43,14 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             };
 
             validationException = new ValidationException(null, (ValidationError) null);
+            ChangeException(ValidationExceptionType.InvalidApprenticeAge);
+        }
+
+        private void ChangeException(ValidationExceptionType exceptionMessage)
+        {
             Container
                 .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidApprenticeAge))
+                .Setup(r => r.CreateValidationException(exceptionMessage))
                 .Returns(validationException);
         }
 
@@ -82,13 +87,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         private void GetsTheValidationExceptionIfEmailIsInvalid(string EmailAddress)
         {
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidEmailAddress))
-                .Returns(validationException);
+            ChangeException(ValidationExceptionType.InvalidEmailAddress);
+
 
             validProfile.EmailAddress = EmailAddress;
-            //  await ClassUnderTest.ValidateAsync(invalidProfile);
+
+           // ExecuteTest(validProfile);
             ClassUnderTest
                 .Invoking(async c => await c.ValidateAsync(validProfile))
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
@@ -121,8 +125,13 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 EmailAddress = ProfileConstants.RandomString(64) + "@" + ProfileConstants.RandomString(256) + "." + ProfileConstants.RandomString(50)
             };
 
+            ExecuteTest(invalidProfile);
+        }
+
+        private void ExecuteTest(Profile profiledata)
+        {
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(invalidProfile))
+                .Invoking(async c => await c.ValidateAsync(profiledata))
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
@@ -132,10 +141,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsValidationExceptionIfProfileTypeIsInvalid()
         {
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType))
-                .Returns(validationException);
+            ChangeException(ValidationExceptionType.InvalidApprenticeprofileType);
+         
 
 
             invalidProfile = new Profile
@@ -147,11 +154,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 ProfileTypeCode = "app"
             };
 
-
-            ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(invalidProfile))
-                .Should().Throw<ValidationException>().Where(e => e == validationException);
+            ExecuteTest(invalidProfile);
+ 
         }
+
+
+        #region PhoneNumber
 
         [TestMethod]
         public void DoesNothingIfForPhonePositiveTesting()
@@ -184,15 +192,13 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private void PhoneContainerError(string phones)
         {
             var number = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = phones};
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidPhoneNumber))
-                .Returns(validationException);
+
+            ChangeException(ValidationExceptionType.InvalidPhoneNumber);
+         
 
             validProfile.Phones.Add(number);
-            ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
-                .Should().Throw<ValidationException>().Where(e => e == validationException);
+            ExecuteTest(validProfile);
+        
         }
 
         private void PhoneContainerPositive(string phones, Boolean needsConversion)
@@ -210,6 +216,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowExceptonforInValidPhoneNumbers()
         {
+            ChangeException(ValidationExceptionType.InvalidPhoneNumber);
             // total Lenght is Less than 10 chars
             PhoneContainerError("021234567");
             // Area code is not valid 
@@ -229,6 +236,34 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             PhoneContainerPositive("1300 777 777", true);
             PhoneContainerPositive("0212457896", false);
         }
+
+        #endregion
+
+        #region Gender
+
+        /// check if the ProfileType Is invalid
+        /// </summary>
+        //[TestMethod]
+        //public void ThrowsValidationExceptionIfGenderCodeIsInvalid()
+        //{
+        //    ChangeException(ValidationExceptionType.InvalidApprenticeAge);
+
+
+        //    invalidProfile = new Profile
+        //    {
+        //        Surname = ProfileConstants.Surname,
+        //        FirstName = ProfileConstants.Firstname,
+        //        BirthDate = DateTime.Now.AddYears(-16),
+        //        EmailAddress = ProfileConstants.RandomString(64) + "@" + ProfileConstants.RandomString(26) + "." + ProfileConstants.RandomString(50),
+        //        ProfileTypeCode = "APPR",
+        //        GenderCode = "AA"
+        //    };
+
+        //    ExecuteTest(invalidProfile);
+ 
+        //}
+
+        #endregion
     }
 
     #endregion

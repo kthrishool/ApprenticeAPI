@@ -65,6 +65,13 @@ namespace ADMS.Apprentice.Core.Services
                 // validation needs to happen
                 profile.Addresses = await addressValidator.ValidateAsync(profile.Addresses.ToList());
             }
+
+
+            //if(profile?.GenderCode != null)
+            //{
+            //    // gender validate not needed as it checked in controller
+
+            //}
             return profile;
         }
 
