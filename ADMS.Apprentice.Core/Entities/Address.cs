@@ -1,4 +1,5 @@
 ﻿using System;
+using Adms.Shared;
 using ADMS.Services.Infrastructure.Model.Interface;
 
 namespace ADMS.Apprentice.Core.Entities
@@ -21,9 +22,9 @@ namespace ADMS.Apprentice.Core.Entities
 
         public string GeocodeType { get; set; }
 
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
-        public int Confidence { get; set; }
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+        public short? Confidence { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }

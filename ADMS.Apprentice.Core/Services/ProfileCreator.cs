@@ -48,13 +48,13 @@ namespace ADMS.Apprentice.Core.Services
             {
                 profile.Addresses.Add(new Address()
                 {
-                    SingleLineAddress = message.ResidentialAddress.SingleLineAddress,
-                    StreetAddress1 = message.ResidentialAddress.StreetAddress1,
-                    StreetAddress2 = message.ResidentialAddress.StreetAddress2,
-                    StreetAddress3 = message.ResidentialAddress.StreetAddress3,
-                    Locality = message.ResidentialAddress.Locality,
-                    StateCode = message.ResidentialAddress.StateCode,
-                    Postcode = message.ResidentialAddress.Postcode,
+                    SingleLineAddress = String.IsNullOrEmpty(message.ResidentialAddress.SingleLineAddress)? null : message.ResidentialAddress.SingleLineAddress,
+                    StreetAddress1 = String.IsNullOrEmpty(message.ResidentialAddress.StreetAddress1) ? null : message.ResidentialAddress.StreetAddress1,
+                    StreetAddress2 = String.IsNullOrEmpty(message.ResidentialAddress.StreetAddress2) ? null : message.ResidentialAddress.StreetAddress2,
+                    StreetAddress3 = String.IsNullOrEmpty(message.ResidentialAddress.StreetAddress3) ? null : message.ResidentialAddress.StreetAddress3,
+                    Locality = String.IsNullOrEmpty(message.ResidentialAddress.Locality) ? null : message.ResidentialAddress.Locality,
+                    StateCode = String.IsNullOrEmpty(message.ResidentialAddress.StateCode) ? null : message.ResidentialAddress.StateCode,
+                    Postcode = String.IsNullOrEmpty(message.ResidentialAddress.Postcode) ? null : message.ResidentialAddress.Postcode,
                     AddressTypeCode = AddressType.RESD.ToString(),
                 });
             }
@@ -62,13 +62,13 @@ namespace ADMS.Apprentice.Core.Services
             {
                 profile.Addresses.Add(new Address()
                 {
-                    SingleLineAddress = message.PostalAddress.SingleLineAddress,
-                    StreetAddress1 = message.PostalAddress.StreetAddress1,
-                    StreetAddress2 = message.PostalAddress.StreetAddress2,
-                    StreetAddress3 = message.PostalAddress.StreetAddress3,
-                    Locality = message.PostalAddress.Locality,
-                    StateCode = message.PostalAddress.StateCode,
-                    Postcode = message.PostalAddress.Postcode,
+                    SingleLineAddress = String.IsNullOrEmpty(message.PostalAddress.SingleLineAddress) ? null : message.PostalAddress.SingleLineAddress,
+                    StreetAddress1 = String.IsNullOrEmpty(message.PostalAddress.StreetAddress1) ? null : message.PostalAddress.StreetAddress1,
+                    StreetAddress2 = String.IsNullOrEmpty(message.PostalAddress.StreetAddress2) ? null : message.PostalAddress.StreetAddress2,
+                    StreetAddress3 = String.IsNullOrEmpty(message.PostalAddress.StreetAddress3) ? null : message.PostalAddress.StreetAddress3,
+                    Locality = String.IsNullOrEmpty(message.PostalAddress.Locality) ? null : message.PostalAddress.Locality,
+                    StateCode = String.IsNullOrEmpty(message.PostalAddress.StateCode) ? null : message.PostalAddress.StateCode,
+                    Postcode = String.IsNullOrEmpty(message.PostalAddress.Postcode) ? null : message.PostalAddress.Postcode,                    
                     AddressTypeCode = AddressType.POST.ToString(),
                 });
             }

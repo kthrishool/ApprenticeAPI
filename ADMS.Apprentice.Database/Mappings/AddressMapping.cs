@@ -49,8 +49,7 @@ namespace ADMS.Apprentice.Database.Mappings
 
             entity.Property(e => e.SingleLineAddress)
                 .HasColumnName("SingleLineAddress")
-                .HasMaxLength(375)
-                .IsRequired();
+                .HasMaxLength(375);                
             entity.Property(e => e.GeocodeType)
                 .HasColumnName("GeocodeType")
                 .HasMaxLength(4);

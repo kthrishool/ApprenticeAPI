@@ -7,6 +7,7 @@ using Adms.Shared;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ADMS.Apprentice.Core.Models;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -141,7 +142,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                     StreetAddress2 = c.StreetAddress2,
                     StreetAddress3 = c.StreetAddress3
                 })
-                .Should().Contain(message.ResidentialAddress);
+                .Should().Contain(message.ResidentialAddress);           
         }
 
         [TestMethod]

@@ -93,16 +93,16 @@ namespace ADMS.Apprentice.Core.Services
 
             //populate geo location + postcode suburb details to profile address from detailsAddress component                                  
             address.SingleLineAddress = detailAddress.FormattedAddress;
-            address.StreetAddress1 = detailAddress.StreetAddressLine1;
-            address.StreetAddress2 = detailAddress.StreetAddressLine2;
-            address.StreetAddress3 = detailAddress.StreetAddressLine3;
+            address.StreetAddress1 = String.IsNullOrEmpty(detailAddress.StreetAddressLine1) ? null : detailAddress.StreetAddressLine1;
+            address.StreetAddress2 = string.IsNullOrEmpty(detailAddress.StreetAddressLine2) ? null : detailAddress.StreetAddressLine2;
+            address.StreetAddress3 = string.IsNullOrEmpty(detailAddress.StreetAddressLine2) ? null : detailAddress.StreetAddressLine3;
             address.Locality = detailAddress.Locality;            
             address.StateCode = detailAddress.State;
             address.Postcode = detailAddress.Postcode;
             address.GeocodeType = detailAddress.GeocodeType;
             address.Latitude = detailAddress.Latitude;
             address.Longitude = detailAddress.Longitude;
-            address.Confidence = detailAddress.Confidence;
+            address.Confidence = (short)detailAddress.Confidence;
             return address;            
         }
 

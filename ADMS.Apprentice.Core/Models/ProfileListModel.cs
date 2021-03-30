@@ -28,8 +28,8 @@ namespace ADMS.Apprentice.Core.Models
         public bool ActiveFlag { get; }
         public List<string> Phones { get; set; }
 
-        public ProfileAddressMessage ResidentialAddress { get; set; }
-        public ProfileAddressMessage PostalAddress { get; set; }
+        public ProfileAddressModel ResidentialAddress { get; set; }
+        public ProfileAddressModel PostalAddress { get; set; }
 
         public DateTime? CreatedOn { get; }
         public string CreatedBy { get; }
@@ -64,7 +64,7 @@ namespace ADMS.Apprentice.Core.Models
             if (apprentice?.Phones?.Count() > 0)
                 Phones = apprentice.Phones.Select(c => c.PhoneNumber).ToList();
             if (apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
-                ResidentialAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).Select(c => new ProfileAddressMessage
+                ResidentialAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).Select(c => new ProfileAddressModel
                 {
                     Postcode = c.Postcode,
                     StateCode = c.StateCode,
@@ -75,7 +75,7 @@ namespace ADMS.Apprentice.Core.Models
                     StreetAddress3 = c.StreetAddress3
                 }).SingleOrDefault();
             if (apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.POST.ToString()))
-                PostalAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.POST.ToString()).Select(c => new ProfileAddressMessage
+                PostalAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.POST.ToString()).Select(c => new ProfileAddressModel
                 {
                     Postcode = c.Postcode,
                     StateCode = c.StateCode,

@@ -43,7 +43,7 @@ namespace ADMS.Apprentice.Core.Entities
             DeceasedFlag = false;
             ProfileTypeCode = ProfileType.APPR.ToString();
             Phones = new List<Phone>();
-            Addresses = new Collection<Address>();
+            Addresses = new List<Address>();
         }
     }
 }
