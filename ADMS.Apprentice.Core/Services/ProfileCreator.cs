@@ -25,14 +25,14 @@ namespace ADMS.Apprentice.Core.Services
             {
                 Surname = message.Surname,
                 FirstName = message.FirstName,
-                OtherNames = message.OtherNames,
-                PreferredName = message.PreferredName,
+                OtherNames = string.IsNullOrEmpty(message.OtherNames) ? null : message.OtherNames,
+                PreferredName = string.IsNullOrEmpty(message.PreferredName) ? null : message.PreferredName,
                 BirthDate = message.BirthDate,
-                EmailAddress = message.EmailAddress,
-                IndigenousStatusCode = message.IndigenousStatusCode,
-                SelfAssessedDisabilityCode =  message.SelfAssessedDisabilityCode?.ToUpper(),
+                EmailAddress = string.IsNullOrEmpty(message.EmailAddress) ? null : message.EmailAddress,
+                IndigenousStatusCode = string.IsNullOrEmpty(message.IndigenousStatusCode) ? null : message.IndigenousStatusCode,
+                SelfAssessedDisabilityCode =  string.IsNullOrEmpty(message.SelfAssessedDisabilityCode)? null : message.SelfAssessedDisabilityCode.ToUpper(),
                 InterpretorRequiredFlag = message.InterpretorRequiredFlag,
-                CitizenshipCode = message.CitizenshipCode?.ToUpper(),
+                CitizenshipCode = string.IsNullOrEmpty(message.CitizenshipCode) ? null : message.CitizenshipCode.ToUpper(),
                 ProfileTypeCode =
                     Enum.IsDefined(typeof(ProfileType), message?.ProfileType) ? message.ProfileType : null,
                 Phones = message?.PhoneNumbers?.Select(c => new Phone()
