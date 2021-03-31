@@ -42,7 +42,10 @@ namespace ADMS.Apprentice.Core.Services
                 }                   
                 else
                 {
-                    validatedAddress.Add( ValidateDefaultCodesAsync(address));
+                    //Do the default code validations
+                    ValidateDefaultCodesAsync(address);
+                    //At this point we know we have a valid Locality, State and postcode. So use iGas to get the partical geolocation details
+                    validatedAddress.Add(await ValidatePartialAddressAsync(address));
                 }                    
             }
             
@@ -81,13 +84,9 @@ namespace ADMS.Apprentice.Core.Services
         private async Task<Address> ValidateSingleLineAddressAsync(Address address)
         {
             //Verify the address using iGas
-            //If it is a valid single line address, iGas will return just one record only            
-
-            AutocompleteAddressModel[] autocompleteAddress =  await referenceDataClient.AutocompleteAddress(address.SingleLineAddress);
-            if (autocompleteAddress.Count() != 1) throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
-
-            //Get detailed address including geo location from the addressId. At this point we are sure that there is only one item in the autocompleteAddress array 
-            DetailAddressModel detailAddress =  await referenceDataClient.GetDetailAddressById(autocompleteAddress[0].Id);
+            //If it is a valid single line address, iGas will return a record with geo location details         
+            
+            DetailAddressModel detailAddress =  await referenceDataClient.GetDetailAddressByFormattedAddress(address.SingleLineAddress);
             //no chance to have detail address to be null, but in case of reasons..
             if (detailAddress == null) throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
 
@@ -104,6 +103,42 @@ namespace ADMS.Apprentice.Core.Services
             address.Longitude = detailAddress.Longitude;
             address.Confidence = (short)detailAddress.Confidence;
             return address;            
+        }
+
+        private async Task<Address> ValidatePartialAddressAsync(Address address)
+        {
+            //Verify the partial address using iGas. Partial address = Locality + State + postcode
+            //If it is a valid, populate geo location details
+
+            string formattedLocality = $"{address.Locality} {address.StateCode} {address.Postcode}"?.ToUpper();
+            
+            if (string.IsNullOrEmpty(formattedLocality))
+                return address; //no chance of hitting this, but in case..
+
+            PartialAddressModel partialAddress = await referenceDataClient.GetAddressByFormattedLocality(formattedLocality);
+            //if iGas couldnt resolve the partial address, return address without geo location info
+            if (partialAddress == null) 
+                return address;
+
+            //update address with geo location details
+            //partial address doenst provide confidence info, but according to below info assigning confidence level of 4
+            //The confidence level from GNAF for the address and Geocode.Should be used in conjunction with Geo Code Type
+            //- 1 = The address is not contained in any of three major contributors / sources of addresses(GNAF)
+            //0 = The address is contained in only one of the three major contributors / sources of addresses(GNAF)
+            //1 = The address is contained in two of the three major contributors / sources of addresses(GNAF)
+            //2 = The address is contained in all three of the three major contributors / sources of addresses(GNAF)
+            //3 = A Match was not found on Street Number.The Geocode returned will only be accurate to the Street(iGas)
+            //4 = A Match was not found on Street.The Geocode returned will only be accurate to the Locality(iGas)
+            //5 = Not found(iGas)
+
+            address.Locality = partialAddress.Locality;
+            address.StateCode = partialAddress.State;
+            address.Postcode = partialAddress.Postcode;            
+            address.Latitude = partialAddress.Latitude;
+            address.Longitude = partialAddress.Longitude;
+            address.Confidence = 4;
+
+            return address;
         }
 
         private async Task<Address> CheckAddressWithTyimsAsync(Address message)
