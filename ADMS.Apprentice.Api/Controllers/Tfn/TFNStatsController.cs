@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ADMS.Apprentice.Core.Messages.TFN;
 using ADMS.Apprentice.Core.Services;
@@ -76,7 +77,7 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
                 x.StatusDate,
                 x.CreatedOn,
                 x.StatusCode.ToString(),
-                ""
+                x.StatusCode == TFNStatus.NOCH ? (DateTime.Now.Subtract(x.StatusDate).Days > 0 ? DateTime.Now.Subtract(x.StatusDate).Days.ToString() : "<1") : "-"
                 ))));
         }
 
