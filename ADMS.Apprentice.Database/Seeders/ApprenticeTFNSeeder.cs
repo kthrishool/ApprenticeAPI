@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using Adms.Shared;
-using ADMS.Apprentice.Core.Messages;
+using ADMS.Apprentice.Core.Messages.TFN;
 using ADMS.Apprentice.Core.Services;
 
 namespace ADMS.Apprentice.Database.Seeders

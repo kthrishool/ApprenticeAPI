@@ -37,6 +37,10 @@ namespace ADMS.Apprentice.Database.Mappings
                 .HasColumnName("StatusReasonCode")
                 .HasMaxLength(10);
 
+            entity.HasOne(x => x.Profile)
+                .WithMany(c => c.TFNs)
+                .HasForeignKey(e => e.ApprenticeId);
+
             entity.Property(e => e.MessageQueueCorrelationId)
                 .HasColumnName("MessageQueueCorrelationId")
                 .IsRequired();

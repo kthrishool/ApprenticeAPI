@@ -1,4 +1,4 @@
-﻿using ADMS.Apprentice.Core.Messages;
+﻿using ADMS.Apprentice.Core.Messages.TFN;
 using ADMS.Apprentice.Core.Services;
 using ADMS.Services.Infrastructure.WebApi;
 using ADMS.Services.Infrastructure.WebApi.Documentation;
