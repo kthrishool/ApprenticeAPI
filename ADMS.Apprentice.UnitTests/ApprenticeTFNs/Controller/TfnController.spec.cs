@@ -1,6 +1,6 @@
 ﻿using System;
 using ADMS.Apprentice.Core.Entities;
-using ADMS.Apprentice.Core.Messages;
+using ADMS.Apprentice.Core.Messages.TFN;
 using ADMS.Apprentice.Core.Models;
 using ADMS.Apprentice.Core.Services;
 using Adms.Shared;

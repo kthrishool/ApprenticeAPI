@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ADMS.Apprentice.Core.Entities;
-using ADMS.Apprentice.Core.Messages;
+using ADMS.Apprentice.Core.Messages.TFN;
 using ADMS.Apprentice.Core.Services;
 using ADMS.Services.Infrastructure.Core.Interface;
 using Adms.Shared.Database;

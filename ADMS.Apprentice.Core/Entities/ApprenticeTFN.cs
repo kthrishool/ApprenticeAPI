@@ -14,6 +14,9 @@ namespace ADMS.Apprentice.Core.Entities
         public string StatusReasonCode { get; set; }
         public Guid MessageQueueCorrelationId { get; set; }
 
+
+        public virtual Profile Profile { get; set; }
+
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }

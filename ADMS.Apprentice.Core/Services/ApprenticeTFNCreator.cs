@@ -2,7 +2,7 @@
 using System.Linq;
 using Adms.Shared;
 using ADMS.Apprentice.Core.Entities;
-using ADMS.Apprentice.Core.Messages;
+using ADMS.Apprentice.Core.Messages.TFN;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Exceptions;
 using Adms.Shared.Database;

@@ -6,7 +6,7 @@ using ADMS.Apprentice.Core.Entities;
 
 // ReSharper disable InconsistentNaming
 
-namespace ADMS.Apprentice.Core.Messages
+namespace ADMS.Apprentice.Core.Messages.TFN
 {
     public record ApprenticeTFNV1 
     {
