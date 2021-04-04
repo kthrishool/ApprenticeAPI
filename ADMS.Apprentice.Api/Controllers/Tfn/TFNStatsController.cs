@@ -14,7 +14,6 @@ using Adms.Shared.Filters;
 using Adms.Shared.Paging;
 using ADMS.Apprentice.Core.Models.TFN;
 using Adms.Shared.Extensions;
-using Castle.Components.DictionaryAdapter;
 using Microsoft.EntityFrameworkCore;
 
 namespace ADMS.Apprentice.Api.Controllers.Tfn
@@ -35,11 +34,11 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         private readonly IApprenticeTFNUpdater apprenticeTFNUpdater;
 
         public TFNStatsController(
-            IHttpContextAccessor contextAccessor, 
+            IHttpContextAccessor contextAccessor,
             IRepository repository,
             IApprenticeTFNCreator apprenticeTFNCreator,
             IApprenticeTFNRetreiver tfnDetailRetreiver,
-            IApprenticeTFNUpdater apprenticeTFNUpdater, 
+            IApprenticeTFNUpdater apprenticeTFNUpdater,
             IPagingHelper pagingHelper) : base(contextAccessor)
         {
             this.repository = repository;
@@ -53,32 +52,48 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         /// Get all stats related to TFN records.
         /// </summary>
         /// <param name="paging">paging metadata.</param>
+        /// <param name="criteria">Search criteria</param>
         [HttpGet]
-        [SupportsPaging(null)]
-        public async Task<ActionResult<PagedList<TFNStatsV1>>> List(PagingInfo paging)
+        [SupportsPaging(typeof(TFNStatsCriteria))]
+        public async Task<ActionResult<PagedList<TFNStatsV1>>> List(PagingInfo paging, TFNStatsCriteria criteria)
         {
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("ApprenticeId", true);
 
-            var tfnRecords = repository.Retrieve<ApprenticeTFN>().Include(x => x.Profile);
-            
+            var tfnRecords = repository.Retrieve<ApprenticeTFN>().Include(x => x.Profile).AsQueryable();
+
+            // Apply filter
+            if (criteria?.Keyword != null)
+            {
+                tfnRecords = tfnRecords.Where(x =>
+                    x.ApprenticeId.ToString() == criteria.Keyword
+                     ||
+                        (x.Profile != null
+                         &&
+                         (x.Profile.FirstName.ToLower().Contains(criteria.Keyword.ToLower())
+                          ||
+                          x.Profile.Surname.ToLower().Contains(criteria.Keyword.ToLower())
+                          ||
+                          (x.Profile.BirthDate.Day+"/"+ x.Profile.BirthDate.Month+"/"+ x.Profile.BirthDate.Year).Equals(criteria.Keyword)
+                          //string.Format("{0:d/M/yyyy}",x.Profile.BirthDate).Equals(criteria.Keyword)
+                          //DateTime.ToString() is not accepted by Linq so you could use x.Profile.BirthDate.Date+"/"+
+                        ))
+                    );
+            }
 
             PagedList<ApprenticeTFN> tfnPagedList = await _pagingHelper.ToPagedListAsync(tfnRecords, paging);
 
-            var model = new List<TFNStatsModel>();
+            var model = new List<TFNStatsModel>(tfnRecords.Select(x => (TFNStatsModel)x));
 
-            model.AddRange(tfnRecords.Select(x => (TFNStatsModel)x));
-
-
-            return  Ok(new PagedList<TFNStatsV1>(tfnPagedList, tfnPagedList.Results.Map(x => new TFNStatsV1(
-                x.ApprenticeId, 
-                x.Profile?.FirstName + " " + x.Profile?.Surname,
-                x.Profile?.BirthDate,
-                x.StatusDate,
-                x.CreatedOn,
-                x.StatusCode.ToString(),
-                x.StatusCode == TFNStatus.NOCH ? (DateTime.Now.Subtract(x.StatusDate).Days > 0 ? DateTime.Now.Subtract(x.StatusDate).Days.ToString() : "<1") : "-"
-                ))));
+            return Ok(new PagedList<TFNStatsV1>(tfnPagedList, tfnPagedList.Results.Map(x => new TFNStatsV1(
+               x.ApprenticeId,
+               x.Profile?.FirstName + " " + x.Profile?.Surname,
+               x.Profile?.BirthDate,
+               x.StatusDate,
+               x.CreatedOn,
+               x.StatusCode.ToString(),
+               x.StatusCode == TFNStatus.NOCH ? (DateTime.Now.Subtract(x.StatusDate).Days > 0 ? DateTime.Now.Subtract(x.StatusDate).Days.ToString() : "<1") : "-"
+               ))));
         }
 
     }
