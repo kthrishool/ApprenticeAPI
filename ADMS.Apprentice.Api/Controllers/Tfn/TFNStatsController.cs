@@ -8,7 +8,6 @@ using ADMS.Services.Infrastructure.WebApi.Documentation;
 using Adms.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using Adms.Shared.Filters;
 using Adms.Shared.Paging;
@@ -29,22 +28,13 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         private readonly IPagingHelper _pagingHelper;
 
         private readonly IRepository repository;
-        private readonly IApprenticeTFNCreator apprenticeTFNCreator;
-        private readonly IApprenticeTFNRetreiver tfnDetailRetreiver;
-        private readonly IApprenticeTFNUpdater apprenticeTFNUpdater;
 
         public TFNStatsController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
-            IApprenticeTFNCreator apprenticeTFNCreator,
-            IApprenticeTFNRetreiver tfnDetailRetreiver,
-            IApprenticeTFNUpdater apprenticeTFNUpdater,
             IPagingHelper pagingHelper) : base(contextAccessor)
         {
             this.repository = repository;
-            this.apprenticeTFNCreator = apprenticeTFNCreator;
-            this.tfnDetailRetreiver = tfnDetailRetreiver;
-            this.apprenticeTFNUpdater = apprenticeTFNUpdater;
             _pagingHelper = pagingHelper;
         }
 
@@ -55,7 +45,7 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         /// <param name="criteria">Search criteria</param>
         [HttpGet]
         [SupportsPaging(typeof(TFNStatsCriteria))]
-        public async Task<ActionResult<PagedList<TFNStatsV1>>> List(PagingInfo paging, TFNStatsCriteria criteria)
+        public ActionResult<PagedList<TFNStatsV1>> List(PagingInfo paging, TFNStatsCriteria criteria)
         {
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("ApprenticeId", true);
@@ -74,16 +64,21 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
                           ||
                           x.Profile.Surname.ToLower().Contains(criteria.Keyword.ToLower())
                           ||
-                          (x.Profile.BirthDate.Day+"/"+ x.Profile.BirthDate.Month+"/"+ x.Profile.BirthDate.Year).Equals(criteria.Keyword)
-                          //string.Format("{0:d/M/yyyy}",x.Profile.BirthDate).Equals(criteria.Keyword)
-                          //DateTime.ToString() is not accepted by Linq so you could use x.Profile.BirthDate.Date+"/"+
+                          (x.Profile.BirthDate.Day + "/" + x.Profile.BirthDate.Month + "/" + x.Profile.BirthDate.Year).Equals(criteria.Keyword)
+                        //string.Format("{0:d/M/yyyy}",x.Profile.BirthDate).Equals(criteria.Keyword)
+                        //DateTime.ToString() is not accepted by Linq so you could use x.Profile.BirthDate.Date+"/"+
                         ))
                     );
             }
 
-            PagedList<ApprenticeTFN> tfnPagedList = await _pagingHelper.ToPagedListAsync(tfnRecords, paging);
+            PagedList<ApprenticeTFN> tfnPagedList = _pagingHelper.ToPagedList(tfnRecords, paging);
 
             var model = new List<TFNStatsModel>(tfnRecords.Select(x => (TFNStatsModel)x));
+
+            var systemDateTime = Context == null || Context.DateTimeContext == DateTime.MinValue ? 
+                DateTime.Now
+                : Context.DateTimeContext
+                ;
 
             return Ok(new PagedList<TFNStatsV1>(tfnPagedList, tfnPagedList.Results.Map(x => new TFNStatsV1(
                x.ApprenticeId,
@@ -92,7 +87,7 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
                x.StatusDate,
                x.CreatedOn,
                x.StatusCode.ToString(),
-               x.StatusCode == TFNStatus.NOCH ? (DateTime.Now.Subtract(x.StatusDate).Days > 0 ? DateTime.Now.Subtract(x.StatusDate).Days.ToString() : "<1") : "-"
+               x.StatusCode == TFNStatus.NOCH ? (systemDateTime.Subtract(x.StatusDate).Days > 0 ? systemDateTime.Subtract(x.StatusDate).Days.ToString() : "<1") : "-"
                ))));
         }
 
