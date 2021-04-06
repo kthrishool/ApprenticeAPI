@@ -11,6 +11,6 @@ namespace ADMS.Apprentice.Core.Entities
         F,
 
         [Description("Unspecified")]
-        U
+        X
     }
 }

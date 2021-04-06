@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 using Adms.Shared.Exceptions;
 using Castle.Core.Internal;
-using System.Linq;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -66,12 +66,6 @@ namespace ADMS.Apprentice.Core.Services
                 profile.Addresses = await addressValidator.ValidateAsync(profile.Addresses.ToList());
             }
 
-
-            //if(profile?.GenderCode != null)
-            //{
-            //    // gender validate not needed as it checked in controller
-
-            //}
             return profile;
         }
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ADMS.Apprentice.Core.Entities;
-using ADMS.Apprentice.Core.Messages;
 
 namespace ADMS.Apprentice.Core.Models
 {
@@ -44,7 +43,7 @@ namespace ADMS.Apprentice.Core.Models
             OtherNames = apprentice.OtherNames;
             PreferredName = apprentice.PreferredName;
             BirthDate = apprentice.BirthDate;
-            GenderCode = apprentice.GenderCode;
+
             EmailAddress = apprentice.EmailAddress;
             SelfAssessedDisabilityCode = apprentice.SelfAssessedDisabilityCode;
             IndigenousStatusCode = apprentice.IndigenousStatusCode;
