@@ -35,18 +35,24 @@ namespace ADMS.Apprentice.Core.Exceptions
         AddressRecordNotFound,
 
         [ExceptionDetails("AP-VAL-0010", "State selected in Invalid for the postcode selected")]
-        PostCodeStateCodeMissmatch,
+        PostCodeStateCodeMismatch,
 
-        [ExceptionDetails("AP-VAL-0011", "Invalid State Code")]
+        [ExceptionDetails("AP-VAL-0011", "Suburb selected in Invalid for the postcode")]
+        PostCodeLocalityMismatch,
+
+        [ExceptionDetails("AP-VAL-0012", "Invalid State Code")]
         InvalidStateCode,
 
-        [ExceptionDetails("AP-VAL-0012", "Street Address Line Exceeds 80 Characters")]
+        [ExceptionDetails("AP-VAL-0013", "Street Address Line Exceeds 80 Characters")]
         StreetAddressExceedsMaxLength,
 
-        [ExceptionDetails("AP-VAL-0013", "Suburb name Exceeds 40 Characters")]
+        [ExceptionDetails("AP-VAL-0014", "Suburb name Exceeds 40 Characters")]
         SuburbExceedsMaxLength,
 
-        [ExceptionDetails("AP-VAL-0014", "Street Address Line cannot be null")]
-        StreetAddressLine1CannotBeNull
+        [ExceptionDetails("AP-VAL-0015", "Street Address Line cannot be null")]
+        StreetAddressLine1CannotBeNull,
+
+        [ExceptionDetails("AP-VAL-0016", "Unexpected error while processing your request")]
+        ServerError
     }
 }

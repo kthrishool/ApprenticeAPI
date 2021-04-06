@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using ADMS.Apprentice.Core;
-using ADMS.Apprentice.Core.Services;
 using ADMS.Apprentice.Database;
 using Adms.Shared;
 using Adms.Shared.Helpers;
@@ -12,7 +11,7 @@ namespace ADMS.Apprentice.Api.Configuration
     public static class DependencyInjectionConfiguration
     {
         public static void ConfigureServices(IServiceCollection services)
-        {            
+        {
             // interfaces which live in the same assembly as their implementation(s) can be registered using our IocRegistrationHelper
             Assembly core = typeof(OurDatabaseSettings).Assembly;
             Assembly database = typeof(Repository).Assembly;
@@ -27,8 +26,7 @@ namespace ADMS.Apprentice.Api.Configuration
             // interfaces which live in a different assembly to their implementation get registered manually here
             services.AddTransient<ISharedSettings, SharedSettings>();
             services.AddScoped<IRepository, Repository>();
-            services.AddScoped<ITyimsRepository, TyimsRepository>();
-
+            //  services.AddScoped<ITyimsRepository, TyimsRepository>();
         }
     }
 }

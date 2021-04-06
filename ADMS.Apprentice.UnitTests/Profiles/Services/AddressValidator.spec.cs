@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Apprentice.Core.Services;
@@ -9,7 +10,6 @@ using Adms.Shared.Exceptions;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -56,7 +56,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Returns(validationException);
         }
 
-        private Address UpdateAddressColumn(string columnName, string value, ValidationExceptionType exception, bool RaiseException)
+        private void UpdateAddressColumn(string columnName, string value, ValidationExceptionType exception, bool RaiseException)
         {
             var localAddress = new Address()
             {
@@ -114,7 +114,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 ClassUnderTest.ValidateAsync(newProfile.Addresses.ToList());
             }
 
-            return localAddress;
+            //  return localAddress;
         }
 
         protected override async void When()
@@ -156,6 +156,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ThrowsValidationExceptionIfStreetLine1IsNull()
         {
             UpdateAddressColumn("StreetAddress1", null, ValidationExceptionType.StreetAddressLine1CannotBeNull, true);
+            UpdateAddressColumn("StreetAddress1", "", ValidationExceptionType.StreetAddressLine1CannotBeNull, true);
+            UpdateAddressColumn("StreetAddress1", " ", ValidationExceptionType.StreetAddressLine1CannotBeNull, true);
         }
 
         [TestMethod]
@@ -179,6 +181,51 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             UpdateAddressColumn("Locality", ProfileConstants.RandomString(42), ValidationExceptionType.SuburbExceedsMaxLength, true);
         }
+
+        //[TestMethod]
+        //public void ThrowsValidationExceptionIfPostCodeIsInvalid()
+        //{
+        //    UpdateAddressColumn("PostCode", "abcd", ValidationExceptionType.InvalidPostcode, true);
+        //}
+
+        //[TestMethod]
+        //public void ThrowsValidationExceptionIfLocalityIsInvaid()
+        //{
+        //    UpdateAddressColumn("Locality", "abcd", ValidationExceptionType.PostCodeLocalityMismatch, true);
+        //}
+
+        //[TestMethod]
+        //public void ThrowsValidationExceptionIfStateIsInvaid()
+        //{
+        //    var localAddress = new Address()
+        //    {
+        //        StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
+        //        StreetAddress2 = ProfileConstants.ResidentialAddress.StreetAddress2,
+        //        StreetAddress3 = ProfileConstants.ResidentialAddress.StreetAddress3,
+        //        Locality = "Mungindi",
+        //        Postcode = "2406",
+        //        StateCode = "NSW",
+        //        AddressTypeCode = AddressType.RESD.ToString()
+        //    };
+
+        //    newProfile.Addresses = new List<Address>();
+
+        //    newProfile.Addresses.Add(localAddress);
+        //    PostcodeLocality[] newpostcode = new PostcodeLocality[1];
+        //    ((IList) newpostcode).Add(new PostcodeLocality() {Postcode = "2601", LocalityCode = "1234", ShortDescription = "Braddon Test", LongDescription = "Braddon Test Long", StateCode = "ACT"});
+        //    Container
+        //        .GetMock<IExceptionFactory>()
+        //        .Setup(r => r.CreateValidationException(ValidationExceptionType.PostCodeStateCodeMismatch))
+        //        .Returns(validationException);
+        //    Container
+        //        .GetMock<IReferenceDataClient>()
+        //        .Setup(r => r.GetRelatedCodesByPostCode("2601"))
+        //        .Returns();
+
+        //    ClassUnderTest
+        //        .Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
+        //        .Should().Throw<ValidationException>();
+        //}
     }
 
     #endregion
