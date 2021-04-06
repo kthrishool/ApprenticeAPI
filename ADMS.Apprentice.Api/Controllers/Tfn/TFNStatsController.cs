@@ -52,8 +52,8 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
 
             IQueryable<ApprenticeTFN> tfnRecords = null;
 
-            if (criteria != null && GetStatusCodeFromCriteria(criteria.StatusCode, out TFNStatus? tfnStatus) && tfnStatus != null)
-                tfnRecords = repository.Retrieve<ApprenticeTFN>().Include(x => x.Profile).Where(x => x.StatusCode == tfnStatus).AsQueryable();
+            if (criteria != null && GetStatusCodeFromCriteria(criteria.StatusCode, out TFNStatus[] tfnStatus) && tfnStatus != null && tfnStatus.Any())
+                tfnRecords = repository.Retrieve<ApprenticeTFN>().Include(x => x.Profile).Where(x => tfnStatus.Contains(x.StatusCode)).AsQueryable();
             else
                 tfnRecords = repository.Retrieve<ApprenticeTFN>().Include(x => x.Profile).AsQueryable();
 
@@ -96,7 +96,7 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
                ))));
         }
 
-        private bool GetStatusCodeFromCriteria(string statusCode, out TFNStatus? tfnStatus)
+        private bool GetStatusCodeFromCriteria(string statusCode, out TFNStatus[] tfnStatus)
         {
             tfnStatus = null;
 
@@ -104,18 +104,20 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
                 return false;
 
             if (statusCode.Equals(TFNStatus.MTCH.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                tfnStatus = TFNStatus.MTCH;
+                tfnStatus = new TFNStatus[] { TFNStatus.MTCH };
             else if (statusCode.Equals(TFNStatus.NOCH.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                tfnStatus = TFNStatus.NOCH;
+                tfnStatus = new TFNStatus[] { TFNStatus.NOCH };
             else if (statusCode.Equals(TFNStatus.SBMT.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                tfnStatus = TFNStatus.SBMT;
+                tfnStatus = new TFNStatus[] { TFNStatus.SBMT };
             else if (statusCode.Equals(TFNStatus.TBVE.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                tfnStatus = TFNStatus.TBVE;
+                tfnStatus = new TFNStatus[] { TFNStatus.TBVE };
             else if (statusCode.Equals(TFNStatus.TERR.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                tfnStatus = TFNStatus.TERR;
+                tfnStatus = new TFNStatus[] { TFNStatus.TERR };
+            else if (statusCode.Equals("INPROG", StringComparison.InvariantCultureIgnoreCase))
+                tfnStatus = new TFNStatus[] { TFNStatus.TERR, TFNStatus.SBMT, TFNStatus.TBVE};
             else
                 return false;
-            
+
             return true;
         }
 

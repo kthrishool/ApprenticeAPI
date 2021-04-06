@@ -415,7 +415,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Returns(results);
 
             Container.GetMock<IPagingHelper>()
-                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) //It.IsAny<IQueryable<ApprenticeTFN>>()
+                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
 
         }
@@ -498,7 +498,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Returns(results);
 
             Container.GetMock<IPagingHelper>()
-                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) //It.IsAny<IQueryable<ApprenticeTFN>>()
+                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
 
         }
@@ -581,7 +581,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Returns(results);
 
             Container.GetMock<IPagingHelper>()
-                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) //It.IsAny<IQueryable<ApprenticeTFN>>()
+                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
 
         }
@@ -664,7 +664,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Returns(results);
 
             Container.GetMock<IPagingHelper>()
-                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) //It.IsAny<IQueryable<ApprenticeTFN>>()
+                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
 
         }
@@ -747,7 +747,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Returns(results);
 
             Container.GetMock<IPagingHelper>()
-                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) //It.IsAny<IQueryable<ApprenticeTFN>>()
+                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
 
         }
@@ -769,6 +769,135 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
             pagedList.Results.Should().NotBeNull();
             pagedList.Results.Should().HaveCount(1);
             pagedList.Results.First().TfnVerificationStatus.Should().Be(TFNStatus.TBVE.ToString());
+        }
+    }
+    #endregion
+
+    #region WhenGettingTFNStatsWithFilterOnInProgStatus
+    [TestClass, ExcludeFromCodeCoverage]
+    public class WhenGettingApprenticeTfnWithInProgStatusFilterUsingTheApi : GivenWhenThen<TFNStatsController>
+    {
+        private ApprenticeTFN tfn;
+        private ActionResult<PagedList<TFNStatsV1>> result;
+        private PagingInfo paging;
+        private TFNStatsCriteria criteria = new TFNStatsCriteria() { Keyword = "surname", StatusCode = "inprog" };
+
+        protected override void Given()
+        {
+
+            paging = new PagingInfo
+            {
+                Page = 1,
+
+            };
+
+            tfn = new ApprenticeTFN
+            {
+                Id = 1,
+                ApprenticeId = 1,
+                TaxFileNumber = "123456789",
+                Profile = new Profile
+                {
+                    Surname = "surname",
+                    FirstName = "firstname",
+                    BirthDate = DateTime.Today
+                },
+                StatusCode = TFNStatus.TBVE,
+                CreatedOn = DateTime.Today
+            };
+
+            var mtchTfn = new ApprenticeTFN
+            {
+                Id = 1,
+                ApprenticeId = 1,
+                TaxFileNumber = "123456789",
+                Profile = new Profile
+                {
+                    Surname = "surname",
+                    FirstName = "firstname",
+                    BirthDate = DateTime.Today
+                },
+                StatusCode = TFNStatus.MTCH,
+                CreatedOn = DateTime.Today
+            };
+
+            var sbmtTfn = new ApprenticeTFN
+            {
+                Id = 1,
+                ApprenticeId = 1,
+                TaxFileNumber = "123456789",
+                Profile = new Profile
+                {
+                    Surname = "surname",
+                    FirstName = "firstname",
+                    BirthDate = DateTime.Today
+                },
+                StatusCode = TFNStatus.SBMT,
+                CreatedOn = DateTime.Today
+            };
+            
+
+            var noMtchTfn = new ApprenticeTFN
+            {
+                Id = 1,
+                ApprenticeId = 1,
+                TaxFileNumber = "123456789",
+                Profile = new Profile
+                {
+                    Surname = "surname",
+                    FirstName = "firstname",
+                    BirthDate = DateTime.Today
+                },
+                StatusCode = TFNStatus.NOCH,
+                CreatedOn = DateTime.Today
+            };
+
+            var errorTfn = new ApprenticeTFN
+            {
+                Id = 1,
+                ApprenticeId = 1,
+                TaxFileNumber = "123456789",
+                Profile = new Profile
+                {
+                    Surname = "surname",
+                    FirstName = "firstname",
+                    BirthDate = DateTime.Today
+                },
+                StatusCode = TFNStatus.TERR,
+                CreatedOn = DateTime.Today
+            };
+
+            var results = new EnumerableQuery<ApprenticeTFN>(new List<ApprenticeTFN> { tfn, mtchTfn, noMtchTfn, sbmtTfn, errorTfn });
+            var resultsWithStatus = new EnumerableQuery<ApprenticeTFN>(new List<ApprenticeTFN> { tfn, sbmtTfn, errorTfn }); // The sequence in which the records are added is important because this object is used in mocking the method and if the elements are not in the same sequence as the parent list (results <<EnumerableQuery>>) then the mocking will not happen.
+
+            Container
+                .GetMock<IRepository>()
+                .Setup(x => x.Retrieve<ApprenticeTFN>())
+                .Returns(results);
+
+            Container.GetMock<IPagingHelper>()
+                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
+                .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
+
+        }
+
+        protected override void When()
+        {
+            result = ClassUnderTest.List(paging, criteria);
+        }
+
+        [TestMethod]
+        public void ReturnsStatsForGivenPageWithInProgStatusFilter()
+        {
+            result.Should().NotBeNull();
+            var list = (Microsoft.AspNetCore.Mvc.OkObjectResult)result.Result;
+            list.Should().NotBeNull();
+            list.Value.Should().NotBeNull();
+            var pagedList = (PagedList<TFNStatsV1>)list.Value;
+            pagedList.Should().NotBeNull();
+            pagedList.Results.Should().NotBeNull();
+            pagedList.Results.Should().HaveCount(3);
+            // If mocking works with the given list (resultsWithStatus), we have ensured that the records returned have one of these statuses: TERR, SBMT and TBVE.
         }
     }
     #endregion
@@ -830,7 +959,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Returns(results);
 
             Container.GetMock<IPagingHelper>()
-                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) //It.IsAny<IQueryable<ApprenticeTFN>>()
+                .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
 
         }
