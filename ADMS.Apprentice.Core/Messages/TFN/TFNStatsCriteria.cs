@@ -6,5 +6,7 @@ namespace ADMS.Apprentice.Core.Messages.TFN
     {
         [Description("Keyword to search on.")]
         public string Keyword { get; set; }
+
+        public string StatusCode { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ADMS.Apprentice.Core.Entities
 {
-	// TODO These statuses would be configured in ADW
+	// These statuses would be configured in ADW
 	public enum TFNStatus
 	{
 		[Description("To be verified")] 

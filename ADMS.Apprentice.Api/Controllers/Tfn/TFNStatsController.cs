@@ -50,10 +50,15 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("ApprenticeId", true);
 
-            var tfnRecords = repository.Retrieve<ApprenticeTFN>().Include(x => x.Profile).AsQueryable();
+            IQueryable<ApprenticeTFN> tfnRecords = null;
+
+            if (criteria != null && GetStatusCodeFromCriteria(criteria.StatusCode, out TFNStatus? tfnStatus) && tfnStatus != null)
+                tfnRecords = repository.Retrieve<ApprenticeTFN>().Include(x => x.Profile).Where(x => x.StatusCode == tfnStatus).AsQueryable();
+            else
+                tfnRecords = repository.Retrieve<ApprenticeTFN>().Include(x => x.Profile).AsQueryable();
 
             // Apply filter
-            if (criteria?.Keyword != null)
+            if (criteria != null && !string.IsNullOrWhiteSpace(criteria.Keyword))
             {
                 tfnRecords = tfnRecords.Where(x =>
                     x.ApprenticeId.ToString() == criteria.Keyword
@@ -75,7 +80,7 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
 
             var model = new List<TFNStatsModel>(tfnRecords.Select(x => (TFNStatsModel)x));
 
-            var systemDateTime = Context == null || Context.DateTimeContext == DateTime.MinValue ? 
+            var systemDateTime = Context == null || Context.DateTimeContext == DateTime.MinValue ?
                 DateTime.Now
                 : Context.DateTimeContext
                 ;
@@ -90,6 +95,30 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
                x.StatusCode == TFNStatus.NOCH ? (systemDateTime.Subtract(x.StatusDate).Days > 0 ? systemDateTime.Subtract(x.StatusDate).Days.ToString() : "<1") : "-"
                ))));
         }
+
+        private bool GetStatusCodeFromCriteria(string statusCode, out TFNStatus? tfnStatus)
+        {
+            tfnStatus = null;
+
+            if (string.IsNullOrWhiteSpace(statusCode))
+                return false;
+
+            if (statusCode.Equals(TFNStatus.MTCH.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                tfnStatus = TFNStatus.MTCH;
+            else if (statusCode.Equals(TFNStatus.NOCH.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                tfnStatus = TFNStatus.NOCH;
+            else if (statusCode.Equals(TFNStatus.SBMT.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                tfnStatus = TFNStatus.SBMT;
+            else if (statusCode.Equals(TFNStatus.TBVE.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                tfnStatus = TFNStatus.TBVE;
+            else if (statusCode.Equals(TFNStatus.TERR.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                tfnStatus = TFNStatus.TERR;
+            else
+                return false;
+            
+            return true;
+        }
+
 
     }
 }
