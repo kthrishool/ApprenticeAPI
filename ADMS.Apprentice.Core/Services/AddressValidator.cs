@@ -6,6 +6,7 @@ using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
+using System.Linq;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -57,7 +58,7 @@ namespace ADMS.Apprentice.Core.Services
                 string.IsNullOrWhiteSpace(address.Locality) ||
                 string.IsNullOrWhiteSpace(address.StateCode))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
-            if (address.Postcode?.Length != 4)
+            if (address.Postcode?.Length != 4 || address.Postcode?.All(char.IsDigit) == false)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPostcode);
             if (address.StateCode?.Length > 10)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidStateCode);
@@ -72,9 +73,6 @@ namespace ADMS.Apprentice.Core.Services
             if (address.Locality?.Length > 40)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.SuburbExceedsMaxLength);
 
-
-            //  await CheckAddressFromReferenceAsync(address);
-            //  return address;
         }
 
         private async Task<Address> ValidateSingleLineAddressAsync(Address address)
@@ -109,13 +107,25 @@ namespace ADMS.Apprentice.Core.Services
             string formattedLocality = $"{address.Locality} {address.StateCode} {address.Postcode}"?.ToUpper();
 
             if (string.IsNullOrEmpty(formattedLocality))
-                return address; //no chance of hitting this, but in case..
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound); //no chance of hitting this, but in case..
 
             PartialAddressModel partialAddress = await referenceDataClient.GetAddressByFormattedLocality(formattedLocality);
-            //if iGas couldnt resolve the partial address, return address without geo location info
+           
             if (partialAddress == null)
-                return address;
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
 
+            //if iGas couldnt resolve the partial address
+            if (string.IsNullOrEmpty(partialAddress.Locality) || string.IsNullOrEmpty(partialAddress.State) || string.IsNullOrEmpty(partialAddress.Postcode))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
+
+            if (partialAddress.Locality != address.Locality.ToUpper())
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.PostCodeLocalityMismatch);
+
+            if (partialAddress.State != address.StateCode.ToUpper())
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.PostCodeStateCodeMismatch);
+
+            if (partialAddress.Postcode != address.Postcode)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.PostCodeMismatch);
             //update address with geo location details
             //partial address doenst provide confidence info, but according to below info assigning confidence level of 4
             //The confidence level from GNAF for the address and Geocode.Should be used in conjunction with Geo Code Type

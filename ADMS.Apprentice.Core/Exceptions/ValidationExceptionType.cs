@@ -34,10 +34,10 @@ namespace ADMS.Apprentice.Core.Exceptions
         [ExceptionDetails("AP-VAL-0009", "Invalid Address details")]
         AddressRecordNotFound,
 
-        [ExceptionDetails("AP-VAL-0010", "State selected in Invalid for the postcode selected")]
+        [ExceptionDetails("AP-VAL-0010", "State selected is Invalid for the postcode selected")]
         PostCodeStateCodeMismatch,
 
-        [ExceptionDetails("AP-VAL-0011", "Suburb selected in Invalid for the postcode")]
+        [ExceptionDetails("AP-VAL-0011", "Suburb selected is Invalid for the postcode")]
         PostCodeLocalityMismatch,
 
         [ExceptionDetails("AP-VAL-0012", "Invalid State Code")]
@@ -53,6 +53,10 @@ namespace ADMS.Apprentice.Core.Exceptions
         StreetAddressLine1CannotBeNull,
 
         [ExceptionDetails("AP-VAL-0016", "Unexpected error while processing your request")]
-        ServerError
+        ServerError,
+
+        [ExceptionDetails("AP-VAL-0017", "Postcode selected is Invalid for the state selected")]
+        PostCodeMismatch,
+
     }
 }
