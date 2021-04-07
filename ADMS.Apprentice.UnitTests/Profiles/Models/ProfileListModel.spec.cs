@@ -61,12 +61,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.CreatedOn.Should().BeCloseTo(ProfileConstants.Createdon);
             model.UpdatedOn.Should().BeCloseTo(ProfileConstants.Updatedon);
             model.CreatedBy.Should().Be(ProfileConstants.Createdby);
-            model.UpdatedBy.Should().Be(ProfileConstants.Updatedby);
-            model.Phones = null;
-            model.ResidentialAddress = null;
-            model.PostalAddress = null;
-            model.GenderCode.Should().Be(ProfileConstants.GenderCode);
-            model.InterpretorRequiredFlag.Should().Be(ProfileConstants.InterpretorRequiredFlag);
+            model.UpdatedBy.Should().Be(ProfileConstants.Updatedby);            
         }
     }
 

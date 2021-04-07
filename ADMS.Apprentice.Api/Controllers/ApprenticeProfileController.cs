@@ -18,8 +18,8 @@ using System;
 namespace ADMS.Apprentice.Api.Controllers
 {
     [ApiVersion(Version = "1", Latest = "1")]
-    [Route("api/v1/apprentice-profile")]
-    [Route("api/apprentice-profile")]
+    [Route("api/v1/apprentices")]
+    [Route("api/apprentices")]
     [Public]
     [Produces("application/json")]
     [Consumes("application/json")]
