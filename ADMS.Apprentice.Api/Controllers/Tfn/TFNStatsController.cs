@@ -26,16 +26,18 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
     public class TFNStatsController : AdmsController
     {
         private readonly IPagingHelper _pagingHelper;
-
         private readonly IRepository repository;
+        private readonly ITFNStatsRetriever _tfnStatsRetriever;
 
         public TFNStatsController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
-            IPagingHelper pagingHelper) : base(contextAccessor)
+            IPagingHelper pagingHelper,
+            ITFNStatsRetriever tfnStatsRetriever) : base(contextAccessor)
         {
             this.repository = repository;
             _pagingHelper = pagingHelper;
+            _tfnStatsRetriever = tfnStatsRetriever;
         }
 
         /// <summary>
@@ -50,41 +52,33 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("ApprenticeId", true);
 
-            IQueryable<ApprenticeTFN> tfnRecords = null;
+            var tfnRecords = _tfnStatsRetriever.RetrieveTfnStats(criteria);
 
-            if (criteria != null && GetStatusCodeFromCriteria(criteria.StatusCode, out TFNStatus[] tfnStatus) && tfnStatus != null && tfnStatus.Any())
-                tfnRecords = repository.Retrieve<ApprenticeTFN>().Include(x => x.Profile).Where(x => tfnStatus.Contains(x.StatusCode)).AsQueryable();
-            else
-                tfnRecords = repository.Retrieve<ApprenticeTFN>().Include(x => x.Profile).AsQueryable();
+            //// REMOVE this as it is not good for performance; Handle sorting on NumberOfDaysSinceTheMismatch
+            //if (!string.IsNullOrWhiteSpace(paging.SortBy) && paging.SortBy.Equals("NumberOfDaysSinceTheMismatch"))
+            //{
+            //    foreach (ApprenticeTFN apprenticeTFN in tfnRecords)
+            //    {
+            //        apprenticeTFN.NumberOfDaysSinceTheMismatch = 
+            //            apprenticeTFN.StatusCode == TFNStatus.NOCH 
+            //                ?
+            //                GetNumberOfDaysSinceTheMismatch(apprenticeTFN.StatusDate, systemDateTime)
+            //                :
+            //                null;
+            //    }
 
-            // Apply filter
-            if (criteria != null && !string.IsNullOrWhiteSpace(criteria.Keyword))
-            {
-                tfnRecords = tfnRecords.Where(x =>
-                    x.ApprenticeId.ToString() == criteria.Keyword
-                     ||
-                        (x.Profile != null
-                         &&
-                         (x.Profile.FirstName.ToLower().Contains(criteria.Keyword.ToLower())
-                          ||
-                          x.Profile.Surname.ToLower().Contains(criteria.Keyword.ToLower())
-                          ||
-                          (x.Profile.BirthDate.Day + "/" + x.Profile.BirthDate.Month + "/" + x.Profile.BirthDate.Year).Equals(criteria.Keyword)
-                        //string.Format("{0:d/M/yyyy}",x.Profile.BirthDate).Equals(criteria.Keyword)
-                        //DateTime.ToString() is not accepted by Linq so you could use x.Profile.BirthDate.Date+"/"+
-                        ))
-                    );
-            }
+            //    var list = paging.Descending ? tfnRecords.ToList().OrderByDescending(x => x.NumberOfDaysSinceTheMismatch) : tfnRecords.ToList().OrderBy(x => x.NumberOfDaysSinceTheMismatch);
+            //    tfnRecords = list.AsQueryable();
+            //    paging.SortBy = "";
+            //}
+
+            var systemDateTime = Context == null || Context.DateTimeContext == DateTime.MinValue
+                ? DateTime.Now
+                : Context.DateTimeContext;
 
             PagedList<ApprenticeTFN> tfnPagedList = _pagingHelper.ToPagedList(tfnRecords, paging);
 
-            var model = new List<TFNStatsModel>(tfnRecords.Select(x => (TFNStatsModel)x));
-
-            var systemDateTime = Context == null || Context.DateTimeContext == DateTime.MinValue ?
-                DateTime.Now
-                : Context.DateTimeContext
-                ;
-
+            
             return Ok(new PagedList<TFNStatsV1>(tfnPagedList, tfnPagedList.Results.Map(x => new TFNStatsV1(
                x.ApprenticeId,
                x.Profile?.FirstName + " " + x.Profile?.Surname,
@@ -92,34 +86,24 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
                x.StatusDate,
                x.CreatedOn,
                x.StatusCode.ToString(),
-               x.StatusCode == TFNStatus.NOCH ? (systemDateTime.Subtract(x.StatusDate).Days > 0 ? systemDateTime.Subtract(x.StatusDate).Days.ToString() : "<1") : "-"
+               x.StatusCode == TFNStatus.NOCH ? GetNumberOfDaysSinceTheMismatchAsString(x.StatusDate, systemDateTime) : "-"
                ))));
         }
 
-        private bool GetStatusCodeFromCriteria(string statusCode, out TFNStatus[] tfnStatus)
+        
+        private int GetNumberOfDaysSinceTheMismatch(DateTime tfnStatusDate, DateTime systemDateTime)
         {
-            tfnStatus = null;
-
-            if (string.IsNullOrWhiteSpace(statusCode))
-                return false;
-
-            if (statusCode.Equals(TFNStatus.MTCH.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                tfnStatus = new TFNStatus[] { TFNStatus.MTCH };
-            else if (statusCode.Equals(TFNStatus.NOCH.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                tfnStatus = new TFNStatus[] { TFNStatus.NOCH };
-            else if (statusCode.Equals(TFNStatus.SBMT.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                tfnStatus = new TFNStatus[] { TFNStatus.SBMT };
-            else if (statusCode.Equals(TFNStatus.TBVE.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                tfnStatus = new TFNStatus[] { TFNStatus.TBVE };
-            else if (statusCode.Equals(TFNStatus.TERR.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                tfnStatus = new TFNStatus[] { TFNStatus.TERR };
-            else if (statusCode.Equals("INPROG", StringComparison.InvariantCultureIgnoreCase))
-                tfnStatus = new TFNStatus[] { TFNStatus.TERR, TFNStatus.SBMT, TFNStatus.TBVE};
-            else
-                return false;
-
-            return true;
+            return systemDateTime.Subtract(tfnStatusDate).Days > 0 ? systemDateTime.Subtract(tfnStatusDate).Days : 0;
         }
+
+        private string GetNumberOfDaysSinceTheMismatchAsString(DateTime tfnStatusDate, DateTime systemDateTime)
+        {
+            var number = GetNumberOfDaysSinceTheMismatch(tfnStatusDate, systemDateTime);
+            return number > 0 ? number.ToString() : "<1";
+        }
+
+
+        
 
 
     }

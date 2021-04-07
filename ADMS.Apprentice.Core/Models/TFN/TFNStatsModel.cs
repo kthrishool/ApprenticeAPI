@@ -13,7 +13,7 @@ namespace ADMS.Apprentice.Core.Models.TFN
         DateTime TfnSubmittedDateTime;
         DateTime TfnCreatedDateTime;
         string TfnVerificationStatus;
-        internal string NumberOfDaysSinceTheMismatch;
+        string NumberOfDaysSinceTheMismatch;
 
         public static explicit operator TFNStatsModel(ApprenticeTFN t) => new TFNStatsModel
         {

@@ -54,10 +54,13 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                .GetMock<IRepository>()
                .Setup(x => x.Retrieve<ApprenticeTFN>())
                .Returns(results);
-
+            
             Container.GetMock<IPagingHelper>()
-                .Setup(x => x.ToPagedList(It.IsAny<IQueryable<ApprenticeTFN>>(), It.IsAny<PagingInfo>()))
+                .Setup(x => x.ToPagedList(results, It.IsAny<PagingInfo>()))
                 .Returns(new PagedList<ApprenticeTFN>(paging, results.Count(), false, results));
+
+            Container.GetMock<ITFNStatsRetriever>().Setup(x => x.RetrieveTfnStats(criteria)).Returns(new TFNStatsRetriever(Container.GetMock<IRepository>().Object)
+                .RetrieveTfnStats(criteria));
 
         }
 
@@ -127,8 +130,11 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Returns(results);
 
             Container.GetMock<IPagingHelper>()
-                .Setup(x => x.ToPagedList(It.IsAny<IQueryable<ApprenticeTFN>>(), It.IsAny<PagingInfo>()))
+                .Setup(x => x.ToPagedList(results, It.IsAny<PagingInfo>()))
                 .Returns(new PagedList<ApprenticeTFN>(paging, results.Count(), false, results));
+
+            Container.GetMock<ITFNStatsRetriever>().Setup(x => x.RetrieveTfnStats(criteria)).Returns(new TFNStatsRetriever(Container.GetMock<IRepository>().Object)
+                .RetrieveTfnStats(criteria));
 
         }
 
@@ -197,8 +203,11 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Returns(results);
 
             Container.GetMock<IPagingHelper>()
-                .Setup(x => x.ToPagedList(It.IsAny<IQueryable<ApprenticeTFN>>(), It.IsAny<PagingInfo>()))
+                .Setup(x => x.ToPagedList(results, It.IsAny<PagingInfo>()))
                 .Returns(new PagedList<ApprenticeTFN>(paging, results.Count(), false, results));
+
+            Container.GetMock<ITFNStatsRetriever>().Setup(x => x.RetrieveTfnStats(criteria)).Returns(new TFNStatsRetriever(Container.GetMock<IRepository>().Object)
+                .RetrieveTfnStats(criteria));
 
         }
 
@@ -264,8 +273,11 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Returns(results);
 
             Container.GetMock<IPagingHelper>()
-                .Setup(x => x.ToPagedList(It.IsAny<IQueryable<ApprenticeTFN>>(), It.IsAny<PagingInfo>()))
+                .Setup(x => x.ToPagedList(results, It.IsAny<PagingInfo>()))
                 .Returns(new PagedList<ApprenticeTFN>(paging, results.Count(), false, results));
+
+            Container.GetMock<ITFNStatsRetriever>().Setup(x => x.RetrieveTfnStats(criteria)).Returns(new TFNStatsRetriever(Container.GetMock<IRepository>().Object)
+                .RetrieveTfnStats(criteria));
 
         }
 
@@ -333,8 +345,11 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Returns(results);
 
             Container.GetMock<IPagingHelper>()
-                .Setup(x => x.ToPagedList(It.IsAny<IQueryable<ApprenticeTFN>>(), It.IsAny<PagingInfo>()))
+                .Setup(x => x.ToPagedList(results, It.IsAny<PagingInfo>()))
                 .Returns(new PagedList<ApprenticeTFN>(paging, results.Count(), false, results));
+
+            Container.GetMock<ITFNStatsRetriever>().Setup(x => x.RetrieveTfnStats(criteria)).Returns(new TFNStatsRetriever(Container.GetMock<IRepository>().Object)
+                .RetrieveTfnStats(criteria));
 
         }
 
@@ -417,6 +432,9 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
             Container.GetMock<IPagingHelper>()
                 .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
+
+            Container.GetMock<ITFNStatsRetriever>().Setup(x => x.RetrieveTfnStats(criteria)).Returns(new TFNStatsRetriever(Container.GetMock<IRepository>().Object)
+                .RetrieveTfnStats(criteria));
 
         }
 
@@ -501,6 +519,9 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
 
+            Container.GetMock<ITFNStatsRetriever>().Setup(x => x.RetrieveTfnStats(criteria)).Returns(new TFNStatsRetriever(Container.GetMock<IRepository>().Object)
+                .RetrieveTfnStats(criteria));
+
         }
 
         protected override void When()
@@ -583,6 +604,9 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
             Container.GetMock<IPagingHelper>()
                 .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
+
+            Container.GetMock<ITFNStatsRetriever>().Setup(x => x.RetrieveTfnStats(criteria)).Returns(new TFNStatsRetriever(Container.GetMock<IRepository>().Object)
+                .RetrieveTfnStats(criteria));
 
         }
 
@@ -667,6 +691,8 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
 
+            Container.GetMock<ITFNStatsRetriever>().Setup(x => x.RetrieveTfnStats(criteria)).Returns(new TFNStatsRetriever(Container.GetMock<IRepository>().Object)
+                .RetrieveTfnStats(criteria));
         }
 
         protected override void When()
@@ -749,6 +775,9 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
             Container.GetMock<IPagingHelper>()
                 .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
+
+            Container.GetMock<ITFNStatsRetriever>().Setup(x => x.RetrieveTfnStats(criteria)).Returns(new TFNStatsRetriever(Container.GetMock<IRepository>().Object)
+                .RetrieveTfnStats(criteria));
 
         }
 
@@ -879,6 +908,9 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
                 .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
 
+            Container.GetMock<ITFNStatsRetriever>().Setup(x => x.RetrieveTfnStats(criteria)).Returns(new TFNStatsRetriever(Container.GetMock<IRepository>().Object)
+                .RetrieveTfnStats(criteria));
+
         }
 
         protected override void When()
@@ -961,6 +993,9 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller
             Container.GetMock<IPagingHelper>()
                 .Setup(x => x.ToPagedList(resultsWithStatus, It.IsAny<PagingInfo>())) 
                 .Returns(new PagedList<ApprenticeTFN>(paging, resultsWithStatus.Count(), false, resultsWithStatus));
+
+            Container.GetMock<ITFNStatsRetriever>().Setup(x => x.RetrieveTfnStats(criteria)).Returns(new TFNStatsRetriever(Container.GetMock<IRepository>().Object)
+                .RetrieveTfnStats(criteria));
 
         }
 
