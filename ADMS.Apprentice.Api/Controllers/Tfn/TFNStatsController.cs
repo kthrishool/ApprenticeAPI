@@ -50,28 +50,11 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         public ActionResult<PagedList<TFNStatsV1>> List(PagingInfo paging, TFNStatsCriteria criteria)
         {
             paging ??= new PagingInfo();
-            paging.SetDefaultSorting("ApprenticeId", true);
+            paging.SetDefaultSorting("CreatedOn", true);
 
             var tfnRecords = _tfnStatsRetriever.RetrieveTfnStats(criteria);
 
-            //// REMOVE this as it is not good for performance; Handle sorting on NumberOfDaysSinceTheMismatch
-            //if (!string.IsNullOrWhiteSpace(paging.SortBy) && paging.SortBy.Equals("NumberOfDaysSinceTheMismatch"))
-            //{
-            //    foreach (ApprenticeTFN apprenticeTFN in tfnRecords)
-            //    {
-            //        apprenticeTFN.NumberOfDaysSinceTheMismatch = 
-            //            apprenticeTFN.StatusCode == TFNStatus.NOCH 
-            //                ?
-            //                GetNumberOfDaysSinceTheMismatch(apprenticeTFN.StatusDate, systemDateTime)
-            //                :
-            //                null;
-            //    }
-
-            //    var list = paging.Descending ? tfnRecords.ToList().OrderByDescending(x => x.NumberOfDaysSinceTheMismatch) : tfnRecords.ToList().OrderBy(x => x.NumberOfDaysSinceTheMismatch);
-            //    tfnRecords = list.AsQueryable();
-            //    paging.SortBy = "";
-            //}
-
+            
             var systemDateTime = Context == null || Context.DateTimeContext == DateTime.MinValue
                 ? DateTime.Now
                 : Context.DateTimeContext;

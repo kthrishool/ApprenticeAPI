@@ -6,7 +6,7 @@ namespace ADMS.Apprentice.Core.Messages.TFN
        int ApprenticeId,
        string ApprenticeName,
         DateTime? DateOfBirth,
-        DateTime TfnSubmittedDateTime,
+        DateTime TfnStatusDateTime,
         DateTime? TfnCreatedDateTime,
         string TfnVerificationStatus,
         string NumberOfDaysSinceTheMismatch
