@@ -4,18 +4,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages.TFN;
-using ADMS.Apprentice.Core.Models;
 using ADMS.Apprentice.Core.Services;
 using Adms.Shared;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using ADMS.Apprentice.Api.Controllers.Tfn;
-using Adms.Shared.Database;
 using Adms.Shared.Paging;
 using Adms.Shared.Testing;
-using Microsoft.AspNetCore.Http;
 using Moq;
 
 namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Controller

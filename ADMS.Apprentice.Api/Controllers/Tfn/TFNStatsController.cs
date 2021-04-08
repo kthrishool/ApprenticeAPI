@@ -3,7 +3,6 @@ using ADMS.Apprentice.Core.Messages.TFN;
 using ADMS.Apprentice.Core.Services;
 using ADMS.Services.Infrastructure.WebApi;
 using ADMS.Services.Infrastructure.WebApi.Documentation;
-using Adms.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ADMS.Apprentice.Core.Entities;
