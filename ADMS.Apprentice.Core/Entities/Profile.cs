@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using ADMS.Services.Infrastructure.Model.Interface;
 using Adms.Shared;
 
@@ -25,6 +24,8 @@ namespace ADMS.Apprentice.Core.Entities
         public string LeftSchoolYearCode { get; set; }
         public string ProfileTypeCode { get; set; }
         public bool DeceasedFlag { get; set; }
+
+        public string CountryOfBirthCode { get; set; }
         public bool ActiveFlag { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }

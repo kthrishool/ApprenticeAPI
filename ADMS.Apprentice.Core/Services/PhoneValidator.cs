@@ -11,7 +11,8 @@ namespace ADMS.Apprentice.Core.Services
 
         public static bool ValidatePhone(ref string phoneNumber, ValidationExceptionType errorMessage)
         {
-            if (!Enum.IsDefined(typeof(ValidationExceptionType), errorMessage)) throw new InvalidEnumArgumentException(nameof(errorMessage), (int) errorMessage, typeof(ValidationExceptionType));
+            if (!Enum.IsDefined(typeof(ValidationExceptionType), errorMessage))
+                throw new InvalidEnumArgumentException(nameof(errorMessage), (int) errorMessage, typeof(ValidationExceptionType));
             phoneNumber = new string(phoneNumber.ToCharArray().Where(char.IsDigit).ToArray());
             if ((phoneNumber.Length == 11) && phoneNumber.Substring(0, 2) == "61")
                 phoneNumber = phoneNumber.Replace("61", "0");

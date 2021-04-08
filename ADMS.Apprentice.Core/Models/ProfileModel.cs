@@ -6,7 +6,7 @@ using ADMS.Apprentice.Core.Entities;
 namespace ADMS.Apprentice.Core.Models
 {
     /// <summary>
-    /// Generic apprentice model, containing all information 
+    /// Generic apprentice model, containing all information
     /// </summary>
     public record ProfileModel
     {
@@ -28,6 +28,7 @@ namespace ADMS.Apprentice.Core.Models
         public string ProfileTypeCode { get; }
         public bool DeceasedFlag { get; }
         public bool ActiveFlag { get; }
+        public string CountryOfBirthCode { get; }
         public List<string> Phones { get; set; }
 
         public ProfileAddressModel ResidentialAddress { get; set; }
@@ -58,6 +59,7 @@ namespace ADMS.Apprentice.Core.Models
             LeftSchoolYearCode = apprentice.LeftSchoolYearCode;
             ProfileTypeCode = apprentice?.ProfileTypeCode?.ToString();
             GenderCode = apprentice?.GenderCode;
+            CountryOfBirthCode = apprentice?.CountryOfBirthCode;
             DeceasedFlag = apprentice.DeceasedFlag;
             ActiveFlag = apprentice.ActiveFlag;
             CreatedOn = apprentice.CreatedOn;

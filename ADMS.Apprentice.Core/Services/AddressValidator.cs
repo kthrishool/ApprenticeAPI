@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
-using System.Linq;
+using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -72,7 +72,6 @@ namespace ADMS.Apprentice.Core.Services
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
             if (address.Locality?.Length > 40)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.SuburbExceedsMaxLength);
-
         }
 
         private async Task<Address> ValidateSingleLineAddressAsync(Address address)
@@ -84,11 +83,12 @@ namespace ADMS.Apprentice.Core.Services
             //no chance to have detail address to be null, but in case of reasons..
             if (detailAddress == null) throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
 
+            string Sanitise(string s) => s.IsNullOrEmpty() ? null : s;
             //populate geo location + postcode suburb details to profile address from detailsAddress component                                  
             address.SingleLineAddress = detailAddress.FormattedAddress;
-            address.StreetAddress1 = String.IsNullOrEmpty(detailAddress.StreetAddressLine1) ? null : detailAddress.StreetAddressLine1;
-            address.StreetAddress2 = string.IsNullOrEmpty(detailAddress.StreetAddressLine2) ? null : detailAddress.StreetAddressLine2;
-            address.StreetAddress3 = string.IsNullOrEmpty(detailAddress.StreetAddressLine2) ? null : detailAddress.StreetAddressLine3;
+            address.StreetAddress1 = Sanitise(detailAddress.StreetAddressLine1);
+            address.StreetAddress2 = Sanitise(detailAddress.StreetAddressLine2);
+            address.StreetAddress3 = Sanitise(detailAddress.StreetAddressLine2);
             address.Locality = detailAddress.Locality;
             address.StateCode = detailAddress.State;
             address.Postcode = detailAddress.Postcode;
@@ -110,7 +110,7 @@ namespace ADMS.Apprentice.Core.Services
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound); //no chance of hitting this, but in case..
 
             PartialAddressModel partialAddress = await referenceDataClient.GetAddressByFormattedLocality(formattedLocality);
-           
+
             if (partialAddress == null)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
 

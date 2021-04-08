@@ -62,5 +62,9 @@ namespace ADMS.Apprentice.Core.Messages
 
         [Display(Name = "InterpretorRequired")]
         public bool? InterpretorRequiredFlag { get; init; }
+
+        [Display(Name = "CountryOfBirthCode")]
+        [MaxLength(10, ErrorMessage = "Country of birth code Exceeds 10 Characters")]
+        public string CountryOfBirthCode { get; init; }
     }
 }

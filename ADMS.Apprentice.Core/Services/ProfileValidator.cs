@@ -15,12 +15,15 @@ namespace ADMS.Apprentice.Core.Services
     {
         private readonly IExceptionFactory exceptionFactory;
         private readonly IAddressValidator addressValidator;
+        private readonly IReferenceDataValidator referenceDataValidator;
 
         public ProfileValidator(IExceptionFactory exceptionFactory,
-            IAddressValidator addressValidator)
+            IAddressValidator addressValidator,
+            IReferenceDataValidator referenceDataValidator)
         {
             this.exceptionFactory = exceptionFactory;
             this.addressValidator = addressValidator;
+            this.referenceDataValidator = referenceDataValidator;
         }
 
         public async Task<Profile> ValidateAsync(Profile profile)
@@ -66,6 +69,9 @@ namespace ADMS.Apprentice.Core.Services
                 profile.Addresses = await addressValidator.ValidateAsync(profile.Addresses.ToList());
             }
 
+            // Codes validation
+            // Country of Birth
+            referenceDataValidator.ValidateAsync(profile);
             return profile;
         }
 

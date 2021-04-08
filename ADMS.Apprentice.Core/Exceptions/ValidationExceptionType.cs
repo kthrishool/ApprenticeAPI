@@ -55,8 +55,11 @@ namespace ADMS.Apprentice.Core.Exceptions
         [ExceptionDetails("AP-VAL-0016", "Unexpected error while processing your request")]
         ServerError,
 
-        [ExceptionDetails("AP-VAL-0017", "Postcode selected is Invalid for the state selected")]
-        PostCodeMismatch,
+        [ExceptionDetails("AP-VAL-0017", "Invalid Country code")]
+        InvalidCountryCode,
+
+        [ExceptionDetails("AP-VAL-0018", "Postcode selected is Invalid for the state selected")]
+        PostCodeMismatch
 
     }
 }

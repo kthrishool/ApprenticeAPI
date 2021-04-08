@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Refit;
 
 namespace ADMS.Apprentice.Core.HttpClients.ReferenceDataApi
@@ -22,10 +23,13 @@ namespace ADMS.Apprentice.Core.HttpClients.ReferenceDataApi
         public Task<DetailAddressModel> GetDetailAddressByFormattedAddress(string formattedAddress, string boundarySpecification = null, string formatSpecifier = null, string context = null, string locality = null, string postCode = null, string state = null);
 
 
-
         //[Get("/RelatedCodes/GetRelatedCodes?RelatedCodeType={RelatedCodeType}&SearchCode={SearchCode}&DominantSearch={DominantSearch}&CurrentCodesOnly={CurrentCodesOnly}&ExactLookup={ExactLookup}&MaxRows={MaxRows}&RowPosition={RowPosition}&CurrentDate={CurrentDate}&EndDateInclusive={EndDateInclusive}")]
         //[Headers("Authorization: Bearer")]
         //public Task<RelatedCodeModel[]> GetRelatedCodes(string RelatedCodeType, string SearchCode = "", bool DominantSearch = true, bool CurrentCodesOnly = true, bool ExactLookup = false, int MaxRows = 0, int RowPosition = 0, string CurrentDate = "", bool? EndDateInclusive = null);
+
+        [Get("/ListCodes?CodeType={CodeType}&StartingCode={StartingCode}&CurrentCodesOnly={CurrentCodesOnly}&ExactLookup={ExactLookup}&MaxRows={MaxRows}&CurrentDate={CurrentDate}&EndDateInclusive={EndDateInclusive}")]
+        [Headers("Authorization: Bearer")]
+        public Task<IList<ListCodeResponseV1>> GetListCodes(string CodeType, string StartingCode = "", bool CurrentCodesOnly = true, bool ExactLookup = false, int MaxRows = 0, string CurrentDate = "", bool? EndDateInclusive = null);
 
         [Get("/RelatedCodes/PostcodeLocality?PostCode={PostCode}")] //PostcodeLocality
         [Headers("Authorization: Bearer")]

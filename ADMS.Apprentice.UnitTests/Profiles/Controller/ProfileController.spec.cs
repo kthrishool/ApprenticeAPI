@@ -36,13 +36,14 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private ProfileMessage CreateNewProfileMessage(string surName,
             String firstName,
             DateTime dob,
-            String email = null,            
+            String email = null,
             string profileType = null,
             string[] phoneNumbers = null,
             string indigenousStatusCode = null,
             string selfAssessedDisabilityCode = null,
-            string citizenshipCode = null,                
-            string gender = null)
+            string citizenshipCode = null,
+            string gender = null,
+            string countryofBirth = null)
         {
             return new ProfileMessage
             {
@@ -52,12 +53,14 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 EmailAddress = email,
                 ProfileType = profileType,
                 PhoneNumbers = phoneNumbers?.ToList(),
-                IndigenousStatusCode = indigenousStatusCode,               
+                IndigenousStatusCode = indigenousStatusCode,
                 SelfAssessedDisabilityCode = selfAssessedDisabilityCode,
                 CitizenshipCode = citizenshipCode,
                 GenderCode = gender,
+                CountryOfBirthCode = countryofBirth
             };
         }
+
         private ProfileMessage GetValidMessage()
         {
             return new ProfileMessage
@@ -70,13 +73,13 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PhoneNumbers = ProfileConstants.PhoneNumbers.ToList(),
                 ResidentialAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = "14 Mort Street, Braddon,ACT -2601"},
                 PostalAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = "14 Mort Street, Braddon,ACT -2601"},
-                GenderCode = "M"
+                GenderCode = "M",
+                CountryOfBirthCode = "AUS"
             };
         }
 
         protected override void Given()
         {
-            // message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, ProfileConstants.Birthdate, ProfileConstants.Emailaddress, ProfileConstants.Profiletype);
             message = new ProfileMessage
             {
                 Surname = ProfileConstants.Surname,
@@ -390,6 +393,18 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 } // For ResidentialAddress 
                 addressflag = false;
             }
+        }
+
+        #endregion
+
+        #region CountryofBirth
+
+        [TestMethod]
+        public void DoNothingWhenCountryOfBirthIsValid()
+        {
+            message = message = CreateNewProfileMessage("Bob", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
         }
 
         #endregion

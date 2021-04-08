@@ -28,6 +28,7 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static ProfileAddressMessage ResidentialAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = null};
         public static readonly ProfileAddressMessage PostalAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = null};
         public static string GenderCode = "M";
+        public static string CountryOfBirthCode = "1101";
 
         public static string RandomString(int length)
         {
