@@ -22,16 +22,13 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
     public class TFNStatsController : AdmsController
     {
         private readonly IPagingHelper _pagingHelper;
-        private readonly IRepository repository;
         private readonly ITFNStatsRetriever _tfnStatsRetriever;
 
         public TFNStatsController(
             IHttpContextAccessor contextAccessor,
-            IRepository repository,
             IPagingHelper pagingHelper,
             ITFNStatsRetriever tfnStatsRetriever) : base(contextAccessor)
         {
-            this.repository = repository;
             _pagingHelper = pagingHelper;
             _tfnStatsRetriever = tfnStatsRetriever;
         }
@@ -70,12 +67,12 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         }
 
         
-        private int GetNumberOfDaysSinceTheMismatch(DateTime tfnStatusDate, DateTime systemDateTime)
+        private static int GetNumberOfDaysSinceTheMismatch(DateTime tfnStatusDate, DateTime systemDateTime)
         {
             return systemDateTime.Subtract(tfnStatusDate).Days > 0 ? systemDateTime.Subtract(tfnStatusDate).Days : 0;
         }
 
-        private string GetNumberOfDaysSinceTheMismatchAsString(DateTime tfnStatusDate, DateTime systemDateTime)
+        private static string GetNumberOfDaysSinceTheMismatchAsString(DateTime tfnStatusDate, DateTime systemDateTime)
         {
             var number = GetNumberOfDaysSinceTheMismatch(tfnStatusDate, systemDateTime);
             return number > 0 ? number.ToString() : "<1";
