@@ -1,37 +1,38 @@
-﻿using System;
+﻿//using System;
 
-namespace ADMS.Apprentice.Core.Models
-{
-    public class ReferenceDataModel
-    {
-        /// <summary>
-        /// Adw code
-        /// </summary>
+//namespace ADMS.Apprentice.Core.Models
+//{
+//    public class ReferenceDataModel
+//    {
+//        /// <summary>
+//        /// Adw code
+//        /// </summary>
 
-        public string Code { get; set; }
+//        public string Code { get; set; }
 
-        /// <summary>
-        /// Long description
-        /// </summary>
+//        /// <summary>
+//        /// Long description
+//        /// </summary>
 
-        public string Description { get; set; }
+//        public string Description { get; set; }
 
-        /// <summary>
-        /// Short description
-        /// </summary>
+//        /// <summary>
+//        /// Short description
+//        /// </summary>
 
-        public string ShortDescription { get; set; }
+//        public string ShortDescription { get; set; }
 
-        /// <summary>
-        /// Currency Start date time
-        /// </summary>
+//        /// <summary>
+//        /// Currency Start date time
+//        /// </summary>
 
-        public DateTime? StartDate { get; set; }
+//        public DateTime? StartDate { get; set; }
 
-        /// <summary>
-        /// Currency end date time
-        /// </summary>
+//        /// <summary>
+//        /// Currency end date time
+//        /// </summary>
 
-        public DateTime? EndDate { get; set; }
-    }
-}
+//        public DateTime? EndDate { get; set; }
+//    }
+//}
+

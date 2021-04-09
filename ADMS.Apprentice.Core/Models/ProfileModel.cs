@@ -57,7 +57,7 @@ namespace ADMS.Apprentice.Core.Models
             EducationLevelCode = apprentice.EducationLevelCode;
             LeftSchoolMonthCode = apprentice.LeftSchoolMonthCode;
             LeftSchoolYearCode = apprentice.LeftSchoolYearCode;
-            ProfileTypeCode = apprentice?.ProfileTypeCode?.ToString();
+            ProfileTypeCode = apprentice?.ProfileTypeCode;
             GenderCode = apprentice?.GenderCode;
             CountryOfBirthCode = apprentice?.CountryOfBirthCode;
             DeceasedFlag = apprentice.DeceasedFlag;
@@ -67,7 +67,7 @@ namespace ADMS.Apprentice.Core.Models
             UpdatedOn = apprentice.UpdatedOn;
             UpdatedBy = apprentice.UpdatedBy;
             Version = apprentice.Version;
-            if (apprentice?.Phones?.Count() > 0)
+            if (apprentice?.Phones?.Count > 0)
                 Phones = apprentice.Phones.Select(c => c.PhoneNumber).ToList();
             if (apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
                 ResidentialAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).Select(c => new ProfileAddressModel

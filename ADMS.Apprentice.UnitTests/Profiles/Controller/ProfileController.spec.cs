@@ -43,7 +43,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             string selfAssessedDisabilityCode = null,
             string citizenshipCode = null,
             string gender = null,
-            string countryofBirth = null)
+            string countryofBirth = null,
+            string Language = null)
         {
             return new ProfileMessage
             {
@@ -57,7 +58,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 SelfAssessedDisabilityCode = selfAssessedDisabilityCode,
                 CitizenshipCode = citizenshipCode,
                 GenderCode = gender,
-                CountryOfBirthCode = countryofBirth
+                CountryOfBirthCode = countryofBirth,
             };
         }
 

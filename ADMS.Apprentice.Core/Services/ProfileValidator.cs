@@ -71,7 +71,7 @@ namespace ADMS.Apprentice.Core.Services
 
             // Codes validation
             // Country of Birth
-            referenceDataValidator.ValidateAsync(profile);
+            await referenceDataValidator.ValidateAsync(profile);
             return profile;
         }
 

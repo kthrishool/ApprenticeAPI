@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 
 namespace ADMS.Apprentice.UnitTests.Constants
@@ -8,9 +9,11 @@ namespace ADMS.Apprentice.UnitTests.Constants
     public static class ProfileConstants
     {
         private static Random random = new Random();
+        public static int Id = 1234;
         public static string Firstname = "Alex";
         public static string Secondname = "Charlie";
         public static string Surname = "Bob";
+        public static string PreferredName = "Bob";
         public static DateTime Birthdate = DateTime.Now.AddYears(-25);
         public static string Emailaddress = "test@test.com";
         public static string Emailaddressmax256 = RandomString(247) + "@test.com";
@@ -29,6 +32,14 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static readonly ProfileAddressMessage PostalAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = null};
         public static string GenderCode = "M";
         public static string CountryOfBirthCode = "1101";
+        public static string EducationLevelCode = "DONTKNOW";
+        public static string LeftSchoolMonthCode = "10";
+        public static string LeftSchoolYearCode = "10JAN2020";
+        public static bool DeceasedFlag = false;
+        public static ProfileType ProfileTypeCode = ProfileType.APPR;
+
+        public static bool ActiveFlag = true;
+        // public static byte[] Version = Convert.ToBase64String("1.1") ;
 
         public static string RandomString(int length)
         {

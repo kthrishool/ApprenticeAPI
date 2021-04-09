@@ -14,6 +14,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
     {
         private ProfileListModel model;
         private Profile profile;
+        private Address address;
 
         protected override void Given()
         {
@@ -26,8 +27,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
                 ProfileTypeCode = ProfileConstants.Profiletype,
+                PreferredName = ProfileConstants.PreferredName,
                 GenderCode = ProfileConstants.GenderCode,
                 InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
+                //Addresses = new List<Address>().Add(ProfileConstants.ResidentialAddress)
                 CreatedOn = ProfileConstants.Createdon,
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,
@@ -58,10 +61,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.OtherNames.Should().Be(ProfileConstants.Secondname);
             model.BirthDate.Should().BeCloseTo(ProfileConstants.Birthdate);
             model.EmailAddress.Should().Be(ProfileConstants.Emailaddress);
+            model.PreferredName.Should().Be(ProfileConstants.PreferredName);
+            model.ProfileTypeCode.Should().Be(ProfileType.APPR.ToString());
             model.CreatedOn.Should().BeCloseTo(ProfileConstants.Createdon);
             model.UpdatedOn.Should().BeCloseTo(ProfileConstants.Updatedon);
             model.CreatedBy.Should().Be(ProfileConstants.Createdby);
-            model.UpdatedBy.Should().Be(ProfileConstants.Updatedby);            
+            model.UpdatedBy.Should().Be(ProfileConstants.Updatedby);
         }
     }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using ADMS.Apprentice.Core.Entities;
 
 namespace ADMS.Apprentice.Core.Models
@@ -11,7 +9,7 @@ namespace ADMS.Apprentice.Core.Models
         public string Surname { get; }
         public string FirstName { get; }
         public string OtherNames { get; }
-        public string PreferredName { get; }        
+        public string PreferredName { get; }
         public DateTime BirthDate { get; }
         public string EmailAddress { get; }
         public string ProfileTypeCode { get; }
@@ -29,13 +27,13 @@ namespace ADMS.Apprentice.Core.Models
             OtherNames = apprentice.OtherNames;
             PreferredName = apprentice.PreferredName;
             BirthDate = apprentice.BirthDate;
-            EmailAddress = apprentice.EmailAddress;           
-            ProfileTypeCode = apprentice?.ProfileTypeCode?.ToString();
-            
+            EmailAddress = apprentice.EmailAddress;
+            ProfileTypeCode = apprentice?.ProfileTypeCode;
+
             CreatedOn = apprentice.CreatedOn;
             CreatedBy = apprentice.CreatedBy;
             UpdatedOn = apprentice.UpdatedOn;
-            UpdatedBy = apprentice.UpdatedBy;           
+            UpdatedBy = apprentice.UpdatedBy;
         }
     }
 }

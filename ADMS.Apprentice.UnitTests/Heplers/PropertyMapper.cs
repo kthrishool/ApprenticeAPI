@@ -12,14 +12,8 @@ namespace ADMS.Apprentice.UnitTests.Heplers
     {
         private static void SetNullForManditoryFiled<T>(ProfileMessage result, Dictionary<string, Tuple<int, string, bool>> fieldDefinition, IPropertyValidator Validator) //where T : ProfileMessage, new()
         {
-            // ProfileMessage result = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
             PropertyInfo[] tProps = typeof(ProfileMessage).GetProperties();
-            //Tuple<int, string, Boolean> length , variable type and is mandatory 
-            //Dictionary<string, Tuple<int, string, bool>> fieldDefinition = new Dictionary<string, Tuple<int, string, bool>>
-            //{
-            //    {"Surname", Tuple.Create(50, ValidationDataTypes.STRING_TYPE, true)},
-            //    {"FirstName", Tuple.Create(50, ValidationDataTypes.STRING_TYPE, true)}
-            //};
+
             foreach (PropertyInfo prop in tProps)
             {
                 var propstringvalue = prop.GetValue(result);
