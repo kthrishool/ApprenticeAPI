@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ADMS.Apprentice.UnitTests.Heplers
+namespace ADMS.Apprentice.UnitTests.Helpers
 {
     public interface IPropertyValidator
     {

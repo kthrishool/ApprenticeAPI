@@ -35,6 +35,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 CitizenshipCode = ProfileConstants.CitizenshipCode,
                 GenderCode = ProfileConstants.GenderCode,
                 InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
+                LanguageCode = ProfileConstants.LanguageCode,
+                CountryOfBirthCode = "1101"
             };
         }
 
@@ -171,6 +173,16 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             profile.CountryOfBirthCode.Should().Contain(ProfileConstants.CountryOfBirthCode);
         }
+
+        #region Language
+
+        [TestMethod]
+        public void ShouldSetLanguageCode()
+        {
+            profile.LanguageCode.Should().Contain(ProfileConstants.LanguageCode);
+        }
+
+        #endregion
     }
 
     #endregion

@@ -82,8 +82,9 @@ namespace ADMS.Apprentice.Core.Services
                 return true;
             if (!(new EmailAddressAttribute().IsValid(emailAddress)))
                 return false;
-            if (emailAddress != null && emailAddress.IndexOf('@') < 0)
-                return false;
+            // we dont need this validation as it been validated above             
+            //if (emailAddress != null && emailAddress.IndexOf('@') < 0)
+            //    return false;
 
             // check domain name in Email
             if (emailAddress != null)

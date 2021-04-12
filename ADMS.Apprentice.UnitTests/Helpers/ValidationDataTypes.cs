@@ -1,4 +1,4 @@
-﻿namespace ADMS.Apprentice.UnitTests.Heplers
+﻿namespace ADMS.Apprentice.UnitTests.Helpers
 {
     public static class ValidationDataTypes
     {

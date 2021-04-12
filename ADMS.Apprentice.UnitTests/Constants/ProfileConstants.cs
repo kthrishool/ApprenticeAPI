@@ -32,11 +32,13 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static readonly ProfileAddressMessage PostalAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = null};
         public static string GenderCode = "M";
         public static string CountryOfBirthCode = "1101";
+        public static string LanguageCode = "1200";
         public static string EducationLevelCode = "DONTKNOW";
         public static string LeftSchoolMonthCode = "10";
         public static string LeftSchoolYearCode = "10JAN2020";
         public static bool DeceasedFlag = false;
         public static ProfileType ProfileTypeCode = ProfileType.APPR;
+
 
         public static bool ActiveFlag = true;
         // public static byte[] Version = Convert.ToBase64String("1.1") ;

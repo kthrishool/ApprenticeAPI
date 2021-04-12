@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
@@ -14,6 +15,8 @@ namespace ADMS.Apprentice.Core.Services
         private readonly IRepository repository;
         private readonly IExceptionFactory exceptionFactory;
         private readonly IReferenceDataClient referenceDataClient;
+        private const string countrycode = "CNTY";
+        private const string languageCode = "LANG";
 
         public ReferenceDataValidator(
             IRepository repository,
@@ -39,18 +42,29 @@ namespace ADMS.Apprentice.Core.Services
             }
         }
 
-        public async Task<Profile> ValidateAsync(Profile profile)
+        private async
+            Task
+            ValidateCode(String CodeName, string codevalue, ValidationExceptionType exception)
+        {
+            IList<ListCodeResponseV1> countryCode = await referenceDataClient.GetListCodes(CodeName, codevalue, true, true);
+            if (!countryCode.Any())
+            {
+                throw exceptionFactory.CreateValidationException(exception);
+            }
+        }
+
+        public async Task ValidateAsync(Profile profile)
         {
             if (!string.IsNullOrEmpty(profile?.CountryOfBirthCode))
             {
-                IList<ListCodeResponseV1> countryCode = await referenceDataClient.GetListCodes("CNTY", profile.CountryOfBirthCode, true, true);
-                if (!countryCode.Any())
-                {
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidCountryCode);
-                }
+                await ValidateCode(countrycode, profile.CountryOfBirthCode, ValidationExceptionType.InvalidCountryCode);
             }
-            //getCountryOfBirthTables(profile);
-            return profile;
+            if (!string.IsNullOrEmpty(profile?.LanguageCode))
+            {
+                await ValidateCode(languageCode, profile.LanguageCode, ValidationExceptionType.InvalidLanguageCode);
+            }
+
+            //  return profile;
         }
     }
 }

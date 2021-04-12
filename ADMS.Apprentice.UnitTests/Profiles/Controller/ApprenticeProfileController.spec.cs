@@ -10,7 +10,7 @@ using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Models;
 using ADMS.Apprentice.Core.Services;
 using ADMS.Apprentice.UnitTests.Constants;
-using ADMS.Apprentice.UnitTests.Heplers;
+using ADMS.Apprentice.UnitTests.Helpers;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +21,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
     #region WhenCreatingAProfile
 
     [TestClass]
-    public class WhenCreatingAProfileUsingApi : GivenWhenThen<ApprenticeProfileController>, IPropertyValidator
+    public class WhenCreatingAApprenticeProfileUsingApi : GivenWhenThen<ApprenticeProfileController>, IPropertyValidator
     {
         private Profile profile;
         private ActionResult<ProfileModel> profileResult;
@@ -59,6 +59,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 CitizenshipCode = citizenshipCode,
                 GenderCode = gender,
                 CountryOfBirthCode = countryofBirth,
+                LanguageCode = Language
             };
         }
 
@@ -75,7 +76,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 ResidentialAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = "14 Mort Street, Braddon,ACT -2601"},
                 PostalAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = "14 Mort Street, Braddon,ACT -2601"},
                 GenderCode = "M",
-                CountryOfBirthCode = "AUS"
+                CountryOfBirthCode = "AUS",
+                LanguageCode = "1200"
             };
         }
 
@@ -106,7 +108,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 {"FirstName", Tuple.Create(50, ValidationDataTypes.STRING_TYPE, true)},
                 {"PhoneNumbers", Tuple.Create(0, ValidationDataTypes.OBJECT_TYPE, false)},
                 {"ResidentialAddress", Tuple.Create(0, ValidationDataTypes.OBJECT_TYPE, false)},
-                {"PostalAddress", Tuple.Create(0, ValidationDataTypes.OBJECT_TYPE, false)}
+                {"PostalAddress", Tuple.Create(0, ValidationDataTypes.OBJECT_TYPE, false)},
+                {"LanguageCode", Tuple.Create(10, ValidationDataTypes.STRING_TYPE, false)},
             };
             addressFieldDefinition = new Dictionary<string, Tuple<int, string, bool>>
             {
@@ -404,6 +407,21 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void DoNothingWhenCountryOfBirthIsValid()
         {
             message = message = CreateNewProfileMessage("Bob", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        #endregion
+
+        #region Language
+
+        [TestMethod]
+        public void DoNothingWhenLanguageIsValid()
+        {
+            message = message = CreateNewProfileMessage("Bob", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null,
+                ProfileConstants.Profiletype,
+                null, null, null,
+                null, "X", null, "111");
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(0);
         }

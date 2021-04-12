@@ -6,10 +6,16 @@ using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.UnitTests.Constants;
 using FluentAssertions;
 
-namespace ADMS.Apprentice.UnitTests.Heplers
+namespace ADMS.Apprentice.UnitTests.Helpers
 {
     public static class PropertyMapper
     {
+        /// <summary>
+        /// Get Related Codes.
+        /// </summary>
+        /// <param name="result">Object that will be used</param>
+        /// <param name="fieldDefinition">Field Name , field length,field Type,isNullable</param>
+        /// <returns></returns>
         private static void SetNullForManditoryFiled<T>(ProfileMessage result, Dictionary<string, Tuple<int, string, bool>> fieldDefinition, IPropertyValidator Validator) //where T : ProfileMessage, new()
         {
             PropertyInfo[] tProps = typeof(ProfileMessage).GetProperties();

@@ -59,7 +59,9 @@ namespace ADMS.Apprentice.Core.Exceptions
         InvalidCountryCode,
 
         [ExceptionDetails("AP-VAL-0018", "Postcode selected is Invalid for the state selected")]
-        PostCodeMismatch
+        PostCodeMismatch,
 
+        [ExceptionDetails("AP-VAL-0019", "Invalid Language code")]
+        InvalidLanguageCode
     }
 }

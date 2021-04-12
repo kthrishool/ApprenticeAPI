@@ -13,9 +13,9 @@ namespace ADMS.Apprentice.Database.Mappings
             entity.Property(e => e.Id)
                 .HasColumnName("ApprenticeId")
                 .IsRequired()
-                .ValueGeneratedOnAdd();           
+                .ValueGeneratedOnAdd();
             entity.Property(e => e.Surname)
-                .HasColumnName("Surname")   
+                .HasColumnName("Surname")
                 .HasMaxLength(50)
                 .IsRequired();
             entity.Property(e => e.FirstName)
@@ -27,7 +27,7 @@ namespace ADMS.Apprentice.Database.Mappings
                 .HasMaxLength(50);
             entity.Property(e => e.PreferredName)
                 .HasColumnName("PreferredName")
-                .HasMaxLength(50);                    
+                .HasMaxLength(50);
             entity.Property(e => e.BirthDate)
                 .HasColumnName("BirthDate")
                 .HasColumnType("date")
@@ -35,12 +35,12 @@ namespace ADMS.Apprentice.Database.Mappings
             entity.Property(e => e.GenderCode)
                 .HasColumnName("GenderCode");
             entity.Property(e => e.EmailAddress)
-                .HasColumnName("EmailAddress")                
+                .HasColumnName("EmailAddress")
                 .HasMaxLength(320);
             entity.Property(e => e.SelfAssessedDisabilityCode)
                 .HasColumnName("SelfAssessedDisabilityCode");
             entity.Property(e => e.IndigenousStatusCode)
-                .HasColumnName("IndigenousStatusCode");           
+                .HasColumnName("IndigenousStatusCode");
             entity.Property(e => e.CitizenshipCode)
                 .HasColumnName("CitizenshipCode");
             entity.Property(e => e.EducationLevelCode)
@@ -50,18 +50,21 @@ namespace ADMS.Apprentice.Database.Mappings
             entity.Property(e => e.LeftSchoolYearCode)
                 .HasColumnName("LeftSchoolYearCode");
             entity.Property(e => e.ProfileTypeCode)
-                .HasColumnName("ProfileTypeCode");            
+                .HasColumnName("ProfileTypeCode");
+            entity.Property(e => e.LanguageCode)
+                .HasColumnName("LanguageCode");
+            entity.Property(e => e.CountryOfBirthCode)
+                .HasColumnName("CountryOfBirthCode");
             entity.Property(e => e.ActiveFlag)
-                .HasColumnName("ActiveFlag");            
+                .HasColumnName("ActiveFlag");
             entity.Property(e => e.DeceasedFlag)
-                .HasColumnName("DeceasedFlag");           
+                .HasColumnName("DeceasedFlag");
             entity.Property(x => x.Version)
                 .HasColumnName("Version")
                 .IsRequired()
                 .IsRowVersion();
             entity.Property(e => e.AuditEventId)
                 .HasColumnName("_AuditEventId");
-
         }
     }
 }

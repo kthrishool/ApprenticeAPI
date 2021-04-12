@@ -92,7 +92,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             validProfile.EmailAddress = EmailAddress;
 
-           // ExecuteTest(validProfile);
+            // ExecuteTest(validProfile);
             ClassUnderTest
                 .Invoking(async c => await c.ValidateAsync(validProfile))
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
@@ -142,7 +142,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ThrowsValidationExceptionIfProfileTypeIsInvalid()
         {
             ChangeException(ValidationExceptionType.InvalidApprenticeprofileType);
-         
 
 
             invalidProfile = new Profile
@@ -155,7 +154,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             };
 
             ExecuteTest(invalidProfile);
- 
         }
 
 
@@ -194,11 +192,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             var number = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = phones};
 
             ChangeException(ValidationExceptionType.InvalidPhoneNumber);
-         
+
 
             validProfile.Phones.Add(number);
             ExecuteTest(validProfile);
-        
         }
 
         private void PhoneContainerPositive(string phones, Boolean needsConversion)
@@ -236,32 +233,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             PhoneContainerPositive("1300 777 777", true);
             PhoneContainerPositive("0212457896", false);
         }
-
-        #endregion
-
-        #region Gender
-
-        /// check if the ProfileType Is invalid
-        /// </summary>
-        //[TestMethod]
-        //public void ThrowsValidationExceptionIfGenderCodeIsInvalid()
-        //{
-        //    ChangeException(ValidationExceptionType.InvalidApprenticeAge);
-
-
-        //    invalidProfile = new Profile
-        //    {
-        //        Surname = ProfileConstants.Surname,
-        //        FirstName = ProfileConstants.Firstname,
-        //        BirthDate = DateTime.Now.AddYears(-16),
-        //        EmailAddress = ProfileConstants.RandomString(64) + "@" + ProfileConstants.RandomString(26) + "." + ProfileConstants.RandomString(50),
-        //        ProfileTypeCode = "APPR",
-        //        GenderCode = "AA"
-        //    };
-
-        //    ExecuteTest(invalidProfile);
- 
-        //}
 
         #endregion
     }

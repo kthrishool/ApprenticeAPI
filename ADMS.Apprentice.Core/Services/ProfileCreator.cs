@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using Adms.Shared;
+using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -21,29 +22,32 @@ namespace ADMS.Apprentice.Core.Services
 
         public async Task<Profile> CreateAsync(ProfileMessage message)
         {
+            string Sanitise(string s) => s.IsNullOrEmpty() ? null : s;
+            string SanitiseUpper(string s) => s.IsNullOrEmpty() ? null : s.ToUpper();
             var profile = new Profile
             {
                 Surname = message.Surname,
                 FirstName = message.FirstName,
-                OtherNames = string.IsNullOrEmpty(message.OtherNames) ? null : message.OtherNames,
-                PreferredName = string.IsNullOrEmpty(message.PreferredName) ? null : message.PreferredName,
+                OtherNames = Sanitise(message.OtherNames),
+                PreferredName = Sanitise(message.PreferredName),
                 BirthDate = message.BirthDate,
-                EmailAddress = string.IsNullOrEmpty(message.EmailAddress) ? null : message.EmailAddress,
-                IndigenousStatusCode = string.IsNullOrEmpty(message.IndigenousStatusCode) ? null : message.IndigenousStatusCode,
-                SelfAssessedDisabilityCode = string.IsNullOrEmpty(message.SelfAssessedDisabilityCode) ? null : message.SelfAssessedDisabilityCode.ToUpper(),
+                EmailAddress = Sanitise(message.EmailAddress),
+                IndigenousStatusCode = Sanitise(message.IndigenousStatusCode),
+                SelfAssessedDisabilityCode = SanitiseUpper(message.SelfAssessedDisabilityCode),
                 InterpretorRequiredFlag = message.InterpretorRequiredFlag,
-                CitizenshipCode = string.IsNullOrEmpty(message.CitizenshipCode) ? null : message.CitizenshipCode.ToUpper(),
+                CitizenshipCode = SanitiseUpper(message.CitizenshipCode),
                 ProfileTypeCode =
                     Enum.IsDefined(typeof(ProfileType), message?.ProfileType) ? message.ProfileType : null,
                 Phones = message?.PhoneNumbers?.Select(c => new Phone()
                     {PhoneNumber = c, PhoneTypeCode = PhoneType.LandLine.ToString()}).ToList(),
-                CountryOfBirthCode = string.IsNullOrEmpty(message.CountryOfBirthCode) ? null : message.CountryOfBirthCode.ToUpper(),
+                CountryOfBirthCode = SanitiseUpper(message.CountryOfBirthCode),
+                LanguageCode = SanitiseUpper((message.LanguageCode))
             };
             if (message?.GenderCode != null)
             {
                 profile.GenderCode = Enum.IsDefined(typeof(GenderType), message?.GenderCode.ToUpper()) ? message.GenderCode.ToUpper() : null;
             }
-            //List<CodeLocalityPostcodesState> postcodeValidations = new List<CodeLocalityPostcodesState>();
+
             if (message.ResidentialAddress != null)
             {
                 profile.Addresses.Add(new Address()

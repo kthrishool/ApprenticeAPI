@@ -42,42 +42,82 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             //    .Returns(validationException);
         }
 
+        private void MockReferenceData(string MethodName, IList<ListCodeResponseV1> returnvalue, ValidationExceptionType exception)
+        {
+            switch (MethodName)
+            {
+                case "GetListCodes":
+                    Container
+                        .GetMock<IReferenceDataClient>()
+                        .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                        .ReturnsAsync(returnvalue);
+
+                    Container
+                        .GetMock<IExceptionFactory>()
+                        .Setup(r => r.CreateValidationException(exception))
+                        .Returns(validationException);
+                    break;
+            }
+        }
+
         [TestMethod]
         public async Task DoesNothingIfCountryofBirthIsValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-            Container
-                .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidCountryCode);
+
 
             newProfile = new Profile();
             newProfile.CountryOfBirthCode = "1101";
             await ClassUnderTest.ValidateAsync(newProfile);
         }
 
+
         [TestMethod]
         public void ThrowsValidationExceptionIfCountryofBirthIsInValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidCountryCode);
 
-            Container
-                .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidCountryCode))
-                .Returns(validationException);
 
             newProfile = new Profile();
             newProfile.CountryOfBirthCode = "dasdas";
-            //ClassUnderTest.ValidateAsync(newProfile)
+
 
             ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
+        }
+
+        //[TestMethod]
+        //public void ThrowsValidationExceptionIfLanguageisInValid()
+        //{
+        //    IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+        //    MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidLanguageCode);
+
+
+        //    newProfile = new Profile();
+        //    newProfile.LanguageCode = "dasdas";
+
+
+        //    ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
+        //        .Should().Throw<ValidationException>().Where(e => e == validationException);
+        //}
+
+
+        [TestMethod]
+        public async Task DoesNothingIfLanguageIsValid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1200", Description = "test",});
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidCountryCode);
+
+
+            newProfile = new Profile();
+            newProfile.CountryOfBirthCode = "1200";
+            await ClassUnderTest.ValidateAsync(newProfile);
         }
     }
 

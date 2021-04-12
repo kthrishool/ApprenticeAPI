@@ -146,36 +146,5 @@ namespace ADMS.Apprentice.Core.Services
 
             return address;
         }
-
-
-        //private async Task<Address> CheckAddressFromReferenceAsync(Address message)
-        //{
-        //    PostcodeLocality[] autocompleteAddress = new PostcodeLocality[10];
-        //    try
-        //    {
-        //        //AutocompleteAddressModel[] autocompleteAddress1 = await referenceDataClient.AutocompleteAddress(message.SingleLineAddress);
-        //        autocompleteAddress = await referenceDataClient.GetRelatedCodesByPostCode(message.Postcode.Trim());
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-
-        //    // change the code to use reference data
-
-        //    // first check if the postcode is valid
-        //    if (autocompleteAddress.Length > 0)
-        //    {
-        //        if (autocompleteAddress.Count(c => c.ShortDescription.ToLower() == message.Locality.Trim().ToLower() || c.LongDescription.ToLower() == message.Locality.Trim().ToLower()) <= 0)
-        //            throw exceptionFactory.CreateValidationException(ValidationExceptionType.PostCodeLocalityMismatch);
-        //        else if (autocompleteAddress.Count(c => c.ShortDescription.ToLower() == message.Locality.Trim().ToLower() || c.LongDescription.ToLower() == message.Locality.Trim().ToLower()) == 1)
-        //            message.StateCode = autocompleteAddress.SingleOrDefault(c => c.ShortDescription.ToLower() == message.Locality.Trim().ToLower() || c.LongDescription.ToLower() == message.Locality.Trim().ToLower())?.StateCode;
-        //        else
-        //            throw exceptionFactory.CreateValidationException(ValidationExceptionType.PostCodeStateCodeMismatch);
-        //    }
-        //    else
-        //        throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPostcode); //    Address will not be null as its only internally called.
-        //    //return new Address();
-        //}
     }
 }
