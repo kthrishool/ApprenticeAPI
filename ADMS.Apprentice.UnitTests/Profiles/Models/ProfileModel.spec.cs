@@ -73,7 +73,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,
                 UpdatedBy = ProfileConstants.Updatedby,
-                Phones = ProfileConstants.PhoneNumbers.Select(c => new Phone() {PhoneNumber = c}).ToList()
+                Phones = ProfileConstants.PhoneNumbers.Select(c => new Phone() {PhoneNumber = c}).ToList(),
+                LanguageCode = ProfileConstants.LanguageCode,
+                PreferredContactType = ProfileConstants.PreferredContactType.ToString()
             };
         }
 
@@ -115,6 +117,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.Phones[0].Should().Be(ProfileConstants.PhoneNumbers[0]);
             model.PreferredName.Should().Be(ProfileConstants.PreferredName);
             model.SelfAssessedDisabilityCode.Should().Be(ProfileConstants.SelfAssessedDisabilityCode);
+            model.LanguageCode.Should().Be(ProfileConstants.LanguageCode);
+            model.PreferredContactCode.Should().Be(ProfileConstants.PreferredContactType.ToString());
             model.HighestSchoolLevelCode.Should().Be(ProfileConstants.HighestSchoolLevelCode);
             model.LeftSchoolMonthCode.Should().Be(ProfileConstants.LeftSchoolMonthCode);
             model.LeftSchoolYearCode.Should().Be(ProfileConstants.LeftSchoolYearCode);

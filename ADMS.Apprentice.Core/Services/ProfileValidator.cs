@@ -46,9 +46,7 @@ namespace ADMS.Apprentice.Core.Services
             {
                 var newPhone = new List<Phone>();
                 if (profile?.Phones != null)
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
                     foreach (Phone phoneNumbers in profile?.Phones)
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
                     {
                         if (phoneNumbers == null || phoneNumbers?.PhoneNumber?.Length == 0) continue;
                         var ErrorMessage = ValidationExceptionType.InvalidPhoneNumber;
@@ -63,9 +61,7 @@ namespace ADMS.Apprentice.Core.Services
                         });
                         preferredPhoneFlag = true;
                     }
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 profile.Phones = newPhone;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
             // Address validation
             if (profile.Addresses != null)
@@ -78,6 +74,7 @@ namespace ADMS.Apprentice.Core.Services
             // Country of Birth
             // language
             // Completed School level
+            // Preferred Contact
             // Month code
             await referenceDataValidator.ValidateAsync(profile);
             return profile;

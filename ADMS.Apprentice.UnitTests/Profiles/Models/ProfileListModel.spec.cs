@@ -13,7 +13,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
     public class WhenInstantiatingAProfileListModel : GivenWhenThen
     {
         private ProfileListModel model;
-        private Profile profile;        
+        private Profile profile;
 
         protected override void Given()
         {
@@ -28,7 +28,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 ProfileTypeCode = ProfileConstants.Profiletype,
                 PreferredName = ProfileConstants.PreferredName,
                 GenderCode = ProfileConstants.GenderCode,
-                InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,                
+                InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
+                LanguageCode = ProfileConstants.LanguageCode,
                 CreatedOn = ProfileConstants.Createdon,
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,

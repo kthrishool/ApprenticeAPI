@@ -27,17 +27,6 @@ namespace ADMS.Apprentice.Core.Services
             this.referenceDataClient = referenceDataClient;            
         }
 
-        //private async void getCountryOfBirthTables(Profile profile)
-        //{
-        //    if (!string.IsNullOrEmpty(profile?.CountryOfBirthCode))
-        //    {
-        //        IList<ListCodeResponseV1> countryCode = await referenceDataClient.GetListCodes("CNTY", profile.CountryOfBirthCode, true, true);
-        //        if (!countryCode.Any())
-        //        {
-        //            throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidCountryCode);
-        //        }
-        //    }
-        //}
 
         private async Task ValidateCode(String CodeName, string codevalue, ValidationExceptionType exception)
         {
@@ -46,6 +35,44 @@ namespace ADMS.Apprentice.Core.Services
             {
                 throw exceptionFactory.CreateValidationException(exception);
             }
+        }
+
+        private async Task ValidatePreferredContactType(Profile profile)
+        {
+            // if profileType is Mobile we need atleast one mobile phone.
+            switch (profile.PreferredContactType)
+            {
+                case "Mobile" or "SMS":
+
+                    if (profile.Phones == null || profile.Phones?.Any(c => c.PhoneNumber.StartsWith("04")) == false)
+                    {
+                        throw exceptionFactory.CreateValidationException(ValidationExceptionType.MobilePreferredContactIsInvalid);
+                    }
+                    break;
+                case "Phone":
+                    if (profile.Phones == null || profile.Phones?.Any() == false)
+                    {
+                        throw exceptionFactory.CreateValidationException(ValidationExceptionType.PhonePreferredContactisInvalid);
+                    }
+                    break;
+                case "Email":
+                    if (string.IsNullOrEmpty(profile.EmailAddress))
+                    {
+                        throw exceptionFactory.CreateValidationException(ValidationExceptionType.EmailPreferredContactisInvalid);
+                    }
+                    break;
+                case "Mail":
+                    if (profile.Addresses == null || profile.Addresses?.Any() == false)
+                    {
+                        throw exceptionFactory.CreateValidationException(ValidationExceptionType.MailPreferredContactisInvalid);
+                    }
+                    break;
+                default:
+                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPreferredContactCode);
+            }
+
+
+            // validate rules based on the type of contact
         }
 
         public async Task ValidateAsync(Profile profile)
@@ -62,6 +89,8 @@ namespace ADMS.Apprentice.Core.Services
             {
                 await ValidateCode(CodeTypes.schoolLevel, profile.HighestSchoolLevelCode, ValidationExceptionType.InvalidHighestSchoolLevelCode);
             }
+            if (!string.IsNullOrEmpty(profile.PreferredContactType))
+                await ValidatePreferredContactType(profile);
             if (!string.IsNullOrEmpty(profile?.LeftSchoolMonthCode))
             {
                 await ValidateCode(CodeTypes.month, profile.LeftSchoolMonthCode, ValidationExceptionType.InvalidMonthCode);

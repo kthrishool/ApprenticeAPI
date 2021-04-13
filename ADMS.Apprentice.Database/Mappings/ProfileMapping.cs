@@ -55,6 +55,8 @@ namespace ADMS.Apprentice.Database.Mappings
                 .HasColumnName("LanguageCode");
             entity.Property(e => e.CountryOfBirthCode)
                 .HasColumnName("CountryOfBirthCode");
+            entity.Property(e => e.PreferredContactType)
+                .HasColumnName("PreferredContactType");
             entity.Property(e => e.ActiveFlag)
                 .HasColumnName("ActiveFlag");
             entity.Property(e => e.DeceasedFlag)

@@ -4,6 +4,7 @@ using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 using ADMS.Apprentice.Core.Services;
+using ADMS.Apprentice.UnitTests.Constants;
 using ADMS.Services.Infrastructure.Core.Exceptions;
 using ADMS.Services.Infrastructure.Core.Validation;
 using Adms.Shared.Exceptions;
@@ -25,8 +26,21 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         protected override void Given()
         {
             newProfile = new Profile();
-            validationException = new ValidationException(null, (ValidationError) null);
 
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
+            validationException = new ValidationException(null, (ValidationError) null);
+        }
+
+        private void ResetExceptionforExceptionValidation(ValidationExceptionType exception, Profile newProfile)
+        {
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(exception))
+                .Returns(validationException);
+
+            ClassUnderTest.Invoking(c => c.ValidateAsync(this.newProfile))
+                .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
         private void MockReferenceData(string MethodName, IList<ListCodeResponseV1> returnvalue, ValidationExceptionType exception)
@@ -108,16 +122,98 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public  void DoesNothingIfSchoolLevelCodeIsValid()
+        public async Task DoesNothingIfPreferredCodeTypeIsValid()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = ProfileConstants.PreferredContactType.ToString();
+            newProfile.Phones.Add(new Phone() {PhoneNumber = "0411111111"});
+            await ClassUnderTest.ValidateAsync(newProfile);
+        }
+
+        [TestMethod]
+        public void ThrowValidationExceptionWhenMobileContactTypeIsInvalid()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = ProfileConstants.PreferredContactType.ToString();
+
+
+            ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
+        }
+
+        [TestMethod]
+        public void ThrowValidationExceptionWhenMobileContactTypeIsNotInCode()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = "test";
+
+            ResetExceptionforExceptionValidation(ValidationExceptionType.InvalidPreferredContactCode, newProfile);
+        }
+
+        [TestMethod]
+        public void ThrowValidationExceptionWhenMobileContactTypeHasNoMobileNo()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = ProfileConstants.PreferredContactType.ToString();
+
+            newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
+
+            ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
+        }
+
+        [TestMethod]
+        public void ThrowValidationExceptionWhenPhoneContactTypeIsInvalid()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.Phone.ToString();
+
+            ResetExceptionforExceptionValidation(ValidationExceptionType.PhonePreferredContactisInvalid, newProfile);
+        }
+
+        [TestMethod]
+        public void ThrowValidationExceptionWhenSMSContactTypeIsInvalid()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.SMS.ToString();
+
+            newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
+
+            ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
+        }
+
+        [TestMethod]
+        public void ThrowValidationExceptionWhenEmailContactTypeIsInvalid()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.Email.ToString();
+
+            newProfile.EmailAddress = null;
+
+
+            ResetExceptionforExceptionValidation(ValidationExceptionType.EmailPreferredContactisInvalid, newProfile);
+        }
+
+        [TestMethod]
+        public void ThrowValidationExceptionWhenAddressContactTypeIsInvalid()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.Mail.ToString();
+
+            newProfile.Addresses = null;
+
+            ResetExceptionforExceptionValidation(ValidationExceptionType.MailPreferredContactisInvalid, newProfile);
+        }
+
+        [TestMethod]
+        public void DoesNothingIfSchoolLevelCodeIsValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "99", Description = "test", });
+            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "99", Description = "test",});
 
             MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidHighestSchoolLevelCode);
 
             newProfile = new Profile();
             newProfile.HighestSchoolLevelCode = "99";
-            
+
             ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
                 .Should().NotThrow();
         }

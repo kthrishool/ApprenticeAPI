@@ -25,7 +25,10 @@ namespace ADMS.Apprentice.Core.Entities
         public string ProfileTypeCode { get; set; }
         public bool DeceasedFlag { get; set; }
         public string CountryOfBirthCode { get; set; }
-        public string LanguageCode { get; set; }        
+
+        public string LanguageCode { get; set; }
+
+        public string PreferredContactType { get; set; }
         public bool ActiveFlag { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }

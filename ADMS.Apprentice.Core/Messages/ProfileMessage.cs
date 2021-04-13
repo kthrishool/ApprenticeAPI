@@ -71,6 +71,10 @@ namespace ADMS.Apprentice.Core.Messages
         [MaxLength(10, ErrorMessage = "Language code Exceeds 10 Characters")]
         public string LanguageCode { get; init; }
 
+        [Display(Name = "PreferredContactType")]
+        [MaxLength(10, ErrorMessage = "Preferred Contact Exceeds 10 Characters")]
+        public string PreferredContactType { get; init; }
+
         [Display(Name = "HighestSchoolLevelCode")]
         [MaxLength(10, ErrorMessage = "Highest School Level Code Exceeds 10 Characters")]
         public string HighestSchoolLevelCode { get; init; }

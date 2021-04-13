@@ -67,10 +67,25 @@ namespace ADMS.Apprentice.Core.Exceptions
         [ExceptionDetails("AP-VAL-0020", "Invalid Highest school level code")]
         InvalidHighestSchoolLevelCode,
 
-        [ExceptionDetails("AP-VAL-0020", "Invalid Month code")]
+        [ExceptionDetails("AP-VAL-0021", "Invalid Month code")]
         InvalidMonthCode,
 
-        [ExceptionDetails("AP-VAL-0021", "Invalid Left school year")]
+        [ExceptionDetails("AP-VAL-0022", "Invalid Left school year")]
         InvalidLeftSchoolYear,
+
+        [ExceptionDetails("AP-VAL-0023", "Missing mobile phone details for preferred contact")]
+        MobilePreferredContactIsInvalid,
+
+        [ExceptionDetails("AP-VAL-0024", "Missing email address for preferred contact")]
+        EmailPreferredContactisInvalid,
+
+        [ExceptionDetails("AP-VAL-0025", "Missing phone details for preferred contact")]
+        PhonePreferredContactisInvalid,
+
+        [ExceptionDetails("AP-VAL-0026", "Missing address details for preferred contact")]
+        MailPreferredContactisInvalid,
+
+        [ExceptionDetails("AP-VAL-0027", "Invalid preferred contact type code")]
+        InvalidPreferredContactCode
     }
 }

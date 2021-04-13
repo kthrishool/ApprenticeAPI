@@ -36,6 +36,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 GenderCode = ProfileConstants.GenderCode,
                 InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
                 LanguageCode = ProfileConstants.LanguageCode,
+                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
                 CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,     
                 LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
@@ -183,6 +184,14 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.LanguageCode.Should().Contain(ProfileConstants.LanguageCode);
         }
 
+        #endregion
+
+        [TestMethod]
+        public void ShouldSetPreferredContactCode()
+        {
+            profile.PreferredContactType.Should().Contain(ProfileConstants.PreferredContactType.ToString());
+        }
+
         [TestMethod]
         public void ShouldSetSchoolLevelCode()
         {
@@ -201,6 +210,4 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.LeftSchoolYearCode.Should().Contain(ProfileConstants.LeftSchoolYearCode);
         }
     }
-
-    #endregion
 }

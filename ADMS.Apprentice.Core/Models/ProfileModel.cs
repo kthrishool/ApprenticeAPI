@@ -21,7 +21,7 @@ namespace ADMS.Apprentice.Core.Models
         public string SelfAssessedDisabilityCode { get; }
         public string IndigenousStatusCode { get; }
         public bool? InterpretorRequiredFlag { get; }
-        public string CitizenshipCode { get; }       
+        public string CitizenshipCode { get; }
         public string LeftSchoolMonthCode { get; }
         public string LeftSchoolYearCode { get; }
         public string ProfileTypeCode { get; }
@@ -31,7 +31,7 @@ namespace ADMS.Apprentice.Core.Models
         public string LanguageCode { get; }
         public string HighestSchoolLevelCode { get; }
         public List<string> Phones { get; set; }
-
+        public string PreferredContactCode { get; set; }
         public ProfileAddressModel ResidentialAddress { get; set; }
         public ProfileAddressModel PostalAddress { get; set; }
 
@@ -54,7 +54,7 @@ namespace ADMS.Apprentice.Core.Models
             SelfAssessedDisabilityCode = apprentice.SelfAssessedDisabilityCode;
             IndigenousStatusCode = apprentice.IndigenousStatusCode;
             CitizenshipCode = apprentice.CitizenshipCode;
-            InterpretorRequiredFlag = apprentice.InterpretorRequiredFlag;            
+            InterpretorRequiredFlag = apprentice.InterpretorRequiredFlag;
             LeftSchoolMonthCode = apprentice.LeftSchoolMonthCode;
             LeftSchoolYearCode = apprentice.LeftSchoolYearCode;
             ProfileTypeCode = apprentice.ProfileTypeCode;
@@ -62,6 +62,7 @@ namespace ADMS.Apprentice.Core.Models
             CountryOfBirthCode = apprentice.CountryOfBirthCode;
             LanguageCode = apprentice.LanguageCode;
             HighestSchoolLevelCode = apprentice.HighestSchoolLevelCode;
+            PreferredContactCode = apprentice.PreferredContactType;
             DeceasedFlag = apprentice.DeceasedFlag;
             ActiveFlag = apprentice.ActiveFlag;
             CreatedOn = apprentice.CreatedOn;

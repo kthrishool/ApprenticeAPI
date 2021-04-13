@@ -31,7 +31,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
-                ProfileTypeCode = ProfileConstants.Profiletype
+                ProfileTypeCode = ProfileConstants.Profiletype,
+                PreferredContactType = ProfileConstants.PreferredContactType.ToString()
             };
             invalidProfile = new Profile
             {
