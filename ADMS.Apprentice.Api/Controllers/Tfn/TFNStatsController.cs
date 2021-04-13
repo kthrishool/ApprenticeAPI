@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using ADMS.Apprentice.Core.Messages.TFN;
 using ADMS.Apprentice.Core.Services;
 using ADMS.Services.Infrastructure.WebApi;
 using ADMS.Services.Infrastructure.WebApi.Documentation;
-using Adms.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ADMS.Apprentice.Core.Entities;
 using Adms.Shared.Filters;
 using Adms.Shared.Paging;
-using ADMS.Apprentice.Core.Models.TFN;
 using Adms.Shared.Extensions;
-using Microsoft.EntityFrameworkCore;
 
 namespace ADMS.Apprentice.Api.Controllers.Tfn
 {
@@ -26,16 +21,13 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
     public class TFNStatsController : AdmsController
     {
         private readonly IPagingHelper _pagingHelper;
-        private readonly IRepository repository;
         private readonly ITFNStatsRetriever _tfnStatsRetriever;
 
         public TFNStatsController(
             IHttpContextAccessor contextAccessor,
-            IRepository repository,
             IPagingHelper pagingHelper,
             ITFNStatsRetriever tfnStatsRetriever) : base(contextAccessor)
         {
-            this.repository = repository;
             _pagingHelper = pagingHelper;
             _tfnStatsRetriever = tfnStatsRetriever;
         }
@@ -64,8 +56,8 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
             
             return Ok(new PagedList<TFNStatsV1>(tfnPagedList, tfnPagedList.Results.Map(x => new TFNStatsV1(
                x.ApprenticeId,
-               x.Profile?.FirstName + " " + x.Profile?.Surname,
-               x.Profile?.BirthDate,
+               x.Profile.FirstName + " " + x.Profile.Surname,
+               x.Profile.BirthDate,
                x.StatusDate,
                x.CreatedOn,
                x.StatusCode.ToString(),
@@ -74,12 +66,12 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         }
 
         
-        private int GetNumberOfDaysSinceTheMismatch(DateTime tfnStatusDate, DateTime systemDateTime)
+        private static int GetNumberOfDaysSinceTheMismatch(DateTime tfnStatusDate, DateTime systemDateTime)
         {
             return systemDateTime.Subtract(tfnStatusDate).Days > 0 ? systemDateTime.Subtract(tfnStatusDate).Days : 0;
         }
 
-        private string GetNumberOfDaysSinceTheMismatchAsString(DateTime tfnStatusDate, DateTime systemDateTime)
+        private static string GetNumberOfDaysSinceTheMismatchAsString(DateTime tfnStatusDate, DateTime systemDateTime)
         {
             var number = GetNumberOfDaysSinceTheMismatch(tfnStatusDate, systemDateTime);
             return number > 0 ? number.ToString() : "<1";

@@ -145,9 +145,6 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
             var et = cryptography.EncryptTFN("19", tfn);
             var dt = cryptography.DecryptTFN("19", et);
 
-            byte[] bytes = Encoding.Default.GetBytes(et);
-            var myString = Encoding.UTF8.GetString(bytes);
-
             et.Should().Be("\u0090­¸\u0093\u0096¢\u0097\u0010\u0010\n\u008e%\u008f ");
 
             dt.Should().Be(tfn);

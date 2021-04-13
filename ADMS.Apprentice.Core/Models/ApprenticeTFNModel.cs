@@ -1,7 +1,4 @@
-﻿using Adms.Shared.Attributes;
-using Adms.Shared.Helpers;
-using ADMS.Apprentice.Core.Entities;
-using System;
+﻿using ADMS.Apprentice.Core.Entities;
 
 namespace ADMS.Apprentice.Core.Models
 {

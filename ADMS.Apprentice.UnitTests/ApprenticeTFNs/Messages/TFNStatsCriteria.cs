@@ -6,25 +6,26 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Messages
 {
     #region WhenCreatingApprenticeTFNV1
     [TestClass]
-    public class WhenCreatingApprenticeTFNV1
+    public class WhenCreatingTFNStatsCriteria
     {
-        private ApprenticeTFNV1 tfnDetail;
+        private TFNStatsCriteria message;
 
         [TestMethod]
         public void NewApprenticeTFN()
         {
-            tfnDetail = new ApprenticeTFNV1
+            message = new TFNStatsCriteria
             {
-                ApprenticeId = 1,
-                TaxFileNumber = 1
+                Keyword = "Keyword",
+                StatusCode = "StatusCode"
             };
 
-            tfnDetail.ApprenticeId.Should().Be(1);
-            tfnDetail.TaxFileNumber.Should().Be(1);
+            message.Keyword.Should().Be("Keyword");
+            message.StatusCode.Should().Be("StatusCode");
         }
 
 
     }
 
     #endregion
+
 }
