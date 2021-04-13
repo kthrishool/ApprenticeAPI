@@ -22,8 +22,8 @@ namespace ADMS.Apprentice.Core.Services
 
         public async Task<Profile> CreateAsync(ProfileMessage message)
         {
-            string Sanitise(string s) => s.IsNullOrEmpty() ? null : s;
-            string SanitiseUpper(string s) => s.IsNullOrEmpty() ? null : s.ToUpper();
+            string Sanitise(string s) => s.IsNullOrEmpty() ? null : s.Trim();
+            string SanitiseUpper(string s) => s.IsNullOrEmpty() ? null : s.Trim().ToUpper();
             var profile = new Profile
             {
                 Surname = message.Surname,
@@ -55,13 +55,13 @@ namespace ADMS.Apprentice.Core.Services
             {
                 profile.Addresses.Add(new Address()
                 {
-                    SingleLineAddress = String.IsNullOrEmpty(message.ResidentialAddress.SingleLineAddress) ? null : message.ResidentialAddress.SingleLineAddress,
-                    StreetAddress1 = String.IsNullOrEmpty(message.ResidentialAddress.StreetAddress1) ? null : message.ResidentialAddress.StreetAddress1,
-                    StreetAddress2 = String.IsNullOrEmpty(message.ResidentialAddress.StreetAddress2) ? null : message.ResidentialAddress.StreetAddress2,
-                    StreetAddress3 = String.IsNullOrEmpty(message.ResidentialAddress.StreetAddress3) ? null : message.ResidentialAddress.StreetAddress3,
-                    Locality = String.IsNullOrEmpty(message.ResidentialAddress.Locality) ? null : message.ResidentialAddress.Locality,
-                    StateCode = String.IsNullOrEmpty(message.ResidentialAddress.StateCode) ? null : message.ResidentialAddress.StateCode,
-                    Postcode = String.IsNullOrEmpty(message.ResidentialAddress.Postcode) ? null : message.ResidentialAddress.Postcode,
+                    SingleLineAddress = Sanitise(message.ResidentialAddress.SingleLineAddress),
+                    StreetAddress1 = Sanitise(message.ResidentialAddress.StreetAddress1),
+                    StreetAddress2 = Sanitise(message.ResidentialAddress.StreetAddress2),
+                    StreetAddress3 = Sanitise(message.ResidentialAddress.StreetAddress3),
+                    Locality = Sanitise(message.ResidentialAddress.Locality),
+                    StateCode = Sanitise(message.ResidentialAddress.StateCode),
+                    Postcode = Sanitise(message.ResidentialAddress.Postcode),
                     AddressTypeCode = AddressType.RESD.ToString(),
                 });
             }
@@ -69,13 +69,13 @@ namespace ADMS.Apprentice.Core.Services
             {
                 profile.Addresses.Add(new Address()
                 {
-                    SingleLineAddress = String.IsNullOrEmpty(message.PostalAddress.SingleLineAddress) ? null : message.PostalAddress.SingleLineAddress,
-                    StreetAddress1 = String.IsNullOrEmpty(message.PostalAddress.StreetAddress1) ? null : message.PostalAddress.StreetAddress1,
-                    StreetAddress2 = String.IsNullOrEmpty(message.PostalAddress.StreetAddress2) ? null : message.PostalAddress.StreetAddress2,
-                    StreetAddress3 = String.IsNullOrEmpty(message.PostalAddress.StreetAddress3) ? null : message.PostalAddress.StreetAddress3,
-                    Locality = String.IsNullOrEmpty(message.PostalAddress.Locality) ? null : message.PostalAddress.Locality,
-                    StateCode = String.IsNullOrEmpty(message.PostalAddress.StateCode) ? null : message.PostalAddress.StateCode,
-                    Postcode = String.IsNullOrEmpty(message.PostalAddress.Postcode) ? null : message.PostalAddress.Postcode,
+                    SingleLineAddress = Sanitise(message.PostalAddress.SingleLineAddress),
+                    StreetAddress1 = Sanitise(message.PostalAddress.StreetAddress1),
+                    StreetAddress2 = Sanitise(message.PostalAddress.StreetAddress2),
+                    StreetAddress3 = Sanitise(message.PostalAddress.StreetAddress3),
+                    Locality = Sanitise(message.PostalAddress.Locality),
+                    StateCode = Sanitise(message.PostalAddress.StateCode),
+                    Postcode = Sanitise(message.PostalAddress.Postcode),
                     AddressTypeCode = AddressType.POST.ToString(),
                 });
             }
