@@ -15,8 +15,6 @@ namespace ADMS.Apprentice.Core.Services
         private readonly IRepository repository;
         private readonly IExceptionFactory exceptionFactory;
         private readonly IReferenceDataClient referenceDataClient;
-        private const string countrycode = "CNTY";
-        private const string languageCode = "LANG";
 
         public ReferenceDataValidator(
             IRepository repository,
@@ -42,12 +40,10 @@ namespace ADMS.Apprentice.Core.Services
             }
         }
 
-        private async
-            Task
-            ValidateCode(String CodeName, string codevalue, ValidationExceptionType exception)
+        private async Task ValidateCode(String CodeName, string codevalue, ValidationExceptionType exception)
         {
-            IList<ListCodeResponseV1> countryCode = await referenceDataClient.GetListCodes(CodeName, codevalue, true, true);
-            if (!countryCode.Any())
+            IList<ListCodeResponseV1> validCodes = await referenceDataClient.GetListCodes(CodeName, codevalue, true, true);
+            if (!validCodes.Any())
             {
                 throw exceptionFactory.CreateValidationException(exception);
             }
@@ -57,14 +53,16 @@ namespace ADMS.Apprentice.Core.Services
         {
             if (!string.IsNullOrEmpty(profile?.CountryOfBirthCode))
             {
-                await ValidateCode(countrycode, profile.CountryOfBirthCode, ValidationExceptionType.InvalidCountryCode);
+                await ValidateCode(CodeTypes.country, profile.CountryOfBirthCode, ValidationExceptionType.InvalidCountryCode);
             }
             if (!string.IsNullOrEmpty(profile?.LanguageCode))
             {
-                await ValidateCode(languageCode, profile.LanguageCode, ValidationExceptionType.InvalidLanguageCode);
+                await ValidateCode(CodeTypes.language, profile.LanguageCode, ValidationExceptionType.InvalidLanguageCode);
             }
-
-            //  return profile;
+            if (!string.IsNullOrEmpty(profile?.HighestSchoolLevelCode))
+            {
+                await ValidateCode(CodeTypes.schoolLevel, profile.HighestSchoolLevelCode, ValidationExceptionType.InvalidHighestSchoolLevelCode);
+            }
         }
     }
 }

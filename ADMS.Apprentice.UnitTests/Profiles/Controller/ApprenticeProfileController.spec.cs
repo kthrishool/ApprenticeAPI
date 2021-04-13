@@ -26,8 +26,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private Profile profile;
         private ActionResult<ProfileModel> profileResult;
         private ProfileMessage message;
-        private ProfileMessage TestMessage;
-
+        
         private Dictionary<string, Tuple<int, string, bool>> profileFieldDefinition;
 
         private Dictionary<string, Tuple<int, string, bool>> addressFieldDefinition;
@@ -77,7 +76,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PostalAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = "14 Mort Street, Braddon,ACT -2601"},
                 GenderCode = "M",
                 CountryOfBirthCode = "AUS",
-                LanguageCode = "1200"
+                LanguageCode = "1200",
+                HighestSchoolLevelCode = "99"
             };
         }
 

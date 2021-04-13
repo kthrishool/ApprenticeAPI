@@ -71,6 +71,8 @@ namespace ADMS.Apprentice.Core.Services
 
             // Codes validation
             // Country of Birth
+            // language
+            // Completed School level
             await referenceDataValidator.ValidateAsync(profile);
             return profile;
         }

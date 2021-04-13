@@ -62,6 +62,9 @@ namespace ADMS.Apprentice.Core.Exceptions
         PostCodeMismatch,
 
         [ExceptionDetails("AP-VAL-0019", "Invalid Language code")]
-        InvalidLanguageCode
+        InvalidLanguageCode,
+
+        [ExceptionDetails("AP-VAL-0020", "Invalid Highest school level code")]
+        InvalidHighestSchoolLevelCode
     }
 }

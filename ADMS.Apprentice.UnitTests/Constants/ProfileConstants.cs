@@ -33,7 +33,7 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static string GenderCode = "M";
         public static string CountryOfBirthCode = "1101";
         public static string LanguageCode = "1200";
-        public static string EducationLevelCode = "DONTKNOW";
+        public static string HighestSchoolLevelCode = "DONTKNOW";
         public static string LeftSchoolMonthCode = "10";
         public static string LeftSchoolYearCode = "10JAN2020";
         public static bool DeceasedFlag = false;

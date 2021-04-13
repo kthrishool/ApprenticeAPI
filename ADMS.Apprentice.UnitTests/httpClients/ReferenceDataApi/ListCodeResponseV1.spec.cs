@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ADMS.Apprentice.UnitTests.httpClients.ReferenceDataApi
 {
-    #region WhenInstantiatingAProfileListModel
+    #region WhenInstantiatingAListCodeResponseV1
 
     [TestClass]
     public class WhenInstantiatingAListCodeResponseV1 : GivenWhenThen

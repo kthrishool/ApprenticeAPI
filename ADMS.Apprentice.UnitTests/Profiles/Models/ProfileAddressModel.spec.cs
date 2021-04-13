@@ -10,8 +10,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
 
     [TestClass]
     public class WhenInstantiatingAProfileAddressModel : GivenWhenThen
-    {
-        // private ProfileListModel model;
+    {        
         private ProfileAddressModel profile;
 
         protected override void Given()

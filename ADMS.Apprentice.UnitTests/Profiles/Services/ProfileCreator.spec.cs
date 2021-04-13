@@ -36,7 +36,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 GenderCode = ProfileConstants.GenderCode,
                 InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
                 LanguageCode = ProfileConstants.LanguageCode,
-                CountryOfBirthCode = "1101"
+                CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
+                HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,                
             };
         }
 
@@ -174,15 +175,18 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.CountryOfBirthCode.Should().Contain(ProfileConstants.CountryOfBirthCode);
         }
 
-        #region Language
-
         [TestMethod]
         public void ShouldSetLanguageCode()
         {
             profile.LanguageCode.Should().Contain(ProfileConstants.LanguageCode);
         }
 
-        #endregion
+        [TestMethod]
+        public void ShouldSetSchoolLevelCode()
+        {
+            profile.HighestSchoolLevelCode.Should().Contain(ProfileConstants.HighestSchoolLevelCode);
+        }
+
     }
 
     #endregion

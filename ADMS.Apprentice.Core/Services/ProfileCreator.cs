@@ -41,7 +41,8 @@ namespace ADMS.Apprentice.Core.Services
                 Phones = message?.PhoneNumbers?.Select(c => new Phone()
                     {PhoneNumber = c, PhoneTypeCode = PhoneType.LandLine.ToString()}).ToList(),
                 CountryOfBirthCode = SanitiseUpper(message.CountryOfBirthCode),
-                LanguageCode = SanitiseUpper((message.LanguageCode))
+                LanguageCode = SanitiseUpper(message.LanguageCode),
+                HighestSchoolLevelCode = Sanitise(message.HighestSchoolLevelCode),                
             };
             if (message?.GenderCode != null)
             {

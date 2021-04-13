@@ -62,14 +62,13 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 IndigenousStatusCode = ProfileConstants.IndigenousStatusCode,
                 GenderCode = ProfileConstants.GenderCode,
                 InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
-                EducationLevelCode = ProfileConstants.EducationLevelCode,
+                HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
                 LeftSchoolYearCode = ProfileConstants.LeftSchoolYearCode,
                 DeceasedFlag = ProfileConstants.DeceasedFlag,
                 ActiveFlag = ProfileConstants.ActiveFlag,
                 Addresses = add,
-                CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
-                // Version = ProfileConstants.Version,
+                CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,                
                 CreatedOn = ProfileConstants.Createdon,
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,
@@ -110,7 +109,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.ActiveFlag.Should().BeTrue();
             model.DeceasedFlag.Should().BeFalse();
             model.CountryOfBirthCode.Should().Be(ProfileConstants.CountryOfBirthCode);
-            model.EducationLevelCode.Should().Be(ProfileConstants.EducationLevelCode);
+            model.HighestSchoolLevelCode.Should().Be(ProfileConstants.HighestSchoolLevelCode);
             model.GenderCode.Should().Be(ProfileConstants.GenderCode);
             model.IndigenousStatusCode.Should().Be(ProfileConstants.IndigenousStatusCode);
             model.InterpretorRequiredFlag.Should().Be(ProfileConstants.InterpretorRequiredFlag);

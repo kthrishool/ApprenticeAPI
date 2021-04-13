@@ -14,32 +14,19 @@ using Moq;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
-    #region WhenValidatingAAddressValidator
+    #region WhenValidatingReferenceData
 
     [TestClass]
     public class WhenValidatingReferenceDataValidator : GivenWhenThen<ReferenceDataValidator>
     {
         private Profile newProfile;
         private ValidationException validationException;
-        private IReferenceDataClient testrefdata;
 
         protected override void Given()
         {
             newProfile = new Profile();
-
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-
-            //Container
-            //    .GetMock<IReferenceDataClient>()
-            //    .Setup(r => r.GetListCodes("22", "22", true, false, 0, "", true))
-            //    .ReturnsAsync(list1);
-
             validationException = new ValidationException(null, (ValidationError) null);
-            //Container
-            //    .GetMock<IExceptionFactory>()
-            //    .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidCountryCode))
-            //    .Returns(validationException);
+
         }
 
         private void MockReferenceData(string MethodName, IList<ListCodeResponseV1> returnvalue, ValidationExceptionType exception)
@@ -76,7 +63,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfCountryofBirthIsInValid()
+        public void ThrowsValidationExceptionIfCountryofBirthIsInvalid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidCountryCode);
@@ -90,20 +77,20 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
-        //[TestMethod]
-        //public void ThrowsValidationExceptionIfLanguageisInValid()
-        //{
-        //    IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-        //    MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidLanguageCode);
+        [TestMethod]
+        public void ThrowsValidationExceptionIfLanguageisInValid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidLanguageCode);
 
 
-        //    newProfile = new Profile();
-        //    newProfile.LanguageCode = "dasdas";
+            newProfile = new Profile();
+            newProfile.LanguageCode = "dasdas";
 
 
-        //    ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
-        //        .Should().Throw<ValidationException>().Where(e => e == validationException);
-        //}
+            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
+                .Should().Throw<ValidationException>().Where(e => e == validationException);
+        }
 
 
         [TestMethod]
@@ -118,6 +105,35 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.CountryOfBirthCode = "1200";
             await ClassUnderTest.ValidateAsync(newProfile);
+        }
+
+        [TestMethod]
+        public  void DoesNothingIfSchoolLevelCodeIsValid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "99", Description = "test", });
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidHighestSchoolLevelCode);
+
+            newProfile = new Profile();
+            newProfile.HighestSchoolLevelCode = "99";
+            
+            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
+                .Should().NotThrow();
+        }
+
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfSchoolLevelCodeIsInvalid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidHighestSchoolLevelCode);
+
+            newProfile = new Profile();
+            newProfile.HighestSchoolLevelCode = "invalidCode";
+
+            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
+                .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
     }
 
