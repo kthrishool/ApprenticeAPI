@@ -27,16 +27,21 @@ namespace ADMS.Apprentice.Core.Services
         }
 
         public async Task<Profile> ValidateAsync(Profile profile)
-        {
-            var preferredPhoneFlag = false;
+        {            
             if (!ValidateAge(profile.BirthDate))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeAge);
+
             // making this async because I think we will be wanting to look in the database for duplicates
             if (!(profile.ProfileTypeCode != null && Enum.IsDefined(typeof(ProfileType), profile.ProfileTypeCode)))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType);
+
             if (!EmailValidation(profile.EmailAddress))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidEmailAddress);
 
+            if (!ValidateLeftSchoolYear(profile.LeftSchoolYearCode))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidLeftSchoolYear);
+
+            var preferredPhoneFlag = false;
             if (profile.Phones != null)
             {
                 var newPhone = new List<Phone>();
@@ -73,6 +78,7 @@ namespace ADMS.Apprentice.Core.Services
             // Country of Birth
             // language
             // Completed School level
+            // Month code
             await referenceDataValidator.ValidateAsync(profile);
             return profile;
         }
@@ -104,6 +110,14 @@ namespace ADMS.Apprentice.Core.Services
             var age = DateTime.Now.Year - birthDate.Year;
             if (DateTime.Now.DayOfYear < birthDate.DayOfYear) age--;
             return age >= 12;
+        }
+
+        private bool ValidateLeftSchoolYear(string stringYear)
+        {
+            if (stringYear.IsNullOrEmpty())
+                return true;
+
+            return (int.TryParse(stringYear, out int year) && (year >= 1900 && year <= DateTime.Now.Year));               
         }
     }
 }

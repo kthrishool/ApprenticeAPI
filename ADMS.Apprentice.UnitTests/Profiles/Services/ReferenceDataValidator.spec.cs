@@ -135,6 +135,35 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
+
+        [TestMethod]
+        public void DoesNothingIfLeftSchoolMonthCodeIsValid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "JAN", Description = "test", });
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidMonthCode);
+
+            newProfile = new Profile();
+            newProfile.LeftSchoolMonthCode = "JAN";
+
+            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
+                .Should().NotThrow();
+        }
+
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfLeftSchoolMonthCodeInvalid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidMonthCode);
+
+            newProfile = new Profile();
+            newProfile.LeftSchoolMonthCode = "invalidCode";
+
+            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
+                .Should().Throw<ValidationException>().Where(e => e == validationException);
+        }
     }
 
     #endregion

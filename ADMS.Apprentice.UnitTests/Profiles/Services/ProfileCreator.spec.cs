@@ -37,7 +37,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
                 LanguageCode = ProfileConstants.LanguageCode,
                 CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
-                HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,                
+                HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,     
+                LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
+                LeftSchoolYearCode = ProfileConstants.LeftSchoolYearCode,
             };
         }
 
@@ -187,6 +189,17 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.HighestSchoolLevelCode.Should().Contain(ProfileConstants.HighestSchoolLevelCode);
         }
 
+        [TestMethod]
+        public void ShouldSetLeftSchoolMonthCode()
+        {
+            profile.LeftSchoolMonthCode.Should().Contain(ProfileConstants.LeftSchoolMonthCode);
+        }
+
+        [TestMethod]
+        public void ShouldSetLeftSchoolYearCode()
+        {
+            profile.LeftSchoolYearCode.Should().Contain(ProfileConstants.LeftSchoolYearCode);
+        }
     }
 
     #endregion

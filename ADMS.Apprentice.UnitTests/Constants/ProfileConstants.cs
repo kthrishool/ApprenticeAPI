@@ -34,8 +34,8 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static string CountryOfBirthCode = "1101";
         public static string LanguageCode = "1200";
         public static string HighestSchoolLevelCode = "DONTKNOW";
-        public static string LeftSchoolMonthCode = "10";
-        public static string LeftSchoolYearCode = "10JAN2020";
+        public static string LeftSchoolMonthCode = "JAN";
+        public static string LeftSchoolYearCode = "2000";
         public static bool DeceasedFlag = false;
         public static ProfileType ProfileTypeCode = ProfileType.APPR;
 

@@ -108,14 +108,16 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.ResidentialAddress.StreetAddress1.Should().Be(RestAddress.StreetAddress1);
             model.ActiveFlag.Should().BeTrue();
             model.DeceasedFlag.Should().BeFalse();
-            model.CountryOfBirthCode.Should().Be(ProfileConstants.CountryOfBirthCode);
-            model.HighestSchoolLevelCode.Should().Be(ProfileConstants.HighestSchoolLevelCode);
+            model.CountryOfBirthCode.Should().Be(ProfileConstants.CountryOfBirthCode);            
             model.GenderCode.Should().Be(ProfileConstants.GenderCode);
             model.IndigenousStatusCode.Should().Be(ProfileConstants.IndigenousStatusCode);
             model.InterpretorRequiredFlag.Should().Be(ProfileConstants.InterpretorRequiredFlag);
             model.Phones[0].Should().Be(ProfileConstants.PhoneNumbers[0]);
             model.PreferredName.Should().Be(ProfileConstants.PreferredName);
             model.SelfAssessedDisabilityCode.Should().Be(ProfileConstants.SelfAssessedDisabilityCode);
+            model.HighestSchoolLevelCode.Should().Be(ProfileConstants.HighestSchoolLevelCode);
+            model.LeftSchoolMonthCode.Should().Be(ProfileConstants.LeftSchoolMonthCode);
+            model.LeftSchoolYearCode.Should().Be(ProfileConstants.LeftSchoolYearCode);
         }
     }
 

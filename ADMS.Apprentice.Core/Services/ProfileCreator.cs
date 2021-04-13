@@ -42,7 +42,9 @@ namespace ADMS.Apprentice.Core.Services
                     {PhoneNumber = c, PhoneTypeCode = PhoneType.LandLine.ToString()}).ToList(),
                 CountryOfBirthCode = SanitiseUpper(message.CountryOfBirthCode),
                 LanguageCode = SanitiseUpper(message.LanguageCode),
-                HighestSchoolLevelCode = Sanitise(message.HighestSchoolLevelCode),                
+                HighestSchoolLevelCode = Sanitise(message.HighestSchoolLevelCode),  
+                LeftSchoolMonthCode = SanitiseUpper(message.LeftSchoolMonthCode),
+                LeftSchoolYearCode = Sanitise(message.LeftSchoolYearCode),
             };
             if (message?.GenderCode != null)
             {

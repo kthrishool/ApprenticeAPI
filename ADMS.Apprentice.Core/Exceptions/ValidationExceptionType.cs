@@ -65,6 +65,12 @@ namespace ADMS.Apprentice.Core.Exceptions
         InvalidLanguageCode,
 
         [ExceptionDetails("AP-VAL-0020", "Invalid Highest school level code")]
-        InvalidHighestSchoolLevelCode
+        InvalidHighestSchoolLevelCode,
+
+        [ExceptionDetails("AP-VAL-0020", "Invalid Month code")]
+        InvalidMonthCode,
+
+        [ExceptionDetails("AP-VAL-0021", "Invalid Left school year")]
+        InvalidLeftSchoolYear,
     }
 }

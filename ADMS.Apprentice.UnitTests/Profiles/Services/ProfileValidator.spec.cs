@@ -39,11 +39,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = DateTime.Now.AddYears(-10),
                 EmailAddress = ProfileConstants.RandomString(64) + "@" + ProfileConstants.RandomString(256) + "." + ProfileConstants.RandomString(50),
-                ProfileTypeCode = ProfileConstants.Profiletype
+                ProfileTypeCode = ProfileConstants.Profiletype,
             };
 
             validationException = new ValidationException(null, (ValidationError) null);
             ChangeException(ValidationExceptionType.InvalidApprenticeAge);
+            ChangeException(ValidationExceptionType.InvalidLeftSchoolYear);
         }
 
         private void ChangeException(ValidationExceptionType exceptionMessage)
@@ -65,6 +66,16 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             ClassUnderTest
                 .Invoking(async c => await c.ValidateAsync(invalidProfile))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfLeftSchoolYearIsInvalid()
+        {
+            //should accept year between 1900 and current year
+            validProfile.LeftSchoolYearCode = "1800";
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
                 .Should().Throw<ValidationException>();
         }
 

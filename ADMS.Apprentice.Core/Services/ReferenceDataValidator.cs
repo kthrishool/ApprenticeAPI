@@ -24,21 +24,20 @@ namespace ADMS.Apprentice.Core.Services
         {
             this.repository = repository;
             this.exceptionFactory = exceptionFactory;
-            this.referenceDataClient = referenceDataClient;
-            // get apprentice Code tables
+            this.referenceDataClient = referenceDataClient;            
         }
 
-        private async void getCountryOfBirthTables(Profile profile)
-        {
-            if (!string.IsNullOrEmpty(profile?.CountryOfBirthCode))
-            {
-                IList<ListCodeResponseV1> countryCode = await referenceDataClient.GetListCodes("CNTY", profile.CountryOfBirthCode, true, true);
-                if (!countryCode.Any())
-                {
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidCountryCode);
-                }
-            }
-        }
+        //private async void getCountryOfBirthTables(Profile profile)
+        //{
+        //    if (!string.IsNullOrEmpty(profile?.CountryOfBirthCode))
+        //    {
+        //        IList<ListCodeResponseV1> countryCode = await referenceDataClient.GetListCodes("CNTY", profile.CountryOfBirthCode, true, true);
+        //        if (!countryCode.Any())
+        //        {
+        //            throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidCountryCode);
+        //        }
+        //    }
+        //}
 
         private async Task ValidateCode(String CodeName, string codevalue, ValidationExceptionType exception)
         {
@@ -62,6 +61,10 @@ namespace ADMS.Apprentice.Core.Services
             if (!string.IsNullOrEmpty(profile?.HighestSchoolLevelCode))
             {
                 await ValidateCode(CodeTypes.schoolLevel, profile.HighestSchoolLevelCode, ValidationExceptionType.InvalidHighestSchoolLevelCode);
+            }
+            if (!string.IsNullOrEmpty(profile?.LeftSchoolMonthCode))
+            {
+                await ValidateCode(CodeTypes.month, profile.LeftSchoolMonthCode, ValidationExceptionType.InvalidMonthCode);
             }
         }
     }
