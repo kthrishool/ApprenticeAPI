@@ -56,8 +56,8 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
             
             return Ok(new PagedList<TFNStatsV1>(tfnPagedList, tfnPagedList.Results.Map(x => new TFNStatsV1(
                x.ApprenticeId,
-               x.Profile?.FirstName + " " + x.Profile?.Surname,
-               x.Profile?.BirthDate,
+               x.Profile.FirstName + " " + x.Profile.Surname,
+               x.Profile.BirthDate,
                x.StatusDate,
                x.CreatedOn,
                x.StatusCode.ToString(),

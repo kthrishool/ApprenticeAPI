@@ -31,14 +31,10 @@ namespace ADMS.Apprentice.UnitTests.Core
             ourDatabaseSettings = new OurDatabaseSettings
             {
                 DatabaseConnectionString = "DatabaseConnectionString",
-                TyimsDatabaseConnectionString = "TyimsDatabaseConnectionString",
-                MigrateDatabaseOnStartup = true,
                 SeedSampleData = true
             };
 
             ourDatabaseSettings.DatabaseConnectionString.Should().Be("DatabaseConnectionString");
-            ourDatabaseSettings.TyimsDatabaseConnectionString.Should().Be("TyimsDatabaseConnectionString");
-            ourDatabaseSettings.MigrateDatabaseOnStartup.Should().BeTrue();
             ourDatabaseSettings.SeedSampleData.Should().BeTrue();
         }
 
@@ -59,18 +55,10 @@ namespace ADMS.Apprentice.UnitTests.Core
             ourEnvironmentSettings = new OurEnvironmentSettings
             {
                 WebRootUrl = "WebRootUrl",
-                ClientBuild = "ClientBuild",
-                DisclaimerUrl = "DisclaimerUrl",
-                CopyrightUrl = "CopyrightUrl",
-                PrivacyUrl = "PrivacyUrl",
                 SortableListRowLimit = 1
             };
 
             ourEnvironmentSettings.WebRootUrl.Should().Be("WebRootUrl");
-            ourEnvironmentSettings.ClientBuild.Should().Be("ClientBuild");
-            ourEnvironmentSettings.DisclaimerUrl.Should().Be("DisclaimerUrl");
-            ourEnvironmentSettings.CopyrightUrl.Should().Be("CopyrightUrl");
-            ourEnvironmentSettings.PrivacyUrl.Should().Be("PrivacyUrl");
             ourEnvironmentSettings.SortableListRowLimit.Should().Be(1);
         }
     }

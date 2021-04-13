@@ -18,7 +18,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Messages
             message = new TFNStatsV1(
                 ApprenticeId:1,
                 ApprenticeName:"ApprenticeName",
-                null,
+                now,
                 now,
                 null,
                 "TfnVerificationStatus",
@@ -27,7 +27,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Messages
 
             message.ApprenticeId.Should().Be(1);
             message.ApprenticeName.Should().Be("ApprenticeName");
-            message.DateOfBirth.Should().Be(null);
+            message.DateOfBirth.Should().Be(now);
             message.TfnStatusDateTime.Should().Be(now);
             message.TfnCreatedDateTime.Should().Be(null);
             message.TfnVerificationStatus.Should().Be("TfnVerificationStatus");
@@ -62,7 +62,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Messages
             message = new TFNStatsV1(
                1,
                "",
-               null,
+               now,
                now,
                null,
                "",
@@ -72,7 +72,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Messages
             var newMessage = message with {
                 ApprenticeId =  1,
                 ApprenticeName  = "ApprenticeName",
-                DateOfBirth = null,
+                DateOfBirth = now,
                 TfnStatusDateTime = now,
                 TfnCreatedDateTime = now,
                 TfnVerificationStatus = "TfnVerificationStatus",
@@ -81,7 +81,7 @@ namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Messages
 
             newMessage.ApprenticeId.Should().Be(1);
             newMessage.ApprenticeName.Should().Be("ApprenticeName");
-            newMessage.DateOfBirth.Should().Be(null);
+            newMessage.DateOfBirth.Should().Be(now);
             newMessage.TfnStatusDateTime.Should().Be(now);
             newMessage.TfnCreatedDateTime.Should().Be(now);
             newMessage.TfnVerificationStatus.Should().Be("TfnVerificationStatus");
