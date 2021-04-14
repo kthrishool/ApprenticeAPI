@@ -38,7 +38,7 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static string LeftSchoolYearCode = "2000";
         public static bool DeceasedFlag = false;
         public static ProfileType ProfileTypeCode = ProfileType.APPR;
-        public static PreferredContactType PreferredContactType = PreferredContactType.Mobile;
+        public static PreferredContactType PreferredContactType = PreferredContactType.MOBILE;
 
 
         public static bool ActiveFlag = true;

@@ -6,16 +6,16 @@ namespace ADMS.Apprentice.Core.Entities
     {
         //TODO: Need to identify code and associated that here
         [Description("Phone")]
-        Phone,
+        PHONE,
 
         [Description("Mobile")]
-        Mobile,
+        MOBILE,
 
         [Description("Email")]
-        Email,
+        EMAIL,
 
         [Description("Mail")]
-        Mail,
+        MAIL,
 
         [Description("SMS")]
         SMS

@@ -164,7 +164,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ThrowValidationExceptionWhenPhoneContactTypeIsInvalid()
         {
             newProfile = new Profile();
-            newProfile.PreferredContactType = PreferredContactType.Phone.ToString();
+            newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
 
             ResetExceptionforExceptionValidation(ValidationExceptionType.PhonePreferredContactisInvalid, newProfile);
         }
@@ -184,7 +184,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ThrowValidationExceptionWhenEmailContactTypeIsInvalid()
         {
             newProfile = new Profile();
-            newProfile.PreferredContactType = PreferredContactType.Email.ToString();
+            newProfile.PreferredContactType = PreferredContactType.EMAIL.ToString();
 
             newProfile.EmailAddress = null;
 
@@ -196,7 +196,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ThrowValidationExceptionWhenAddressContactTypeIsInvalid()
         {
             newProfile = new Profile();
-            newProfile.PreferredContactType = PreferredContactType.Mail.ToString();
+            newProfile.PreferredContactType = PreferredContactType.MAIL.ToString();
 
             newProfile.Addresses = null;
 
@@ -236,7 +236,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void DoesNothingIfLeftSchoolMonthCodeIsValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "JAN", Description = "test", });
+            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "JAN", Description = "test",});
 
             MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidMonthCode);
 

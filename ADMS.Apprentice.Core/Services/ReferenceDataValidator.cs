@@ -24,7 +24,7 @@ namespace ADMS.Apprentice.Core.Services
         {
             this.repository = repository;
             this.exceptionFactory = exceptionFactory;
-            this.referenceDataClient = referenceDataClient;            
+            this.referenceDataClient = referenceDataClient;
         }
 
 
@@ -42,26 +42,26 @@ namespace ADMS.Apprentice.Core.Services
             // if profileType is Mobile we need atleast one mobile phone.
             switch (profile.PreferredContactType)
             {
-                case "Mobile" or "SMS":
+                case nameof(PreferredContactType.MOBILE) or nameof(PreferredContactType.SMS):
 
                     if (profile.Phones == null || profile.Phones?.Any(c => c.PhoneNumber.StartsWith("04")) == false)
                     {
                         throw exceptionFactory.CreateValidationException(ValidationExceptionType.MobilePreferredContactIsInvalid);
                     }
                     break;
-                case "Phone":
+                case nameof(PreferredContactType.PHONE):
                     if (profile.Phones == null || profile.Phones?.Any() == false)
                     {
                         throw exceptionFactory.CreateValidationException(ValidationExceptionType.PhonePreferredContactisInvalid);
                     }
                     break;
-                case "Email":
+                case nameof(PreferredContactType.EMAIL):
                     if (string.IsNullOrEmpty(profile.EmailAddress))
                     {
                         throw exceptionFactory.CreateValidationException(ValidationExceptionType.EmailPreferredContactisInvalid);
                     }
                     break;
-                case "Mail":
+                case nameof(PreferredContactType.MAIL):
                     if (profile.Addresses == null || profile.Addresses?.Any() == false)
                     {
                         throw exceptionFactory.CreateValidationException(ValidationExceptionType.MailPreferredContactisInvalid);

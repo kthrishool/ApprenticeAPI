@@ -37,19 +37,19 @@ namespace ADMS.Apprentice.Core.Services
                 CitizenshipCode = message.CitizenshipCode.SanitiseUpper(),
                 ProfileTypeCode =
                     Enum.IsDefined(typeof(ProfileType), message?.ProfileType) ? message.ProfileType : null,
-                Phones = message?.PhoneNumbers?.Select(c => new Phone()
+                Phones = message.PhoneNumbers?.Select(c => new Phone()
                     {PhoneNumber = c, PhoneTypeCode = PhoneType.LandLine.ToString()}).ToList(),
                 CountryOfBirthCode = message.CountryOfBirthCode.SanitiseUpper(),
-                PreferredContactType = message.PreferredContactType,
+                PreferredContactType = message.PreferredContactType.SanitiseUpper(),
                 
                 LanguageCode = message.LanguageCode.SanitiseUpper(),
                 HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),  
                 LeftSchoolMonthCode = message.LeftSchoolMonthCode.SanitiseUpper(),
                 LeftSchoolYearCode = message.LeftSchoolYearCode.Sanitise(),
             };
-            if (message?.GenderCode != null)
+            if (message.GenderCode != null)
             {
-                profile.GenderCode = Enum.IsDefined(typeof(GenderType), message?.GenderCode.ToUpper()) ? message.GenderCode.ToUpper() : null;
+                profile.GenderCode = Enum.IsDefined(typeof(GenderType), message.GenderCode.ToUpper()) ? message.GenderCode.ToUpper() : null;
             }
 
             if (message.ResidentialAddress != null)
