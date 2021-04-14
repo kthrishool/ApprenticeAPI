@@ -84,7 +84,8 @@ namespace ADMS.Apprentice.Core.Services
             if (detailAddress == null) throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
             
             //populate geo location + postcode suburb details to profile address from detailsAddress component                                  
-            address.SingleLineAddress = detailAddress.FormattedAddress.Sanitise(); 
+            address.SingleLineAddress = detailAddress.FormattedAddress.Sanitise();
+            address.StreetAddress1 = detailAddress.StreetAddressLine1.Sanitise();
             address.StreetAddress2 = detailAddress.StreetAddressLine2.Sanitise();
             address.StreetAddress3 = detailAddress.StreetAddressLine2.Sanitise();
             address.Locality = detailAddress.Locality;
