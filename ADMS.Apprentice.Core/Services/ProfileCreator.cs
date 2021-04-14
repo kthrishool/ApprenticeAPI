@@ -5,6 +5,7 @@ using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using Adms.Shared;
 using Adms.Shared.Extensions;
+using ADMS.Apprentice.Core.Helpers;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -21,32 +22,30 @@ namespace ADMS.Apprentice.Core.Services
         }
 
         public async Task<Profile> CreateAsync(ProfileMessage message)
-        {
-            string Sanitise(string s) => s.IsNullOrEmpty() ? null : s.Trim();
-            string SanitiseUpper(string s) => s.IsNullOrEmpty() ? null : s.Trim().ToUpper();
+        {            
             var profile = new Profile
             {
                 Surname = message.Surname,
                 FirstName = message.FirstName,
-                OtherNames = Sanitise(message.OtherNames),
-                PreferredName = Sanitise(message.PreferredName),
+                OtherNames = message.OtherNames.Sanitise(),
+                PreferredName = message.PreferredName.Sanitise(),
                 BirthDate = message.BirthDate,
-                EmailAddress = Sanitise(message.EmailAddress),
-                IndigenousStatusCode = Sanitise(message.IndigenousStatusCode),
-                SelfAssessedDisabilityCode = SanitiseUpper(message.SelfAssessedDisabilityCode),
+                EmailAddress = message.EmailAddress.Sanitise(),
+                IndigenousStatusCode = message.IndigenousStatusCode.Sanitise(),
+                SelfAssessedDisabilityCode = message.SelfAssessedDisabilityCode.SanitiseUpper(),
                 InterpretorRequiredFlag = message.InterpretorRequiredFlag,
-                CitizenshipCode = SanitiseUpper(message.CitizenshipCode),
+                CitizenshipCode = message.CitizenshipCode.SanitiseUpper(),
                 ProfileTypeCode =
                     Enum.IsDefined(typeof(ProfileType), message?.ProfileType) ? message.ProfileType : null,
                 Phones = message?.PhoneNumbers?.Select(c => new Phone()
                     {PhoneNumber = c, PhoneTypeCode = PhoneType.LandLine.ToString()}).ToList(),
-                CountryOfBirthCode = SanitiseUpper(message.CountryOfBirthCode),
+                CountryOfBirthCode = message.CountryOfBirthCode.SanitiseUpper(),
                 PreferredContactType = message.PreferredContactType,
                 
-                LanguageCode = SanitiseUpper(message.LanguageCode),
-                HighestSchoolLevelCode = Sanitise(message.HighestSchoolLevelCode),  
-                LeftSchoolMonthCode = SanitiseUpper(message.LeftSchoolMonthCode),
-                LeftSchoolYearCode = Sanitise(message.LeftSchoolYearCode),
+                LanguageCode = message.LanguageCode.SanitiseUpper(),
+                HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),  
+                LeftSchoolMonthCode = message.LeftSchoolMonthCode.SanitiseUpper(),
+                LeftSchoolYearCode = message.LeftSchoolYearCode.Sanitise(),
             };
             if (message?.GenderCode != null)
             {
@@ -57,13 +56,13 @@ namespace ADMS.Apprentice.Core.Services
             {
                 profile.Addresses.Add(new Address()
                 {
-                    SingleLineAddress = Sanitise(message.ResidentialAddress.SingleLineAddress),
-                    StreetAddress1 = Sanitise(message.ResidentialAddress.StreetAddress1),
-                    StreetAddress2 = Sanitise(message.ResidentialAddress.StreetAddress2),
-                    StreetAddress3 = Sanitise(message.ResidentialAddress.StreetAddress3),
-                    Locality = Sanitise(message.ResidentialAddress.Locality),
-                    StateCode = Sanitise(message.ResidentialAddress.StateCode),
-                    Postcode = Sanitise(message.ResidentialAddress.Postcode),
+                    SingleLineAddress = message.ResidentialAddress.SingleLineAddress.Sanitise(),
+                    StreetAddress1 = message.ResidentialAddress.StreetAddress1.Sanitise(),
+                    StreetAddress2 = message.ResidentialAddress.StreetAddress2.Sanitise(),
+                    StreetAddress3 = message.ResidentialAddress.StreetAddress3.Sanitise(),
+                    Locality = message.ResidentialAddress.Locality.Sanitise(),
+                    StateCode = message.ResidentialAddress.StateCode.Sanitise(),
+                    Postcode = message.ResidentialAddress.Postcode.Sanitise(),
                     AddressTypeCode = AddressType.RESD.ToString(),
                 });
             }
@@ -71,13 +70,13 @@ namespace ADMS.Apprentice.Core.Services
             {
                 profile.Addresses.Add(new Address()
                 {
-                    SingleLineAddress = Sanitise(message.PostalAddress.SingleLineAddress),
-                    StreetAddress1 = Sanitise(message.PostalAddress.StreetAddress1),
-                    StreetAddress2 = Sanitise(message.PostalAddress.StreetAddress2),
-                    StreetAddress3 = Sanitise(message.PostalAddress.StreetAddress3),
-                    Locality = Sanitise(message.PostalAddress.Locality),
-                    StateCode = Sanitise(message.PostalAddress.StateCode),
-                    Postcode = Sanitise(message.PostalAddress.Postcode),
+                    SingleLineAddress = message.PostalAddress.SingleLineAddress.Sanitise(),
+                    StreetAddress1 = message.PostalAddress.StreetAddress1.Sanitise(),
+                    StreetAddress2 = message.PostalAddress.StreetAddress2.Sanitise(),
+                    StreetAddress3 = message.PostalAddress.StreetAddress3.Sanitise(),
+                    Locality = message.PostalAddress.Locality.Sanitise(),
+                    StateCode = message.PostalAddress.StateCode.Sanitise(),
+                    Postcode = message.PostalAddress.Postcode.Sanitise(),
                     AddressTypeCode = AddressType.POST.ToString(),
                 });
             }

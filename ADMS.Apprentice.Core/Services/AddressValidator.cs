@@ -6,7 +6,7 @@ using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
-using Adms.Shared.Extensions;
+using ADMS.Apprentice.Core.Helpers;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -82,13 +82,11 @@ namespace ADMS.Apprentice.Core.Services
             DetailAddressModel detailAddress = await referenceDataClient.GetDetailAddressByFormattedAddress(address.SingleLineAddress);
             //no chance to have detail address to be null, but in case of reasons..
             if (detailAddress == null) throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
-
-            string Sanitise(string s) => s.IsNullOrEmpty() ? null : s;
+            
             //populate geo location + postcode suburb details to profile address from detailsAddress component                                  
-            address.SingleLineAddress = detailAddress.FormattedAddress;
-            address.StreetAddress1 = Sanitise(detailAddress.StreetAddressLine1);
-            address.StreetAddress2 = Sanitise(detailAddress.StreetAddressLine2);
-            address.StreetAddress3 = Sanitise(detailAddress.StreetAddressLine2);
+            address.SingleLineAddress = detailAddress.FormattedAddress.Sanitise(); 
+            address.StreetAddress2 = detailAddress.StreetAddressLine2.Sanitise();
+            address.StreetAddress3 = detailAddress.StreetAddressLine2.Sanitise();
             address.Locality = detailAddress.Locality;
             address.StateCode = detailAddress.State;
             address.Postcode = detailAddress.Postcode;
