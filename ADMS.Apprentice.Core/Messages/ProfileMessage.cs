@@ -84,5 +84,8 @@ namespace ADMS.Apprentice.Core.Messages
         
         [MaxLength(10, ErrorMessage = "Left School Year code Exceeds 10 Characters")]
         public string LeftSchoolYearCode { get; init; }
+
+        [Display(Name = "Qualifications")]
+        public List<ProfileQualificationMessage> Qualifications { get; init; }
     }
 }

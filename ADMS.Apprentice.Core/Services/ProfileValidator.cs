@@ -16,14 +16,17 @@ namespace ADMS.Apprentice.Core.Services
         private readonly IExceptionFactory exceptionFactory;
         private readonly IAddressValidator addressValidator;
         private readonly IReferenceDataValidator referenceDataValidator;
+        private readonly IQualificationValidator qualificationValidator;
 
         public ProfileValidator(IExceptionFactory exceptionFactory,
             IAddressValidator addressValidator,
-            IReferenceDataValidator referenceDataValidator)
+            IReferenceDataValidator referenceDataValidator,
+            IQualificationValidator qualificationValidator)
         {
             this.exceptionFactory = exceptionFactory;
             this.addressValidator = addressValidator;
             this.referenceDataValidator = referenceDataValidator;
+            this.qualificationValidator = qualificationValidator;
         }
 
         public async Task<Profile> ValidateAsync(Profile profile)
@@ -40,6 +43,9 @@ namespace ADMS.Apprentice.Core.Services
 
             if (!ValidateLeftSchoolYear(profile.LeftSchoolYearCode))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidLeftSchoolYear);
+
+            if (!profile.LeftSchoolMonthCode.IsNullOrEmpty() && !Enum.IsDefined(typeof(MonthCode), profile.LeftSchoolMonthCode))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidMonthCode);
 
             var preferredPhoneFlag = false;
             if (profile.Phones != null)
@@ -77,6 +83,12 @@ namespace ADMS.Apprentice.Core.Services
             // Preferred Contact
             // Month code
             await referenceDataValidator.ValidateAsync(profile);
+
+            //Qualification validator should be called after the reference data validator to make sure we are passing valid Month codes to create the start and end date
+            if (profile.Qualifications != null)
+            {
+                profile.Qualifications = await qualificationValidator.ValidateAsync(profile.Qualifications.ToList());
+            }
             return profile;
         }
 

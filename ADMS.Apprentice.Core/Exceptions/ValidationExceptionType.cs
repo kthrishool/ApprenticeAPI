@@ -86,6 +86,9 @@ namespace ADMS.Apprentice.Core.Exceptions
         MailPreferredContactisInvalid,
 
         [ExceptionDetails("AP-VAL-0027", "Invalid preferred contact type code")]
-        InvalidPreferredContactCode
+        InvalidPreferredContactCode,
+
+        [ExceptionDetails("AP-VAL-0028", "Invalid Qualification details")]
+        InvalidQualification,
     }
 }

@@ -34,6 +34,7 @@ namespace ADMS.Apprentice.Core.Models
         public string PreferredContactCode { get; set; }
         public ProfileAddressModel ResidentialAddress { get; set; }
         public ProfileAddressModel PostalAddress { get; set; }
+        public List<ProfileQualificationModel> Qualifications { get; set; }
 
         public DateTime? CreatedOn { get; }
         public string CreatedBy { get; }
@@ -94,6 +95,9 @@ namespace ADMS.Apprentice.Core.Models
                     StreetAddress2 = c.StreetAddress2,
                     StreetAddress3 = c.StreetAddress3
                 }).SingleOrDefault();
+
+            Qualifications = apprentice.Qualifications.Select(q => new ProfileQualificationModel(q)).ToList();
+
         }
     }
 }

@@ -41,6 +41,7 @@ namespace ADMS.Apprentice.Core.Entities
         public virtual ICollection<Phone> Phones { get; set; }
         public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<ApprenticeTFN> TFNs { get; set; }
+        public virtual ICollection<Qualification> Qualifications { get; set; }
 
         public Profile()
         {
@@ -50,6 +51,7 @@ namespace ADMS.Apprentice.Core.Entities
             Phones = new List<Phone>();
             Addresses = new List<Address>();
             TFNs = new List<ApprenticeTFN>();
+            Qualifications = new List<Qualification>();
         }
     }
 }

@@ -65,10 +65,11 @@ namespace ADMS.Apprentice.Api.Controllers
 
         [HttpPost]
         public async Task<ActionResult<ProfileModel>> Create([FromBody] ProfileMessage message)
-        {               
+        {
+            
             Profile profile = await profileCreator.CreateAsync(message);
             await repository.SaveAsync();
-            return Created($"/{profile.Id}", new ProfileModel(profile));            
+            return Created($"/{profile.Id}", new ProfileModel(profile));
         }        
     }
 }

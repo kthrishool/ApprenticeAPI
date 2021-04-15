@@ -6,6 +6,7 @@ using ADMS.Apprentice.Core.Messages;
 using Adms.Shared;
 using Adms.Shared.Extensions;
 using ADMS.Apprentice.Core.Helpers;
+using System.Globalization;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -22,7 +23,7 @@ namespace ADMS.Apprentice.Core.Services
         }
 
         public async Task<Profile> CreateAsync(ProfileMessage message)
-        {            
+        {
             var profile = new Profile
             {
                 Surname = message.Surname,
@@ -45,7 +46,16 @@ namespace ADMS.Apprentice.Core.Services
                 LanguageCode = message.LanguageCode.SanitiseUpper(),
                 HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),  
                 LeftSchoolMonthCode = message.LeftSchoolMonthCode.SanitiseUpper(),
-                LeftSchoolYearCode = message.LeftSchoolYearCode.Sanitise(),
+                LeftSchoolYearCode = message.LeftSchoolYearCode.SanitiseUpper(),
+                Qualifications = message.Qualifications?.Select(q => new Qualification()
+                {
+                    QualificationCode = q.QualificationCode.Sanitise(),
+                    QualificationDescription = q.QualificationDescription.Sanitise(),                    
+                    StartMonth = q.StartMonth.SanitiseUpper(),
+                    StartYear = q.StartYear.Sanitise(),
+                    EndMonth = q.EndMonth.SanitiseUpper(),
+                    EndYear = q.EndYear.Sanitise(),                    
+                }).ToList(),                    
             };
             if (message.GenderCode != null)
             {

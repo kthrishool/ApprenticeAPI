@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
+using ADMS.Apprentice.Core.Models;
 
 namespace ADMS.Apprentice.UnitTests.Constants
 {
@@ -39,7 +40,7 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static bool DeceasedFlag = false;
         public static ProfileType ProfileTypeCode = ProfileType.APPR;
         public static PreferredContactType PreferredContactType = PreferredContactType.MOBILE;
-
+        public static Qualification Qualification = new Qualification() { QualificationCode = "QCode", QualificationDescription = "QDescription", StartDate = new DateTime(2000, 10, 1), EndDate = new DateTime(2002, 10, 1) };
 
         public static bool ActiveFlag = true;
         // public static byte[] Version = Convert.ToBase64String("1.1") ;

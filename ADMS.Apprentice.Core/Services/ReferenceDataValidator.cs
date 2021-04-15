@@ -7,6 +7,7 @@ using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
+using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -90,11 +91,10 @@ namespace ADMS.Apprentice.Core.Services
                 await ValidateCode(CodeTypes.schoolLevel, profile.HighestSchoolLevelCode, ValidationExceptionType.InvalidHighestSchoolLevelCode);
             }
             if (!string.IsNullOrEmpty(profile.PreferredContactType))
-                await ValidatePreferredContactType(profile);
-            if (!string.IsNullOrEmpty(profile?.LeftSchoolMonthCode))
             {
-                await ValidateCode(CodeTypes.month, profile.LeftSchoolMonthCode, ValidationExceptionType.InvalidMonthCode);
-            }
+                await ValidatePreferredContactType(profile);
+            }               
+            
         }
     }
 }
