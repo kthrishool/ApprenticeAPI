@@ -73,7 +73,7 @@ namespace ADMS.Apprentice.Core.Models
             Version = apprentice.Version;
             if (apprentice?.Phones?.Count > 0)
                 Phones = apprentice.Phones.Select(c => c.PhoneNumber).ToList();
-            if (apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
+            if (apprentice.Addresses?.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
                 ResidentialAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).Select(c => new ProfileAddressModel
                 {
                     Postcode = c.Postcode,
@@ -84,7 +84,7 @@ namespace ADMS.Apprentice.Core.Models
                     StreetAddress2 = c.StreetAddress2,
                     StreetAddress3 = c.StreetAddress3
                 }).SingleOrDefault();
-            if (apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.POST.ToString()))
+            if (apprentice.Addresses?.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.POST.ToString()))
                 PostalAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.POST.ToString()).Select(c => new ProfileAddressModel
                 {
                     Postcode = c.Postcode,
@@ -96,7 +96,7 @@ namespace ADMS.Apprentice.Core.Models
                     StreetAddress3 = c.StreetAddress3
                 }).SingleOrDefault();
 
-            Qualifications = apprentice.Qualifications.Select(q => new ProfileQualificationModel(q)).ToList();
+            Qualifications = apprentice.Qualifications?.Select(q => new ProfileQualificationModel(q)).ToList();
 
         }
     }

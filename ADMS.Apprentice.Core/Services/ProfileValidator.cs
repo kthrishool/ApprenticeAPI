@@ -98,10 +98,7 @@ namespace ADMS.Apprentice.Core.Services
             if (emailAddress.IsNullOrEmpty())
                 return true;
             if (!(new EmailAddressAttribute().IsValid(emailAddress)))
-                return false;
-            // we dont need this validation as it been validated above             
-            //if (emailAddress != null && emailAddress.IndexOf('@') < 0)
-            //    return false;
+                return false;            
 
             // check domain name in Email
             if (emailAddress != null)

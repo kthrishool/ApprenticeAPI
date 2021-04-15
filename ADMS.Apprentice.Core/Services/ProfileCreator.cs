@@ -49,7 +49,7 @@ namespace ADMS.Apprentice.Core.Services
                 LeftSchoolYearCode = message.LeftSchoolYearCode.SanitiseUpper(),
                 Qualifications = message.Qualifications?.Select(q => new Qualification()
                 {
-                    QualificationCode = q.QualificationCode.Sanitise(),
+                    QualificationCode = q.QualificationCode.SanitiseUpper(),
                     QualificationDescription = q.QualificationDescription.Sanitise(),                    
                     StartMonth = q.StartMonth.SanitiseUpper(),
                     StartYear = q.StartYear.Sanitise(),
