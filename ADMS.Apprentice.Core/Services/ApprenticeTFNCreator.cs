@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Exceptions;
 using Adms.Shared.Database;
 using Adms.Shared.Exceptions;
-using System.Text;
-using System.Text.RegularExpressions;
+using Adms.Shared.Services;
 
 namespace ADMS.Apprentice.Core.Services
 {

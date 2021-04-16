@@ -1,8 +1,8 @@
 ﻿using System;
 using ADMS.Apprentice.Core.Entities;
-using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services;
 using Adms.Shared;
+using Adms.Shared.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ADMS.Apprentice.Core.Models;
@@ -17,8 +17,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query;
 using Adms.Shared.Exceptions;
-using Adms.Shared.Database;
-using ADMS.Services.Infrastructure.Core.Exceptions;
 
 namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 {
