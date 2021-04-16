@@ -29,8 +29,9 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static DateTime Updatedon = DateTime.Now;
         public static string Createdby = "User1";
         public static string Updatedby = "User2";
-        public static ProfileAddressMessage ResidentialAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = null};
+        public static ProfileAddressMessage ResidentialAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street"};
         public static readonly ProfileAddressMessage PostalAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = null};
+        public static ProfileAddressMessage ResidentialSingleLineAddress = new ProfileAddressMessage() { SingleLineAddress = "14 Mort Street ACT BRADDON 2601"};
         public static string GenderCode = "M";
         public static string CountryOfBirthCode = "1101";
         public static string LanguageCode = "1200";

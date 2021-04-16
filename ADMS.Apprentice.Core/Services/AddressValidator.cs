@@ -6,6 +6,7 @@ using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
+using Adms.Shared.Extensions;
 using ADMS.Apprentice.Core.Helpers;
 
 namespace ADMS.Apprentice.Core.Services
@@ -82,8 +83,10 @@ namespace ADMS.Apprentice.Core.Services
             DetailAddressModel detailAddress = await referenceDataClient.GetDetailAddressByFormattedAddress(address.SingleLineAddress);
             //no chance to have detail address to be null, but in case of reasons..
             if (detailAddress == null) throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
-            
-            //populate geo location + postcode suburb details to profile address from detailsAddress component                                  
+
+            if (detailAddress.StreetAddressLine1.IsNullOrEmpty() || detailAddress.Locality.IsNullOrEmpty() || detailAddress.State.IsNullOrEmpty() || detailAddress.Postcode.IsNullOrEmpty())
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
+            //populate geo location + postcode suburb details to profile address from detailsAddress component
             address.SingleLineAddress = detailAddress.FormattedAddress.Sanitise();
             address.StreetAddress1 = detailAddress.StreetAddressLine1.Sanitise();
             address.StreetAddress2 = detailAddress.StreetAddressLine2.Sanitise();
@@ -103,10 +106,7 @@ namespace ADMS.Apprentice.Core.Services
             //Verify the partial address using iGas. Partial address = Locality + State + postcode
             //If it is a valid, populate geo location details
 
-            string formattedLocality = $"{address.Locality} {address.StateCode} {address.Postcode}"?.ToUpper();
-
-            if (string.IsNullOrEmpty(formattedLocality))
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound); //no chance of hitting this, but in case..
+            string formattedLocality = $"{address.Locality} {address.StateCode} {address.Postcode}"?.ToUpper();            
 
             PartialAddressModel partialAddress = await referenceDataClient.GetAddressByFormattedLocality(formattedLocality);
 

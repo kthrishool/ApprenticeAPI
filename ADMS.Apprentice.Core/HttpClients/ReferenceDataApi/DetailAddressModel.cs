@@ -10,14 +10,14 @@ namespace ADMS.Apprentice.Core.HttpClients.ReferenceDataApi
     /// </summary>
     /// <remarks>Most data is source from the G-NAF dataset. Up to date descriptions of the G-NAF dataset can be found here: https://www.psma.com.au/products/g-naf </remarks>
     public record DetailAddressModel(
-        int AddressId ,
+        int AddressId,
         string BuildingName,
         string FormattedAddress,
         string StreetAddress,
         string StreetAddressLine1,
         string StreetAddressLine2,
         string StreetAddressLine3,
-        string Locality, 
+        string Locality,
         string State,
         string Postcode,
         string GeocodeType,
@@ -29,5 +29,5 @@ namespace ADMS.Apprentice.Core.HttpClients.ReferenceDataApi
         int SubAddressCount,
         Boundary[] Boundaries,
         int Index
-    );
+    );    
 }

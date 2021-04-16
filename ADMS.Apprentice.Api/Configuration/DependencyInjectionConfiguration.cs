@@ -25,8 +25,7 @@ namespace ADMS.Apprentice.Api.Configuration
 
             // interfaces which live in a different assembly to their implementation get registered manually here
             services.AddTransient<ISharedSettings, SharedSettings>();
-            services.AddScoped<IRepository, Repository>();
-            //  services.AddScoped<ITyimsRepository, TyimsRepository>();
+            services.AddScoped<IRepository, Repository>();            
         }
     }
 }
