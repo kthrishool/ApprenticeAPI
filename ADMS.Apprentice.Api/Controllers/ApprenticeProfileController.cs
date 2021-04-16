@@ -27,23 +27,27 @@ namespace ADMS.Apprentice.Api.Controllers
     {
         private readonly IRepository repository;
         private readonly IPagingHelper pagingHelper;
-        private readonly IProfileCreator profileCreator;
-        private readonly IReferenceDataClient referenceDataClient;
+        private readonly IProfileCreator profileCreator;        
+        private readonly IProfileUpdater profileUpdater;
 
         public ApprenticeProfileController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
             IPagingHelper pagingHelper,
             IProfileCreator profileCreator,
-            IReferenceDataClient referenceDataClient
+            IProfileUpdater profileUpdater            
         ) : base(contextAccessor)
         {
             this.repository = repository;
             this.pagingHelper = pagingHelper;
-            this.profileCreator = profileCreator;
-            this.referenceDataClient = referenceDataClient;
+            this.profileCreator = profileCreator;            
+            this.profileUpdater = profileUpdater;
         }
 
+        /// <summary>
+        /// List all apprentice profile and returns generic summary information for each apprentice.
+        /// </summary>
+        /// <param name="paging">Paging information</param>
         [HttpGet]
         [SupportsPaging(null)]
         public async Task<ActionResult<PagedList<ProfileListModel>>> List(PagingInfo paging)
@@ -55,6 +59,10 @@ namespace ADMS.Apprentice.Api.Controllers
             return Ok(new PagedList<ProfileListModel>(profiles, models));
         }
 
+        /// <summary>
+        /// Gets all information of a given apprentice id.
+        /// </summary>
+        /// <param name="id">Id of the apprentice</param>
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfileModel>> Get(int id)
         {            
@@ -63,6 +71,10 @@ namespace ADMS.Apprentice.Api.Controllers
         }
 
 
+        /// <summary>
+        /// Creates a new apprentice profile
+        /// </summary>
+        /// <param name="message">Details of the apprentice profile to be created</param>
         [HttpPost]
         public async Task<ActionResult<ProfileModel>> Create([FromBody] ProfileMessage message)
         {
@@ -70,6 +82,20 @@ namespace ADMS.Apprentice.Api.Controllers
             Profile profile = await profileCreator.CreateAsync(message);
             await repository.SaveAsync();
             return Created($"/{profile.Id}", new ProfileModel(profile));
-        }        
+        }
+
+        /// <summary>
+        /// Updates an existing AAIP claim application.
+        /// </summary>
+        /// <param name="id">ID of the application to be updated</param>
+        /// <param name="message">Details of the information to be updated</param>
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ProfileModel>> Update(int id, [FromBody] ProfileMessage message)
+        {
+            Profile profile = await repository.GetAsync<Profile>(id);
+            profileUpdater.Update(profile, message);
+            await repository.SaveAsync();
+            return Ok(new ProfileModel(profile));
+        }
     }
 }

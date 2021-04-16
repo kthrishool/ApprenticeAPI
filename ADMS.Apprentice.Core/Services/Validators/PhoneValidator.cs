@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using ADMS.Apprentice.Core.Exceptions;
 
-namespace ADMS.Apprentice.Core.Services
+namespace ADMS.Apprentice.Core.Services.Validators
 {
     public static class PhoneValidator
     {

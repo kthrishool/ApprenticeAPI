@@ -9,7 +9,7 @@ using Adms.Shared;
 using Adms.Shared.Exceptions;
 using Adms.Shared.Extensions;
 
-namespace ADMS.Apprentice.Core.Services
+namespace ADMS.Apprentice.Core.Services.Validators
 {
     public class ReferenceDataValidator : IReferenceDataValidator
     {

@@ -7,6 +7,7 @@ using Adms.Shared;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ADMS.Apprentice.Core.Services.Validators;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {

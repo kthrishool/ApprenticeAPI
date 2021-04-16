@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
-using ADMS.Apprentice.Core.Services;
+using ADMS.Apprentice.Core.Services.Validators;
 using ADMS.Apprentice.UnitTests.Constants;
 using ADMS.Services.Infrastructure.Core.Exceptions;
 using ADMS.Services.Infrastructure.Core.Validation;

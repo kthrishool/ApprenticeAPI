@@ -10,7 +10,7 @@ using ADMS.Apprentice.Core.Helpers;
 using System;
 using System.Globalization;
 
-namespace ADMS.Apprentice.Core.Services
+namespace ADMS.Apprentice.Core.Services.Validators
 {
     public class QualificationValidator : IQualificationValidator
     {

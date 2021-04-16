@@ -9,7 +9,7 @@ using ADMS.Apprentice.Core.Exceptions;
 using Adms.Shared.Exceptions;
 using Castle.Core.Internal;
 
-namespace ADMS.Apprentice.Core.Services
+namespace ADMS.Apprentice.Core.Services.Validators
 {
     public class ProfileValidator : IProfileValidator
     {

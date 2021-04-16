@@ -2,11 +2,11 @@
 using ADMS.Apprentice.Core.Entities;
 using Adms.Shared.Attributes;
 
-namespace ADMS.Apprentice.Core.Services
+namespace ADMS.Apprentice.Core.Services.Validators
 {
     [RegisterWithIocContainer]
-    public interface IProfileValidator
+    public interface IReferenceDataValidator
     {
-        Task<Profile> ValidateAsync(Profile profile);
+        Task ValidateAsync(Profile profile);
     }
 }

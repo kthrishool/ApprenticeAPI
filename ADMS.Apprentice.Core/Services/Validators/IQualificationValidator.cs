@@ -3,11 +3,11 @@ using ADMS.Apprentice.Core.Entities;
 using Adms.Shared.Attributes;
 using System.Threading.Tasks;
 
-namespace ADMS.Apprentice.Core.Services
+namespace ADMS.Apprentice.Core.Services.Validators
 {
     [RegisterWithIocContainer]
-    public interface IAddressValidator
+    public interface IQualificationValidator
     {
-         Task<List<Address>> ValidateAsync(List<Address> addresses);
+        Task<List<Qualification>> ValidateAsync(List<Qualification> qualifications);
     }
 }

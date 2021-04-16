@@ -9,7 +9,7 @@ using Adms.Shared.Exceptions;
 using Adms.Shared.Extensions;
 using ADMS.Apprentice.Core.Helpers;
 
-namespace ADMS.Apprentice.Core.Services
+namespace ADMS.Apprentice.Core.Services.Validators
 {
     public class AddressValidator : IAddressValidator
     {

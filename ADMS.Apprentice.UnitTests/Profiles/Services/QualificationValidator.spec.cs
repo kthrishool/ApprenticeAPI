@@ -12,6 +12,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Globalization;
+using ADMS.Apprentice.Core.Services.Validators;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
