@@ -46,13 +46,12 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
             if (!profile.LeftSchoolMonthCode.IsNullOrEmpty() && !Enum.IsDefined(typeof(MonthCode), profile.LeftSchoolMonthCode))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidMonthCode);
-
-            //var preferredPhoneFlag = false;
+            
             if (profile.Phones != null)
             {
                 var newPhone = new List<Phone>();
                 if (profile?.Phones != null)
-                    foreach (Phone phoneNumbers in profile?.Phones)
+                    foreach (Phone phoneNumbers in profile.Phones)
                     {
                         if (phoneNumbers == null || phoneNumbers?.PhoneNumber?.Length == 0) continue;
                         var ErrorMessage = ValidationExceptionType.InvalidPhoneNumber;
@@ -65,8 +64,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
                             PhoneNumber = formattedPhone,
                             PhoneTypeCode = phoneType.ToString(),
                             PreferredPhoneFlag = phoneNumbers.PreferredPhoneFlag
-                        });
-                        //  preferredPhoneFlag = true;
+                        });                        
                     }
                 profile.Phones = newPhone;
             }

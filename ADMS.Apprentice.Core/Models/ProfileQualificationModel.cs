@@ -6,6 +6,7 @@ namespace ADMS.Apprentice.Core.Models
 {
     public record ProfileQualificationModel
     {
+        public int QualificationId { get; }
         public string QualificationCode { get; }
         public string QualificationDescription { get; }
         public string StartMonth { get; }
@@ -22,6 +23,7 @@ namespace ADMS.Apprentice.Core.Models
 
         public ProfileQualificationModel(Qualification qualification)
         {
+            QualificationId = qualification.Id;
             QualificationCode = qualification.QualificationCode;
             QualificationDescription = qualification.QualificationDescription;
             StartMonth = qualification.StartDate.ToString("MMM").ToUpper();
