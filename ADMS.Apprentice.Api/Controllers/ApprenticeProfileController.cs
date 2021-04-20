@@ -25,22 +25,21 @@ namespace ADMS.Apprentice.Api.Controllers
     {
         private readonly IRepository repository;
         private readonly IPagingHelper pagingHelper;
-
-        private readonly IProfileCreator profileCreator;
-        // private readonly IProfileUpdater profileUpdater;
+        private readonly IProfileCreator profileCreator;        
+        private readonly IProfileUpdater profileUpdater;
 
         public ApprenticeProfileController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
             IPagingHelper pagingHelper,
-            IProfileCreator profileCreator
-            //, IProfileUpdater profileUpdater            
+            IProfileCreator profileCreator,
+            IProfileUpdater profileUpdater            
         ) : base(contextAccessor)
         {
             this.repository = repository;
             this.pagingHelper = pagingHelper;
-            this.profileCreator = profileCreator;
-            //  this.profileUpdater = profileUpdater;
+            this.profileCreator = profileCreator;            
+            this.profileUpdater = profileUpdater;
         }
 
         /// <summary>
@@ -88,10 +87,10 @@ namespace ADMS.Apprentice.Api.Controllers
         /// <param name="id">ID of the application to be updated</param>
         /// <param name="message">Details of the information to be updated</param>
         [HttpPut("{id}")]
-        public async Task<ActionResult<ProfileModel>> Update(int id, [FromBody] ProfileMessage message)
+        public async Task<ActionResult<ProfileModel>> Update(int id, [FromBody] UpdateProfileMessage message)
         {
             Profile profile = await repository.GetAsync<Profile>(id);
-            //profileUpdater.Update(profile, message);
+            await profileUpdater.Update(profile, message);
             await repository.SaveAsync();
             return Ok(new ProfileModel(profile));
         }

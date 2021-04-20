@@ -56,6 +56,7 @@ namespace ADMS.Apprentice.Core.Services
                     EndYear = q.EndYear.Sanitise(),
                 }).ToList(),
             };
+            profile.CitizenshipCode = message.CitizenshipCode.SanitiseUpper();
             if (message.GenderCode != null)
             {
                 profile.GenderCode = Enum.IsDefined(typeof(GenderType), message.GenderCode.ToUpper()) ? message.GenderCode.ToUpper() : null;
