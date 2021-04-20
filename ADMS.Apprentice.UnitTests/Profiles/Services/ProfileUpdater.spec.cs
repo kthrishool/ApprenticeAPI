@@ -1,219 +1,156 @@
-﻿//using System.Linq;
-//using ADMS.Apprentice.Core.Entities;
-//using ADMS.Apprentice.Core.Messages;
-//using ADMS.Apprentice.Core.Services;
-//using ADMS.Apprentice.UnitTests.Constants;
-//using Adms.Shared;
-//using Adms.Shared.Testing;
-//using FluentAssertions;
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
-//using ADMS.Apprentice.Core.Services.Validators;
+﻿using System.Linq;
+using ADMS.Apprentice.Core.Entities;
+using ADMS.Apprentice.Core.Messages;
+using ADMS.Apprentice.Core.Services;
+using ADMS.Apprentice.UnitTests.Constants;
+using Adms.Shared;
+using Adms.Shared.Testing;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ADMS.Apprentice.Core.Services.Validators;
 
-//namespace ADMS.Apprentice.UnitTests.Profiles.Services
-//{
-//    #region WhenUpdatingAProfile
+namespace ADMS.Apprentice.UnitTests.Profiles.Services
+{
+    #region WhenUpdatingAProfile
 
-//    [TestClass]
-//    public class WhenUpdatigAProfile : GivenWhenThen<ProfileUpdater>
-//    {
-//        private Profile profile;
-//        private UpdateProfileMessage message;
+    [TestClass]
+    public class WhenUpdatigAProfile : GivenWhenThen<ProfileUpdater>
+    {
+        private Profile profile;
+        private UpdateProfileMessage message;
 
-//        protected override void Given()
-//        {
-//            message = new UpdateProfileMessage
-//            {
-//                Surname = ProfileConstants.Surname,
-//                FirstName = ProfileConstants.Firstname,
-//                BirthDate = ProfileConstants.Birthdate,
-//                EmailAddress = ProfileConstants.Emailaddress,
-//                ProfileType = ProfileConstants.Profiletype,
-//                PhoneNumbers = ProfileConstants.PhoneNumbers,
-//                ResidentialAddress = ProfileConstants.ResidentialAddress,
-//                PostalAddress = ProfileConstants.PostalAddress,
-//                IndigenousStatusCode = ProfileConstants.IndigenousStatusCode,
-//                SelfAssessedDisabilityCode = ProfileConstants.SelfAssessedDisabilityCode,
-//                CitizenshipCode = ProfileConstants.CitizenshipCode,
-//                GenderCode = ProfileConstants.GenderCode,
-//                InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
-//                LanguageCode = ProfileConstants.LanguageCode,
-//                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
-//                CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
-//                HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
-//                LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
-//                LeftSchoolYearCode = ProfileConstants.LeftSchoolYearCode,
-//                Qualifications = ProfileConstants.Qualifications,
-//            };
+        protected override void Given()
+        {
+            profile = new Profile();
+            message = new UpdateProfileMessage(
+                new BasicDetailsMessage
+                {
+                    Surname = ProfileConstants.Surname,
+                    FirstName = ProfileConstants.Firstname,
+                    BirthDate = ProfileConstants.Birthdate,
+                    ProfileType = ProfileConstants.Profiletype,
+                    GenderCode = ProfileConstants.GenderCode,
+                },
+                new ContactDetailsMessage
+                {
+                    EmailAddress = ProfileConstants.Emailaddress,
+                    PhoneNumbers = ProfileConstants.PhoneNumbers,
+                    ResidentialAddress = ProfileConstants.ResidentialAddress,
+                    PostalAddress = ProfileConstants.PostalAddress,
+                    PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
+                },
+                new SchoolDetailsMessage
+                {
+                    HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
+                    LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
+                    LeftSchoolYearCode = ProfileConstants.LeftSchoolYearCode,
+                },
+                new OtherDetailsMessage
+                {
+                    IndigenousStatusCode = ProfileConstants.IndigenousStatusCode,
+                    SelfAssessedDisabilityCode = ProfileConstants.SelfAssessedDisabilityCode,
+                    CitizenshipCode = ProfileConstants.CitizenshipCode,
+                    InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
+                    LanguageCode = ProfileConstants.LanguageCode,
+                    CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
+                },
+                new QualificationDetailsMessage
+                {
+                    Qualifications = ProfileConstants.Qualifications,
+                }
+            );
+        }
 
-//            profile = new Profile
-//            {
-//            };
-//        }
+        protected override async void When()
+        {
+            profile = await ClassUnderTest.Update(profile, message);
+        }
 
-//        protected override async void When()
-//        {
-//            profile = await ClassUnderTest.Update(profile, message);
-//        }
+        [TestMethod]
+        public void SetsBasicDetails()
+        {
+            profile.FirstName.Should().Be(message.BasicDetails.FirstName);
+            profile.Surname.Should().Be(message.BasicDetails.Surname);
+            profile.BirthDate.Should().Be(message.BasicDetails.BirthDate);
+            profile.GenderCode.Should().Contain(message.BasicDetails.GenderCode);
+            profile.ProfileTypeCode.Should().Be(message.BasicDetails.ProfileType);
+        }
 
-//        [TestMethod]
-//        public void ShouldReturnProfile()
-//        {
-//            profile.Should().NotBeNull();
-//        }
+        [TestMethod]
+        public void SetsContactDetails()
+        {
+            profile.EmailAddress.Should().Be(message.ContactDetails.EmailAddress);
+            profile.Phones.Count().Should().Be(message.ContactDetails.PhoneNumbers.Count());
+            profile.Phones.Select(c => c.PhoneNumber).Should().Contain(message.ContactDetails.PhoneNumbers.Select(c => c.PhoneNumber));
+            profile.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString())
+                .Select(c => new ProfileAddressMessage()
+                {
+                    Postcode = c.Postcode,
+                    StateCode = c.StateCode,
+                    SingleLineAddress = c.SingleLineAddress,
+                    Locality = c.Locality,
+                    StreetAddress1 = c.StreetAddress1,
+                    StreetAddress2 = c.StreetAddress2,
+                    StreetAddress3 = c.StreetAddress3
+                }).Should().Contain(message.ContactDetails.ResidentialAddress);
 
-//        [TestMethod]
-//        public void ShouldAddTheProfileToTheDatabase()
-//        {
-//            Container.GetMock<IRepository>().Verify(r => r.Insert(profile));
-//        }
+            profile.Addresses.Where(c => c.AddressTypeCode == AddressType.POST.ToString())
+                .Select(c => new ProfileAddressMessage()
+                {
+                    Postcode = c.Postcode,
+                    StateCode = c.StateCode,
+                    SingleLineAddress = c.SingleLineAddress,
+                    Locality = c.Locality,
+                    StreetAddress1 = c.StreetAddress1,
+                    StreetAddress2 = c.StreetAddress2,
+                    StreetAddress3 = c.StreetAddress3
+                })
+                .Should().Contain(message.ContactDetails.PostalAddress);
+            profile.PreferredContactType.Should().Be(message.ContactDetails.PreferredContactType);
+        }
 
-//        [TestMethod]
-//        public void ShouldValidatesTheProfileRequest()
-//        {
-//            Container.GetMock<IProfileValidator>().Verify(r => r.ValidateAsync(profile));
-//        }
+        [TestMethod]
+        public void SetsOtherDetails()
+        {
+            profile.InterpretorRequiredFlag.Should().Be(message.OtherDetails.InterpretorRequiredFlag);
+            profile.CitizenshipCode.Should().Be(message.OtherDetails.CitizenshipCode);
+            profile.SelfAssessedDisabilityCode.Should().Be(message.OtherDetails.SelfAssessedDisabilityCode);
+            profile.IndigenousStatusCode.Should().Be(message.OtherDetails.IndigenousStatusCode);
+            profile.LanguageCode.Should().Contain(message.OtherDetails.LanguageCode);
+            profile.CountryOfBirthCode.Should().Contain(message.OtherDetails.CountryOfBirthCode);
+        }
 
-//        [TestMethod]
-//        public void ShouldSetTheName()
-//        {
-//            profile.FirstName.Should().Be(message.FirstName);
-//            profile.Surname.Should().Be(message.Surname);
-//        }
+        [TestMethod]
+        public void ShouldValidatesTheProfileRequest()
+        {
+            Container.GetMock<IProfileValidator>().Verify(r => r.ValidateAsync(profile));
+        }
+    }
+    #endregion
 
-//        [TestMethod]
-//        public void ShouldSetTheBirthDate()
-//        {
-//            profile.BirthDate.Should().Be(message.BirthDate);
-//        }
+    #region WhenUpdatingAProfileWithoutProvingAnyInfo
+    [TestClass]
+    public class WhenUpdatigAProfileWithoutProvidingAnyInfo : GivenWhenThen<ProfileUpdater>
+    {
+        private Profile profile;
+        private UpdateProfileMessage message;
 
-//        [TestMethod]
-//        public void ShouldSetDefaultValues()
-//        {
-//            profile.DeceasedFlag.Should().BeFalse();
-//            profile.ActiveFlag.Should().BeTrue();
-//        }
+        protected override void Given()
+        {
+            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname };
+            message = new UpdateProfileMessage(null, null, null, null, null);
+        }
 
-//        [TestMethod]
-//        public void ShouldSetProfileType()
-//        {
-//            profile.ProfileTypeCode.Should().Be(ProfileConstants.Profiletype);
-//        }
+        protected override async void When()
+        {
+            profile = await ClassUnderTest.Update(profile, message);
+        }
 
-//        /// <summary>
-//        /// Insert a profile record and check if the email has been updated .
-//        /// </summary>
-//        [TestMethod]
-//        public void ShouldSetEmailAddress()
-//        {
-//            profile.EmailAddress.Should().Be(message.EmailAddress);
-//        }
-
-//        [TestMethod]
-//        public void ShouldSetIndigenousStatusCode()
-//        {
-//            profile.IndigenousStatusCode.Should().Be(message.IndigenousStatusCode);
-//        }
-
-//        [TestMethod]
-//        public void ShouldSetDisabilityStatusCode()
-//        {
-//            profile.SelfAssessedDisabilityCode.Should().Be(message.SelfAssessedDisabilityCode);
-//        }
-
-//        [TestMethod]
-//        public void ShouldSetCitizenshipCode()
-//        {
-//            profile.CitizenshipCode.Should().Be(message.CitizenshipCode);
-//        }
-
-//        [TestMethod]
-//        public void ShouldSetInterpretorRequiredFlag()
-//        {
-//            profile.InterpretorRequiredFlag.Should().Be(message.InterpretorRequiredFlag);
-//        }
-
-
-//        [TestMethod]
-//        public void ShouldSetPhoneNumber()
-//        {
-//            profile.Phones.Select(c => c.PhoneNumber).Should().Contain(message.PhoneNumbers[0]);
-//        }
-
-//        [TestMethod]
-//        public void ShouldSetResidentialAddress()
-//        {
-//            profile.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString())
-//                .Select(c => new ProfileAddressMessage()
-//                {
-//                    Postcode = c.Postcode,
-//                    StateCode = c.StateCode,
-//                    SingleLineAddress = c.SingleLineAddress,
-//                    Locality = c.Locality,
-//                    StreetAddress1 = c.StreetAddress1,
-//                    StreetAddress2 = c.StreetAddress2,
-//                    StreetAddress3 = c.StreetAddress3
-//                })
-//                .Should().Contain(message.ResidentialAddress);
-//        }
-
-//        [TestMethod]
-//        public void ShouldSetPostalAddress()
-//        {
-//            profile.Addresses.Where(c => c.AddressTypeCode == AddressType.POST.ToString())
-//                .Select(c => new ProfileAddressMessage()
-//                {
-//                    Postcode = c.Postcode,
-//                    StateCode = c.StateCode,
-//                    SingleLineAddress = c.SingleLineAddress,
-//                    Locality = c.Locality,
-//                    StreetAddress1 = c.StreetAddress1,
-//                    StreetAddress2 = c.StreetAddress2,
-//                    StreetAddress3 = c.StreetAddress3
-//                })
-//                .Should().Contain(message.PostalAddress);
-//        }
-
-//        [TestMethod]
-//        public void ShouldSetGenderCode()
-//        {
-//            profile.GenderCode.Should().Contain(ProfileConstants.GenderCode);
-//        }
-
-//        public void ShouldSetCountryofBirthCodeCode()
-//        {
-//            profile.CountryOfBirthCode.Should().Contain(ProfileConstants.CountryOfBirthCode);
-//        }
-
-//        [TestMethod]
-//        public void ShouldSetLanguageCode()
-//        {
-//            profile.LanguageCode.Should().Contain(ProfileConstants.LanguageCode);
-//        }
-
-//        #endregion
-
-//        [TestMethod]
-//        public void ShouldSetPreferredContactCode()
-//        {
-//            profile.PreferredContactType.Should().Contain(ProfileConstants.PreferredContactType.ToString());
-//        }
-
-//        [TestMethod]
-//        public void ShouldSetSchoolLevelCode()
-//        {
-//            profile.HighestSchoolLevelCode.Should().Contain(ProfileConstants.HighestSchoolLevelCode);
-//        }
-
-//        [TestMethod]
-//        public void ShouldSetLeftSchoolMonthCode()
-//        {
-//            profile.LeftSchoolMonthCode.Should().Contain(ProfileConstants.LeftSchoolMonthCode);
-//        }
-
-//        [TestMethod]
-//        public void ShouldSetLeftSchoolYearCode()
-//        {
-//            profile.LeftSchoolYearCode.Should().Contain(ProfileConstants.LeftSchoolYearCode);
-//        }
-//    }
-//}
+        [TestMethod]
+        public void ProfileShouldHaveNoChange()
+        {
+            profile.Should().Be(profile);
+        }
+    }
+    #endregion
+}

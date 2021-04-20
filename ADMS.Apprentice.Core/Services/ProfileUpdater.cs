@@ -42,7 +42,7 @@ namespace ADMS.Apprentice.Core.Services
             profile.PreferredName = message.BasicDetails.PreferredName.Sanitise();
             profile.BirthDate = (System.DateTime)(message.BasicDetails.BirthDate);
             profile.GenderCode = Enum.IsDefined(typeof(GenderType), message.BasicDetails.GenderCode?.SanitiseUpper()) ? message.BasicDetails.GenderCode.SanitiseUpper() : null;
-            profile.ProfileTypeCode = Enum.IsDefined(typeof(ProfileType), message?.BasicDetails.ProfileType?.SanitiseUpper()) ? message.BasicDetails.ProfileType.SanitiseUpper() : null;
+            profile.ProfileTypeCode = Enum.IsDefined(typeof(ProfileType), message.BasicDetails.ProfileType?.SanitiseUpper()) ? message.BasicDetails.ProfileType.SanitiseUpper() : null;
         }
 
         private static void SetContactDetails(Profile profile, UpdateProfileMessage message)
@@ -50,9 +50,11 @@ namespace ADMS.Apprentice.Core.Services
             if (message?.ContactDetails == null) return;
 
             profile.EmailAddress = message.ContactDetails.EmailAddress.Sanitise();
+            
+            //remove existing phones
             profile.Phones.Clear();
             profile.Phones = message.ContactDetails.PhoneNumbers?.Select(c => new Phone()
-            { PhoneNumber = c, PhoneTypeCode = PhoneType.LandLine.ToString() }).ToList();
+            { PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag }).ToList();
 
             //remove the existing addresses
             profile.Addresses.Clear();

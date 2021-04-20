@@ -11,7 +11,7 @@ namespace ADMS.Apprentice.Core.Messages
         public string EmailAddress { get; init; }
 
         [Display(Name = "Phone number")]
-        public List<string> PhoneNumbers { get; init; }
+        public List<PhoneNumberMessage> PhoneNumbers { get; init; }
 
         [Display(Name = "Residential Address")]
         public ProfileAddressMessage ResidentialAddress { get; init; }
