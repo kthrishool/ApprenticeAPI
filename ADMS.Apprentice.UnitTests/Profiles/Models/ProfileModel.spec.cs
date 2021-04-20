@@ -68,12 +68,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 DeceasedFlag = ProfileConstants.DeceasedFlag,
                 ActiveFlag = ProfileConstants.ActiveFlag,
                 Addresses = add,
-                CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,                
+                CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
                 CreatedOn = ProfileConstants.Createdon,
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,
                 UpdatedBy = ProfileConstants.Updatedby,
-                Phones = ProfileConstants.PhoneNumbers.Select(c => new Phone() {PhoneNumber = c}).ToList(),
+                Phones = ProfileConstants.PhoneNumbers.Select(c => new Phone() {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList(),
                 LanguageCode = ProfileConstants.LanguageCode,
                 PreferredContactType = ProfileConstants.PreferredContactType.ToString()
             };
@@ -110,11 +110,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.ResidentialAddress.StreetAddress1.Should().Be(RestAddress.StreetAddress1);
             model.ActiveFlag.Should().BeTrue();
             model.DeceasedFlag.Should().BeFalse();
-            model.CountryOfBirthCode.Should().Be(ProfileConstants.CountryOfBirthCode);            
+            model.CountryOfBirthCode.Should().Be(ProfileConstants.CountryOfBirthCode);
             model.GenderCode.Should().Be(ProfileConstants.GenderCode);
             model.IndigenousStatusCode.Should().Be(ProfileConstants.IndigenousStatusCode);
             model.InterpretorRequiredFlag.Should().Be(ProfileConstants.InterpretorRequiredFlag);
-            model.Phones[0].Should().Be(ProfileConstants.PhoneNumbers[0]);
+            model.Phones[0].PhoneNumber.Should().Be(ProfileConstants.PhoneNumbers[0].PhoneNumber);
             model.PreferredName.Should().Be(ProfileConstants.PreferredName);
             model.SelfAssessedDisabilityCode.Should().Be(ProfileConstants.SelfAssessedDisabilityCode);
             model.LanguageCode.Should().Be(ProfileConstants.LanguageCode);

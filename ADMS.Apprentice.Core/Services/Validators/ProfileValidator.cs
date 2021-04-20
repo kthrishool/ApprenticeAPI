@@ -30,7 +30,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
         }
 
         public async Task<Profile> ValidateAsync(Profile profile)
-        {            
+        {
             if (!ValidateAge(profile.BirthDate))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeAge);
 
@@ -47,7 +47,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
             if (!profile.LeftSchoolMonthCode.IsNullOrEmpty() && !Enum.IsDefined(typeof(MonthCode), profile.LeftSchoolMonthCode))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidMonthCode);
 
-            var preferredPhoneFlag = false;
+            //var preferredPhoneFlag = false;
             if (profile.Phones != null)
             {
                 var newPhone = new List<Phone>();
@@ -57,15 +57,16 @@ namespace ADMS.Apprentice.Core.Services.Validators
                         if (phoneNumbers == null || phoneNumbers?.PhoneNumber?.Length == 0) continue;
                         var ErrorMessage = ValidationExceptionType.InvalidPhoneNumber;
                         string? formattedPhone = phoneNumbers?.PhoneNumber;
-                        if (!PhoneValidator.ValidatePhone(ref formattedPhone, ErrorMessage))
+                        PhoneType phoneType = PhoneType.MOBILE;
+                        if (!PhoneValidator.ValidatePhone(ref formattedPhone, ref phoneType, ErrorMessage))
                             throw exceptionFactory.CreateValidationException(ErrorMessage);
                         newPhone.Add(new Phone()
                         {
                             PhoneNumber = formattedPhone,
-                            PhoneTypeCode = PhoneType.LandLine.ToString(),
-                            PreferredPhoneFlag = !preferredPhoneFlag
+                            PhoneTypeCode = phoneType.ToString(),
+                            PreferredPhoneFlag = phoneNumbers.PreferredPhoneFlag
                         });
-                        preferredPhoneFlag = true;
+                        //  preferredPhoneFlag = true;
                     }
                 profile.Phones = newPhone;
             }
@@ -98,7 +99,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
             if (emailAddress.IsNullOrEmpty())
                 return true;
             if (!(new EmailAddressAttribute().IsValid(emailAddress)))
-                return false;            
+                return false;
 
             // check domain name in Email
             if (emailAddress != null)
@@ -123,7 +124,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
             if (stringYear.IsNullOrEmpty())
                 return true;
 
-            return (int.TryParse(stringYear, out int year) && (year >= 1900 && year <= DateTime.Now.Year));               
+            return (int.TryParse(stringYear, out int year) && (year >= 1900 && year <= DateTime.Now.Year));
         }
     }
 }

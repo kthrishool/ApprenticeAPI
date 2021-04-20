@@ -12,8 +12,6 @@ using Adms.Shared.Filters;
 using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
-using System;
 
 namespace ADMS.Apprentice.Api.Controllers
 {
@@ -27,21 +25,22 @@ namespace ADMS.Apprentice.Api.Controllers
     {
         private readonly IRepository repository;
         private readonly IPagingHelper pagingHelper;
-        private readonly IProfileCreator profileCreator;        
-        private readonly IProfileUpdater profileUpdater;
+
+        private readonly IProfileCreator profileCreator;
+        // private readonly IProfileUpdater profileUpdater;
 
         public ApprenticeProfileController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
             IPagingHelper pagingHelper,
-            IProfileCreator profileCreator,
-            IProfileUpdater profileUpdater            
+            IProfileCreator profileCreator
+            //, IProfileUpdater profileUpdater            
         ) : base(contextAccessor)
         {
             this.repository = repository;
             this.pagingHelper = pagingHelper;
-            this.profileCreator = profileCreator;            
-            this.profileUpdater = profileUpdater;
+            this.profileCreator = profileCreator;
+            //  this.profileUpdater = profileUpdater;
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace ADMS.Apprentice.Api.Controllers
         /// <param name="id">Id of the apprentice</param>
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfileModel>> Get(int id)
-        {            
+        {
             Profile profile = await repository.GetAsync<Profile>(id);
             return Ok(new ProfileModel(profile));
         }
@@ -78,7 +77,6 @@ namespace ADMS.Apprentice.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ProfileModel>> Create([FromBody] ProfileMessage message)
         {
-            
             Profile profile = await profileCreator.CreateAsync(message);
             await repository.SaveAsync();
             return Created($"/{profile.Id}", new ProfileModel(profile));
@@ -93,7 +91,7 @@ namespace ADMS.Apprentice.Api.Controllers
         public async Task<ActionResult<ProfileModel>> Update(int id, [FromBody] ProfileMessage message)
         {
             Profile profile = await repository.GetAsync<Profile>(id);
-            profileUpdater.Update(profile, message);
+            //profileUpdater.Update(profile, message);
             await repository.SaveAsync();
             return Ok(new ProfileModel(profile));
         }

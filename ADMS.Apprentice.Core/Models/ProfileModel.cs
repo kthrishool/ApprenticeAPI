@@ -30,7 +30,7 @@ namespace ADMS.Apprentice.Core.Models
         public string CountryOfBirthCode { get; }
         public string LanguageCode { get; }
         public string HighestSchoolLevelCode { get; }
-        public List<string> Phones { get; set; }
+        public List<PhoneNumberModel> Phones { get; set; }
         public string PreferredContactCode { get; set; }
         public ProfileAddressModel ResidentialAddress { get; set; }
         public ProfileAddressModel PostalAddress { get; set; }
@@ -72,7 +72,7 @@ namespace ADMS.Apprentice.Core.Models
             UpdatedBy = apprentice.UpdatedBy;
             Version = apprentice.Version;
             if (apprentice?.Phones?.Count > 0)
-                Phones = apprentice.Phones.Select(c => c.PhoneNumber).ToList();
+                Phones = apprentice.Phones.Select(c => new PhoneNumberModel() {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag, PhoneTypeCode = c.PhoneTypeCode}).ToList();
             if (apprentice.Addresses?.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
                 ResidentialAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).Select(c => new ProfileAddressModel
                 {
@@ -97,7 +97,6 @@ namespace ADMS.Apprentice.Core.Models
                 }).SingleOrDefault();
 
             Qualifications = apprentice.Qualifications?.Select(q => new ProfileQualificationModel(q)).ToList();
-
         }
     }
 }

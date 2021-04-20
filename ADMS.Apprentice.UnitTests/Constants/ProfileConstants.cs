@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
-using ADMS.Apprentice.Core.Models;
 
 namespace ADMS.Apprentice.UnitTests.Constants
 {
@@ -18,7 +17,13 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static DateTime Birthdate = DateTime.Now.AddYears(-25);
         public static string Emailaddress = "test@test.com";
         public static string Emailaddressmax256 = RandomString(247) + "@test.com";
-        public static List<string> PhoneNumbers = new List<string>() {"0212345678", "+61 2 1234 1111"};
+
+        public static List<PhoneNumberMessage> PhoneNumbers = new List<PhoneNumberMessage>()
+        {
+            new PhoneNumberMessage() {PhoneNumber = "0212345678"},
+            new PhoneNumberMessage() {PhoneNumber = "+61 2 1234 1111", PreferredPhoneFlag = true}
+        };
+
         public static List<string> InvalidPhoneNumbers = new List<string>() {"0212345678", "+61 2 1234 1111"};
         public static string Profiletype = "APPR";
         public static string IndigenousStatusCode = "@";
@@ -31,7 +36,7 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static string Updatedby = "User2";
         public static ProfileAddressMessage ResidentialAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street"};
         public static readonly ProfileAddressMessage PostalAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = null};
-        public static ProfileAddressMessage ResidentialSingleLineAddress = new ProfileAddressMessage() { SingleLineAddress = "14 Mort Street ACT BRADDON 2601"};
+        public static ProfileAddressMessage ResidentialSingleLineAddress = new ProfileAddressMessage() {SingleLineAddress = "14 Mort Street ACT BRADDON 2601"};
         public static string GenderCode = "M";
         public static string CountryOfBirthCode = "1101";
         public static string LanguageCode = "1200";
@@ -41,7 +46,7 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static bool DeceasedFlag = false;
         public static ProfileType ProfileTypeCode = ProfileType.APPR;
         public static PreferredContactType PreferredContactType = PreferredContactType.MOBILE;
-        public static Qualification Qualification = new Qualification() { QualificationCode = "QCode", QualificationDescription = "QDescription", StartDate = new DateTime(2000, 10, 1), EndDate = new DateTime(2002, 10, 1) };
+        public static Qualification Qualification = new Qualification() {QualificationCode = "QCode", QualificationDescription = "QDescription", StartDate = new DateTime(2000, 10, 1), EndDate = new DateTime(2002, 10, 1)};
 
         public static bool ActiveFlag = true;
         // public static byte[] Version = Convert.ToBase64String("1.1") ;

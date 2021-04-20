@@ -2,12 +2,12 @@
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services;
+using ADMS.Apprentice.Core.Services.Validators;
 using ADMS.Apprentice.UnitTests.Constants;
 using Adms.Shared;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ADMS.Apprentice.Core.Services.Validators;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -39,7 +39,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 LanguageCode = ProfileConstants.LanguageCode,
                 PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
                 CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
-                HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,     
+                HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
                 LeftSchoolYearCode = ProfileConstants.LeftSchoolYearCode,
             };
@@ -131,7 +131,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldSetPhoneNumber()
         {
-            profile.Phones.Select(c => c.PhoneNumber).Should().Contain(message.PhoneNumbers[0]);
+            profile.Phones.Select(c => c.PhoneNumber).Should().Contain(message.PhoneNumbers[0].PhoneNumber);
         }
 
         [TestMethod]

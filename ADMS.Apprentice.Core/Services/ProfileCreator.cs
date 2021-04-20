@@ -2,11 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
-using ADMS.Apprentice.Core.Messages;
-using Adms.Shared;
-using Adms.Shared.Extensions;
 using ADMS.Apprentice.Core.Helpers;
+using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services.Validators;
+using Adms.Shared;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -39,23 +38,23 @@ namespace ADMS.Apprentice.Core.Services
                 ProfileTypeCode =
                     Enum.IsDefined(typeof(ProfileType), message?.ProfileType) ? message.ProfileType : null,
                 Phones = message.PhoneNumbers?.Select(c => new Phone()
-                    {PhoneNumber = c, PhoneTypeCode = PhoneType.LandLine.ToString()}).ToList(),
+                    {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList(),
                 CountryOfBirthCode = message.CountryOfBirthCode.SanitiseUpper(),
                 PreferredContactType = message.PreferredContactType.SanitiseUpper(),
-                
+
                 LanguageCode = message.LanguageCode.SanitiseUpper(),
-                HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),  
+                HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),
                 LeftSchoolMonthCode = message.LeftSchoolMonthCode.SanitiseUpper(),
                 LeftSchoolYearCode = message.LeftSchoolYearCode.SanitiseUpper(),
                 Qualifications = message.Qualifications?.Select(q => new Qualification()
                 {
                     QualificationCode = q.QualificationCode.SanitiseUpper(),
-                    QualificationDescription = q.QualificationDescription.Sanitise(),                    
+                    QualificationDescription = q.QualificationDescription.Sanitise(),
                     StartMonth = q.StartMonth.SanitiseUpper(),
                     StartYear = q.StartYear.Sanitise(),
                     EndMonth = q.EndMonth.SanitiseUpper(),
-                    EndYear = q.EndYear.Sanitise(),                    
-                }).ToList(),                    
+                    EndYear = q.EndYear.Sanitise(),
+                }).ToList(),
             };
             if (message.GenderCode != null)
             {

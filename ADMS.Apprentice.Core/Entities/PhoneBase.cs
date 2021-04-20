@@ -6,7 +6,7 @@ namespace ADMS.Apprentice.Core.Entities
     {
         public string PhoneTypeCode { get; set; }
         public string PhoneNumber { get; set; }
-        public Boolean PreferredPhoneFlag { get; set; }
+        public Boolean? PreferredPhoneFlag { get; set; }
 
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }

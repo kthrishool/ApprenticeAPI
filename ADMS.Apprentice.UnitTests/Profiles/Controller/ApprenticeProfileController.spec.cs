@@ -26,7 +26,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private Profile profile;
         private ActionResult<ProfileModel> profileResult;
         private ProfileMessage message;
-        
+
         private Dictionary<string, Tuple<int, string, bool>> profileFieldDefinition;
 
         private Dictionary<string, Tuple<int, string, bool>> addressFieldDefinition;
@@ -52,7 +52,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 BirthDate = dob,
                 EmailAddress = email,
                 ProfileType = profileType,
-                PhoneNumbers = phoneNumbers?.ToList(),
+                PhoneNumbers = phoneNumbers?.Select(c => new PhoneNumberMessage() {PhoneNumber = c}).ToList(),
                 IndigenousStatusCode = indigenousStatusCode,
                 SelfAssessedDisabilityCode = selfAssessedDisabilityCode,
                 CitizenshipCode = citizenshipCode,

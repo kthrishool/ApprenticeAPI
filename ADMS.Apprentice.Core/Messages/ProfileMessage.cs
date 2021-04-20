@@ -37,7 +37,7 @@ namespace ADMS.Apprentice.Core.Messages
         public string ProfileType { get; init; }
 
         [Display(Name = "Phone number")]
-        public List<string> PhoneNumbers { get; init; }
+        public List<PhoneNumberMessage> PhoneNumbers { get; init; }
 
         [Display(Name = "Residential Address")]
         public ProfileAddressMessage ResidentialAddress { get; init; }
@@ -78,10 +78,10 @@ namespace ADMS.Apprentice.Core.Messages
         [Display(Name = "HighestSchoolLevelCode")]
         [MaxLength(10, ErrorMessage = "Highest School Level Code Exceeds 10 Characters")]
         public string HighestSchoolLevelCode { get; init; }
-        
+
         [MaxLength(10, ErrorMessage = "Left School Month code Exceeds 10 Characters")]
         public string LeftSchoolMonthCode { get; init; }
-        
+
         [MaxLength(10, ErrorMessage = "Left School Year code Exceeds 10 Characters")]
         public string LeftSchoolYearCode { get; init; }
 

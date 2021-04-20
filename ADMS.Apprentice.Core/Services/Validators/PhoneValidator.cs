@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 
 namespace ADMS.Apprentice.Core.Services.Validators
@@ -9,8 +10,9 @@ namespace ADMS.Apprentice.Core.Services.Validators
     {
         private static readonly string[] startingCode = {"02", "03", "04", "07", "08", "13", "18"};
 
-        public static bool ValidatePhone(ref string phoneNumber, ValidationExceptionType errorMessage)
+        public static bool ValidatePhone(ref string phoneNumber, ref PhoneType phoneType, ValidationExceptionType errorMessage)
         {
+            phoneType = PhoneType.LANDLINE;
             if (!Enum.IsDefined(typeof(ValidationExceptionType), errorMessage))
                 throw new InvalidEnumArgumentException(nameof(errorMessage), (int) errorMessage, typeof(ValidationExceptionType));
             phoneNumber = new string(phoneNumber.ToCharArray().Where(char.IsDigit).ToArray());
@@ -22,6 +24,9 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 errorMessage = ValidationExceptionType.InvalidPhoneNumber;
                 return false;
             }
+            if (phoneNumber.Substring(0, 2) == "04")
+                phoneType = PhoneType.MOBILE;
+
             return true;
         }
     }

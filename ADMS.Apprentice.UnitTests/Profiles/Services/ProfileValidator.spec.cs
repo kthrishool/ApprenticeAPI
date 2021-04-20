@@ -175,7 +175,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void DoesNothingIfForPhonePositiveTesting()
         {
             // Phone Number is null
-            var phones = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = "0212345678"};
+            var phones = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "0212345678"};
 
             validProfile.Phones = null; //.Add(phones);
             ClassUnderTest.ValidateAsync(validProfile);
@@ -184,7 +184,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsValidationExceptionIfThePhoneNumberIsValid()
         {
-            var phones = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = "0212345678"};
+            var phones = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "0212345678"};
 
             validProfile.Phones.Add(phones);
             ClassUnderTest.ValidateAsync(validProfile);
@@ -193,7 +193,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void DoesNothingIfThePhoneNumberIsNull()
         {
-            var phones = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = "0212345678"};
+            var phones = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "0212345678"};
 
             validProfile.Phones.Add(phones);
             ClassUnderTest.ValidateAsync(validProfile);
@@ -201,7 +201,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         private void PhoneContainerError(string phones)
         {
-            var number = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = phones};
+            var number = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = phones};
 
             ChangeException(ValidationExceptionType.InvalidPhoneNumber);
 
@@ -212,7 +212,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         private void PhoneContainerPositive(string phones, Boolean needsConversion)
         {
-            var number = new Phone() {PhoneTypeCode = PhoneType.LandLine.ToString(), PhoneNumber = phones};
+            var number = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = phones};
 
             validProfile.Phones.Add(number);
             ClassUnderTest.ValidateAsync(validProfile);
