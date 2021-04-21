@@ -7,7 +7,7 @@ namespace ADMS.Apprentice.Core.Exceptions
         [ExceptionDetails("AP-VAL-0001", "Apprentice must be at least 12 years old")]
         InvalidApprenticeAge,
 
-        [ExceptionDetails("AP-VAL-0002", "Invalid Apprentice profile type ")]
+        [ExceptionDetails("AP-VAL-0002", "Invalid apprentice profile type ")]
         InvalidApprenticeprofileType,
 
         [ExceptionDetails("AP-VAL-0003", "ApprenticeId is not valid")]
@@ -22,55 +22,55 @@ namespace ADMS.Apprentice.Core.Exceptions
         [ExceptionDetails("AP-VAL-0006", "Phone number is mandatory")]
         NullPhoneNumber,
 
-        [ExceptionDetails("AP-VAL-0007", "Invalid Apprentice phone number")]
+        [ExceptionDetails("AP-VAL-0007", "Invalid apprentice phone number")]
         InvalidPhoneNumber,
 
-        [ExceptionDetails("AP-VAL-0008", "Invalid Email address")]
+        [ExceptionDetails("AP-VAL-0008", "Invalid email address")]
         InvalidEmailAddress,
 
-        [ExceptionDetails("AP-VAL-0008", "Invalid Postcode")]
+        [ExceptionDetails("AP-VAL-0008", "Invalid postcode")]
         InvalidPostcode,
 
-        [ExceptionDetails("AP-VAL-0009", "Invalid Address details")]
+        [ExceptionDetails("AP-VAL-0009", "Invalid address details")]
         AddressRecordNotFound,
 
-        [ExceptionDetails("AP-VAL-0010", "State selected is Invalid for the postcode selected")]
+        [ExceptionDetails("AP-VAL-0010", "State selected is invalid for the postcode selected")]
         PostCodeStateCodeMismatch,
 
-        [ExceptionDetails("AP-VAL-0011", "Suburb selected is Invalid for the postcode")]
+        [ExceptionDetails("AP-VAL-0011", "Suburb selected is invalid for the postcode")]
         PostCodeLocalityMismatch,
 
-        [ExceptionDetails("AP-VAL-0012", "Invalid State Code")]
+        [ExceptionDetails("AP-VAL-0012", "Invalid state code")]
         InvalidStateCode,
 
-        [ExceptionDetails("AP-VAL-0013", "Street Address Line Exceeds 80 Characters")]
+        [ExceptionDetails("AP-VAL-0013", "Street address line exceeds 80 characters")]
         StreetAddressExceedsMaxLength,
 
-        [ExceptionDetails("AP-VAL-0014", "Suburb name Exceeds 40 Characters")]
+        [ExceptionDetails("AP-VAL-0014", "Suburb name exceeds 40 characters")]
         SuburbExceedsMaxLength,
 
-        [ExceptionDetails("AP-VAL-0015", "Street Address Line cannot be null")]
+        [ExceptionDetails("AP-VAL-0015", "Street address line cannot be null")]
         StreetAddressLine1CannotBeNull,
 
         [ExceptionDetails("AP-VAL-0016", "Unexpected error while processing your request")]
         ServerError,
 
-        [ExceptionDetails("AP-VAL-0017", "Invalid Country code")]
+        [ExceptionDetails("AP-VAL-0017", "Invalid country code")]
         InvalidCountryCode,
 
-        [ExceptionDetails("AP-VAL-0018", "Postcode selected is Invalid for the state selected")]
+        [ExceptionDetails("AP-VAL-0018", "Postcode selected is invalid for the state selected")]
         PostCodeMismatch,
 
-        [ExceptionDetails("AP-VAL-0019", "Invalid Language code")]
+        [ExceptionDetails("AP-VAL-0019", "Invalid language code")]
         InvalidLanguageCode,
 
-        [ExceptionDetails("AP-VAL-0020", "Invalid Highest school level code")]
+        [ExceptionDetails("AP-VAL-0020", "Invalid highest school level code")]
         InvalidHighestSchoolLevelCode,
 
-        [ExceptionDetails("AP-VAL-0021", "Invalid Month code")]
+        [ExceptionDetails("AP-VAL-0021", "Invalid month code")]
         InvalidMonthCode,
 
-        [ExceptionDetails("AP-VAL-0022", "Invalid Left school year")]
+        [ExceptionDetails("AP-VAL-0022", "Invalid left school year")]
         InvalidLeftSchoolYear,
 
         [ExceptionDetails("AP-VAL-0023", "Missing mobile phone details for preferred contact")]
@@ -88,7 +88,7 @@ namespace ADMS.Apprentice.Core.Exceptions
         [ExceptionDetails("AP-VAL-0027", "Invalid preferred contact type code")]
         InvalidPreferredContactCode,
 
-        [ExceptionDetails("AP-VAL-0028", "Invalid Qualification details")]
+        [ExceptionDetails("AP-VAL-0028", "Invalid qualification details")]
         InvalidQualification,
     }
 }

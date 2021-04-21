@@ -46,10 +46,11 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
             if (!profile.LeftSchoolMonthCode.IsNullOrEmpty() && !Enum.IsDefined(typeof(MonthCode), profile.LeftSchoolMonthCode))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidMonthCode);
-            
+
             if (profile.Phones != null)
             {
                 var newPhone = new List<Phone>();
+                var preferredPhoneSet = false;
                 if (profile?.Phones != null)
                     foreach (Phone phoneNumbers in profile.Phones)
                     {
@@ -59,12 +60,21 @@ namespace ADMS.Apprentice.Core.Services.Validators
                         PhoneType phoneType = PhoneType.MOBILE;
                         if (!PhoneValidator.ValidatePhone(ref formattedPhone, ref phoneType, ErrorMessage))
                             throw exceptionFactory.CreateValidationException(ErrorMessage);
-                        newPhone.Add(new Phone()
+                        if (preferredPhoneSet && Convert.ToBoolean(phoneNumbers.PreferredPhoneFlag))
                         {
-                            PhoneNumber = formattedPhone,
-                            PhoneTypeCode = phoneType.ToString(),
-                            PreferredPhoneFlag = phoneNumbers.PreferredPhoneFlag
-                        });                        
+                            phoneNumbers.PreferredPhoneFlag = false;
+                        }
+                        else if (Convert.ToBoolean(phoneNumbers.PreferredPhoneFlag))
+                            preferredPhoneSet = Convert.ToBoolean(phoneNumbers.PreferredPhoneFlag);
+                        if (!newPhone.Any(c => phoneNumbers.PhoneNumber.Contains(c.PhoneNumber)))
+                        {
+                            newPhone.Add(new Phone()
+                            {
+                                PhoneNumber = formattedPhone,
+                                PhoneTypeCode = phoneType.ToString(),
+                                PreferredPhoneFlag = phoneNumbers.PreferredPhoneFlag
+                            });
+                        }
                     }
                 profile.Phones = newPhone;
             }

@@ -114,11 +114,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.GenderCode.Should().Be(ProfileConstants.GenderCode);
             model.IndigenousStatusCode.Should().Be(ProfileConstants.IndigenousStatusCode);
             model.InterpretorRequiredFlag.Should().Be(ProfileConstants.InterpretorRequiredFlag);
-            model.Phones[0].PhoneNumber.Should().Be(ProfileConstants.PhoneNumbers[0].PhoneNumber);
+            model.PhoneNumbers[0].PhoneNumber.Should().Be(ProfileConstants.PhoneNumbers[0].PhoneNumber);
             model.PreferredName.Should().Be(ProfileConstants.PreferredName);
             model.SelfAssessedDisabilityCode.Should().Be(ProfileConstants.SelfAssessedDisabilityCode);
             model.LanguageCode.Should().Be(ProfileConstants.LanguageCode);
-            model.PreferredContactCode.Should().Be(ProfileConstants.PreferredContactType.ToString());
+            model.PreferredContactType.Should().Be(ProfileConstants.PreferredContactType.ToString());
             model.HighestSchoolLevelCode.Should().Be(ProfileConstants.HighestSchoolLevelCode);
             model.LeftSchoolMonthCode.Should().Be(ProfileConstants.LeftSchoolMonthCode);
             model.LeftSchoolYearCode.Should().Be(ProfileConstants.LeftSchoolYearCode);

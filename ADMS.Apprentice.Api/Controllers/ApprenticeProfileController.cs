@@ -25,21 +25,24 @@ namespace ADMS.Apprentice.Api.Controllers
     {
         private readonly IRepository repository;
         private readonly IPagingHelper pagingHelper;
-        private readonly IProfileCreator profileCreator;        
+        private readonly IProfileCreator profileCreator;
         private readonly IProfileUpdater profileUpdater;
+        private readonly IProfileRetreiver profileRetreiver;
 
         public ApprenticeProfileController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
             IPagingHelper pagingHelper,
             IProfileCreator profileCreator,
-            IProfileUpdater profileUpdater            
+            IProfileUpdater profileUpdater,
+            IProfileRetreiver profileRetreiver
         ) : base(contextAccessor)
         {
             this.repository = repository;
             this.pagingHelper = pagingHelper;
-            this.profileCreator = profileCreator;            
+            this.profileCreator = profileCreator;
             this.profileUpdater = profileUpdater;
+            this.profileRetreiver = profileRetreiver;
         }
 
         /// <summary>
@@ -52,7 +55,8 @@ namespace ADMS.Apprentice.Api.Controllers
         {
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("id", true);
-            PagedList<Profile> profiles = await pagingHelper.ToPagedListAsync(repository.Retrieve<Profile>(), paging);
+            //   PagedList<Profile> profiles = await pagingHelper.ToPagedListAsync(repository.Retrieve<Profile>(), paging);
+            PagedList<Profile> profiles = await pagingHelper.ToPagedListAsync(profileRetreiver.RetreiveList(), paging);
             IEnumerable<ProfileListModel> models = profiles.Results.Map(a => new ProfileListModel(a));
             return Ok(new PagedList<ProfileListModel>(profiles, models));
         }

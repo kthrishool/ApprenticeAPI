@@ -24,14 +24,14 @@ namespace ADMS.Apprentice.Core.Models
         public string CitizenshipCode { get; }
         public string LeftSchoolMonthCode { get; }
         public string LeftSchoolYearCode { get; }
-        public string ProfileTypeCode { get; }
+        public string ProfileType { get; }
         public bool DeceasedFlag { get; }
         public bool ActiveFlag { get; }
         public string CountryOfBirthCode { get; }
         public string LanguageCode { get; }
         public string HighestSchoolLevelCode { get; }
-        public List<PhoneNumberModel> Phones { get; set; }
-        public string PreferredContactCode { get; set; }
+        public List<PhoneNumberModel> PhoneNumbers { get; set; }
+        public string PreferredContactType { get; set; }
         public ProfileAddressModel ResidentialAddress { get; set; }
         public ProfileAddressModel PostalAddress { get; set; }
         public List<ProfileQualificationModel> Qualifications { get; set; }
@@ -58,12 +58,12 @@ namespace ADMS.Apprentice.Core.Models
             InterpretorRequiredFlag = apprentice.InterpretorRequiredFlag;
             LeftSchoolMonthCode = apprentice.LeftSchoolMonthCode;
             LeftSchoolYearCode = apprentice.LeftSchoolYearCode;
-            ProfileTypeCode = apprentice.ProfileTypeCode;
+            ProfileType = apprentice.ProfileTypeCode;
             GenderCode = apprentice.GenderCode;
             CountryOfBirthCode = apprentice.CountryOfBirthCode;
             LanguageCode = apprentice.LanguageCode;
             HighestSchoolLevelCode = apprentice.HighestSchoolLevelCode;
-            PreferredContactCode = apprentice.PreferredContactType;
+            PreferredContactType = apprentice.PreferredContactType;
             DeceasedFlag = apprentice.DeceasedFlag;
             ActiveFlag = apprentice.ActiveFlag;
             CreatedOn = apprentice.CreatedOn;
@@ -72,7 +72,7 @@ namespace ADMS.Apprentice.Core.Models
             UpdatedBy = apprentice.UpdatedBy;
             Version = apprentice.Version;
             if (apprentice?.Phones?.Count > 0)
-                Phones = apprentice.Phones.Select(c => new PhoneNumberModel() {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag, PhoneTypeCode = c.PhoneTypeCode}).ToList();
+                PhoneNumbers = apprentice.Phones.Select(c => new PhoneNumberModel() {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag, PhoneTypeCode = c.PhoneTypeCode}).ToList();
             if (apprentice.Addresses?.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
                 ResidentialAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).Select(c => new ProfileAddressModel
                 {
