@@ -33,20 +33,22 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             {
                 QualificationCode = "QCode",
                 QualificationDescription = "QDescription",
+                QualificationLevel = "524",
+                QualificationANZSCOCode = "ANZS",
                 StartMonth = "JAN",
-                StartYear = "2000",
+                StartYear = 2000,
                 EndMonth = "DEC",
-                EndYear = "2004",
+                EndYear = 2004,
             };
             profile.Qualifications.Add(qualification);
-            validationException = new ValidationException(null, (ValidationError) null);
+            validationException = new ValidationException(null, (ValidationError)null);
             Container
                 .GetMock<IExceptionFactory>()
                 .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidQualification))
                 .Returns(validationException);
         }
 
-        
+
         protected override async void When()
         {
             profile.Qualifications = await ClassUnderTest.ValidateAsync(profile.Qualifications.ToList());
@@ -57,58 +59,149 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             profile.Qualifications.ToList().ForEach(x =>
             {
-                x.StartDate.Should().Be(new DateTime(int.Parse(x.StartYear), DateTime.ParseExact(x.StartMonth, "MMM", CultureInfo.CurrentCulture).Month, 1));
-                x.EndDate.Should().Be(new DateTime(int.Parse(x.EndYear), DateTime.ParseExact(x.EndMonth, "MMM", CultureInfo.CurrentCulture).Month, 1));
+                x.StartDate.Should().Be(new DateTime(x.StartYear.Value, DateTime.ParseExact(x.StartMonth, "MMM", CultureInfo.CurrentCulture).Month, 1));
+                x.EndDate.Should().Be(new DateTime(x.EndYear.Value, DateTime.ParseExact(x.EndMonth, "MMM", CultureInfo.CurrentCulture).Month, 1));
             });
         }
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfStartOrEndDateIsNull()
+        public void NoExceptionIfStartYearAndStartMonthIsNull()
         {
             profile.Qualifications = new List<Qualification>();
             qualification.StartMonth = null;
             qualification.StartYear = null;
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
-                .Should().Throw<ValidationException>();
+                .Should().NotThrow<ValidationException>();
         }
-        
-         [TestMethod]
-        public void ThrowsValidationExceptionIfStartOrEndMonthNotValid()
+
+        [TestMethod]
+        public void NoExceptionIfEndYearAndEndMonthIsNull()
         {
             profile.Qualifications = new List<Qualification>();
-            qualification.StartMonth = "MMM";
-            qualification.EndMonth = "OCT";
+            qualification.EndMonth = null;
+            qualification.EndYear = null;
+            profile.Qualifications.Add(qualification);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
+                .Should().NotThrow<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfQCodeIsNull()
+        {
+            profile.Qualifications = new List<Qualification>();
+            qualification.QualificationCode = null;
+            profile.Qualifications.Add(qualification);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
+                .Should().Throw<ValidationException>();
+        }
+        [TestMethod]
+        public void ThrowsValidationExceptionIfStartMonthNullAndStartYearHasValue()
+        {
+            profile.Qualifications = new List<Qualification>();
+            qualification.StartMonth = null;            
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
                 .Should().Throw<ValidationException>();
         }
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfStartYearIsNotValid()
+        public void ThrowsValidationExceptionIfEndMonthNullAndEndYearHasValue()
         {
             profile.Qualifications = new List<Qualification>();
-            qualification.StartYear = "1800";            
+            qualification.EndMonth = null;
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
                 .Should().Throw<ValidationException>();
         }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfStartYearNullAndStartMonthHasValue()
+        {
+            profile.Qualifications = new List<Qualification>();
+            qualification.StartYear = null;
+            profile.Qualifications.Add(qualification);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfEndYearNullAndEndMonthHasValue()
+        {
+            profile.Qualifications = new List<Qualification>();
+            qualification.EndYear = null;
+            profile.Qualifications.Add(qualification);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfStartMonthIsInvalid()
+        {
+            profile.Qualifications = new List<Qualification>();
+            qualification.StartMonth = "MMM";            
+            profile.Qualifications.Add(qualification);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfEndMonthIsInvalid()
+        {
+            profile.Qualifications = new List<Qualification>();
+            qualification.EndMonth = "MMM";
+            profile.Qualifications.Add(qualification);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfStartYearIsInvalid()
+        {
+            profile.Qualifications = new List<Qualification>();
+            qualification.StartYear = 1800;
+            profile.Qualifications.Add(qualification);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfStartYearIsGreaterThanCurrentYear()
+        {
+            profile.Qualifications = new List<Qualification>();
+            qualification.StartYear = DateTime.Today.Year + 1;
+            profile.Qualifications.Add(qualification);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
+                .Should().Throw<ValidationException>();
+        }
+
 
         [TestMethod]
         public void ThrowsValidationExceptionIfEndYearIsNotValid()
         {
             profile.Qualifications = new List<Qualification>();
-            qualification.EndYear = "1800";
+            qualification.EndYear = 1800;
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
                 .Should().Throw<ValidationException>();
         }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfEndYearIsGreaterThanCurrentYear()
+        {
+            profile.Qualifications = new List<Qualification>();
+            qualification.EndYear = DateTime.Now.Year + 1;
+            profile.Qualifications.Add(qualification);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
+                .Should().Throw<ValidationException>();
+        }
+
         [TestMethod]
         public void ThrowsExceptionIfEndYearIsLessThanStartYear()
         {
             profile.Qualifications = new List<Qualification>();
-            qualification.StartYear = "2005";
-            qualification.EndYear = "2000";
+            qualification.StartYear = 2005;
+            qualification.EndYear = 2000;
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
                 .Should().Throw<ValidationException>();
@@ -117,8 +210,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ThrowsExceptionIfEndDateIsLessThanStartDate()
         {
             profile.Qualifications = new List<Qualification>();
-            qualification.StartYear = "2000";
-            qualification.EndYear = "2000";
+            qualification.StartYear = 2000;
+            qualification.EndYear = 2000;
             qualification.StartMonth = "DEC";
             qualification.EndMonth = "JAN";
             profile.Qualifications.Add(qualification);

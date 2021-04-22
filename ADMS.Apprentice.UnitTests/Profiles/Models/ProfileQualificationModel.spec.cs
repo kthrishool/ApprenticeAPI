@@ -39,10 +39,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
         {
             qualificationModel.QualificationCode.Should().Be(ProfileConstants.Qualification.QualificationCode);
             qualificationModel.QualificationDescription.Should().Be(ProfileConstants.Qualification.QualificationDescription);
-            qualificationModel.StartMonth.Should().Be(ProfileConstants.Qualification.StartDate.ToString("MMM").ToUpper());
-            qualificationModel.StartYear.Should().Be(ProfileConstants.Qualification.StartDate.Year.ToString());
-            qualificationModel.EndMonth.Should().Be(ProfileConstants.Qualification.EndDate.ToString("MMM").ToUpper());
-            qualificationModel.EndYear.Should().Be(ProfileConstants.Qualification.EndDate.Year.ToString());
+            qualificationModel.QualificationLevel.Should().Be(ProfileConstants.Qualification.QualificationLevel);
+            qualificationModel.QualificationANZSCOCode.Should().Be(ProfileConstants.Qualification.QualificationANZSCOCode);
+            qualificationModel.StartMonth.Should().Be(ProfileConstants.Qualification.StartDate?.ToString("MMM").ToUpper());
+            qualificationModel.StartYear.Should().Be(ProfileConstants.Qualification.StartDate?.Year);
+            qualificationModel.EndMonth.Should().Be(ProfileConstants.Qualification.EndDate?.ToString("MMM").ToUpper());
+            qualificationModel.EndYear.Should().Be(ProfileConstants.Qualification.EndDate?.Year); 
         }
     }
 

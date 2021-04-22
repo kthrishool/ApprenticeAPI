@@ -9,10 +9,12 @@ namespace ADMS.Apprentice.Core.Models
         public int QualificationId { get; }
         public string QualificationCode { get; }
         public string QualificationDescription { get; }
+        public string QualificationLevel { get; }
+        public string QualificationANZSCOCode { get; }
         public string StartMonth { get; }
-        public string StartYear { get; }
+        public int? StartYear { get; }
         public string EndMonth { get; }
-        public string EndYear { get; }
+        public int? EndYear { get; }
 
         public DateTime? CreatedOn { get; }
         public string CreatedBy { get; }
@@ -26,10 +28,12 @@ namespace ADMS.Apprentice.Core.Models
             QualificationId = qualification.Id;
             QualificationCode = qualification.QualificationCode;
             QualificationDescription = qualification.QualificationDescription;
-            StartMonth = qualification.StartDate.ToString("MMM").ToUpper();
-            StartYear = qualification.StartDate.Year.ToString();
-            EndMonth = qualification.EndDate.ToString("MMM").ToUpper();
-            EndYear = qualification.EndDate.Year.ToString();
+            QualificationLevel = qualification.QualificationLevel;
+            QualificationANZSCOCode = qualification.QualificationANZSCOCode;
+            StartMonth = qualification.StartDate?.ToString("MMM").ToUpper();
+            StartYear = qualification.StartDate?.Year;
+            EndMonth = qualification.EndDate?.ToString("MMM").ToUpper();
+            EndYear = qualification.EndDate?.Year;
 
             CreatedOn = qualification.CreatedOn;
             CreatedBy = qualification.CreatedBy;

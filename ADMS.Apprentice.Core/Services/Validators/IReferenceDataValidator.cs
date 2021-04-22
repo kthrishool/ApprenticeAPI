@@ -8,5 +8,6 @@ namespace ADMS.Apprentice.Core.Services.Validators
     public interface IReferenceDataValidator
     {
         Task ValidateAsync(Profile profile);
+        Task ValidateAsync(Qualification qualification);
     }
 }

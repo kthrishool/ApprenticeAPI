@@ -12,5 +12,7 @@ namespace ADMS.Apprentice.Core.HttpClients.ReferenceDataApi
         public const string language = "LANG";
         public const string schoolLevel = "SLVL";
         public const string month = "MNTH";
+        public const string qualificationLevel = "QLFL";
+        public const string ANZSCOCode = "ANZS";
     }
 }

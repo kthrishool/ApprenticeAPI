@@ -48,15 +48,17 @@ namespace ADMS.Apprentice.Core.Services
                 LeftSchoolYearCode = message.LeftSchoolYearCode.SanitiseUpper(),
                 Qualifications = message.Qualifications?.Select(q => new Qualification()
                 {
-                    QualificationCode = q.QualificationCode.SanitiseUpper(),
+                    QualificationCode = q.QualificationCode.Sanitise(),
                     QualificationDescription = q.QualificationDescription.Sanitise(),
+                    QualificationLevel = q.QualificationLevel.Sanitise(),
+                    QualificationANZSCOCode = q.QualificationANZSCOCode.Sanitise(),
                     StartMonth = q.StartMonth.SanitiseUpper(),
-                    StartYear = q.StartYear.Sanitise(),
+                    StartYear = q.StartYear,
                     EndMonth = q.EndMonth.SanitiseUpper(),
-                    EndYear = q.EndYear.Sanitise(),
+                    EndYear = q.EndYear,
                 }).ToList(),
             };
-            profile.CitizenshipCode = message.CitizenshipCode.SanitiseUpper();
+           
             if (message.GenderCode != null)
             {
                 profile.GenderCode = Enum.IsDefined(typeof(GenderType), message.GenderCode.ToUpper()) ? message.GenderCode.ToUpper() : null;

@@ -23,16 +23,17 @@ namespace ADMS.Apprentice.Database.Mappings
                 .IsRequired();
             entity.Property(e => e.QualificationDescription)
                 .HasColumnName("QualificationDescription")
-                .HasMaxLength(50);                
-
+                .HasMaxLength(50);
+            entity.Property(e => e.QualificationLevel)
+                .HasColumnName("QualificationLevel")
+                .HasMaxLength(10);
+            entity.Property(e => e.QualificationANZSCOCode)
+                .HasColumnName("QualificationANZSCOCode")
+                .HasMaxLength(10);
             entity.Property(e => e.StartDate)
-                .HasColumnName("StartDate")                
-                .IsRequired();
-
+                .HasColumnName("StartDate");
             entity.Property(e => e.EndDate)
-                .HasColumnName("EndDate")                
-                .IsRequired();            
-
+                .HasColumnName("EndDate");              
             entity.Property(x => x.Version)
                 .HasColumnName("Version")
                 .IsRequired()

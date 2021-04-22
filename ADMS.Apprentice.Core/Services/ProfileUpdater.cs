@@ -118,12 +118,14 @@ namespace ADMS.Apprentice.Core.Services
             profile.Qualifications.Clear();
             profile.Qualifications = message.QualificationDetails.Qualifications?.Select(q => new Qualification()
             {
-                QualificationCode = q.QualificationCode.SanitiseUpper(),
+                QualificationCode = q.QualificationCode.Sanitise(),
                 QualificationDescription = q.QualificationDescription.Sanitise(),
+                QualificationLevel = q.QualificationLevel.Sanitise(),
+                QualificationANZSCOCode = q.QualificationANZSCOCode.Sanitise(),
                 StartMonth = q.StartMonth.SanitiseUpper(),
-                StartYear = q.StartYear.Sanitise(),
+                StartYear = q.StartYear,
                 EndMonth = q.EndMonth.SanitiseUpper(),
-                EndYear = q.EndYear.Sanitise(),
+                EndYear = q.EndYear,
             }).ToList();
         }    
     }

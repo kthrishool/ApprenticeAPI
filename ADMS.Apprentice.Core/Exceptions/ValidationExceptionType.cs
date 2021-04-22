@@ -90,5 +90,11 @@ namespace ADMS.Apprentice.Core.Exceptions
 
         [ExceptionDetails("AP-VAL-0028", "Invalid qualification details")]
         InvalidQualification,
+
+        [ExceptionDetails("AP-VAL-0030", "Invalid qualification level")]
+        InvalidQualificationLevel,
+
+        [ExceptionDetails("AP-VAL-0031", "Invalid qualification ANZSCO")]
+        InvalidQualificationANZSCO,
     }
 }

@@ -31,21 +31,18 @@ namespace ADMS.Apprentice.Api.Controllers
     {
         private readonly IRepository repository;
         private readonly IPagingHelper pagingHelper;
-        private readonly IQualificationValidator qualificationValidator;        
-        //private readonly IProfileUpdater profileUpdater;
+        private readonly IQualificationValidator qualificationValidator;              
 
         public ApprenticeQualificationController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
             IPagingHelper pagingHelper,
-            IQualificationValidator qualificationValidator
-            //IProfileUpdater profileUpdater            
+            IQualificationValidator qualificationValidator                 
         ) : base(contextAccessor)
         {
             this.repository = repository;
             this.pagingHelper = pagingHelper;
             this.qualificationValidator = qualificationValidator;            
-            //this.profileUpdater = profileUpdater;
         }
 
         /// <summary>
@@ -90,12 +87,14 @@ namespace ADMS.Apprentice.Api.Controllers
             Profile profile = await repository.GetAsync<Profile>(apprenticeId);
             Qualification qualification = new Qualification
             {
-                QualificationCode = message.QualificationCode.SanitiseUpper(),
+                QualificationCode = message.QualificationCode.Sanitise(),
                 QualificationDescription = message.QualificationDescription.Sanitise(),
+                QualificationLevel = message.QualificationLevel.Sanitise(),
+                QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise(),
                 StartMonth = message.StartMonth.SanitiseUpper(),
-                StartYear = message.StartYear.Sanitise(),
+                StartYear = message.StartYear,
                 EndMonth = message.EndMonth.SanitiseUpper(),
-                EndYear = message.EndYear.Sanitise(),
+                EndYear = message.EndYear,
             };
             
             await qualificationValidator.ValidateAsync(new List<Qualification> { qualification });
@@ -117,13 +116,16 @@ namespace ADMS.Apprentice.Api.Controllers
             Qualification qualification = profile.Qualifications.SingleOrDefault(x => x.Id == id);
             if (qualification != null)
             {
-                qualification.QualificationCode = message.QualificationCode;
-                qualification.QualificationDescription = message.QualificationDescription;
+                qualification.QualificationCode = message.QualificationCode.Sanitise();
+                qualification.QualificationDescription = message.QualificationDescription.Sanitise();
+                qualification.QualificationLevel = message.QualificationLevel.Sanitise();
+                qualification.QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise();
                 qualification.StartMonth = message.StartMonth.SanitiseUpper();
-                qualification.StartYear = message.StartYear.Sanitise();
+                qualification.StartYear = message.StartYear;
                 qualification.EndMonth = message.EndMonth.SanitiseUpper();
-                qualification.EndYear = message.EndYear.Sanitise();
+                qualification.EndYear = message.EndYear;
             }
+            //pass only the updated to validate
             await qualificationValidator.ValidateAsync(new List<Qualification> { qualification });
             await repository.SaveAsync();
             return Ok(new ProfileQualificationModel(profile.Qualifications.SingleOrDefault(x => x.Id == id)));

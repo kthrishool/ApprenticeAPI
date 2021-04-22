@@ -23,6 +23,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
     {
         private Profile newProfile;
         private ValidationException validationException;
+        private Qualification qualification;
 
         protected override void Given()
         {
@@ -233,7 +234,45 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
+        #region QualificationValidationUsingReferenceData
+        [TestMethod]
+        public async Task DoesNothingIfQualificationIsValid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "1101", Description = "test", });
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualification);
+
+
+            qualification = ProfileConstants.Qualification;            
+            await ClassUnderTest.ValidateAsync(qualification);
+        }
+
+        [TestMethod]
+        public async Task ThrowsExceptionIfQualificationLevelIsInvalid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "1101", Description = "test", });
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
+            qualification = ProfileConstants.Qualification;
+            qualification.QualificationLevel = "Invalid";
+            await ClassUnderTest.ValidateAsync(qualification);
+        }
+
+        [TestMethod]
+        public async Task ThrowsExceptionIfQualificationANZSCIsInvalid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "1101", Description = "test", });
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationANZSCO);
+            qualification = ProfileConstants.Qualification;
+            qualification.QualificationANZSCOCode = "Invalid";
+            await ClassUnderTest.ValidateAsync(qualification);
+        }
+        #endregion
     }
 
-    #endregion
+    #endregion    
 }

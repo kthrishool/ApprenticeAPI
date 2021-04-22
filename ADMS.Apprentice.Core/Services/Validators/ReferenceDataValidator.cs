@@ -93,8 +93,19 @@ namespace ADMS.Apprentice.Core.Services.Validators
             if (!string.IsNullOrEmpty(profile.PreferredContactType))
             {
                 await ValidatePreferredContactType(profile);
-            }               
-            
+            }            
+        }
+
+        public async Task ValidateAsync(Qualification qualification)
+        {
+            if (!qualification.QualificationLevel.IsNullOrEmpty())
+            {
+                await ValidateCode(CodeTypes.qualificationLevel, qualification.QualificationLevel, ValidationExceptionType.InvalidQualificationLevel);
+            }
+            if (!qualification.QualificationANZSCOCode.IsNullOrEmpty())
+            {
+                await ValidateCode(CodeTypes.ANZSCOCode, qualification.QualificationANZSCOCode, ValidationExceptionType.InvalidQualificationANZSCO);
+            }
         }
     }
 }

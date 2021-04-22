@@ -12,8 +12,10 @@ namespace ADMS.Apprentice.Core.Entities
 
         public string QualificationCode { get; set; }
         public string QualificationDescription { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }        
+        public string QualificationLevel { get; set; }
+        public string QualificationANZSCOCode { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }        
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
@@ -23,9 +25,9 @@ namespace ADMS.Apprentice.Core.Entities
 
         //Not mapped fields
         public string StartMonth;
-        public string StartYear;
+        public int? StartYear;
         public string EndMonth; 
-        public string EndYear;
+        public int? EndYear;
 
         public virtual Profile Profile { get; set; }
     }
