@@ -115,6 +115,8 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 var domainName = emailAddress.Substring(emailAddress.LastIndexOf('@') + 1);
                 if (domainName.IndexOf('.') < 1)
                     return false;
+                else if (emailAddress.IndexOf("..", StringComparison.Ordinal) >= 0)
+                    return false;
             }
             return true;
         }
