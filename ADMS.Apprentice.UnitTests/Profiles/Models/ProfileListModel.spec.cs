@@ -61,7 +61,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.BirthDate.Should().BeCloseTo(ProfileConstants.Birthdate);
             model.EmailAddress.Should().Be(ProfileConstants.Emailaddress);
             model.PreferredName.Should().Be(ProfileConstants.PreferredName);
-            model.ProfileTypeCode.Should().Be(ProfileType.APPR.ToString());
+            model.ProfileType.Should().Be(ProfileType.APPR.ToString());
             model.CreatedOn.Should().BeCloseTo(ProfileConstants.Createdon);
             model.UpdatedOn.Should().BeCloseTo(ProfileConstants.Updatedon);
             model.CreatedBy.Should().Be(ProfileConstants.Createdby);

@@ -12,7 +12,7 @@ namespace ADMS.Apprentice.Core.Models
         public string PreferredName { get; }
         public DateTime BirthDate { get; }
         public string EmailAddress { get; }
-        public string ProfileTypeCode { get; }
+        public string ProfileType { get; }
 
         public DateTime? CreatedOn { get; }
         public string CreatedBy { get; }
@@ -28,7 +28,7 @@ namespace ADMS.Apprentice.Core.Models
             PreferredName = apprentice.PreferredName;
             BirthDate = apprentice.BirthDate;
             EmailAddress = apprentice.EmailAddress;
-            ProfileTypeCode = apprentice?.ProfileTypeCode;
+            ProfileType = apprentice.ProfileTypeCode;
 
             CreatedOn = apprentice.CreatedOn;
             CreatedBy = apprentice.CreatedBy;
