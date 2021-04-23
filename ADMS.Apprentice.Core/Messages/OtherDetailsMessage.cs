@@ -21,11 +21,15 @@ namespace ADMS.Apprentice.Core.Messages
         public bool? InterpretorRequiredFlag { get; init; }
 
         [Display(Name = "CountryOfBirthCode")]
-        [MaxLength(10, ErrorMessage = "Country of birth code Exceeds 10 Characters")]
+        [MaxLength(10, ErrorMessage = "Country of birth code exceeds 10 Characters")]
         public string CountryOfBirthCode { get; init; }
 
         [Display(Name = "LanguageCode")]
-        [MaxLength(10, ErrorMessage = "Language code Exceeds 10 Characters")]
+        [MaxLength(10, ErrorMessage = "Language code exceeds 10 Characters")]
         public string LanguageCode { get; init; }
+        
+        [MaxLength(11, ErrorMessage = "Visa number exceeds 11 Characters")]
+        [RegularExpression("^[a-zA-Z0-9]{11}$", ErrorMessage = "Visa number must be a 11 character string with only alphanumeric characters")]
+        public string VisaNumber { get; init; }
     }
 }

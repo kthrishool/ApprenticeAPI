@@ -75,7 +75,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 UpdatedBy = ProfileConstants.Updatedby,
                 Phones = ProfileConstants.PhoneNumbers.Select(c => new Phone() {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList(),
                 LanguageCode = ProfileConstants.LanguageCode,
-                PreferredContactType = ProfileConstants.PreferredContactType.ToString()
+                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
+                VisaNumber = ProfileConstants.VisaNumber,
             };
         }
 
@@ -122,6 +123,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.HighestSchoolLevelCode.Should().Be(ProfileConstants.HighestSchoolLevelCode);
             model.LeftSchoolMonthCode.Should().Be(ProfileConstants.LeftSchoolMonthCode);
             model.LeftSchoolYearCode.Should().Be(ProfileConstants.LeftSchoolYearCode);
+            model.VisaNumber.Should().Be(ProfileConstants.VisaNumber);
         }
     }
 

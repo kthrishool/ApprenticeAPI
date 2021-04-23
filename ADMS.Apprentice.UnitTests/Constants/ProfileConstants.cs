@@ -50,6 +50,7 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static List<ProfileQualificationMessage> Qualifications = new List<ProfileQualificationMessage>
         { new ProfileQualificationMessage { QualificationCode = "QCode", QualificationDescription = "QDescription", StartMonth = "JAN", StartYear = 2000, EndMonth = "DEC", EndYear = 2004 } };
         public static bool ActiveFlag = true;
+        public static string VisaNumber = "12345678901";
         // public static byte[] Version = Convert.ToBase64String("1.1") ;
 
         public static string RandomString(int length)

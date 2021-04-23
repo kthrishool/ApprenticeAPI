@@ -109,6 +109,7 @@ namespace ADMS.Apprentice.Core.Services
 
             profile.IndigenousStatusCode = message.OtherDetails.IndigenousStatusCode.Sanitise();
             profile.SelfAssessedDisabilityCode = message.OtherDetails.SelfAssessedDisabilityCode.SanitiseUpper();
+            profile.VisaNumber = message.OtherDetails.VisaNumber.Sanitise();
         }
         private static void SetQualificationDetails(Profile profile, UpdateProfileMessage message)
         {

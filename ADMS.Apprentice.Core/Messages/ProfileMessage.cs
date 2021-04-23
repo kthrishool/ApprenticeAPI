@@ -85,6 +85,10 @@ namespace ADMS.Apprentice.Core.Messages
         [MaxLength(10, ErrorMessage = "Left School Year code Exceeds 10 Characters")]
         public string LeftSchoolYearCode { get; init; }
 
+        [MaxLength(11, ErrorMessage = "Visa number exceeds 11 Characters")]
+        [RegularExpression("^[a-zA-Z0-9]{11}$", ErrorMessage = "Visa number must be a 11 character string with only alphanumeric characters")]
+        public string VisaNumber { get; init; }
+
         [Display(Name = "Qualifications")]
         public List<ProfileQualificationMessage> Qualifications { get; init; }
     }

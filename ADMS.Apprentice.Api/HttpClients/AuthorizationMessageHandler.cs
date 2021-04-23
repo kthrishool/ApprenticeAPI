@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace ADMS.Apprentice.Core.HttpClients
+namespace ADMS.Apprentice.Api.HttpClients
 {
     /// <summary>
     /// Adds authorization token from incoming requests to outgoing HttpClient requests

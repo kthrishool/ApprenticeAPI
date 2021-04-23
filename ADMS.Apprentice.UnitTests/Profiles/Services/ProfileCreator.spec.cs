@@ -8,6 +8,7 @@ using Adms.Shared;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -42,6 +43,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
                 LeftSchoolYearCode = ProfileConstants.LeftSchoolYearCode,
+                VisaNumber = ProfileConstants.VisaNumber,
             };
         }
 
@@ -60,7 +62,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ShouldAddTheProfileToTheDatabase()
         {
             Container.GetMock<IRepository>().Verify(r => r.Insert(profile));
-        }
+        }        
 
         [TestMethod]
         public void ShouldValidatesTheProfileRequest()
@@ -209,6 +211,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ShouldSetLeftSchoolYearCode()
         {
             profile.LeftSchoolYearCode.Should().Contain(ProfileConstants.LeftSchoolYearCode);
+        }
+
+        [TestMethod]
+        public void ShouldSetVisaNumber()
+        {
+            profile.VisaNumber.Should().Contain(ProfileConstants.VisaNumber);
         }
     }
 }

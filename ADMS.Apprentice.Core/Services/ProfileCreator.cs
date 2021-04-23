@@ -46,6 +46,7 @@ namespace ADMS.Apprentice.Core.Services
                 HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),
                 LeftSchoolMonthCode = message.LeftSchoolMonthCode.SanitiseUpper(),
                 LeftSchoolYearCode = message.LeftSchoolYearCode.SanitiseUpper(),
+                VisaNumber = message.VisaNumber.Sanitise(),
                 Qualifications = message.Qualifications?.Select(q => new Qualification()
                 {
                     QualificationCode = q.QualificationCode.Sanitise(),

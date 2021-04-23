@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
+using ADMS.Apprentice.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
 
-namespace ADMS.Apprentice.Core.HttpClients
+namespace ADMS.Apprentice.Api.HttpClients
 {
     public static class HttpClientConfiguration
     {

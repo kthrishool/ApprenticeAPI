@@ -236,40 +236,56 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         #region QualificationValidationUsingReferenceData
         [TestMethod]
-        public async Task DoesNothingIfQualificationIsValid()
+        public void DoesNothingIfQualificationIsValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "1101", Description = "test", });
 
             MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualification);
 
-
             qualification = ProfileConstants.Qualification;            
-            await ClassUnderTest.ValidateAsync(qualification);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(qualification)).Should().NotThrow();
         }
 
         [TestMethod]
-        public async Task ThrowsExceptionIfQualificationLevelIsInvalid()
+        public void ThrowsExceptionIfQualificationLevelIsInvalid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "1101", Description = "test", });
 
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
-            qualification = ProfileConstants.Qualification;
+            Container
+                .GetMock<IReferenceDataClient>()
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(list1);
+
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidQualificationLevel))
+                .Returns(validationException);
+            qualification = new Qualification();
             qualification.QualificationLevel = "Invalid";
-            await ClassUnderTest.ValidateAsync(qualification);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(qualification))
+                .Should().Throw<ValidationException>();
         }
 
         [TestMethod]
         public async Task ThrowsExceptionIfQualificationANZSCIsInvalid()
         {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "1101", Description = "test", });
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>(); 
+            Container
+                .GetMock<IReferenceDataClient>()
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(list1);
 
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationANZSCO);
-            qualification = ProfileConstants.Qualification;
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidQualificationANZSCO))
+                .Returns(validationException);
+
+            qualification = new Qualification();
             qualification.QualificationANZSCOCode = "Invalid";
-            await ClassUnderTest.ValidateAsync(qualification);
+            
+            ClassUnderTest.Invoking(c => c.ValidateAsync(qualification))
+                .Should().Throw<ValidationException>();
         }
         #endregion
     }

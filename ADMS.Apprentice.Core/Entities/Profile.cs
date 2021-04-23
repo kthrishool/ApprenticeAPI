@@ -15,20 +15,20 @@ namespace ADMS.Apprentice.Core.Entities
         public string GenderCode { get; set; }
         public DateTime BirthDate { get; set; }
         public string EmailAddress { get; set; }
+        public string PreferredContactType { get; set; }
         public string SelfAssessedDisabilityCode { get; set; }
         public string IndigenousStatusCode { get; set; }
         public string CitizenshipCode { get; set; }
-        public bool? InterpretorRequiredFlag { get; set; }
         public string HighestSchoolLevelCode { get; set; }
         public string LeftSchoolMonthCode { get; set; }
         public string LeftSchoolYearCode { get; set; }
         public string ProfileTypeCode { get; set; }
-        public bool DeceasedFlag { get; set; }
+        public string VisaNumber { get; set; }
         public string CountryOfBirthCode { get; set; }
-
         public string LanguageCode { get; set; }
-
-        public string PreferredContactType { get; set; }
+        public bool? InterpretorRequiredFlag { get; set; }       
+        public bool DeceasedFlag { get; set; } 
+        
         public bool ActiveFlag { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }

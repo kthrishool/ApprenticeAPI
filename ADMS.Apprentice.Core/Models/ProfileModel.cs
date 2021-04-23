@@ -30,6 +30,7 @@ namespace ADMS.Apprentice.Core.Models
         public string CountryOfBirthCode { get; }
         public string LanguageCode { get; }
         public string HighestSchoolLevelCode { get; }
+        public string VisaNumber { get; }
         public List<PhoneNumberModel> PhoneNumbers { get; set; }
         public string PreferredContactType { get; set; }
         public ProfileAddressModel ResidentialAddress { get; set; }
@@ -64,6 +65,7 @@ namespace ADMS.Apprentice.Core.Models
             LanguageCode = apprentice.LanguageCode;
             HighestSchoolLevelCode = apprentice.HighestSchoolLevelCode;
             PreferredContactType = apprentice.PreferredContactType;
+            VisaNumber = apprentice.VisaNumber;
             DeceasedFlag = apprentice.DeceasedFlag;
             ActiveFlag = apprentice.ActiveFlag;
             CreatedOn = apprentice.CreatedOn;
