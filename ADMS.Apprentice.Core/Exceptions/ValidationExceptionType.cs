@@ -96,5 +96,8 @@ namespace ADMS.Apprentice.Core.Exceptions
 
         [ExceptionDetails("AP-VAL-0031", "Invalid qualification ANZSCO")]
         InvalidQualificationANZSCO,
+
+        [ExceptionDetails("AP-VAL-0032", "Birth date is required")]
+        InvalidDOB,
     }
 }

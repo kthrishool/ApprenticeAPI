@@ -6,6 +6,7 @@ using ADMS.Apprentice.Core.Services.Validators;
 using ADMS.Apprentice.Core.Helpers;
 using System;
 using System.Linq;
+using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -40,8 +41,9 @@ namespace ADMS.Apprentice.Core.Services
             profile.FirstName = message.BasicDetails.FirstName;
             profile.OtherNames = message.BasicDetails.OtherNames.Sanitise();
             profile.PreferredName = message.BasicDetails.PreferredName.Sanitise();
-            profile.BirthDate = (System.DateTime)(message.BasicDetails.BirthDate);
-            profile.GenderCode = Enum.IsDefined(typeof(GenderType), message.BasicDetails.GenderCode?.SanitiseUpper()) ? message.BasicDetails.GenderCode.SanitiseUpper() : null;
+            profile.BirthDate = message.BasicDetails.BirthDate;
+            profile.GenderCode = message.BasicDetails.GenderCode.IsNullOrEmpty()? null :
+                Enum.IsDefined(typeof(GenderType), message.BasicDetails.GenderCode.SanitiseUpper()) ? message.BasicDetails.GenderCode.SanitiseUpper() : null;
             profile.ProfileTypeCode = Enum.IsDefined(typeof(ProfileType), message.BasicDetails.ProfileType?.SanitiseUpper()) ? message.BasicDetails.ProfileType.SanitiseUpper() : null;
         }
 

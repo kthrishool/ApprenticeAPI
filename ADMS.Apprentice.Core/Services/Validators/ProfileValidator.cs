@@ -31,6 +31,8 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
         public async Task<Profile> ValidateAsync(Profile profile)
         {
+            if (profile.BirthDate.Year == 0001)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidDOB);
             if (!ValidateAge(profile.BirthDate))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeAge);
 

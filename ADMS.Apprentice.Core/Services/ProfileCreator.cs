@@ -35,8 +35,7 @@ namespace ADMS.Apprentice.Core.Services
                 SelfAssessedDisabilityCode = message.SelfAssessedDisabilityCode.SanitiseUpper(),
                 InterpretorRequiredFlag = message.InterpretorRequiredFlag,
                 CitizenshipCode = message.CitizenshipCode.SanitiseUpper(),
-                ProfileTypeCode =
-                    Enum.IsDefined(typeof(ProfileType), message?.ProfileType) ? message.ProfileType : null,
+                ProfileTypeCode = Enum.IsDefined(typeof(ProfileType), message?.ProfileType.SanitiseUpper()) ? message.ProfileType.SanitiseUpper() : null,
                 Phones = message.PhoneNumbers?.Select(c => new Phone()
                     {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList(),
                 CountryOfBirthCode = message.CountryOfBirthCode.SanitiseUpper(),
