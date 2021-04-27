@@ -9,5 +9,7 @@ namespace ADMS.Apprentice.Core.Services
     public interface IProfileUpdater
     {
         Task<Profile> Update(Profile profile, UpdateProfileMessage message);
+        void Update(Profile profile, AdminUpdateMessage message);
+        void UpdateDeceasedFlag(Profile profile, bool deceased);
     }
 }

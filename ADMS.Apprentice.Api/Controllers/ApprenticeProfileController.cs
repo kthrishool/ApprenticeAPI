@@ -86,7 +86,7 @@ namespace ADMS.Apprentice.Api.Controllers
         }
 
         /// <summary>
-        /// Updates an existing AAIP claim application.
+        /// Updates an existing apprentice.
         /// </summary>
         /// <param name="id">ID of the application to be updated</param>
         /// <param name="message">Details of the information to be updated</param>
@@ -95,6 +95,38 @@ namespace ADMS.Apprentice.Api.Controllers
         {
             Profile profile = await repository.GetAsync<Profile>(id);
             await profileUpdater.Update(profile, message);
+            await repository.SaveAsync();
+            return Ok(new ProfileModel(profile));
+        }
+
+        /// <summary>
+        /// Updates an existing apprentice deceased flag to true.
+        /// </summary>
+        /// <param name="id">ID of the apprentice</param>        
+        [HttpPut("{id}/deceased")]
+        public async Task<ActionResult<ProfileModel>> Deceased(int id)
+        {
+            Profile profile = await repository.GetAsync<Profile>(id);
+            profileUpdater.UpdateDeceasedFlag(profile, true);
+            await repository.SaveAsync();
+            return Ok(new ProfileModel(profile));
+        }
+
+
+        /*******************************************************
+         *The current assumption that we dont allow network providers to change the deceased flag to false once they set to true.
+         *So creating separate endpoint in case if the department user need to update it to false.
+         *Feel free to change to another name / uri :)
+         *******************************************************/
+        /// <summary>
+        /// Updates an existing apprentice deceased flag to false and other special department updates.
+        /// </summary>
+        /// <param name="id">ID of the apprentice</param>        
+        [HttpPut("{id}/admin-update")]
+        public async Task<ActionResult<ProfileModel>> AdminUpdate(int id, [FromBody] AdminUpdateMessage message)
+        {
+            Profile profile = await repository.GetAsync<Profile>(id);
+            profileUpdater.Update(profile, message);
             await repository.SaveAsync();
             return Ok(new ProfileModel(profile));
         }

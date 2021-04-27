@@ -128,6 +128,96 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
     }
     #endregion
 
+    #region WhenUpdatingAProfileWithInvalidGenderAndProfileType
+    [TestClass]
+    public class WhenUpdatingAProfileWithInvalidGenderAndProfileType : GivenWhenThen<ProfileUpdater>
+    {
+        private Profile profile;
+        private UpdateProfileMessage message;
+
+        protected override void Given()
+        {
+            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode  = ProfileConstants.GenderCode };
+            message = new UpdateProfileMessage ( new BasicDetailsMessage { GenderCode = "Invalid", ProfileType = "Invalid" }, null, null, null, null );
+        }
+
+        protected override async void When()
+        {
+            profile = await ClassUnderTest.Update(profile, message);
+        }
+
+        [TestMethod]
+        public void GenderAndProfileTypeShouldBeNull()
+        {
+            profile.GenderCode.Should().BeNull();
+            profile.ProfileTypeCode.Should().BeNull();
+        }       
+
+    }
+    #endregion
+
+    #region WhenUpdatingAProfileWithNullGender
+    [TestClass]
+    public class WhenUpdatingAProfileWithNullGender : GivenWhenThen<ProfileUpdater>
+    {
+        private Profile profile;
+        private UpdateProfileMessage message;
+
+        protected override void Given()
+        {
+            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
+            message = new UpdateProfileMessage(new BasicDetailsMessage { GenderCode = "", ProfileType = "APPR" }, null, null, null, null);
+        }
+
+        protected override async void When()
+        {
+            profile = await ClassUnderTest.Update(profile, message);
+        }
+
+        [TestMethod]
+        public void GenderAndProfileTypeShouldBeNull()
+        {
+            profile.GenderCode.Should().BeNull();
+        }
+
+    }
+    #endregion
+
+    #region WhenUpdatingAProfileWithNoPhoneNumbers
+    [TestClass]
+    public class WhenUpdatingAProfileWithNoPhoneNumbers : GivenWhenThen<ProfileUpdater>
+    {
+        private Profile profile;
+        private UpdateProfileMessage message;
+
+        protected override void Given()
+        {
+            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
+            message = new UpdateProfileMessage(null,
+                new ContactDetailsMessage
+                {
+                    EmailAddress = ProfileConstants.Emailaddress,
+                    PhoneNumbers = null,
+                    ResidentialAddress = ProfileConstants.ResidentialAddress,
+                    PostalAddress = ProfileConstants.PostalAddress,
+                    PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
+                }, null, null, null);
+        }
+
+        protected override async void When()
+        {
+            profile = await ClassUnderTest.Update(profile, message);
+        }
+
+        [TestMethod]
+        public void PhoneNumbersShouldBeNull()
+        {
+            profile.Phones.Should().BeNull();
+        }
+
+    }
+    #endregion
+
     #region WhenUpdatingAProfileWithoutProvingAnyInfo
     [TestClass]
     public class WhenUpdatigAProfileWithoutProvidingAnyInfo : GivenWhenThen<ProfileUpdater>
@@ -138,7 +228,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         protected override void Given()
         {
             profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname };
-            message = new UpdateProfileMessage(null, null, null, null, null);
+            message = null;
         }
 
         protected override async void When()
@@ -150,6 +240,64 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ProfileShouldHaveNoChange()
         {
             profile.Should().Be(profile);
+        }
+
+        //[TestMethod]
+        //public  void ProfileShouldHaveNoChangeIfMessageIsNull()
+        //{
+        //    message = null;
+        //    //profile = await ClassUnderTest.Update(profile, message);
+        //    profile.Should().Be(profile);
+        //}
+    }
+    #endregion
+
+    #region WhenUpdatingDeceasedFlag
+    [TestClass]
+    public class WhenUpdatingDeceasedFlag : GivenWhenThen<ProfileUpdater>
+    {
+        private Profile profile;        
+
+        protected override void Given()
+        {
+            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname };            
+        }
+
+        protected override void When()
+        {
+            ClassUnderTest.UpdateDeceasedFlag(profile, true);
+        }
+
+        [TestMethod]
+        public void DeceasedFlagShouldBeTrue()
+        {
+            profile.DeceasedFlag.Should().Be(true);
+        }
+    }
+    #endregion
+
+    #region WhenAdminUpdateSpecialAttributes
+    [TestClass]
+    public class WhenAdminUpdates : GivenWhenThen<ProfileUpdater>
+    {
+        private Profile profile;
+        private AdminUpdateMessage message;
+
+        protected override void Given()
+        {
+            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, DeceasedFlag = true };
+            message = new AdminUpdateMessage { DeceasedFlag = false };
+        }
+
+        protected override void When()
+        {
+            ClassUnderTest.Update(profile, message);
+        }
+
+        [TestMethod]
+        public void DeceasedFlagShouldBeFlase()
+        {
+            profile.DeceasedFlag.Should().Be(false);
         }
     }
     #endregion

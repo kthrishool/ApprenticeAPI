@@ -176,6 +176,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.GenderCode.Should().Contain(ProfileConstants.GenderCode);
         }
 
+        [TestMethod]
         public void ShouldSetCountryofBirthCodeCode()
         {
             profile.CountryOfBirthCode.Should().Contain(ProfileConstants.CountryOfBirthCode);

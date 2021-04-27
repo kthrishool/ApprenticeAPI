@@ -19,6 +19,17 @@ namespace ADMS.Apprentice.Core.Services
             this.profileValidator = profileValidator;
         }
 
+        public void UpdateDeceasedFlag(Profile profile, bool deceased)
+        {
+            profile.DeceasedFlag = deceased;
+            //Need to think about ending any TCs that are active and therefore any TSL instalments pending. 
+        }
+
+        public void Update(Profile profile, AdminUpdateMessage message)
+        {
+            profile.DeceasedFlag = message.DeceasedFlag; //or call UpdateDeceasedFlag function??  
+        }
+
         public async Task<Profile> Update(Profile profile, UpdateProfileMessage message)
         {
             
@@ -44,7 +55,7 @@ namespace ADMS.Apprentice.Core.Services
             profile.BirthDate = message.BasicDetails.BirthDate;
             profile.GenderCode = message.BasicDetails.GenderCode.IsNullOrEmpty()? null :
                 Enum.IsDefined(typeof(GenderType), message.BasicDetails.GenderCode.SanitiseUpper()) ? message.BasicDetails.GenderCode.SanitiseUpper() : null;
-            profile.ProfileTypeCode = Enum.IsDefined(typeof(ProfileType), message.BasicDetails.ProfileType?.SanitiseUpper()) ? message.BasicDetails.ProfileType.SanitiseUpper() : null;
+            profile.ProfileTypeCode = Enum.IsDefined(typeof(ProfileType), message.BasicDetails.ProfileType.SanitiseUpper()) ? message.BasicDetails.ProfileType.SanitiseUpper() : null;
         }
 
         private static void SetContactDetails(Profile profile, UpdateProfileMessage message)
@@ -119,7 +130,7 @@ namespace ADMS.Apprentice.Core.Services
             
             //clear existing qualifications first.
             profile.Qualifications.Clear();
-            profile.Qualifications = message.QualificationDetails.Qualifications?.Select(q => new Qualification()
+            profile.Qualifications = message.QualificationDetails.Qualifications.Select(q => new Qualification()
             {
                 QualificationCode = q.QualificationCode.Sanitise(),
                 QualificationDescription = q.QualificationDescription.Sanitise(),

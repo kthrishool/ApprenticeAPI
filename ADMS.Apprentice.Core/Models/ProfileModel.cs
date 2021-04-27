@@ -51,8 +51,7 @@ namespace ADMS.Apprentice.Core.Models
             OtherNames = apprentice.OtherNames;
             PreferredName = apprentice.PreferredName;
             BirthDate = apprentice.BirthDate;
-
-            EmailAddress = apprentice.EmailAddress;
+            
             SelfAssessedDisabilityCode = apprentice.SelfAssessedDisabilityCode;
             IndigenousStatusCode = apprentice.IndigenousStatusCode;
             CitizenshipCode = apprentice.CitizenshipCode;
@@ -63,8 +62,7 @@ namespace ADMS.Apprentice.Core.Models
             GenderCode = apprentice.GenderCode;
             CountryOfBirthCode = apprentice.CountryOfBirthCode;
             LanguageCode = apprentice.LanguageCode;
-            HighestSchoolLevelCode = apprentice.HighestSchoolLevelCode;
-            PreferredContactType = apprentice.PreferredContactType;
+            HighestSchoolLevelCode = apprentice.HighestSchoolLevelCode;            
             VisaNumber = apprentice.VisaNumber;
             DeceasedFlag = apprentice.DeceasedFlag;
             ActiveFlag = apprentice.ActiveFlag;
@@ -73,30 +71,36 @@ namespace ADMS.Apprentice.Core.Models
             UpdatedOn = apprentice.UpdatedOn;
             UpdatedBy = apprentice.UpdatedBy;
             Version = apprentice.Version;
-            if (apprentice?.Phones?.Count > 0)
-                PhoneNumbers = apprentice.Phones.Select(c => new PhoneNumberModel() {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag, PhoneTypeCode = c.PhoneTypeCode}).ToList();
-            if (apprentice.Addresses?.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
-                ResidentialAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).Select(c => new ProfileAddressModel
-                {
-                    Postcode = c.Postcode,
-                    StateCode = c.StateCode,
-                    SingleLineAddress = c.SingleLineAddress,
-                    Locality = c.Locality,
-                    StreetAddress1 = c.StreetAddress1,
-                    StreetAddress2 = c.StreetAddress2,
-                    StreetAddress3 = c.StreetAddress3
-                }).SingleOrDefault();
-            if (apprentice.Addresses?.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.POST.ToString()))
-                PostalAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.POST.ToString()).Select(c => new ProfileAddressModel
-                {
-                    Postcode = c.Postcode,
-                    StateCode = c.StateCode,
-                    SingleLineAddress = c.SingleLineAddress,
-                    Locality = c.Locality,
-                    StreetAddress1 = c.StreetAddress1,
-                    StreetAddress2 = c.StreetAddress2,
-                    StreetAddress3 = c.StreetAddress3
-                }).SingleOrDefault();
+
+            if (!apprentice.DeceasedFlag)
+            {
+                PreferredContactType = apprentice.PreferredContactType;
+                EmailAddress = apprentice.EmailAddress;
+                if (apprentice?.Phones?.Count > 0)
+                    PhoneNumbers = apprentice.Phones.Select(c => new PhoneNumberModel() { PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag, PhoneTypeCode = c.PhoneTypeCode }).ToList();
+                if (apprentice.Addresses?.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
+                    ResidentialAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).Select(c => new ProfileAddressModel
+                    {
+                        Postcode = c.Postcode,
+                        StateCode = c.StateCode,
+                        SingleLineAddress = c.SingleLineAddress,
+                        Locality = c.Locality,
+                        StreetAddress1 = c.StreetAddress1,
+                        StreetAddress2 = c.StreetAddress2,
+                        StreetAddress3 = c.StreetAddress3
+                    }).SingleOrDefault();
+                if (apprentice.Addresses?.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.POST.ToString()))
+                    PostalAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.POST.ToString()).Select(c => new ProfileAddressModel
+                    {
+                        Postcode = c.Postcode,
+                        StateCode = c.StateCode,
+                        SingleLineAddress = c.SingleLineAddress,
+                        Locality = c.Locality,
+                        StreetAddress1 = c.StreetAddress1,
+                        StreetAddress2 = c.StreetAddress2,
+                        StreetAddress3 = c.StreetAddress3
+                    }).SingleOrDefault();
+            }           
 
             Qualifications = apprentice.Qualifications?.Select(q => new ProfileQualificationModel(q)).ToList();
         }
