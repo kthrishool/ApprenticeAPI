@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Adms.Shared" Version="3.0.0" />
+    <PackageReference Include="Adms.Shared" Version="2.7.1-features-updatee0002" />
   </ItemGroup>
 
 </Project>
