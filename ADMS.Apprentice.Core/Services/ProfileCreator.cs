@@ -35,16 +35,16 @@ namespace ADMS.Apprentice.Core.Services
                 SelfAssessedDisabilityCode = message.SelfAssessedDisabilityCode.SanitiseUpper(),
                 InterpretorRequiredFlag = message.InterpretorRequiredFlag,
                 CitizenshipCode = message.CitizenshipCode.SanitiseUpper(),
-                ProfileTypeCode = Enum.IsDefined(typeof(ProfileType), message?.ProfileType.SanitiseUpper()) ? message.ProfileType.SanitiseUpper() : null,
+                ProfileTypeCode = message.ProfileType.SanitiseUpper(),
                 Phones = message.PhoneNumbers?.Select(c => new Phone()
-                    {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList(),
+                { PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag }).ToList(),
                 CountryOfBirthCode = message.CountryOfBirthCode.SanitiseUpper(),
                 PreferredContactType = message.PreferredContactType.SanitiseUpper(),
 
                 LanguageCode = message.LanguageCode.SanitiseUpper(),
                 HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),
                 LeftSchoolMonthCode = message.LeftSchoolMonthCode.SanitiseUpper(),
-                LeftSchoolYearCode = message.LeftSchoolYearCode.SanitiseUpper(),
+                LeftSchoolYear = message.LeftSchoolYear,
                 VisaNumber = message.VisaNumber.Sanitise(),
                 Qualifications = message.Qualifications?.Select(q => new Qualification()
                 {
@@ -58,10 +58,47 @@ namespace ADMS.Apprentice.Core.Services
                     EndYear = q.EndYear,
                 }).ToList(),
             };
-           
+
+            //var profile = new Profile();
+
+
+            //profile.Surname = message.Surname;
+            //profile.FirstName = message.FirstName;
+            //profile.OtherNames = message.OtherNames.Sanitise();
+            //profile.PreferredName = message.PreferredName.Sanitise();
+            //profile.BirthDate = message.BirthDate;
+            //profile.EmailAddress = message.EmailAddress.Sanitise();
+            //profile.IndigenousStatusCode = message.IndigenousStatusCode.Sanitise();
+            //profile.SelfAssessedDisabilityCode = message.SelfAssessedDisabilityCode.SanitiseUpper();
+            //profile.InterpretorRequiredFlag = message.InterpretorRequiredFlag;
+            //profile.CitizenshipCode = message.CitizenshipCode.SanitiseUpper();
+            //profile.ProfileTypeCode = message.ProfileType.SanitiseUpper();
+            //profile.Phones = message.PhoneNumbers?.Select(c => new Phone()
+            //{ PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag }).ToList();
+            //profile.CountryOfBirthCode = message.CountryOfBirthCode.SanitiseUpper();
+            //profile.PreferredContactType = message.PreferredContactType.SanitiseUpper();
+
+            //profile.LanguageCode = message.LanguageCode.SanitiseUpper();
+            //profile.HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise();
+            //profile.LeftSchoolMonthCode = message.LeftSchoolMonthCode.SanitiseUpper();
+            //profile.LeftSchoolYear = message.LeftSchoolYear;
+            //profile.VisaNumber = message.VisaNumber.Sanitise();
+            //profile.Qualifications = message.Qualifications?.Select(q => new Qualification()
+            //{
+            //    QualificationCode = q.QualificationCode.Sanitise(),
+            //    QualificationDescription = q.QualificationDescription.Sanitise(),
+            //    QualificationLevel = q.QualificationLevel.Sanitise(),
+            //    QualificationANZSCOCode = q.QualificationANZSCOCode.Sanitise(),
+            //    StartMonth = q.StartMonth.SanitiseUpper(),
+            //    StartYear = q.StartYear,
+            //    EndMonth = q.EndMonth.SanitiseUpper(),
+            //    EndYear = q.EndYear,
+            //}).ToList();
+            
+
             if (message.GenderCode != null)
-            {
-                profile.GenderCode = Enum.IsDefined(typeof(GenderType), message.GenderCode.ToUpper()) ? message.GenderCode.ToUpper() : null;
+            {                
+                profile.GenderCode = message.GenderCode.SanitiseUpper();
             }
 
             if (message.ResidentialAddress != null)

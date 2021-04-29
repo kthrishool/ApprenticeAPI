@@ -71,15 +71,81 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfLeftSchoolYearIsInvalid()
+        public void ThrowsValidationExceptionIfDOBIsInvalid()
         {
-            //should accept year between 1900 and current year
-            validProfile.LeftSchoolYearCode = "1800";
+            validProfile.BirthDate = new DateTime(0001, 01, 01);
+            ChangeException(ValidationExceptionType.InvalidDOB);
             ClassUnderTest
                 .Invoking(async c => await c.ValidateAsync(validProfile))
                 .Should().Throw<ValidationException>();
         }
 
+        [TestMethod]
+        public void ThrowsValidationExceptionIfTypeIsInvalid()
+        {
+            validProfile.ProfileTypeCode = "Invalid";
+            ChangeException(ValidationExceptionType.InvalidApprenticeprofileType);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().Throw<ValidationException>();
+        }
+
+
+        #region LeftSchoolDetailsValidation
+        [TestMethod]
+        public void ThrowsValidationExceptionIfLeftSchoolYearIsInvalid()
+        {
+            //should accept year between 1900 and current year
+            validProfile.LeftSchoolYear = 1800;
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfLeftSchoolMonthIsInvalid()
+        {            
+            validProfile.LeftSchoolYear = 2000;
+            validProfile.LeftSchoolMonthCode = "Invalid";
+            ChangeException(ValidationExceptionType.InvalidMonthCode);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfLeftSchoolMonthIsMissing()
+        {
+            validProfile.LeftSchoolYear = 2000;
+            validProfile.LeftSchoolMonthCode = null;
+            ChangeException(ValidationExceptionType.InvalidLeftSchoolDetails);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfLeftSchoolYearIsMissing()
+        {
+            validProfile.LeftSchoolYear = null;
+            validProfile.LeftSchoolMonthCode = "JAN";
+            ChangeException(ValidationExceptionType.InvalidLeftSchoolDetails);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public async Task SetsLeftSchoolDateIfLeftSchoolMonthYearIsValid()
+        {
+            validProfile.LeftSchoolYear = 2000;
+            validProfile.LeftSchoolMonthCode = "JAN";
+            await ClassUnderTest.ValidateAsync(validProfile);
+            validProfile.LeftSchoolDate.Should().Be(new DateTime(2000, 1, 1));
+        }
+
+
+        #endregion
         /// <summary>
         /// Insert a profile record and check if the email has been updated .
         /// </summary>
@@ -123,6 +189,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             GetsTheValidationExceptionIfEmailIsInvalid("ghjghjg@.comjjj");
             // No @symbol
             GetsTheValidationExceptionIfEmailIsInvalid("ghjghjg.comjjj");
+            // ..
+            GetsTheValidationExceptionIfEmailIsInvalid("abc@gmail..comjjj");
         }
 
 

@@ -99,5 +99,8 @@ namespace ADMS.Apprentice.Core.Exceptions
 
         [ExceptionDetails("AP-VAL-0032", "Birth date is required")]
         InvalidDOB,
+
+        [ExceptionDetails("AP-VAL-0033", "Invalid left school details")]
+        InvalidLeftSchoolDetails,
     }
 }

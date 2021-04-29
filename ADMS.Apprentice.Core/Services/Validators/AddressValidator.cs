@@ -59,19 +59,19 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 string.IsNullOrWhiteSpace(address.Locality) ||
                 string.IsNullOrWhiteSpace(address.StateCode))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
-            if (address.Postcode?.Length != 4 || address.Postcode?.All(char.IsDigit) == false)
+            if (address.Postcode.Length != 4 || address.Postcode?.All(char.IsDigit) == false)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPostcode);
-            if (address.StateCode?.Length > 10)
+            if (address.StateCode.Length > 10)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidStateCode);
             if (string.IsNullOrWhiteSpace(address.StreetAddress1))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressLine1CannotBeNull);
-            if (address.StreetAddress1?.Length > 80)
+            if (address.StreetAddress1.Length > 80)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
             if (address.StreetAddress2?.Length > 80)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
             if (address.StreetAddress3?.Length > 80)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.StreetAddressExceedsMaxLength);
-            if (address.Locality?.Length > 40)
+            if (address.Locality.Length > 40)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.SuburbExceedsMaxLength);
         }
 

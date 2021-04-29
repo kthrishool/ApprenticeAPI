@@ -43,7 +43,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 {
                     HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                     LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
-                    LeftSchoolYearCode = ProfileConstants.LeftSchoolYearCode,
+                    LeftSchoolYear = ProfileConstants.LeftSchoolYear,
                 },
                 new OtherDetailsMessage
                 {

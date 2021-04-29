@@ -23,7 +23,7 @@ namespace ADMS.Apprentice.Core.Models
         public bool? InterpretorRequiredFlag { get; }
         public string CitizenshipCode { get; }
         public string LeftSchoolMonthCode { get; }
-        public string LeftSchoolYearCode { get; }
+        public int? LeftSchoolYear { get; }
         public string ProfileType { get; }
         public bool DeceasedFlag { get; }
         public bool ActiveFlag { get; }
@@ -56,8 +56,8 @@ namespace ADMS.Apprentice.Core.Models
             IndigenousStatusCode = apprentice.IndigenousStatusCode;
             CitizenshipCode = apprentice.CitizenshipCode;
             InterpretorRequiredFlag = apprentice.InterpretorRequiredFlag;
-            LeftSchoolMonthCode = apprentice.LeftSchoolMonthCode;
-            LeftSchoolYearCode = apprentice.LeftSchoolYearCode;
+            LeftSchoolMonthCode = apprentice.LeftSchoolDate?.ToString("MMM").ToUpper();
+            LeftSchoolYear = apprentice.LeftSchoolDate?.Year;            
             ProfileType = apprentice.ProfileTypeCode;
             GenderCode = apprentice.GenderCode;
             CountryOfBirthCode = apprentice.CountryOfBirthCode;

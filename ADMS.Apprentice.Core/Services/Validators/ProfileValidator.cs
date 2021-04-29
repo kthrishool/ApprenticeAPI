@@ -8,6 +8,7 @@ using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 using Adms.Shared.Exceptions;
 using Castle.Core.Internal;
+using System.Globalization;
 
 namespace ADMS.Apprentice.Core.Services.Validators
 {
@@ -35,19 +36,19 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidDOB);
             if (!ValidateAge(profile.BirthDate))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeAge);
-
-            // making this async because I think we will be wanting to look in the database for duplicates
+            
             if (!(profile.ProfileTypeCode != null && Enum.IsDefined(typeof(ProfileType), profile.ProfileTypeCode)))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType);
 
             if (!EmailValidation(profile.EmailAddress))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidEmailAddress);
 
-            if (!ValidateLeftSchoolYear(profile.LeftSchoolYearCode))
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidLeftSchoolYear);
-
-            if (!profile.LeftSchoolMonthCode.IsNullOrEmpty() && !Enum.IsDefined(typeof(MonthCode), profile.LeftSchoolMonthCode))
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidMonthCode);
+            if (ValidateLeftSchoolDetails(profile.LeftSchoolMonthCode, profile.LeftSchoolYear))
+            {
+                //At this point we know we have a valid month and year..
+                //so create the date out of it if Months and Years exist.
+                profile.LeftSchoolDate = profile.LeftSchoolYear.HasValue ? new DateTime(profile.LeftSchoolYear.Value, DateTime.ParseExact(profile.LeftSchoolMonthCode, "MMM", CultureInfo.CurrentCulture).Month, 1) : null;               
+            }
 
             if (profile.Phones != null)
             {
@@ -131,12 +132,21 @@ namespace ADMS.Apprentice.Core.Services.Validators
             return age >= 12;
         }
 
-        private bool ValidateLeftSchoolYear(string stringYear)
+        private bool ValidateLeftSchoolDetails(string monthCode, int? year)
         {
-            if (stringYear.IsNullOrEmpty())
-                return true;
+            //check month code
+            if (!monthCode.IsNullOrEmpty() && !Enum.IsDefined(typeof(MonthCode), monthCode))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidMonthCode);
 
-            return (int.TryParse(stringYear, out int year) && (year >= 1900 && year <= DateTime.Now.Year));
+            //check valid year
+            if (year.HasValue && (year < 1900 || year > DateTime.Now.Year))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidLeftSchoolYear);
+
+            //if month exist, need year and vice versa
+            if ((year.HasValue && monthCode.IsNullOrEmpty()) || (!monthCode.IsNullOrEmpty() && !year.HasValue))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidLeftSchoolDetails);
+
+            return true;            
         }
     }
 }

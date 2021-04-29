@@ -44,11 +44,10 @@ namespace ADMS.Apprentice.Database.Mappings
             entity.Property(e => e.CitizenshipCode)
                 .HasColumnName("CitizenshipCode");
             entity.Property(e => e.HighestSchoolLevelCode)
-                .HasColumnName("EducationLevelCode");
-            entity.Property(e => e.LeftSchoolMonthCode)
-                .HasColumnName("LeftSchoolMonthCode");
-            entity.Property(e => e.LeftSchoolYearCode)
-                .HasColumnName("LeftSchoolYearCode");
+                .HasColumnName("EducationLevelCode");           
+            entity.Property(e => e.LeftSchoolDate)
+                .HasColumnName("LeftSchoolDate")
+                .HasColumnType("date");
             entity.Property(e => e.ProfileTypeCode)
                 .HasColumnName("ProfileTypeCode");
             entity.Property(e => e.LanguageCode)

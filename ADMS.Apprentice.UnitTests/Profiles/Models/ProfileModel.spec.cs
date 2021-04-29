@@ -64,7 +64,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
-                LeftSchoolYearCode = ProfileConstants.LeftSchoolYearCode,
+                LeftSchoolYear = ProfileConstants.LeftSchoolYear,
+                LeftSchoolDate = new System.DateTime(ProfileConstants.LeftSchoolYear.Value, 01, 01),
                 DeceasedFlag = ProfileConstants.DeceasedFlag,
                 ActiveFlag = ProfileConstants.ActiveFlag,
                 Addresses = add,
@@ -122,7 +123,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.PreferredContactType.Should().Be(ProfileConstants.PreferredContactType.ToString());
             model.HighestSchoolLevelCode.Should().Be(ProfileConstants.HighestSchoolLevelCode);
             model.LeftSchoolMonthCode.Should().Be(ProfileConstants.LeftSchoolMonthCode);
-            model.LeftSchoolYearCode.Should().Be(ProfileConstants.LeftSchoolYearCode);
+            model.LeftSchoolYear.Should().Be(ProfileConstants.LeftSchoolYear);
             model.VisaNumber.Should().Be(ProfileConstants.VisaNumber);
         }
     }

@@ -42,7 +42,7 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static string LanguageCode = "1200";
         public static string HighestSchoolLevelCode = "DONTKNOW";
         public static string LeftSchoolMonthCode = "JAN";
-        public static string LeftSchoolYearCode = "2000";
+        public static int? LeftSchoolYear = 2000;
         public static bool DeceasedFlag = false;
         public static ProfileType ProfileTypeCode = ProfileType.APPR;
         public static PreferredContactType PreferredContactType = PreferredContactType.MOBILE;

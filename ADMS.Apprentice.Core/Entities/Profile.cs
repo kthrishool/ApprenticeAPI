@@ -20,8 +20,7 @@ namespace ADMS.Apprentice.Core.Entities
         public string IndigenousStatusCode { get; set; }
         public string CitizenshipCode { get; set; }
         public string HighestSchoolLevelCode { get; set; }
-        public string LeftSchoolMonthCode { get; set; }
-        public string LeftSchoolYearCode { get; set; }
+        public DateTime? LeftSchoolDate { get; set; }
         public string ProfileTypeCode { get; set; }
         public string VisaNumber { get; set; }
         public string CountryOfBirthCode { get; set; }
@@ -42,6 +41,10 @@ namespace ADMS.Apprentice.Core.Entities
         public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<ApprenticeTFN> TFNs { get; set; }
         public virtual ICollection<Qualification> Qualifications { get; set; }
+
+        //Not mapped fields
+        public string LeftSchoolMonthCode;
+        public int? LeftSchoolYear;
 
         public Profile()
         {

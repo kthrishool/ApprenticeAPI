@@ -12,8 +12,7 @@ namespace ADMS.Apprentice.Core.Messages
 
         [MaxLength(10, ErrorMessage = "Left School Month code Exceeds 10 Characters")]
         public string LeftSchoolMonthCode { get; init; }
-
-        [MaxLength(10, ErrorMessage = "Left School Year code Exceeds 10 Characters")]
-        public string LeftSchoolYearCode { get; init; }
+        
+        public int? LeftSchoolYear { get; init; }
     }
 }

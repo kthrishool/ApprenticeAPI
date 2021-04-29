@@ -108,7 +108,7 @@ namespace ADMS.Apprentice.Core.Services
 
             profile.HighestSchoolLevelCode = message.SchoolDetails.HighestSchoolLevelCode.Sanitise();
             profile.LeftSchoolMonthCode = message.SchoolDetails.LeftSchoolMonthCode.SanitiseUpper();
-            profile.LeftSchoolYearCode = message.SchoolDetails.LeftSchoolYearCode.SanitiseUpper();
+            profile.LeftSchoolYear = message.SchoolDetails.LeftSchoolYear;
         }
 
         private static void SetOtherDetails(Profile profile, UpdateProfileMessage message)
