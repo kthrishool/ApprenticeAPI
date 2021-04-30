@@ -8,7 +8,7 @@ resources:
   repositories:
     - repository: templates
       type: git
-      name: DevOpsManagement/PipelineTemplates
+      name: ADMS/pipeline-templates
 
 stages:
   - template: Pipelines/website.yml@templates
@@ -16,6 +16,8 @@ stages:
       artifactFeed: d5f873fd-aea7-4b0f-956a-08364122d906/c8b90219-fc51-43a0-b803-dfc2d668ad9b
       testFileSpec: '**/*UnitTests*.csproj'      
       calculateCoverage: true
+      buildQualityCheckWarnings: true
+      buildQualityCheckCodeCoverage: true
 
   - stage: Dev
     dependsOn: BuildApplication
@@ -96,3 +98,108 @@ stages:
         windowsAuthentication: false
         webApplicationName: '$(admsApplicationName)'      
         listSites: true
+#trigger:
+#  branches:
+#    include: [ '*' ] # Trigger on all commits in all branches
+#  tags:
+#    include: [ 'v*', '*deploy*' ] # Trigger on v* tags and *deploy* tags
+
+#resources:
+#  repositories:
+#    - repository: templates
+#      type: git
+#      name: ADMS/pipeline-templates
+
+## Disable the Unit Testing step
+#stages:
+#  - template: Pipelines/website.yml@templates
+#    parameters:
+#      artifactFeed: d5f873fd-aea7-4b0f-956a-08364122d906/c8b90219-fc51-43a0-b803-dfc2d668ad9b
+#      testFileSpec: '**/*UnitTests*.csproj'      
+#      calculateCoverage: false
+#      testProjectFolder: 'ADMS.Apprentice.UnitTests'
+#      buildQualityCheckWarnings: false
+#      buildQualityCheckCodeCoverage: false
+##      codeCoverageToolSet: 'cobertura' 
+##      default test toolset is mstest which is needed to work with our pipelines
+##      build quality checks only work with mstest
+
+#  - stage: Dev
+#    dependsOn: BuildApplication
+#    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-deploy'))
+#    variables:
+#        - group: ServiceAccounts
+#        - group: DevSettings
+#        - name: System.Debug
+#          value: true
+#        - name: "OurDatabaseSettings.MigrateDatabaseOnStartup"
+#          value: false
+#        - name: "OurDatabaseSettings.SeedSampleData"
+#          value: true
+#        - name: "OurDatabaseSettings.DatabaseConnectionString"
+#          value: '$(AdmsApprenticeConnectionString)'
+#        - name: "OurHttpClientSettings.ReferenceDataEndpointBaseUrl"
+#          value: '$(ReferenceDataEndpointBaseUrl)'
+#        - name: port
+#          value: "80"
+#        - name: hostname
+#          value: "admsapi.edc.hosts.devnetwork"
+#        - name: admsApplicationName
+#          value: "apprenticeapi"
+#    jobs:
+#    - template: Jobs/Release/iiswebapplication.yml@templates
+#      parameters:
+#        environmentName: Backend_Dev
+#        parallelLimit: 100%
+#        xmlTransformation: false
+#        xmlVarSubstitution: true
+#        parentWebsiteName: '$(admsWebsiteName)'
+#        installDir: $(admsInstallDir)
+#        takeAppOffline: true
+#        hostName: ${{ variables.hostName }}
+#        webAppPoolUsername: "$(ApprenticeAPI_ENETDEV)"
+#        webAppPoolPassword: "$(ApprenticeAPIPassword_ENETDEV)"
+#        anonymousAuthentication: true
+#        windowsAuthentication: false
+#        webApplicationName: '$(admsApplicationName)'      
+#        listSites: true
+
+#  - stage: Test
+#    dependsOn: BuildApplication
+#    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/test-deploy'))
+#    variables:
+#        - group: ServiceAccounts
+#        - group: TestSettings
+#        - name: System.Debug
+#          value: true
+#        - name: "OurDatabaseSettings.MigrateDatabaseOnStartup"
+#          value: false
+#        - name: "OurDatabaseSettings.SeedSampleData"
+#          value: false
+#        - name: "OurDatabaseSettings.DatabaseConnectionString"
+#          value: '$(AdmsApprenticeConnectionString)'
+#        - name: "OurHttpClientSettings.ReferenceDataEndpointBaseUrl"
+#          value: '$(ReferenceDataEndpointBaseUrl)'
+#        - name: port
+#          value: "80"
+#        - name: hostname
+#          value: "admsapi.edc.hosts.testnetwork"
+#        - name: admsApplicationName
+#          value: "apprenticeapi"
+#    jobs:
+#    - template: Jobs/Release/iiswebapplication.yml@templates
+#      parameters:
+#        environmentName: Backend_Test
+#        parallelLimit: 100%
+#        xmlTransformation: false
+#        xmlVarSubstitution: true
+#        parentWebsiteName: '$(admsWebsiteName)'
+#        installDir: $(admsInstallDir)
+#        takeAppOffline: true
+#        hostName: ${{ variables.hostName }}
+#        webAppPoolUsername: "$(ApprenticeAPI_ENETDEV)"
+#        webAppPoolPassword: "$(ApprenticeAPIPassword_ENETDEV)"
+#        anonymousAuthentication: true
+#        windowsAuthentication: false
+#        webApplicationName: '$(admsApplicationName)'      
+#        listSites: true

@@ -8,8 +8,14 @@ using Refit;
 
 namespace ADMS.Apprentice.Api.HttpClients
 {
+    /// <summary>
+    /// Configuration for the HTTP client
+    /// </summary>
     public static class HttpClientConfiguration
     {
+        /// <summary>
+        /// Configures the HTTP client
+        /// </summary>
         public static void Configure(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<AuthorizationMessageHandler>();

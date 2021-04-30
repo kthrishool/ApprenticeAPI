@@ -20,15 +20,27 @@ using ADMS.Apprentice.Api.HttpClients;
 
 namespace ADMS.Apprentice.Api
 {
+    /// <summary>
+    /// Application startup
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        /// <summary>
+        /// Configuration
+        /// </summary>
         public IConfiguration Configuration { get; }
 
+        /// <summary>
+        /// Configures services
+        /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddInfrastructure(new List<IApplicationModelConvention> { new ApiExplorerGetsOnlyConvention() });
@@ -46,7 +58,9 @@ namespace ADMS.Apprentice.Api
             DependencyInjectionConfiguration.ConfigureServices(services);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
         public void Configure(
             IApplicationBuilder app, 
             IWebHostEnvironment env, 

@@ -21,6 +21,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ADMS.Apprentice.Api.Controllers
 {
+    /// <summary>
+    /// Apprentice qualification endpoints of a given apprentice.
+    /// </summary>
     [ApiVersion(Version = "1", Latest = "1")]
     [Route("api/v1/apprentices/{apprenticeId}/qualificatios")]
     [Route("api/apprentices/{apprenticeId}/qualifications")]
@@ -31,8 +34,9 @@ namespace ADMS.Apprentice.Api.Controllers
     {
         private readonly IRepository repository;
         private readonly IPagingHelper pagingHelper;
-        private readonly IQualificationValidator qualificationValidator;              
+        private readonly IQualificationValidator qualificationValidator;
 
+        /// <summary>Constructor</summary>
         public ApprenticeQualificationController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
@@ -80,6 +84,7 @@ namespace ADMS.Apprentice.Api.Controllers
         /// <summary>
         /// Creates a new qualification for an apprentice
         /// </summary>
+        /// <param name="apprenticeId">apprenticeId</param>
         /// <param name="message">Details of the qualification to be created</param>
         [HttpPost]
         public async Task<ActionResult<ProfileQualificationModel>> Create(int apprenticeId, [FromBody] ProfileQualificationMessage message)

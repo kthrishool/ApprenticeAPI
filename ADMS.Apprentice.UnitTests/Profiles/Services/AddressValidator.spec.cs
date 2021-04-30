@@ -91,7 +91,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                .ReturnsAsync(partialAddress);
         }
 
-        private void UpdateAddressColumn(string columnName, string value, ValidationExceptionType exception, bool RaiseException)
+        private async Task UpdateAddressColumnAsync(string columnName, string value, ValidationExceptionType exception, bool RaiseException)
         {
             var localAddress = new Address()
             {
@@ -146,7 +146,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             }
             else
             {
-                ClassUnderTest.ValidateAsync(newProfile.Addresses.ToList());
+               await ClassUnderTest.ValidateAsync(newProfile.Addresses.ToList());
             }
 
             //  return localAddress;
@@ -160,7 +160,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void DoesNothingIfTheAddressIsValid()
         {
-            ClassUnderTest.ValidateAsync(newProfile.Addresses.ToList());
+            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
+               .Should().NotThrow<ValidationException>();            
         }
 
         [TestMethod]
@@ -173,48 +174,48 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfPostCodeLocalityMissMatch()
+        public async Task ThrowsValidationExceptionIfPostCodeLocalityMissMatchAsync()
         {
-            UpdateAddressColumn("Postcode", "260", ValidationExceptionType.InvalidPostcode, true);
-            UpdateAddressColumn("Postcode", "26022", ValidationExceptionType.InvalidPostcode, true);
+            await UpdateAddressColumnAsync("Postcode", "260", ValidationExceptionType.InvalidPostcode, true);
+            await UpdateAddressColumnAsync("Postcode", "26022", ValidationExceptionType.InvalidPostcode, true);
         }
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfStateCodeExceedMaxlength()
+        public async Task ThrowsValidationExceptionIfStateCodeExceedMaxlength()
         {
-            UpdateAddressColumn("StateCode", ProfileConstants.RandomString(23), ValidationExceptionType.InvalidStateCode, true);
-
-            UpdateAddressColumn("StateCode", "", ValidationExceptionType.AddressRecordNotFound, true);
+            await UpdateAddressColumnAsync("StateCode", ProfileConstants.RandomString(23), ValidationExceptionType.InvalidStateCode, true);
+            
+            await UpdateAddressColumnAsync("StateCode", "", ValidationExceptionType.AddressRecordNotFound, true);
         }
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfStreetLine1IsNull()
+        public async Task ThrowsValidationExceptionIfStreetLine1IsNull()
         {
-            UpdateAddressColumn("StreetAddress1", null, ValidationExceptionType.StreetAddressLine1CannotBeNull, true);
-            UpdateAddressColumn("StreetAddress1", "", ValidationExceptionType.StreetAddressLine1CannotBeNull, true);
-            UpdateAddressColumn("StreetAddress1", " ", ValidationExceptionType.StreetAddressLine1CannotBeNull, true);
+            await UpdateAddressColumnAsync("StreetAddress1", null, ValidationExceptionType.StreetAddressLine1CannotBeNull, true);
+            await UpdateAddressColumnAsync("StreetAddress1", "", ValidationExceptionType.StreetAddressLine1CannotBeNull, true);
+            await UpdateAddressColumnAsync("StreetAddress1", " ", ValidationExceptionType.StreetAddressLine1CannotBeNull, true);
         }
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfStreetLineExceedsLength()
+        public async Task ThrowsValidationExceptionIfStreetLineExceedsLength()
         {
-            UpdateAddressColumn("StreetAddress1", ProfileConstants.RandomString(82), ValidationExceptionType.StreetAddressExceedsMaxLength, true);
-            UpdateAddressColumn("StreetAddress2", ProfileConstants.RandomString(82), ValidationExceptionType.StreetAddressExceedsMaxLength, true);
-            UpdateAddressColumn("StreetAddress3", ProfileConstants.RandomString(82), ValidationExceptionType.StreetAddressExceedsMaxLength, true);
+            await UpdateAddressColumnAsync("StreetAddress1", ProfileConstants.RandomString(82), ValidationExceptionType.StreetAddressExceedsMaxLength, true);
+            await UpdateAddressColumnAsync("StreetAddress2", ProfileConstants.RandomString(82), ValidationExceptionType.StreetAddressExceedsMaxLength, true);
+            await UpdateAddressColumnAsync("StreetAddress3", ProfileConstants.RandomString(82), ValidationExceptionType.StreetAddressExceedsMaxLength, true);
         }
 
 
         [TestMethod]
-        public void DoNothingIfStreetLine23IsNull()
+        public async Task DoNothingIfStreetLine23IsNull()
         {
-            UpdateAddressColumn("StreetAddress2", null, ValidationExceptionType.StreetAddressLine1CannotBeNull, false);
-            UpdateAddressColumn("StreetAddress3", null, ValidationExceptionType.StreetAddressLine1CannotBeNull, false);
+            await UpdateAddressColumnAsync("StreetAddress2", null, ValidationExceptionType.StreetAddressLine1CannotBeNull, false);
+            await UpdateAddressColumnAsync("StreetAddress3", null, ValidationExceptionType.StreetAddressLine1CannotBeNull, false);
         }
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfLocalityExceedsLenght()
+        public async Task ThrowsValidationExceptionIfLocalityExceedsLenght()
         {
-            UpdateAddressColumn("Locality", ProfileConstants.RandomString(42), ValidationExceptionType.SuburbExceedsMaxLength, true);
+            await UpdateAddressColumnAsync("Locality", ProfileConstants.RandomString(42), ValidationExceptionType.SuburbExceedsMaxLength, true);
         }
 
         #region iGasValidation
@@ -235,7 +236,19 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task ThrowsExceptionIfManualAddressIsInvalid()
+        public void ThrowsExceptionIfAddressIsNull()
+        {
+            newProfile = new Profile();
+            invalidAddress = null;
+            newProfile.Addresses.Add(invalidAddress);
+
+            ClassUnderTest
+                    .Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
+                    .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionIfManualAddressIsInvalid()
         {
             newProfile = new Profile();
             invalidAddress = new Address()
@@ -261,7 +274,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task ThrowsExceptionIfManualAddressIsInvalid1()
+        public void ThrowsExceptionIfManualAddressIsInvalid1()
         {
             newProfile = new Profile();
             invalidAddress = new Address()
@@ -293,7 +306,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
 
         [TestMethod]
-        public async Task ThrowsLocalityMismatchExceptionIfManualAddressIsInvalid1()
+        public void ThrowsLocalityMismatchExceptionIfManualAddressIsInvalid1()
         {
             newProfile = new Profile();
             invalidAddress = new Address()
@@ -323,7 +336,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task ThrowsStateMismatchExceptionIfManualAddressStateIsInvalid1()
+        public void ThrowsStateMismatchExceptionIfManualAddressStateIsInvalid1()
         {
             newProfile = new Profile();
             invalidAddress = new Address()
@@ -353,7 +366,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task ThrowsPostCodeMismatchExceptionIfManualAddressPostCodeIsInvalid1()
+        public void ThrowsPostCodeMismatchExceptionIfManualAddressPostCodeIsInvalid1()
         {
             newProfile = new Profile();
             invalidAddress = new Address()
@@ -399,7 +412,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
 
         [TestMethod]
-        public async Task ShouldNotThrowErrorIfSingleLineAddressIsValid()
+        public void ShouldNotThrowErrorIfSingleLineAddressIsValid()
         {
             newProfile = new Profile();
             newProfile.Addresses.Add(validSingleLineAddress);
@@ -410,7 +423,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task ThrowsExceptionIfSingleLineAddressIsInvalid()
+        public void ThrowsExceptionIfSingleLineAddressIsInvalid()
         {
             newProfile = new Profile();
             newProfile.Addresses.Add(invalidSingleLineAddress);
@@ -426,7 +439,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task ThrowsExceptionIfSingleLineAddressIsInvalid1()
+        public void ThrowsExceptionIfSingleLineAddressIsInvalid1()
         {
             newProfile = new Profile();
             newProfile.Addresses.Add(invalidSingleLineAddress);

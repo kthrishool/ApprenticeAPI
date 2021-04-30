@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
@@ -9,7 +10,8 @@ namespace ADMS.Apprentice.Core.Services.Validators
     public static class PhoneValidator
     {
         private static readonly string[] startingCode = {"02", "03", "04", "07", "08", "13", "18"};
-
+        //TODO: more unit testing
+        [ExcludeFromCodeCoverage]
         public static bool ValidatePhone(ref string phoneNumber, ref PhoneType phoneType, ValidationExceptionType errorMessage)
         {
             phoneType = PhoneType.LANDLINE;

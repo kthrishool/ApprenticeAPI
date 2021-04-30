@@ -12,6 +12,7 @@ using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentice.Api.Controllers.Tfn
 {
+    /// <summary>TFNStats endpoints</summary>
     [ApiVersion(Version = "1", Latest = "1")]
     [Route("api/v1/tfnstats")]
     [Route("api/tfnstats")]
@@ -23,6 +24,7 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         private readonly IPagingHelper _pagingHelper;
         private readonly ITFNStatsRetriever _tfnStatsRetriever;
 
+        /// <summary>Constructor</summary>
         public TFNStatsController(
             IHttpContextAccessor contextAccessor,
             IPagingHelper pagingHelper,

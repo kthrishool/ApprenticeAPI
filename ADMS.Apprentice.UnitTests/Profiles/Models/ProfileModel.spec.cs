@@ -47,6 +47,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             };
             add.Add(RestAddress);
             add.Add(postal);
+
+            ICollection<Qualification> qualifications = new List<Qualification>();
+            qualifications.Add(ProfileConstants.Qualification);
+
             profile = new Profile
             {
                 Id = ProfileConstants.Id,
@@ -74,10 +78,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,
                 UpdatedBy = ProfileConstants.Updatedby,
-                Phones = ProfileConstants.PhoneNumbers.Select(c => new Phone() {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList(),
+                Phones = ProfileConstants.PhoneNumbers.Select(c => new Phone() { PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag }).ToList(),
                 LanguageCode = ProfileConstants.LanguageCode,
                 PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
                 VisaNumber = ProfileConstants.VisaNumber,
+                Qualifications = qualifications,
             };
         }
 
@@ -125,6 +130,31 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.LeftSchoolMonthCode.Should().Be(ProfileConstants.LeftSchoolMonthCode);
             model.LeftSchoolYear.Should().Be(ProfileConstants.LeftSchoolYear);
             model.VisaNumber.Should().Be(ProfileConstants.VisaNumber);
+        }
+
+        [TestMethod]
+        public void SetAddressToNullIfNoAddress()
+        {
+            profile.Addresses = null;
+            model = new ProfileModel(profile);
+            model.PostalAddress.Should().BeNull();
+            model.ResidentialAddress.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void SetPhonesToNullIfNoPhones()
+        {
+            profile.Phones = null;
+            model = new ProfileModel(profile);
+            model.PhoneNumbers.Should().BeNull();            
+        }
+
+        [TestMethod]
+        public void SetQualificationsToNullIfNoQuals()
+        {
+            profile.Qualifications = null;
+            model = new ProfileModel(profile);
+            model.Qualifications.Should().BeNull();
         }
     }
 

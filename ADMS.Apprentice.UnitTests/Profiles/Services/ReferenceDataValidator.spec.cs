@@ -172,12 +172,32 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
+        public void ThrowValidationExceptionWhenPhoneContactTypeAndNoPhone()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
+            newProfile.Phones = null;
+            ResetExceptionforExceptionValidation(ValidationExceptionType.PhonePreferredContactisInvalid, newProfile);
+        }
+
+        [TestMethod]
         public void ThrowValidationExceptionWhenSMSContactTypeIsInvalid()
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.SMS.ToString();
 
             newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
+
+            ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
+        }
+
+        [TestMethod]
+        public void ThrowValidationExceptionWhenSMSContactTypeAndNoPhone()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.SMS.ToString();
+
+            newProfile.Phones = null;
 
             ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
         }
@@ -201,6 +221,15 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.PreferredContactType = PreferredContactType.MAIL.ToString();
 
             newProfile.Addresses = null;
+
+            ResetExceptionforExceptionValidation(ValidationExceptionType.MailPreferredContactisInvalid, newProfile);
+        }
+
+        [TestMethod]
+        public void ThrowValidationExceptionWhenAddressContactTypeAndNoAddress()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.MAIL.ToString();
 
             ResetExceptionforExceptionValidation(ValidationExceptionType.MailPreferredContactisInvalid, newProfile);
         }
@@ -268,7 +297,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task ThrowsExceptionIfQualificationANZSCIsInvalid()
+        public void ThrowsExceptionIfQualificationANZSCIsInvalid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>(); 
             Container

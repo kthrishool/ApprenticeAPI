@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace ADMS.Apprentice.Api.Controllers.Tfn
 {
+    /// <summary>
+    /// Apprentice TFN endpoints.
+    /// </summary>
     [ApiVersion(Version = "1", Latest = "1")]
     [Route("api/v1/apprentices/{apprenticeId}/TFN")]
     [Route("api/apprentices/{apprenticeId}/TFN")]
@@ -22,6 +25,7 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         private readonly IApprenticeTFNRetreiver tfnDetailRetreiver;
         private readonly IApprenticeTFNUpdater apprenticeTFNUpdater;
 
+        /// <summary>Constructor</summary>
         public ApprenticeTFNController(
             IHttpContextAccessor contextAccessor, 
             IRepository repository,

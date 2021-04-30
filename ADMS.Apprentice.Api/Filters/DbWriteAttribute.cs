@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ADMS.Apprentice.Api.Filters
 {
+    /// <summary>DbWriteAttribute</summary>
     public class DbWriteAttribute : TypeFilterAttribute
     {
+        /// <summary>Constructor</summary>
         public DbWriteAttribute() : base(typeof(DbWriteFilter))
         {
         }

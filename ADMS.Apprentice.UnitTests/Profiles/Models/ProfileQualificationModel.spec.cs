@@ -46,6 +46,21 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             qualificationModel.EndMonth.Should().Be(ProfileConstants.Qualification.EndDate?.ToString("MMM").ToUpper());
             qualificationModel.EndYear.Should().Be(ProfileConstants.Qualification.EndDate?.Year); 
         }
+
+        [TestMethod]
+        public void StartAndEndMonthYearNullIfDateIsNull()
+        {
+            //given
+            qualification.StartDate = null;
+            qualification.EndDate = null;
+            //when
+            qualificationModel = new ProfileQualificationModel(qualification);
+            //then
+            qualificationModel.StartMonth.Should().BeNull();
+            qualificationModel.StartYear.Should().BeNull();
+            qualificationModel.EndMonth.Should().BeNull();
+            qualificationModel.EndYear.Should().BeNull();
+        }
     }
 
     #endregion

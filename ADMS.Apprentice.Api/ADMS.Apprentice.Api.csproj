@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
-    <NoWarn>1701;1702;1591</NoWarn>
+    <DocumentationFile>C:\Developer\repos\ADMS\Apprentice.WebApi\ADMS.Apprentice.Api\ADMS.Apprentice.Api.xml</DocumentationFile>
+    <NoWarn>1701;1702;</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
+    <WarningsAsErrors></WarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

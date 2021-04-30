@@ -2,9 +2,12 @@
 using ADMS.Apprentice.Core.Entities;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ADMS.Apprentice.Core.Services
 {
+    //TODO: implement unit testing
+    [ExcludeFromCodeCoverage]
     public class ProfileRetreiver : IProfileRetreiver
     {
         private readonly IRepository _repository;

@@ -21,8 +21,6 @@ namespace ADMS.Apprentice.Core.Models
         public DateTime? UpdatedOn { get; }
         public string UpdatedBy { get; }
 
-        public ProfileQualificationModel() { }
-
         public ProfileQualificationModel(Qualification qualification)
         {
             QualificationId = qualification.Id;

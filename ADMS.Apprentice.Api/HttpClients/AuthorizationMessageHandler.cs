@@ -15,11 +15,17 @@ namespace ADMS.Apprentice.Api.HttpClients
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 
+        /// <summary>Constructor</summary>
         public AuthorizationMessageHandler(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContextAccessor = httpContextAccessor;
         }
-
+        /// <summary>
+        /// SendAsync
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancelToken"></param>
+        /// <returns></returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancelToken)
         {
             HttpRequestHeaders headers = request.Headers;

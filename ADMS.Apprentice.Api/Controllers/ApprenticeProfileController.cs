@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ADMS.Apprentice.Api.Controllers
 {
+    /// <summary>
+    /// Apprentice endpoints.
+    /// </summary>
     [ApiVersion(Version = "1", Latest = "1")]
     [Route("api/v1/apprentices")]
     [Route("api/apprentices")]
@@ -29,6 +32,7 @@ namespace ADMS.Apprentice.Api.Controllers
         private readonly IProfileUpdater profileUpdater;
         private readonly IProfileRetreiver profileRetreiver;
 
+        /// <summary>Constructor</summary>
         public ApprenticeProfileController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
@@ -121,7 +125,8 @@ namespace ADMS.Apprentice.Api.Controllers
         /// <summary>
         /// Updates an existing apprentice deceased flag to false and other special department updates.
         /// </summary>
-        /// <param name="id">ID of the apprentice</param>        
+        /// <param name="id">ID of the apprentice</param>
+        /// <param name="message"></param>        
         [HttpPut("{id}/admin-update")]
         public async Task<ActionResult<ProfileModel>> AdminUpdate(int id, [FromBody] AdminUpdateMessage message)
         {

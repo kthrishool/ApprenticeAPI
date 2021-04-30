@@ -36,8 +36,9 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidDOB);
             if (!ValidateAge(profile.BirthDate))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeAge);
-            
-            if (!(profile.ProfileTypeCode != null && Enum.IsDefined(typeof(ProfileType), profile.ProfileTypeCode)))
+            if (profile.ProfileTypeCode.IsNullOrEmpty())
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType);
+            if (!(Enum.IsDefined(typeof(ProfileType), profile.ProfileTypeCode)))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType);
 
             if (!EmailValidation(profile.EmailAddress))
@@ -49,36 +50,36 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 //so create the date out of it if Months and Years exist.
                 profile.LeftSchoolDate = profile.LeftSchoolYear.HasValue ? new DateTime(profile.LeftSchoolYear.Value, DateTime.ParseExact(profile.LeftSchoolMonthCode, "MMM", CultureInfo.CurrentCulture).Month, 1) : null;               
             }
-
+            
             if (profile.Phones != null)
             {
                 var newPhone = new List<Phone>();
                 var preferredPhoneSet = false;
-                if (profile?.Phones != null)
-                    foreach (Phone phoneNumbers in profile.Phones)
+                
+                foreach (Phone phone in profile.Phones)
+                {
+                    if (phone == null || phone.PhoneNumber.IsNullOrEmpty()) continue;
+                    var ErrorMessage = ValidationExceptionType.InvalidPhoneNumber;
+                    string formattedPhone = phone.PhoneNumber;
+                    PhoneType phoneType = PhoneType.MOBILE;
+                    if (!PhoneValidator.ValidatePhone(ref formattedPhone, ref phoneType, ErrorMessage))
+                        throw exceptionFactory.CreateValidationException(ErrorMessage);
+                    if (preferredPhoneSet && Convert.ToBoolean(phone.PreferredPhoneFlag))
                     {
-                        if (phoneNumbers == null || phoneNumbers?.PhoneNumber?.Length == 0) continue;
-                        var ErrorMessage = ValidationExceptionType.InvalidPhoneNumber;
-                        string? formattedPhone = phoneNumbers?.PhoneNumber;
-                        PhoneType phoneType = PhoneType.MOBILE;
-                        if (!PhoneValidator.ValidatePhone(ref formattedPhone, ref phoneType, ErrorMessage))
-                            throw exceptionFactory.CreateValidationException(ErrorMessage);
-                        if (preferredPhoneSet && Convert.ToBoolean(phoneNumbers.PreferredPhoneFlag))
-                        {
-                            phoneNumbers.PreferredPhoneFlag = false;
-                        }
-                        else if (Convert.ToBoolean(phoneNumbers.PreferredPhoneFlag))
-                            preferredPhoneSet = Convert.ToBoolean(phoneNumbers.PreferredPhoneFlag);
-                        if (!newPhone.Any(c => phoneNumbers.PhoneNumber.Contains(c.PhoneNumber)))
-                        {
-                            newPhone.Add(new Phone()
-                            {
-                                PhoneNumber = formattedPhone,
-                                PhoneTypeCode = phoneType.ToString(),
-                                PreferredPhoneFlag = phoneNumbers.PreferredPhoneFlag
-                            });
-                        }
+                        phone.PreferredPhoneFlag = false;
                     }
+                    else if (Convert.ToBoolean(phone.PreferredPhoneFlag))
+                        preferredPhoneSet = Convert.ToBoolean(phone.PreferredPhoneFlag);
+                    if (!newPhone.Any(c => phone.PhoneNumber.Contains(c.PhoneNumber)))
+                    {
+                        newPhone.Add(new Phone()
+                        {
+                            PhoneNumber = formattedPhone,
+                            PhoneTypeCode = phoneType.ToString(),
+                            PreferredPhoneFlag = phone.PreferredPhoneFlag
+                        });
+                    }
+                }
                 profile.Phones = newPhone;
             }
             // Address validation

@@ -76,7 +76,7 @@ namespace ADMS.Apprentice.Core.Models
             {
                 PreferredContactType = apprentice.PreferredContactType;
                 EmailAddress = apprentice.EmailAddress;
-                if (apprentice?.Phones?.Count > 0)
+                if (apprentice.Phones?.Count > 0)
                     PhoneNumbers = apprentice.Phones.Select(c => new PhoneNumberModel() { PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag, PhoneTypeCode = c.PhoneTypeCode }).ToList();
                 if (apprentice.Addresses?.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
                     ResidentialAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).Select(c => new ProfileAddressModel

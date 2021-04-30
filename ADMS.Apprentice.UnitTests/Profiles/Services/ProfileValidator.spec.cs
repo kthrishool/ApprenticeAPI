@@ -65,6 +65,16 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsValidationExceptionIfAgeIsLessThan12()
         {
+            validProfile.ProfileTypeCode = null;
+            ChangeException(ValidationExceptionType.InvalidApprenticeprofileType);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfProfileTypeIsNull()
+        {
             ClassUnderTest
                 .Invoking(async c => await c.ValidateAsync(invalidProfile))
                 .Should().Throw<ValidationException>();
@@ -246,16 +256,41 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             var phones = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "0212345678"};
 
             validProfile.Phones = null; //.Add(phones);
-            ClassUnderTest.ValidateAsync(validProfile);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().NotThrow();
         }
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfThePhoneNumberIsValid()
+        public void DoesNothingIfPhoneIsNull()
+        {
+            // Phone is null
+            Phone phone = null;
+            validProfile.Phones.Add(phone);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void DoesNothingIfPhoneNumberIsEmpty()
+        {
+            var phone = new Phone() { PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "" };
+            validProfile.Phones.Add(phone);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void NoValidationExceptionIfThePhoneNumberIsValid()
         {
             var phones = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "0212345678"};
 
             validProfile.Phones.Add(phones);
-            ClassUnderTest.ValidateAsync(validProfile);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().NotThrow();
         }
 
         [TestMethod]
@@ -264,7 +299,21 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             var phones = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "0212345678"};
 
             validProfile.Phones.Add(phones);
-            ClassUnderTest.ValidateAsync(validProfile);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().NotThrow();
+        }
+
+        [TestMethod]
+        public  async  Task SetPreferredFlagOnlyOnOnePhone()
+        {
+            var phone1 = new Phone() { PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "0212345678", PreferredPhoneFlag = true  };
+            var phone2 = new Phone() { PhoneTypeCode = PhoneType.MOBILE.ToString(), PhoneNumber = "0404000000", PreferredPhoneFlag = true };
+
+            validProfile.Phones.Add(phone1);
+            validProfile.Phones.Add(phone2);
+            validProfile = await ClassUnderTest.ValidateAsync(validProfile);
+            validProfile.Phones.Where(x => x.PreferredPhoneFlag == true).Count().Should().Be(1);
         }
 
         private void PhoneContainerError(string phones)
@@ -278,12 +327,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             ExecuteTest(validProfile);
         }
 
-        private void PhoneContainerPositive(string phones, Boolean needsConversion)
+        private async void PhoneContainerPositive(string phones, Boolean needsConversion)
         {
             var number = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = phones};
 
             validProfile.Phones.Add(number);
-            ClassUnderTest.ValidateAsync(validProfile);
+            await ClassUnderTest.ValidateAsync(validProfile);
             if (needsConversion)
                 validProfile.Phones.Select(c => c.PhoneNumber).Should().NotContain(phones);
             else

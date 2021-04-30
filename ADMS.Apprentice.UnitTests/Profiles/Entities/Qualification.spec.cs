@@ -15,8 +15,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
     {              
         private Qualification qualification;
         private Profile profile;
-        private DateTime dt = DateTime.Now;
-        private Guid g = new Guid();
+        private DateTime dt = DateTime.Now;        
         private byte[] b = new byte[] { 1 };
 
         protected override void Given()

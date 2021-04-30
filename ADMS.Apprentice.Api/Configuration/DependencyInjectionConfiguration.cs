@@ -8,8 +8,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ADMS.Apprentice.Api.Configuration
 {
+    /// <summary>
+    /// Configuration for dependency injection
+    /// </summary>
     public static class DependencyInjectionConfiguration
     {
+        /// <summary>
+        /// Configures dependency injection
+        /// </summary>
+        /// <param name="services">Services collection</param>
         public static void ConfigureServices(IServiceCollection services)
         {
             // interfaces which live in the same assembly as their implementation(s) can be registered using our IocRegistrationHelper

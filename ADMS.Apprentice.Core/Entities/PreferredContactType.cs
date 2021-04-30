@@ -3,8 +3,7 @@
 namespace ADMS.Apprentice.Core.Entities
 {
     public enum PreferredContactType
-    {
-        //TODO: Need to identify code and associated that here
+    {        
         [Description("Phone")]
         PHONE,
 

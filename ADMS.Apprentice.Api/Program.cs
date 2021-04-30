@@ -16,8 +16,14 @@ using Microsoft.Extensions.Options;
 
 namespace ADMS.Apprentice.Api
 {
+    /// <summary>
+    /// Application start point
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// Start point for the application
+        /// </summary>
         public static async Task Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
@@ -25,7 +31,7 @@ namespace ADMS.Apprentice.Api
             host.Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             string assemblyName = typeof(Startup).GetTypeInfo().Assembly.FullName;
             return WebHost.CreateDefaultBuilder(args).UseStartup(assemblyName);
