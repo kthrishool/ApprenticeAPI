@@ -4,11 +4,9 @@ using Adms.Shared;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages.TFN;
 using System.Threading.Tasks;
-using ADMS.Apprentice.Core.Exceptions;
 using Adms.Shared.Database;
 using Adms.Shared.Exceptions;
-using System.Text;
-using System.Text.RegularExpressions;
+using Adms.Shared.Services;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -30,7 +28,6 @@ namespace ADMS.Apprentice.Core.Services
             this.cryptography = cryptography;
             this.contextRetriever = contextRetriever;
             this.exceptionFactory = exceptionFactory;
-
         }
 
         public async Task<ApprenticeTFN> SetRevalidate(int apprenticeId)

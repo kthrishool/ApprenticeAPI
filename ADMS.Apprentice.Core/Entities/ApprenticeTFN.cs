@@ -4,7 +4,7 @@ using System;
 
 namespace ADMS.Apprentice.Core.Entities
 {
-    public class ApprenticeTFN : IAmAnAggregateRoot<int>, ITimestampEnabled, IAuditableIdentifier
+    public class ApprenticeTFN : IAmAnAggregateRoot<int>, IAuditableIdentifier, ITimestampEnabled
     {
         public int Id { get; set; }
         public int ApprenticeId { get; set; }

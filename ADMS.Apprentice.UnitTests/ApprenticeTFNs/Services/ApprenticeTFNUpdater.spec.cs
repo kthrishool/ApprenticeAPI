@@ -14,8 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using ADMS.Services.Infrastructure.Core.Exceptions;
 using Adms.Shared.Exceptions;
-using ADMS.Services.Infrastructure.Core.Validation;
-using ADMS.Apprentice.Core.Exceptions;
+using Adms.Shared.Services;
 
 namespace ADMS.Apprentice.UnitTests.ApprenticeTFNs.Services
 {

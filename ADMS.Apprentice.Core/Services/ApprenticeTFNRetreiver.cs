@@ -2,7 +2,7 @@
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Models;
 using Adms.Shared.Exceptions;
-using Adms.Shared.Database;
+using Adms.Shared.Services;
 using System.Linq;
 
 namespace ADMS.Apprentice.Core.Services

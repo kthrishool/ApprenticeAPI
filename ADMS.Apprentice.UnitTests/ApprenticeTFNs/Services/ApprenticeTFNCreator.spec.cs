@@ -5,6 +5,7 @@ using ADMS.Apprentice.Core.Messages.TFN;
 using ADMS.Apprentice.Core.Services;
 using ADMS.Services.Infrastructure.Core.Interface;
 using Adms.Shared.Database;
+using Adms.Shared.Services;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
