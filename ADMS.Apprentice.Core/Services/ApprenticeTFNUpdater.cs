@@ -28,7 +28,6 @@ namespace ADMS.Apprentice.Core.Services
             this.cryptography = cryptography;
             this.contextRetriever = contextRetriever;
             this.exceptionFactory = exceptionFactory;
-
         }
 
         public async Task<ApprenticeTFN> SetRevalidate(int apprenticeId)
