@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Database.ADMSApprentice</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{b8e48a08-7d3e-4989-84a7-e35189f883d5}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql140DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Database.ADMSApprentice</RootNamespace>
+    <AssemblyName>Database.ADMSApprentice</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <ReadCommittedSnapshot>True</ReadCommittedSnapshot>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SqlTargetName>ADMSApprentice</SqlTargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SqlTargetName>ADMSApprentice</SqlTargetName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Infrastructure\Tables\" />
+    <Folder Include="SensitiveLogging\" />
+    <Folder Include="SensitiveLogging\Tables\" />
+    <Folder Include="FT\" />
+    <Folder Include="FT\Tables\" />
+    <Folder Include="Storage\" />
+    <Folder Include="Security\" />
+    <Folder Include="FT\Functions\" />
+    <Folder Include="FT\Stored Procedures\" />
+    <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="Batch\" />
+    <Folder Include="Batch\Stored Procedures\" />
+    <Folder Include="Infrastructure\Stored Procedures\" />
+    <Folder Include="Infrastructure\User Defined Types\" />
+    <Folder Include="Batch\User Defined Types\" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\CDC" />
+    <Folder Include="Scripts\Data" />
+    <Folder Include="Scripts\DeploymentConfigurations" />
+    <Folder Include="Scripts\Misc" />
+    <Folder Include="Scripts\Security" />
+    <Folder Include="Scripts\Data\post" />
+    <Folder Include="Scripts\Data\pre" />
+    <Folder Include="Scripts\Data\SeedData" />
+    <Folder Include="Scripts\Data\SeedData\SeedDataFiles" />
+    <Folder Include="ChangeControl" />
+    <Folder Include="ChangeControl\Tables" />
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="CSVPath">
+      <DefaultValue>''</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\ApprenticeQualification.sql" />
+    <Build Include="dbo\Tables\Guardian.sql" />
+    <Build Include="Infrastructure\Tables\AuditEvent.sql" />
+    <Build Include="Infrastructure\Tables\ServiceBusEvent.sql" />
+    <Build Include="Infrastructure\Tables\ServiceBusEventArchive.sql" />
+    <Build Include="dbo\Tables\Apprentice.sql" />
+    <Build Include="Infrastructure\Tables\ServiceRequestMessage.sql" />
+    <Build Include="dbo\Tables\CDCLockedTables.sql" />
+    <Build Include="dbo\Tables\ApprenticeAddress.sql" />
+    <Build Include="dbo\Tables\ApprenticePhone.sql" />
+    <Build Include="dbo\Tables\ApprenticeTFN.sql" />
+    <Build Include="dbo\Tables\ApprenticeUSI.sql" />
+    <Build Include="dbo\Tables\ApprenticeComment.sql" />
+    <Build Include="SensitiveLogging\Tables\RequestLog.sql" />
+    <Build Include="SensitiveLogging\Tables\APIRequestLog.sql" />
+    <Build Include="FT\Tables\AliasTerm.sql" />
+    <Build Include="FT\Tables\Apprentice.sql" />
+    <Build Include="FT\Tables\SearchLog.sql" />
+    <Build Include="FT\Tables\Term.sql" />
+    <Build Include="Storage\FT_Apprentice.sql" />
+    <Build Include="FullTextIndexes.sql" />
+    <Build Include="Storage\CDC.sql" />
+    <Build Include="FT\Functions\ConsonantTerm.sql" />
+    <Build Include="FT\Functions\DoubleMetaPhone.sql" />
+    <Build Include="FT\Functions\QuickSearchCriteria.sql" />
+    <Build Include="FT\Stored Procedures\FTApprenticeProcessFuzzyLogic.sql" />
+    <Build Include="dbo\Stored Procedures\ApprenticeFuzzySearch.sql" />
+    <Build Include="dbo\Stored Procedures\ApprenticeQuickFind.sql" />
+    <Build Include="Batch\Stored Procedures\ApprenticeTFNsToBeVerifiedList.sql" />
+    <Build Include="Batch\Stored Procedures\ApprenticeTFNsSetMatchedStatus.sql" />
+    <Build Include="Infrastructure\Stored Procedures\GetNotPublishedInProgressServiceBusEvents.sql" />
+    <Build Include="Infrastructure\Stored Procedures\upAuditEventInsert.sql" />
+    <Build Include="Infrastructure\Stored Procedures\UpdateServiceBusEventStatusById.sql" />
+    <Build Include="Batch\Stored Procedures\ApprenticeTFNsSetStatusToSubmitted.sql" />
+    <Build Include="Infrastructure\User Defined Types\IdentityAndStatus.sql" />
+    <Build Include="Batch\User Defined Types\ApprenticeTFNSubmittedListType.sql" />
+    <Build Include="Batch\User Defined Types\ApprenticeTFNMatchStatusListType.sql" />
+    <Build Include="Security\Batch.sql" />
+    <Build Include="Security\FT.sql" />
+    <Build Include="Security\Infrastructure.sql" />
+    <Build Include="Security\SensitiveLogging.sql" />
+    <Build Include="ChangeControl\Tables\CDCTest.sql" />
+    <Build Include="ChangeControl\Tables\VersionHistory.sql" />
+    <PostDeploy Include="Scripts\PostDeployment.sql" />
+    <PreDeploy Include="Scripts\PreDeployment.sql" />
+    <None Include="Scripts\CDC\cdc_postdeployment.sql" />
+    <None Include="Scripts\CDC\cdc_predeployment.sql" />
+    <None Include="Scripts\Data\DataPopulation.sql" />
+    <None Include="Scripts\Data\SeedData\CSVDataImport.sql" />
+    <None Include="Scripts\Data\SeedData\populate_SeedData.sql" />
+    <None Include="Scripts\DeploymentConfigurations\ChangeControl-DeploymentConfiguration_SeedData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripts\DeploymentConfigurations\ChangeControl-DeploymentTask_SeedData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripts\DeploymentConfigurations\ChangeControl-ImportConfiguration_SeedData.sql" />
+    <None Include="Scripts\DeploymentConfigurations\ChangeControl-ValidationTest_SeedData.sql" />
+    <None Include="Scripts\DeploymentConfigurations\Security_Configurations.sql" />
+    <None Include="Scripts\DeploymentConfigurations\Seed_DeploymentConfigurations.sql" />
+    <None Include="Scripts\Misc\ApplyVersionNumber.sql" />
+    <None Include="Scripts\Misc\CLRConfiguration.sql" />
+    <None Include="Scripts\Misc\CreateSnapshot.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripts\Misc\DatabaseConfigurations.sql" />
+    <None Include="Scripts\Misc\DropSnapshot.sql" />
+    <None Include="Scripts\Misc\DropUnusedObjects.sql" />
+    <None Include="Scripts\Misc\PostDeployment_Release_Validation.sql" />
+    <None Include="Scripts\Misc\PostDeploymentTasks_End.sql" />
+    <None Include="Scripts\Misc\PostDeploymentTasks_Start.sql" />
+    <None Include="Scripts\Misc\Pre_PreDeploymentTasks_Start.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripts\Misc\PreDeployment_Release_Validation.sql" />
+    <None Include="Scripts\Misc\PreDeploymentTasks_End.sql" />
+    <None Include="Scripts\Misc\PreDeploymentTasks_Start.sql" />
+    <None Include="Scripts\Misc\SetDatabaseMultiUser.sql" />
+    <None Include="Scripts\Misc\SetDatabaseRestrictedUser.sql" />
+    <None Include="Scripts\Security\AuditSecurity.sql" />
+    <None Include="Scripts\Security\CreateSecurity.sql" />
+    <None Include="Scripts\Security\DeleteSecurity.sql" />
+    <Build Include="Scripts\Security\Schemas.sql" />
+  </ItemGroup>
+</Project>
