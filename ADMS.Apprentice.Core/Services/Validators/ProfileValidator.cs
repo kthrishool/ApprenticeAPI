@@ -93,14 +93,13 @@ namespace ADMS.Apprentice.Core.Services.Validators
             // Country of Birth
             // language
             // Completed School level
-            // Preferred Contact
-            // Month code
+            // Preferred Contact            
             await referenceDataValidator.ValidateAsync(profile);
-
-            //Qualification validator should be called after the reference data validator to make sure we are passing valid Month codes to create the start and end date
-            if (profile.Qualifications != null)
+            
+            if (profile.Qualifications != null) 
             {
                 profile.Qualifications = await qualificationValidator.ValidateAsync(profile.Qualifications.ToList());
+                qualificationValidator.CheckForDuplicates(profile.Qualifications.ToList());
             }
             return profile;
         }

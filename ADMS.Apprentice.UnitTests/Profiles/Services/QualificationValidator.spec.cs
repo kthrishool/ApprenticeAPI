@@ -46,6 +46,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .GetMock<IExceptionFactory>()
                 .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidQualification))
                 .Returns(validationException);
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.DuplicateQualification))
+                .Returns(validationException);
         }
 
 
@@ -83,6 +87,27 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             qualification.EndYear = null;
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(c => c.ValidateAsync(profile.Qualifications.ToList()))
+                .Should().NotThrow<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfFoundDuplicate()
+        {           
+            profile.Qualifications = new List<Qualification>();            
+            profile.Qualifications.Add(qualification);            
+            profile.Qualifications.Add(qualification);
+
+            ClassUnderTest.Invoking(c => c.CheckForDuplicates(profile.Qualifications.ToList()))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void DoesNotThrowValidationExceptionIfNoDuplicate()
+        {
+            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Add(qualification);
+
+            ClassUnderTest.Invoking(c => c.CheckForDuplicates(profile.Qualifications.ToList()))
                 .Should().NotThrow<ValidationException>();
         }
 

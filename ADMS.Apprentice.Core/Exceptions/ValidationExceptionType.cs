@@ -102,5 +102,8 @@ namespace ADMS.Apprentice.Core.Exceptions
 
         [ExceptionDetails("AP-VAL-0033", "Invalid left school details")]
         InvalidLeftSchoolDetails,
+
+        [ExceptionDetails("AP-VAL-0034", "Duplicate qualification identified")]
+        DuplicateQualification,
     }
 }

@@ -11,6 +11,8 @@ using Adms.Shared.Exceptions;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using Moq;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -32,7 +34,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
                 ProfileTypeCode = ProfileConstants.Profiletype,
-                PreferredContactType = ProfileConstants.PreferredContactType.ToString()
+                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),                
             };
             invalidProfile = new Profile
             {
@@ -46,6 +48,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validationException = new ValidationException(null, (ValidationError) null);
             ChangeException(ValidationExceptionType.InvalidApprenticeAge);
             ChangeException(ValidationExceptionType.InvalidLeftSchoolYear);
+            Container.GetMock<IQualificationValidator>()
+                .Setup(r => r.ValidateAsync(It.IsAny<List<Qualification>>()))
+                .ReturnsAsync(new List<Qualification>());
         }
 
         private void ChangeException(ValidationExceptionType exceptionMessage)

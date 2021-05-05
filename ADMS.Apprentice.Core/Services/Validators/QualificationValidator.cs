@@ -75,5 +75,11 @@ namespace ADMS.Apprentice.Core.Services.Validators
             return validQualifications;
         }
 
+        public void CheckForDuplicates(List<Qualification> qualifications)
+        {
+            //check for duplicates based on Qcode
+            if (qualifications.GroupBy(x => x.QualificationCode.ToUpper()).Any(g => g.Count() > 1))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.DuplicateQualification);
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace ADMS.Apprentice.Api.Controllers
     /// Apprentice qualification endpoints of a given apprentice.
     /// </summary>
     [ApiVersion(Version = "1", Latest = "1")]
-    [Route("api/v1/apprentices/{apprenticeId}/qualificatios")]
+    [Route("api/v1/apprentices/{apprenticeId}/qualifications")]
     [Route("api/apprentices/{apprenticeId}/qualifications")]
     [Public]
     [Produces("application/json")]
@@ -101,9 +101,12 @@ namespace ADMS.Apprentice.Api.Controllers
                 EndMonth = message.EndMonth.SanitiseUpper(),
                 EndYear = message.EndYear,
             };
-            
+
+            //pass only the created one to validate
             await qualificationValidator.ValidateAsync(new List<Qualification> { qualification });
             profile.Qualifications.Add(qualification);
+            qualificationValidator.CheckForDuplicates(profile.Qualifications.ToList());
+
             await repository.SaveAsync();
             return Created($"/{profile.Qualifications.LastOrDefault().Id}", new ProfileQualificationModel(qualification));
         }
@@ -130,8 +133,9 @@ namespace ADMS.Apprentice.Api.Controllers
                 qualification.EndMonth = message.EndMonth.SanitiseUpper();
                 qualification.EndYear = message.EndYear;
             }
-            //pass only the updated to validate
+            //pass only the updated one to validate
             await qualificationValidator.ValidateAsync(new List<Qualification> { qualification });
+            qualificationValidator.CheckForDuplicates(profile.Qualifications.ToList());
             await repository.SaveAsync();
             return Ok(new ProfileQualificationModel(profile.Qualifications.SingleOrDefault(x => x.Id == id)));
         }
