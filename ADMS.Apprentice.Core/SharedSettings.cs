@@ -7,7 +7,7 @@ namespace ADMS.Apprentice.Core
     {
         private readonly IOptions<OurTestingSettings> ourTestingSettings;
         private readonly IOptions<OurEnvironmentSettings> ourEnvironmentSettings;
-        private readonly IOptions<OurDatabaseSettings> ourDatabaseSettings;
+        private readonly IOptions<OurDatabaseSettings> ourDatabaseSettings;        
 
         public int SortableListRowLimit => ourEnvironmentSettings.Value.SortableListRowLimit;
         public bool EnableTestingTools => ourTestingSettings.Value.EnableTestingTools;

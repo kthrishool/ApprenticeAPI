@@ -11,12 +11,12 @@ namespace ADMS.Apprentice.Api.HttpClients
     /// <summary>
     /// Adds authorization token from incoming requests to outgoing HttpClient requests
     /// </summary>
-    public class AuthorizationMessageHandler : DelegatingHandler
+    public class JwtPassThroughMessageHandler : DelegatingHandler
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 
         /// <summary>Constructor</summary>
-        public AuthorizationMessageHandler(IHttpContextAccessor httpContextAccessor)
+        public JwtPassThroughMessageHandler(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContextAccessor = httpContextAccessor;
         }

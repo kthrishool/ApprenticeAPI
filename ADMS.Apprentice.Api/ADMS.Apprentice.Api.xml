@@ -165,22 +165,6 @@
         <member name="M:ADMS.Apprentice.Api.Filters.DbWriteAttribute.#ctor">
             <summary>Constructor</summary>
         </member>
-        <member name="T:ADMS.Apprentice.Api.HttpClients.AuthorizationMessageHandler">
-            <summary>
-            Adds authorization token from incoming requests to outgoing HttpClient requests
-            </summary>
-        </member>
-        <member name="M:ADMS.Apprentice.Api.HttpClients.AuthorizationMessageHandler.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
-            <summary>Constructor</summary>
-        </member>
-        <member name="M:ADMS.Apprentice.Api.HttpClients.AuthorizationMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
-            <summary>
-            SendAsync
-            </summary>
-            <param name="request"></param>
-            <param name="cancelToken"></param>
-            <returns></returns>
-        </member>
         <member name="T:ADMS.Apprentice.Api.HttpClients.HttpClientConfiguration">
             <summary>
             Configuration for the HTTP client
@@ -190,6 +174,38 @@
             <summary>
             Configures the HTTP client
             </summary>
+        </member>
+        <member name="T:ADMS.Apprentice.Api.HttpClients.JwtPassThroughMessageHandler">
+            <summary>
+            Adds authorization token from incoming requests to outgoing HttpClient requests
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentice.Api.HttpClients.JwtPassThroughMessageHandler.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentice.Api.HttpClients.JwtPassThroughMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            SendAsync
+            </summary>
+            <param name="request"></param>
+            <param name="cancelToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ADMS.Apprentice.Api.HttpClients.UsiAuthorizationMessageHandler">
+            <summary>
+            Generate and adds authorization token to outgoing HttpClient requests
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentice.Api.HttpClients.UsiAuthorizationMessageHandler.#ctor(Microsoft.Extensions.Options.IOptions{ADMS.Apprentice.Core.OurUsiSettings})">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentice.Api.HttpClients.UsiAuthorizationMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            SendAsync
+            </summary>
+            <param name="request"></param>
+            <param name="cancelToken"></param>
+            <returns></returns>
         </member>
         <member name="T:ADMS.Apprentice.Api.Program">
             <summary>
