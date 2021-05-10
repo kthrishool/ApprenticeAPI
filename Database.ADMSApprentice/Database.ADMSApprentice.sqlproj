@@ -106,7 +106,6 @@
     <Build Include="Infrastructure\Tables\ServiceBusEventArchive.sql" />
     <Build Include="dbo\Tables\Apprentice.sql" />
     <Build Include="Infrastructure\Tables\ServiceRequestMessage.sql" />
-    <Build Include="dbo\Tables\CDCLockedTables.sql" />
     <Build Include="dbo\Tables\ApprenticeAddress.sql" />
     <Build Include="dbo\Tables\ApprenticePhone.sql" />
     <Build Include="dbo\Tables\ApprenticeTFN.sql" />
@@ -182,5 +181,6 @@
     <None Include="Scripts\Security\CreateSecurity.sql" />
     <None Include="Scripts\Security\DeleteSecurity.sql" />
     <Build Include="Scripts\Security\Schemas.sql" />
+    <Build Include="Storage\temp.sql" />
   </ItemGroup>
 </Project>
