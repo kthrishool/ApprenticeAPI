@@ -14,7 +14,7 @@ namespace ADMS.Apprentice.Core.Entities
         public Boolean SurnameMatchedFlag { get; set; }
         public Boolean DateOfBirthMatchedFlag { get; set; }
 
-        public string USIStatusCode { get; set; }
+        public string USIStatus { get; set; }
 
         public virtual Profile Profile { get; set; }
 

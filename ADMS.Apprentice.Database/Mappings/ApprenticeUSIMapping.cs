@@ -36,9 +36,9 @@ namespace ADMS.Apprentice.Database.Mappings
                 .HasColumnName("SurnameMatchedFlag");
             entity.Property(e => e.DateOfBirthMatchedFlag)
                 .HasColumnName("DateOfBirthMatchedFlag");
-            entity.Property(e => e.USIStatusCode)
-                .HasColumnName("USIStatusCode")
-                .HasMaxLength(10);
+            entity.Property(e => e.USIStatus)
+                .HasColumnName("USIStatus")
+                .HasMaxLength(15);
 
             entity.HasOne(x => x.Profile)
                 .WithMany(c => c.USIs)
