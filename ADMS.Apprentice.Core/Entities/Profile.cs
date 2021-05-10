@@ -25,9 +25,9 @@ namespace ADMS.Apprentice.Core.Entities
         public string VisaNumber { get; set; }
         public string CountryOfBirthCode { get; set; }
         public string LanguageCode { get; set; }
-        public bool? InterpretorRequiredFlag { get; set; }       
-        public bool DeceasedFlag { get; set; } 
-        
+        public bool? InterpretorRequiredFlag { get; set; }
+        public bool DeceasedFlag { get; set; }
+
         public bool ActiveFlag { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }
@@ -45,15 +45,17 @@ namespace ADMS.Apprentice.Core.Entities
         //Not mapped fields
         public string LeftSchoolMonthCode;
         public int? LeftSchoolYear;
+        public virtual ICollection<ApprenticeUSI> USIs { get; set; }
 
         public Profile()
         {
             ActiveFlag = true;
-            DeceasedFlag = false;            
+            DeceasedFlag = false;
             Phones = new List<Phone>();
             Addresses = new List<Address>();
             TFNs = new List<ApprenticeTFN>();
             Qualifications = new List<Qualification>();
+            USIs = new List<ApprenticeUSI>();
         }
     }
 }
