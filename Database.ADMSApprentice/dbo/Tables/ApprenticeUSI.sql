@@ -8,7 +8,7 @@
     [FirstNameMatchedFlag]   BIT             NULL,
     [SurnameMatchedFlag]     BIT             NULL,
     [DateOfBirthMatchedFlag] BIT             NULL,
-    [USIStatusCode]          VARCHAR (10)    NULL,
+    [USIStatus]              VARCHAR (15)    NULL,
     [CreatedBy]              NVARCHAR (1024) NOT NULL,
     [CreatedOn]              DATETIME2 (7)   NOT NULL,
     [UpdatedBy]              NVARCHAR (1024) NOT NULL,
