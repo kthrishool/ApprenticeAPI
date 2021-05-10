@@ -88,7 +88,7 @@ namespace ADMS.Apprentice.Core.Messages
         [RegularExpression("^[a-zA-Z0-9]{11}$", ErrorMessage = "Visa number must be a 11 character string with only alphanumeric characters")]
         public string VisaNumber { get; init; }
 
-        [Display(Name = "Qualifications")]
-        public List<ProfileQualificationMessage> Qualifications { get; init; }
+        //[Display(Name = "Qualifications")]
+        //public List<ProfileQualificationMessage> Qualifications { get; init; }
     }
 }

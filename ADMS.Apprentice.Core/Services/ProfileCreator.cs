@@ -45,18 +45,7 @@ namespace ADMS.Apprentice.Core.Services
                 HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),
                 LeftSchoolMonthCode = message.LeftSchoolMonthCode.SanitiseUpper(),
                 LeftSchoolYear = message.LeftSchoolYear,
-                VisaNumber = message.VisaNumber.Sanitise(),
-                Qualifications = message.Qualifications?.Select(q => new Qualification()
-                {
-                    QualificationCode = q.QualificationCode.Sanitise(),
-                    QualificationDescription = q.QualificationDescription.Sanitise(),
-                    QualificationLevel = q.QualificationLevel.Sanitise(),
-                    QualificationANZSCOCode = q.QualificationANZSCOCode.Sanitise(),
-                    StartMonth = q.StartMonth.SanitiseUpper(),
-                    StartYear = q.StartYear,
-                    EndMonth = q.EndMonth.SanitiseUpper(),
-                    EndYear = q.EndYear,
-                }).ToList(),
+                VisaNumber = message.VisaNumber.Sanitise()               
             };
 
             if (message.GenderCode != null)

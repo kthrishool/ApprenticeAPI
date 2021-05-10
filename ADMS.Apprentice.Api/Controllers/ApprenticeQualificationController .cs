@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Models;
-using ADMS.Apprentice.Core.Services;
 using ADMS.Services.Infrastructure.WebApi;
 using ADMS.Services.Infrastructure.WebApi.Documentation;
 using Adms.Shared;
@@ -12,12 +11,11 @@ using Adms.Shared.Filters;
 using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
-using System;
 using System.Linq;
 using ADMS.Apprentice.Core.Helpers;
 using ADMS.Apprentice.Core.Services.Validators;
-using Microsoft.EntityFrameworkCore;
+using ADMS.Apprentice.Core.Services;
+using Adms.Shared.Exceptions;
 
 namespace ADMS.Apprentice.Api.Controllers
 {
@@ -34,19 +32,25 @@ namespace ADMS.Apprentice.Api.Controllers
     {
         private readonly IRepository repository;
         private readonly IPagingHelper pagingHelper;
-        private readonly IQualificationValidator qualificationValidator;
+        private readonly IQualificationCreator qualificationCreator;
+        private readonly IQualificationUpdater qualificationUpdater;
+        private readonly IExceptionFactory exceptionFactory;
 
         /// <summary>Constructor</summary>
         public ApprenticeQualificationController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
             IPagingHelper pagingHelper,
-            IQualificationValidator qualificationValidator                 
+            IQualificationCreator qualificationCreator,
+            IQualificationUpdater qualificationUpdater,
+            IExceptionFactory exceptionFactory
         ) : base(contextAccessor)
         {
             this.repository = repository;
             this.pagingHelper = pagingHelper;
-            this.qualificationValidator = qualificationValidator;            
+            this.qualificationCreator = qualificationCreator;
+            this.qualificationUpdater = qualificationUpdater;
+            this.exceptionFactory = exceptionFactory;
         }
 
         /// <summary>
@@ -60,7 +64,10 @@ namespace ADMS.Apprentice.Api.Controllers
         {
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("id", true);
-            Profile profile = await repository.GetAsync<Profile>(apprenticeId);
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
+            if (profile == null)
+                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
+
             IQueryable<Qualification> query = profile.Qualifications.AsQueryable();            
             PagedList<Qualification> qualifications = pagingHelper.ToPagedList(query, paging);
             IEnumerable<ProfileQualificationModel> models = qualifications.Results.Map(a => new ProfileQualificationModel(a));
@@ -75,40 +82,34 @@ namespace ADMS.Apprentice.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfileQualificationModel>> Get(int apprenticeId, int id)
         {            
-            Profile profile = await repository.GetAsync<Profile>(apprenticeId);
-            Qualification qualification = profile.Qualifications.SingleOrDefault(x => x.Id == id);
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
+            if (profile == null)
+                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
+            Qualification qualification = profile.Qualifications.Single(x => x.Id == id);
+            if (qualification == null)
+                return NotFound();
+
             return Ok(new ProfileQualificationModel(qualification));
         }
 
 
         /// <summary>
-        /// Creates a new qualification for an apprentice
+        /// Adds a new qualification for an apprentice
         /// </summary>
         /// <param name="apprenticeId">apprenticeId</param>
         /// <param name="message">Details of the qualification to be created</param>
         [HttpPost]
         public async Task<ActionResult<ProfileQualificationModel>> Create(int apprenticeId, [FromBody] ProfileQualificationMessage message)
         {
-            Profile profile = await repository.GetAsync<Profile>(apprenticeId);
-            Qualification qualification = new Qualification
-            {
-                QualificationCode = message.QualificationCode.Sanitise(),
-                QualificationDescription = message.QualificationDescription.Sanitise(),
-                QualificationLevel = message.QualificationLevel.Sanitise(),
-                QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise(),
-                StartMonth = message.StartMonth.SanitiseUpper(),
-                StartYear = message.StartYear,
-                EndMonth = message.EndMonth.SanitiseUpper(),
-                EndYear = message.EndYear,
-            };
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
+            if (profile == null)
+                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
 
-            //pass only the created one to validate
-            await qualificationValidator.ValidateAsync(new List<Qualification> { qualification });
-            profile.Qualifications.Add(qualification);
-            qualificationValidator.CheckForDuplicates(profile.Qualifications.ToList());
+            Qualification qualification = await qualificationCreator.CreateAsync(message);
+            profile.Qualifications.Add(qualification);            
 
             await repository.SaveAsync();
-            return Created($"/{profile.Qualifications.LastOrDefault().Id}", new ProfileQualificationModel(qualification));
+            return Created($"/{qualification.Id}", new ProfileQualificationModel(qualification));
         }
 
         /// <summary>
@@ -120,24 +121,18 @@ namespace ADMS.Apprentice.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ProfileQualificationModel>> Update(int apprenticeId, int id, [FromBody] ProfileQualificationMessage message)
         {
-            Profile profile = await repository.GetAsync<Profile>(apprenticeId);
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
+            if (profile == null)
+                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
+
             Qualification qualification = profile.Qualifications.SingleOrDefault(x => x.Id == id);
-            if (qualification != null)
-            {
-                qualification.QualificationCode = message.QualificationCode.Sanitise();
-                qualification.QualificationDescription = message.QualificationDescription.Sanitise();
-                qualification.QualificationLevel = message.QualificationLevel.Sanitise();
-                qualification.QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise();
-                qualification.StartMonth = message.StartMonth.SanitiseUpper();
-                qualification.StartYear = message.StartYear;
-                qualification.EndMonth = message.EndMonth.SanitiseUpper();
-                qualification.EndYear = message.EndYear;
-            }
-            //pass only the updated one to validate
-            await qualificationValidator.ValidateAsync(new List<Qualification> { qualification });
-            qualificationValidator.CheckForDuplicates(profile.Qualifications.ToList());
+            if (qualification == null)
+                throw exceptionFactory.CreateNotFoundException("Apprentice Qualification ", id.ToString());
+
+            await qualificationUpdater.Update(qualification, message);
+            
             await repository.SaveAsync();
-            return Ok(new ProfileQualificationModel(profile.Qualifications.SingleOrDefault(x => x.Id == id)));
+            return Ok(new ProfileQualificationModel(qualification));
         }
     }
 }

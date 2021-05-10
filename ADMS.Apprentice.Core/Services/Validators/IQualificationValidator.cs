@@ -9,6 +9,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
     public interface IQualificationValidator
     {
         Task<List<Qualification>> ValidateAsync(List<Qualification> qualifications);
+        Task<Qualification> ValidateAsync(Qualification qualifications);
 
         void CheckForDuplicates(List<Qualification> qualifications);
     }

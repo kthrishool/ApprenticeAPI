@@ -44,8 +44,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
                 LeftSchoolYear = ProfileConstants.LeftSchoolYear,
-                VisaNumber = ProfileConstants.VisaNumber,
-                Qualifications = ProfileConstants.Qualifications
+                VisaNumber = ProfileConstants.VisaNumber                
             };
         }
 
@@ -222,26 +221,25 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.VisaNumber.Should().Contain(ProfileConstants.VisaNumber);
         }
 
-        [TestMethod]
-        public void ShouldSetQualification()
-        {
-            profile.Qualifications.Should().NotBeNull();
-        }
+        //[TestMethod]
+        //public void ShouldSetQualification()
+        //{
+        //    profile.Qualifications.Should().NotBeNull();
+        //}
 
-        [TestMethod]
-        public async Task QualificationShouldBeNullIfNoQUalificationPassed()
-        {
-            message = new ProfileMessage
-            {
-                Surname = ProfileConstants.Surname,
-                FirstName = ProfileConstants.Firstname,
-                BirthDate = ProfileConstants.Birthdate,                
-                ProfileType = ProfileConstants.Profiletype,                
-                Qualifications = null
-            };
-            profile = await ClassUnderTest.CreateAsync(message);
-            profile.Qualifications.Should().BeNull();
-        }
+        //[TestMethod]
+        //public async Task QualificationShouldBeNullIfNoQUalificationPassed()
+        //{
+        //    message = new ProfileMessage
+        //    {
+        //        Surname = ProfileConstants.Surname,
+        //        FirstName = ProfileConstants.Firstname,
+        //        BirthDate = ProfileConstants.Birthdate,                
+        //        ProfileType = ProfileConstants.Profiletype                            
+        //    };
+        //    profile = await ClassUnderTest.CreateAsync(message);
+        //    profile.Qualifications.Should().BeNull();
+        //}
 
         [TestMethod]
         public async Task PhonesShouldBeNullIfNoPhonesPassed()

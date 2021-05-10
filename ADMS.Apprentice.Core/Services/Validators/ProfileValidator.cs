@@ -96,11 +96,6 @@ namespace ADMS.Apprentice.Core.Services.Validators
             // Preferred Contact            
             await referenceDataValidator.ValidateAsync(profile);
             
-            if (profile.Qualifications != null) 
-            {
-                profile.Qualifications = await qualificationValidator.ValidateAsync(profile.Qualifications.ToList());
-                qualificationValidator.CheckForDuplicates(profile.Qualifications.ToList());
-            }
             return profile;
         }
 

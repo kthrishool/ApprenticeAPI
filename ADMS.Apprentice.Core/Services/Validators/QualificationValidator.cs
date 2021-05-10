@@ -29,53 +29,59 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
             foreach (Qualification qualification in qualifications)
             {
-                //check if mandatory fields presents
-                if (qualification.QualificationCode.IsNullOrEmpty() )
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
-
-                //check if the month is valid
-                if (!qualification.StartMonth.IsNullOrEmpty() && !(Enum.IsDefined(typeof(MonthCode), qualification.StartMonth)))
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
-                if (!qualification.EndMonth.IsNullOrEmpty() && !(Enum.IsDefined(typeof(MonthCode), qualification.EndMonth)))
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
-
-                //Check if the year is valid
-                if (qualification.StartYear.HasValue && (qualification.StartYear < 1900 || qualification.StartYear > DateTime.Now.Year))
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
-
-                if (qualification.EndYear.HasValue && (qualification.EndYear < 1900 || qualification.EndYear > DateTime.Now.Year))
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
-
-                //check if startyear <= endyear
-                if (qualification.StartYear.HasValue && qualification.EndYear.HasValue && qualification.StartYear > qualification.EndYear)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
-
-                //if month exist, need year and vice versa
-                if ((qualification.StartYear.HasValue && qualification.StartMonth.IsNullOrEmpty()) || (!qualification.StartMonth.IsNullOrEmpty() && !qualification.StartYear.HasValue))
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
-
-                if ((qualification.EndYear.HasValue && qualification.EndMonth.IsNullOrEmpty()) || (!qualification.EndMonth.IsNullOrEmpty() && !qualification.EndYear.HasValue))
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
-
-                //At this point we know we have a valid start and end month fields because month code has been validated against enum and year validations happened as well,
-                //so create the date out of it if Months and Years exist.
-
-                qualification.StartDate = qualification.StartYear.HasValue ? new DateTime(qualification.StartYear.Value, DateTime.ParseExact(qualification.StartMonth, "MMM", CultureInfo.CurrentCulture).Month, 1) : null;
-                qualification.EndDate = qualification.EndYear.HasValue ? new DateTime(qualification.EndYear.Value, DateTime.ParseExact(qualification.EndMonth, "MMM", CultureInfo.CurrentCulture).Month, 1) : null;
-
-                //check if StartDate < endDate if startDate and EndDate not null
-                if (qualification.StartDate?.Date > qualification.EndDate?.Date)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
-
-                await referenceDataValidator.ValidateAsync(qualification);
-
+                await ValidateAsync(qualification);
                 validQualifications.Add(qualification);                
             }
 
             return validQualifications;
         }
 
-        public void CheckForDuplicates(List<Qualification> qualifications)
+        public async Task<Qualification> ValidateAsync(Qualification qualification)
+        {
+            //check if mandatory fields presents
+            if (qualification.QualificationCode.IsNullOrEmpty())
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
+
+            //check if the month is valid
+            if (!qualification.StartMonth.IsNullOrEmpty() && !(Enum.IsDefined(typeof(MonthCode), qualification.StartMonth)))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
+            if (!qualification.EndMonth.IsNullOrEmpty() && !(Enum.IsDefined(typeof(MonthCode), qualification.EndMonth)))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
+
+            //Check if the year is valid
+            if (qualification.StartYear.HasValue && (qualification.StartYear < 1900 || qualification.StartYear > DateTime.Now.Year))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
+
+            if (qualification.EndYear.HasValue && (qualification.EndYear < 1900 || qualification.EndYear > DateTime.Now.Year))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
+
+            //check if startyear <= endyear
+            if (qualification.StartYear.HasValue && qualification.EndYear.HasValue && qualification.StartYear > qualification.EndYear)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
+
+            //if month exist, need year and vice versa
+            if ((qualification.StartYear.HasValue && qualification.StartMonth.IsNullOrEmpty()) || (!qualification.StartMonth.IsNullOrEmpty() && !qualification.StartYear.HasValue))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
+
+            if ((qualification.EndYear.HasValue && qualification.EndMonth.IsNullOrEmpty()) || (!qualification.EndMonth.IsNullOrEmpty() && !qualification.EndYear.HasValue))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
+
+            //At this point we know we have a valid start and end month fields because month code has been validated against enum and year validations happened as well,
+            //so create the date out of it if Months and Years exist.
+
+            qualification.StartDate = qualification.StartYear.HasValue ? new DateTime(qualification.StartYear.Value, DateTime.ParseExact(qualification.StartMonth, "MMM", CultureInfo.CurrentCulture).Month, 1) : null;
+            qualification.EndDate = qualification.EndYear.HasValue ? new DateTime(qualification.EndYear.Value, DateTime.ParseExact(qualification.EndMonth, "MMM", CultureInfo.CurrentCulture).Month, 1) : null;
+
+            //check if StartDate < endDate if startDate and EndDate not null
+            if (qualification.StartDate?.Date > qualification.EndDate?.Date)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidQualification);
+
+            await referenceDataValidator.ValidateAsync(qualification);
+
+            return qualification;
+        }
+
+            public void CheckForDuplicates(List<Qualification> qualifications)
         {
             //check for duplicates based on Qcode
             if (qualifications.GroupBy(x => x.QualificationCode.ToUpper()).Any(g => g.Count() > 1))

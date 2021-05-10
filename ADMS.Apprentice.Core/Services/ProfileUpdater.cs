@@ -36,8 +36,7 @@ namespace ADMS.Apprentice.Core.Services
             SetBasicDetails(profile, message);
             SetContactDetails(profile, message);            
             SetSchoolDetails(profile, message);
-            SetOtherDetails(profile, message);
-            SetQualificationDetails(profile, message);
+            SetOtherDetails(profile, message);            
 
             await profileValidator.ValidateAsync(profile);
 
@@ -123,24 +122,6 @@ namespace ADMS.Apprentice.Core.Services
             profile.IndigenousStatusCode = message.OtherDetails.IndigenousStatusCode.Sanitise();
             profile.SelfAssessedDisabilityCode = message.OtherDetails.SelfAssessedDisabilityCode.SanitiseUpper();
             profile.VisaNumber = message.OtherDetails.VisaNumber.Sanitise();
-        }
-        private static void SetQualificationDetails(Profile profile, UpdateProfileMessage message)
-        {
-            if (message?.QualificationDetails == null) return;
-            
-            //clear existing qualifications first.
-            profile.Qualifications.Clear();
-            profile.Qualifications = message.QualificationDetails.Qualifications.Select(q => new Qualification()
-            {
-                QualificationCode = q.QualificationCode.Sanitise(),
-                QualificationDescription = q.QualificationDescription.Sanitise(),
-                QualificationLevel = q.QualificationLevel.Sanitise(),
-                QualificationANZSCOCode = q.QualificationANZSCOCode.Sanitise(),
-                StartMonth = q.StartMonth.SanitiseUpper(),
-                StartYear = q.StartYear,
-                EndMonth = q.EndMonth.SanitiseUpper(),
-                EndYear = q.EndYear,
-            }).ToList();
-        }    
+        }        
     }
 }

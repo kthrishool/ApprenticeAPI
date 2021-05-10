@@ -53,11 +53,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                     InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
                     LanguageCode = ProfileConstants.LanguageCode,
                     CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
-                },
-                new QualificationDetailsMessage
-                {
-                    Qualifications = ProfileConstants.Qualifications,
-                }
+                }                
             );
         }
 
@@ -138,7 +134,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         protected override void Given()
         {
             profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode  = ProfileConstants.GenderCode };
-            message = new UpdateProfileMessage ( new BasicDetailsMessage { GenderCode = "Invalid", ProfileType = "Invalid" }, null, null, null, null );
+            message = new UpdateProfileMessage ( new BasicDetailsMessage { GenderCode = "Invalid", ProfileType = "Invalid" }, null, null, null );
         }
 
         protected override async void When()
@@ -166,7 +162,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         protected override void Given()
         {
             profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
-            message = new UpdateProfileMessage(new BasicDetailsMessage { GenderCode = "", ProfileType = "APPR" }, null, null, null, null);
+            message = new UpdateProfileMessage(new BasicDetailsMessage { GenderCode = "", ProfileType = "APPR" }, null, null, null);
         }
 
         protected override async void When()
@@ -201,7 +197,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                     ResidentialAddress = ProfileConstants.ResidentialAddress,
                     PostalAddress = ProfileConstants.PostalAddress,
                     PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
-                }, null, null, null);
+                }, null, null);
         }
 
         protected override async void When()

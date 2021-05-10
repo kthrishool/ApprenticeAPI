@@ -6,7 +6,6 @@ namespace ADMS.Apprentice.Core.Messages
         BasicDetailsMessage BasicDetails,
         ContactDetailsMessage ContactDetails,
         SchoolDetailsMessage SchoolDetails,
-        OtherDetailsMessage OtherDetails,
-        QualificationDetailsMessage QualificationDetails
+        OtherDetailsMessage OtherDetails      
     );
 }

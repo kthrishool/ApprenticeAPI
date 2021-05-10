@@ -78,7 +78,7 @@
             Apprentice qualification endpoints of a given apprentice.
             </summary>
         </member>
-        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeQualificationController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Paging.IPagingHelper,ADMS.Apprentice.Core.Services.Validators.IQualificationValidator)">
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeQualificationController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Paging.IPagingHelper,ADMS.Apprentice.Core.Services.IQualificationCreator,ADMS.Apprentice.Core.Services.IQualificationUpdater,Adms.Shared.Exceptions.IExceptionFactory)">
             <summary>Constructor</summary>
         </member>
         <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeQualificationController.List(System.Int32,Adms.Shared.Paging.PagingInfo)">
@@ -97,7 +97,7 @@
         </member>
         <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeQualificationController.Create(System.Int32,ADMS.Apprentice.Core.Messages.ProfileQualificationMessage)">
             <summary>
-            Creates a new qualification for an apprentice
+            Adds a new qualification for an apprentice
             </summary>
             <param name="apprenticeId">apprenticeId</param>
             <param name="message">Details of the qualification to be created</param>
