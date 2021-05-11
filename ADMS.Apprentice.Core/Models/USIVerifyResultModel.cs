@@ -1,12 +1,15 @@
 ﻿using ADMS.Apprentice.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ADMS.Apprentice.Core.Models
-{    
+{
+    //TODO: implement unit testing
+    [ExcludeFromCodeCoverage]
     public class USIVerifyResultModel
     {
         public int ApprenticeId { get; set; }
