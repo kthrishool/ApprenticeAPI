@@ -31,6 +31,7 @@ namespace ADMS.Apprentice.Api.Controllers
         private readonly IProfileCreator profileCreator;
         private readonly IProfileUpdater profileUpdater;
         private readonly IProfileRetreiver profileRetreiver;
+        private readonly IUSIVerify usiVerify;
 
         /// <summary>Constructor</summary>
         public ApprenticeProfileController(
@@ -39,7 +40,8 @@ namespace ADMS.Apprentice.Api.Controllers
             IPagingHelper pagingHelper,
             IProfileCreator profileCreator,
             IProfileUpdater profileUpdater,
-            IProfileRetreiver profileRetreiver
+            IProfileRetreiver profileRetreiver,
+            IUSIVerify usiVerify
         ) : base(contextAccessor)
         {
             this.repository = repository;
@@ -47,6 +49,7 @@ namespace ADMS.Apprentice.Api.Controllers
             this.profileCreator = profileCreator;
             this.profileUpdater = profileUpdater;
             this.profileRetreiver = profileRetreiver;
+            this.usiVerify = usiVerify;
         }
 
         /// <summary>
@@ -85,7 +88,7 @@ namespace ADMS.Apprentice.Api.Controllers
         public async Task<ActionResult<ProfileModel>> Create([FromBody] ProfileMessage message)
         {
             Profile profile = await profileCreator.CreateAsync(message);
-            await repository.SaveAsync();
+            await repository.SaveAsync();            
             return Created($"/{profile.Id}", new ProfileModel(profile));
         }
 

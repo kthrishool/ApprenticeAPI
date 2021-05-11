@@ -42,13 +42,16 @@ namespace ADMS.Apprentice.Database.Mappings
 
             entity.HasOne(x => x.Profile)
                 .WithMany(c => c.USIs)
-                .HasForeignKey(e => e.ApprenticeId);
-
+                .HasForeignKey(e => e.ApprenticeId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.Property(e => e.Version)
                 .HasColumnName("Version")
                 .IsRequired()
                 .IsRowVersion();
+
+            entity.Property(e => e.AuditEventId)
+                .HasColumnName("_AuditEventId");
         }
     }
 }

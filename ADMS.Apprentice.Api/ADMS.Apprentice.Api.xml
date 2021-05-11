@@ -32,7 +32,7 @@
             Apprentice endpoints.
             </summary>
         </member>
-        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Paging.IPagingHelper,ADMS.Apprentice.Core.Services.IProfileCreator,ADMS.Apprentice.Core.Services.IProfileUpdater,ADMS.Apprentice.Core.Services.IProfileRetreiver)">
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Paging.IPagingHelper,ADMS.Apprentice.Core.Services.IProfileCreator,ADMS.Apprentice.Core.Services.IProfileUpdater,ADMS.Apprentice.Core.Services.IProfileRetreiver,ADMS.Apprentice.Core.Services.IUSIVerify)">
             <summary>Constructor</summary>
         </member>
         <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController.List(Adms.Shared.Paging.PagingInfo)">

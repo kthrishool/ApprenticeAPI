@@ -23,6 +23,6 @@ namespace ADMS.Apprentice.Core.HttpClients.USI
 
         public bool? SingleNameMatched { get; set; }
 
-        public bool DateOfBirthMatched { get; set; }
+        public bool? DateOfBirthMatched { get; set; }
     }
 }

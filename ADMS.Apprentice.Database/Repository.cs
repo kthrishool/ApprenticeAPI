@@ -25,6 +25,7 @@ namespace ADMS.Apprentice.Database
             modelBuilder.ApplyConfiguration(new PhoneMapping());
             modelBuilder.ApplyConfiguration(new AddressMapping());
             modelBuilder.ApplyConfiguration(new QualificationMapping());
+            modelBuilder.ApplyConfiguration(new ApprenticeUSIMapping());
         }
     }
 }

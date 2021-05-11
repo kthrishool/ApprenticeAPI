@@ -7,12 +7,12 @@ namespace ADMS.Apprentice.Core.Entities
         public int Id { get; set; }
         public int ApprenticeId { get; set; }
         public string USI { get; set; }
-        public Boolean ActiveFlag { get; set; }
+        public bool ActiveFlag { get; set; }
         public string USIChangeReason { get; set; }
-        public Boolean USIVerifyFlag { get; set; }
-        public Boolean FirstNameMatchedFlag { get; set; }
-        public Boolean SurnameMatchedFlag { get; set; }
-        public Boolean DateOfBirthMatchedFlag { get; set; }
+        public bool? USIVerifyFlag { get; set; }
+        public bool? FirstNameMatchedFlag { get; set; }
+        public bool? SurnameMatchedFlag { get; set; }
+        public bool? DateOfBirthMatchedFlag { get; set; }
 
         public string USIStatus { get; set; }
 
