@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Models;
@@ -69,7 +70,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
                 LeftSchoolYear = ProfileConstants.LeftSchoolYear,
-                LeftSchoolDate = new System.DateTime(ProfileConstants.LeftSchoolYear.Value, 01, 01),
+                LeftSchoolDate = new DateTime(ProfileConstants.LeftSchoolYear.Value, 01, 01),
                 DeceasedFlag = ProfileConstants.DeceasedFlag,
                 ActiveFlag = ProfileConstants.ActiveFlag,
                 Addresses = add,
@@ -78,11 +79,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,
                 UpdatedBy = ProfileConstants.Updatedby,
-                Phones = ProfileConstants.PhoneNumbers.Select(c => new Phone() { PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag }).ToList(),
+                Phones = ProfileConstants.PhoneNumbers.Select(c => new Phone() {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList(),
                 LanguageCode = ProfileConstants.LanguageCode,
                 PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
                 VisaNumber = ProfileConstants.VisaNumber,
                 Qualifications = qualifications,
+                USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = ProfileConstants.USI, ActiveFlag = true, USIStatus = "test"}}
             };
         }
 
@@ -130,6 +132,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.LeftSchoolMonthCode.Should().Be(ProfileConstants.LeftSchoolMonthCode);
             model.LeftSchoolYear.Should().Be(ProfileConstants.LeftSchoolYear);
             model.VisaNumber.Should().Be(ProfileConstants.VisaNumber);
+            model.USI.USI.Should().Be(ProfileConstants.USI);
+            model.USI.USIStatus.Should().Be("test");
         }
 
         [TestMethod]
@@ -146,7 +150,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
         {
             profile.Phones = null;
             model = new ProfileModel(profile);
-            model.PhoneNumbers.Should().BeNull();            
+            model.PhoneNumbers.Should().BeNull();
         }
 
         [TestMethod]

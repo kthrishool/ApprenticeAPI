@@ -46,12 +46,17 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static bool DeceasedFlag = false;
         public static ProfileType ProfileTypeCode = ProfileType.APPR;
         public static PreferredContactType PreferredContactType = PreferredContactType.MOBILE;
-        public static Qualification Qualification = new Qualification() { QualificationCode = "QCode", QualificationDescription = "QDescription", QualificationLevel = "1101", QualificationANZSCOCode="1101", StartDate = new DateTime(2000, 10, 1), EndDate = new DateTime(2002, 10, 1) };
+        public static Qualification Qualification = new Qualification() {QualificationCode = "QCode", QualificationDescription = "QDescription", QualificationLevel = "1101", QualificationANZSCOCode = "1101", StartDate = new DateTime(2000, 10, 1), EndDate = new DateTime(2002, 10, 1)};
+
         public static ProfileQualificationMessage QualificationMessage = new ProfileQualificationMessage()
-        { QualificationCode = "QCode", QualificationDescription = "QDescription", StartMonth = "JAN", StartYear = 2000, EndMonth = "DEC", EndYear = 2004 };
+            {QualificationCode = "QCode", QualificationDescription = "QDescription", StartMonth = "JAN", StartYear = 2000, EndMonth = "DEC", EndYear = 2004};
+
         public static bool ActiveFlag = true;
+
         public static string VisaNumber = "12345678901";
+
         // public static byte[] Version = Convert.ToBase64String("1.1") ;
+        public static string USI = "thisisTestUsi";
 
         public static string RandomString(int length)
         {

@@ -1,8 +1,9 @@
 ﻿using System;
+using ADMS.Services.Infrastructure.Model.Interface;
 
 namespace ADMS.Apprentice.Core.Entities
 {
-    public class ApprenticeUSI
+    public class ApprenticeUSI : IAuditableIdentifier, ITimestampEnabled
     {
         public int Id { get; set; }
         public int ApprenticeId { get; set; }

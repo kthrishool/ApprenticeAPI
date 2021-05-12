@@ -105,5 +105,8 @@ namespace ADMS.Apprentice.Core.Exceptions
 
         [ExceptionDetails("AP-VAL-0034", "Duplicate qualification identified")]
         DuplicateQualification,
+
+        [ExceptionDetails("AP-VAL-0035", "Invalid USI code ")]
+        InvalidUSI,
     }
 }

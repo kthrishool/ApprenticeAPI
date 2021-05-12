@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services;
@@ -8,8 +9,6 @@ using Adms.Shared;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Threading.Tasks;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -44,7 +43,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
                 LeftSchoolYear = ProfileConstants.LeftSchoolYear,
-                VisaNumber = ProfileConstants.VisaNumber                
+                VisaNumber = ProfileConstants.VisaNumber,
+                USI = ProfileConstants.USI
             };
         }
 
@@ -63,7 +63,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ShouldAddTheProfileToTheDatabase()
         {
             Container.GetMock<IRepository>().Verify(r => r.Insert(profile));
-        }        
+        }
 
         [TestMethod]
         public void ShouldValidatesTheProfileRequest()
@@ -221,25 +221,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.VisaNumber.Should().Contain(ProfileConstants.VisaNumber);
         }
 
-        //[TestMethod]
-        //public void ShouldSetQualification()
-        //{
-        //    profile.Qualifications.Should().NotBeNull();
-        //}
-
-        //[TestMethod]
-        //public async Task QualificationShouldBeNullIfNoQUalificationPassed()
-        //{
-        //    message = new ProfileMessage
-        //    {
-        //        Surname = ProfileConstants.Surname,
-        //        FirstName = ProfileConstants.Firstname,
-        //        BirthDate = ProfileConstants.Birthdate,                
-        //        ProfileType = ProfileConstants.Profiletype                            
-        //    };
-        //    profile = await ClassUnderTest.CreateAsync(message);
-        //    profile.Qualifications.Should().BeNull();
-        //}
 
         [TestMethod]
         public async Task PhonesShouldBeNullIfNoPhonesPassed()
@@ -254,6 +235,24 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             };
             profile = await ClassUnderTest.CreateAsync(message);
             profile.Phones.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Insert a profile record and check if the email has been updated .
+        /// </summary>
+        [TestMethod]
+        public async Task ShouldSetUSI()
+        {
+            message = new ProfileMessage
+            {
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                ProfileType = ProfileConstants.Profiletype,
+                PhoneNumbers = null
+            };
+            profile = await ClassUnderTest.CreateAsync(message);
+            profile.USIs.Select(c => c.USI = ProfileConstants.USI);
         }
     }
 }

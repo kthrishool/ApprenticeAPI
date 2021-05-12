@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
@@ -11,7 +12,6 @@ using Adms.Shared.Exceptions;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using Moq;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
@@ -34,7 +34,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
                 ProfileTypeCode = ProfileConstants.Profiletype,
-                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),                
+                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
             };
             invalidProfile = new Profile
             {
@@ -60,6 +60,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Setup(r => r.CreateValidationException(exceptionMessage))
                 .Returns(validationException);
         }
+
 
         [TestMethod]
         public async Task DoesNothingIfTheProfileIsValid()
@@ -107,6 +108,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
 
         #region LeftSchoolDetailsValidation
+
         [TestMethod]
         public void ThrowsValidationExceptionIfLeftSchoolYearIsInvalid()
         {
@@ -119,7 +121,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         [TestMethod]
         public void ThrowsValidationExceptionIfLeftSchoolMonthIsInvalid()
-        {            
+        {
             validProfile.LeftSchoolYear = 2000;
             validProfile.LeftSchoolMonthCode = "Invalid";
             ChangeException(ValidationExceptionType.InvalidMonthCode);
@@ -159,8 +161,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile.LeftSchoolDate.Should().Be(new DateTime(2000, 1, 1));
         }
 
-
         #endregion
+
         /// <summary>
         /// Insert a profile record and check if the email has been updated .
         /// </summary>
@@ -280,7 +282,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void DoesNothingIfPhoneNumberIsEmpty()
         {
-            var phone = new Phone() { PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "" };
+            var phone = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = ""};
             validProfile.Phones.Add(phone);
             ClassUnderTest
                 .Invoking(async c => await c.ValidateAsync(validProfile))
@@ -310,10 +312,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public  async  Task SetPreferredFlagOnlyOnOnePhone()
+        public async Task SetPreferredFlagOnlyOnOnePhone()
         {
-            var phone1 = new Phone() { PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "0212345678", PreferredPhoneFlag = true  };
-            var phone2 = new Phone() { PhoneTypeCode = PhoneType.MOBILE.ToString(), PhoneNumber = "0404000000", PreferredPhoneFlag = true };
+            var phone1 = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "0212345678", PreferredPhoneFlag = true};
+            var phone2 = new Phone() {PhoneTypeCode = PhoneType.MOBILE.ToString(), PhoneNumber = "0404000000", PreferredPhoneFlag = true};
 
             validProfile.Phones.Add(phone1);
             validProfile.Phones.Add(phone2);
@@ -369,6 +371,44 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         #endregion
+
+        /// <summary>
+        /// Insert a profile record and check if the email has been updated .
+        /// </summary>
+        [TestMethod]
+        public async Task DoesNothingIfUSIIsEmpty()
+        {
+            invalidProfile = new Profile
+            {
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = DateTime.Now.AddYears(-14),
+                ProfileTypeCode = ProfileConstants.Profiletype
+            };
+
+            await ClassUnderTest.ValidateAsync(invalidProfile);
+        }
+
+        /// <summary>
+        /// Insert a profile record and check if the email has been updated .
+        /// </summary>
+        [TestMethod]
+        public void ThrowsValidationExceptionIfUSIIsNull()
+        {
+            ChangeException(ValidationExceptionType.InvalidUSI);
+
+
+            validProfile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = "", ActiveFlag = true, USIStatus = "test"}};
+
+            Container.GetMock<IUSIValidator>()
+                .Setup(r => r.Validate(validProfile))
+                .Returns(false);
+
+            // ExecuteTest(validProfile);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Equals(false);
+        }
     }
 
     #endregion

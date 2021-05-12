@@ -36,6 +36,7 @@ namespace ADMS.Apprentice.Core.Models
         public ProfileAddressModel ResidentialAddress { get; set; }
         public ProfileAddressModel PostalAddress { get; set; }
         public List<ProfileQualificationModel> Qualifications { get; set; }
+        public ProfileUSIModel USI { get; set; }
 
         public DateTime? CreatedOn { get; }
         public string CreatedBy { get; }
@@ -51,18 +52,18 @@ namespace ADMS.Apprentice.Core.Models
             OtherNames = apprentice.OtherNames;
             PreferredName = apprentice.PreferredName;
             BirthDate = apprentice.BirthDate;
-            
+
             SelfAssessedDisabilityCode = apprentice.SelfAssessedDisabilityCode;
             IndigenousStatusCode = apprentice.IndigenousStatusCode;
             CitizenshipCode = apprentice.CitizenshipCode;
             InterpretorRequiredFlag = apprentice.InterpretorRequiredFlag;
             LeftSchoolMonthCode = apprentice.LeftSchoolDate?.ToString("MMM").ToUpper();
-            LeftSchoolYear = apprentice.LeftSchoolDate?.Year;            
+            LeftSchoolYear = apprentice.LeftSchoolDate?.Year;
             ProfileType = apprentice.ProfileTypeCode;
             GenderCode = apprentice.GenderCode;
             CountryOfBirthCode = apprentice.CountryOfBirthCode;
             LanguageCode = apprentice.LanguageCode;
-            HighestSchoolLevelCode = apprentice.HighestSchoolLevelCode;            
+            HighestSchoolLevelCode = apprentice.HighestSchoolLevelCode;
             VisaNumber = apprentice.VisaNumber;
             DeceasedFlag = apprentice.DeceasedFlag;
             ActiveFlag = apprentice.ActiveFlag;
@@ -77,7 +78,7 @@ namespace ADMS.Apprentice.Core.Models
                 PreferredContactType = apprentice.PreferredContactType;
                 EmailAddress = apprentice.EmailAddress;
                 if (apprentice.Phones?.Count > 0)
-                    PhoneNumbers = apprentice.Phones.Select(c => new PhoneNumberModel() { PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag, PhoneTypeCode = c.PhoneTypeCode }).ToList();
+                    PhoneNumbers = apprentice.Phones.Select(c => new PhoneNumberModel() {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag, PhoneTypeCode = c.PhoneTypeCode}).ToList();
                 if (apprentice.Addresses?.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
                     ResidentialAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).Select(c => new ProfileAddressModel
                     {
@@ -100,9 +101,13 @@ namespace ADMS.Apprentice.Core.Models
                         StreetAddress2 = c.StreetAddress2,
                         StreetAddress3 = c.StreetAddress3
                     }).SingleOrDefault();
-            }           
+            }
 
             Qualifications = apprentice.Qualifications?.Select(q => new ProfileQualificationModel(q)).ToList();
+            if (apprentice.USIs.Any(c => c.ActiveFlag == true))
+            {
+                USI = apprentice.USIs.Where(c => c.ActiveFlag == true).Select(c => new ProfileUSIModel() {USI = c.USI, USIStatus = c.USIStatus}).SingleOrDefault();
+            }
         }
     }
 }

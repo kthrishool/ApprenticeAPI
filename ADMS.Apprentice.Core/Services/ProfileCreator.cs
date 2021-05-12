@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Helpers;
@@ -44,7 +45,7 @@ namespace ADMS.Apprentice.Core.Services
                 HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),
                 LeftSchoolMonthCode = message.LeftSchoolMonthCode.SanitiseUpper(),
                 LeftSchoolYear = message.LeftSchoolYear,
-                VisaNumber = message.VisaNumber.Sanitise()               
+                VisaNumber = message.VisaNumber.Sanitise(),
             };
 
             if (message.GenderCode != null)
@@ -79,6 +80,10 @@ namespace ADMS.Apprentice.Core.Services
                     Postcode = message.PostalAddress.Postcode.Sanitise(),
                     AddressTypeCode = AddressType.POST.ToString(),
                 });
+            }
+            if (message.USI != null)
+            {
+                profile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = message.USI, ActiveFlag = true}};
             }
 
             await profileValidator.ValidateAsync(profile);

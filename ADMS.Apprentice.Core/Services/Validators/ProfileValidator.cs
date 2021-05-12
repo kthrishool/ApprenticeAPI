@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 using Adms.Shared.Exceptions;
 using Castle.Core.Internal;
-using System.Globalization;
 
 namespace ADMS.Apprentice.Core.Services.Validators
 {
@@ -17,17 +17,17 @@ namespace ADMS.Apprentice.Core.Services.Validators
         private readonly IExceptionFactory exceptionFactory;
         private readonly IAddressValidator addressValidator;
         private readonly IReferenceDataValidator referenceDataValidator;
-        private readonly IQualificationValidator qualificationValidator;
+        private readonly IUSIValidator usiValidator;
 
         public ProfileValidator(IExceptionFactory exceptionFactory,
             IAddressValidator addressValidator,
             IReferenceDataValidator referenceDataValidator,
-            IQualificationValidator qualificationValidator)
+            IUSIValidator usiValidator)
         {
             this.exceptionFactory = exceptionFactory;
             this.addressValidator = addressValidator;
             this.referenceDataValidator = referenceDataValidator;
-            this.qualificationValidator = qualificationValidator;
+            this.usiValidator = usiValidator;
         }
 
         public async Task<Profile> ValidateAsync(Profile profile)
@@ -48,40 +48,12 @@ namespace ADMS.Apprentice.Core.Services.Validators
             {
                 //At this point we know we have a valid month and year..
                 //so create the date out of it if Months and Years exist.
-                profile.LeftSchoolDate = profile.LeftSchoolYear.HasValue ? new DateTime(profile.LeftSchoolYear.Value, DateTime.ParseExact(profile.LeftSchoolMonthCode, "MMM", CultureInfo.CurrentCulture).Month, 1) : null;               
+                profile.LeftSchoolDate = profile.LeftSchoolYear.HasValue ? new DateTime(profile.LeftSchoolYear.Value, DateTime.ParseExact(profile.LeftSchoolMonthCode, "MMM", CultureInfo.CurrentCulture).Month, 1) : null;
             }
-            
-            if (profile.Phones != null)
-            {
-                var newPhone = new List<Phone>();
-                var preferredPhoneSet = false;
-                
-                foreach (Phone phone in profile.Phones)
-                {
-                    if (phone == null || phone.PhoneNumber.IsNullOrEmpty()) continue;
-                    var ErrorMessage = ValidationExceptionType.InvalidPhoneNumber;
-                    string formattedPhone = phone.PhoneNumber;
-                    PhoneType phoneType = PhoneType.MOBILE;
-                    if (!PhoneValidator.ValidatePhone(ref formattedPhone, ref phoneType, ErrorMessage))
-                        throw exceptionFactory.CreateValidationException(ErrorMessage);
-                    if (preferredPhoneSet && Convert.ToBoolean(phone.PreferredPhoneFlag))
-                    {
-                        phone.PreferredPhoneFlag = false;
-                    }
-                    else if (Convert.ToBoolean(phone.PreferredPhoneFlag))
-                        preferredPhoneSet = Convert.ToBoolean(phone.PreferredPhoneFlag);
-                    if (!newPhone.Any(c => phone.PhoneNumber.Contains(c.PhoneNumber)))
-                    {
-                        newPhone.Add(new Phone()
-                        {
-                            PhoneNumber = formattedPhone,
-                            PhoneTypeCode = phoneType.ToString(),
-                            PreferredPhoneFlag = phone.PreferredPhoneFlag
-                        });
-                    }
-                }
-                profile.Phones = newPhone;
-            }
+
+            // Phone validation
+            PhoneValidation(profile);
+
             // Address validation
             if (profile.Addresses != null)
             {
@@ -89,15 +61,19 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 profile.Addresses = await addressValidator.ValidateAsync(profile.Addresses.ToList());
             }
 
+            // USI Validator
+            USIValidation(profile);
+
             // Codes validation
             // Country of Birth
             // language
             // Completed School level
             // Preferred Contact            
             await referenceDataValidator.ValidateAsync(profile);
-            
+
             return profile;
         }
+
 
         // All email Validations are done in this function
         private bool EmailValidation(string? emailAddress)
@@ -141,7 +117,57 @@ namespace ADMS.Apprentice.Core.Services.Validators
             if ((year.HasValue && monthCode.IsNullOrEmpty()) || (!monthCode.IsNullOrEmpty() && !year.HasValue))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidLeftSchoolDetails);
 
-            return true;            
+            return true;
         }
+
+
+        #region Phone validation
+
+        private void PhoneValidation(Profile profile)
+        {
+            if (profile.Phones != null)
+            {
+                var newPhone = new List<Phone>();
+                var preferredPhoneSet = false;
+
+                foreach (Phone phone in profile.Phones)
+                {
+                    if (phone == null || phone.PhoneNumber.IsNullOrEmpty()) continue;
+                    var ErrorMessage = ValidationExceptionType.InvalidPhoneNumber;
+                    string formattedPhone = phone.PhoneNumber;
+                    PhoneType phoneType = PhoneType.MOBILE;
+                    if (!PhoneValidator.ValidatePhone(ref formattedPhone, ref phoneType, ErrorMessage))
+                        throw exceptionFactory.CreateValidationException(ErrorMessage);
+                    if (preferredPhoneSet && Convert.ToBoolean(phone.PreferredPhoneFlag))
+                    {
+                        phone.PreferredPhoneFlag = false;
+                    }
+                    else if (Convert.ToBoolean(phone.PreferredPhoneFlag))
+                        preferredPhoneSet = Convert.ToBoolean(phone.PreferredPhoneFlag);
+                    if (!newPhone.Any(c => phone.PhoneNumber.Contains(c.PhoneNumber)))
+                    {
+                        newPhone.Add(new Phone()
+                        {
+                            PhoneNumber = formattedPhone,
+                            PhoneTypeCode = phoneType.ToString(),
+                            PreferredPhoneFlag = phone.PreferredPhoneFlag
+                        });
+                    }
+                }
+                profile.Phones = newPhone;
+            }
+        }
+
+        #endregion
+
+
+        #region USI validation
+
+        private void USIValidation(Profile profile)
+        {
+            usiValidator.Validate(profile);
+        }
+
+        #endregion
     }
 }

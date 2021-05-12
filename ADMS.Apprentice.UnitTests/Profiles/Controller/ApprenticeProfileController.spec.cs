@@ -43,7 +43,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             string citizenshipCode = null,
             string gender = null,
             string countryofBirth = null,
-            string Language = null)
+            string Language = null,
+            string USI = null)
         {
             return new ProfileMessage
             {
@@ -58,7 +59,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 CitizenshipCode = citizenshipCode,
                 GenderCode = gender,
                 CountryOfBirthCode = countryofBirth,
-                LanguageCode = Language
+                LanguageCode = Language,
+                USI = USI
             };
         }
 
@@ -422,6 +424,33 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 ProfileConstants.Profiletype,
                 null, null, null,
                 null, "X", null, "111");
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        #endregion
+
+
+        #region USI
+
+        [TestMethod]
+        public void DoNothingWhenUSIIsNull()
+        {
+            message = message = CreateNewProfileMessage("Bob", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null,
+                ProfileConstants.Profiletype,
+                null, null, null,
+                null, "X", null, "");
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        [TestMethod]
+        public void DoNothingWhenUSIIsNotNull()
+        {
+            message = message = CreateNewProfileMessage("Bob", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null,
+                ProfileConstants.Profiletype,
+                null, null, null,
+                null, "X", null, "", "Test");
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(0);
         }
