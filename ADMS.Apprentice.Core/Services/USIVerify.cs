@@ -1,7 +1,9 @@
 ﻿using Adms.Shared;
+using Adms.Shared.Exceptions;
 using Adms.Shared.Extensions;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.HttpClients.USI;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -15,21 +17,28 @@ namespace ADMS.Apprentice.Core.Services
     {
         private readonly IRepository repository;
         private readonly IUSIClient usiClient;
-        public USIVerify(IRepository repository, IUSIClient usiClient)
+        private readonly IExceptionFactory exceptionFactory;
+        public USIVerify(IRepository repository, IUSIClient usiClient, IExceptionFactory exceptionFactory)
         {
             this.repository = repository;
             this.usiClient = usiClient;
+            this.exceptionFactory = exceptionFactory;
         }
-        public async Task VerifyAsync(int apprenticeId, string usi)
+        /// <summary>
+        /// Verify the active USI of given apprentice ID
+        /// </summary>
+        /// <param name="apprenticeId"></param>
+        /// <returns>ApprenticeUSI</returns>
+        public async Task<ApprenticeUSI> VerifyAsync(int apprenticeId)
         {
-            if (apprenticeId <= 0 || usi.IsNullOrEmpty()) return;                
-
             Profile profile = repository.Get<Profile>(apprenticeId);
-            if (profile == null) return;                 
+            if (profile == null)
+                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
 
             //get the active apprenticeUsi record.
-            ApprenticeUSI apprenticeUSI = profile.USIs.FirstOrDefault(x => x.ActiveFlag == true && x.USI == usi);
-            if (apprenticeUSI == null) return;                
+            ApprenticeUSI apprenticeUSI = profile.USIs?.Where(x => x.ActiveFlag == true).SingleOrDefault();
+            if (apprenticeUSI == null)
+                throw exceptionFactory.CreateNotFoundException("Active USI for apprentice", apprenticeId.ToString());
 
             //The available end points for USI verification accepts lists of USI requests - so need to convert into a list even though we verify single USI
             List<VerifyUsiMessage> messages = new List<VerifyUsiMessage>();
@@ -39,7 +48,7 @@ namespace ADMS.Apprentice.Core.Services
                 FirstName = profile.FirstName,
                 FamilyName = profile.Surname,
                 DateOfBirth = profile.BirthDate,
-                USI = usi,
+                USI = apprenticeUSI.USI,
             };
             messages.Add(message);
             try
@@ -55,11 +64,12 @@ namespace ADMS.Apprentice.Core.Services
                     && model.FirstNameMatched.Value && model.DateOfBirthMatched.Value && model.FamilyNameMatched.Value;
 
                 await repository.SaveAsync();
+                return apprenticeUSI;
             }
             catch
             {
                 //hardly get excetion from the external api. In case if we get it, silently continue. Log into logging database may be?
-                return;
+                return apprenticeUSI;
             }            
         }
     }

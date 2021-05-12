@@ -110,6 +110,21 @@
             <param name="id">ID of the qualification to be updated</param>
             <param name="message">Details of the information to be updated</param>
         </member>
+        <member name="T:ADMS.Apprentice.Api.Controllers.ApprenticeUSIController">
+            <summary>
+            Apprentice usi endpoints.
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeUSIController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Exceptions.IExceptionFactory,ADMS.Apprentice.Core.Services.IUSIVerify)">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeUSIController.Verify(System.Int32)">
+            <summary>
+            Verify provided USI of a given apprentice
+            </summary>     
+            <param name="apprenticeId"></param>        
+            <returns></returns>
+        </member>
         <member name="T:ADMS.Apprentice.Api.Controllers.Tfn.ApprenticeTFNController">
             <summary>
             Apprentice TFN endpoints.
