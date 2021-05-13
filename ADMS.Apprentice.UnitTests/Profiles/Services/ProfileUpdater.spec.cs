@@ -2,12 +2,11 @@
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services;
+using ADMS.Apprentice.Core.Services.Validators;
 using ADMS.Apprentice.UnitTests.Constants;
-using Adms.Shared;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ADMS.Apprentice.Core.Services.Validators;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -53,7 +52,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                     InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
                     LanguageCode = ProfileConstants.LanguageCode,
                     CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
-                }                
+                }
             );
         }
 
@@ -122,9 +121,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             Container.GetMock<IProfileValidator>().Verify(r => r.ValidateAsync(profile));
         }
     }
+
     #endregion
 
     #region WhenUpdatingAProfileWithInvalidGenderAndProfileType
+
     [TestClass]
     public class WhenUpdatingAProfileWithInvalidGenderAndProfileType : GivenWhenThen<ProfileUpdater>
     {
@@ -133,8 +134,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void Given()
         {
-            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode  = ProfileConstants.GenderCode };
-            message = new UpdateProfileMessage ( new BasicDetailsMessage { GenderCode = "Invalid", ProfileType = "Invalid" }, null, null, null );
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
+            message = new UpdateProfileMessage(new BasicDetailsMessage {GenderCode = "Invalid", ProfileType = "Invalid"}, null, null, null);
         }
 
         protected override async void When()
@@ -147,12 +148,13 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             profile.GenderCode.Should().BeNull();
             profile.ProfileTypeCode.Should().BeNull();
-        }       
-
+        }
     }
+
     #endregion
 
     #region WhenUpdatingAProfileWithNullGender
+
     [TestClass]
     public class WhenUpdatingAProfileWithNullGender : GivenWhenThen<ProfileUpdater>
     {
@@ -161,8 +163,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void Given()
         {
-            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
-            message = new UpdateProfileMessage(new BasicDetailsMessage { GenderCode = "", ProfileType = "APPR" }, null, null, null);
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
+            message = new UpdateProfileMessage(new BasicDetailsMessage {GenderCode = "", ProfileType = "APPR"}, null, null, null);
         }
 
         protected override async void When()
@@ -175,11 +177,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             profile.GenderCode.Should().BeNull();
         }
-
     }
+
     #endregion
 
     #region WhenUpdatingAProfileWithNoPhoneNumbers
+
     [TestClass]
     public class WhenUpdatingAProfileWithNoPhoneNumbers : GivenWhenThen<ProfileUpdater>
     {
@@ -188,7 +191,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void Given()
         {
-            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
             message = new UpdateProfileMessage(null,
                 new ContactDetailsMessage
                 {
@@ -210,11 +213,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             profile.Phones.Should().BeNull();
         }
-
     }
+
     #endregion
 
     #region WhenUpdatingAProfileWithoutProvingAnyInfo
+
     [TestClass]
     public class WhenUpdatigAProfileWithoutProvidingAnyInfo : GivenWhenThen<ProfileUpdater>
     {
@@ -223,7 +227,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void Given()
         {
-            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname };
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname};
             message = null;
         }
 
@@ -246,17 +250,19 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         //    profile.Should().Be(profile);
         //}
     }
+
     #endregion
 
     #region WhenUpdatingDeceasedFlag
+
     [TestClass]
     public class WhenUpdatingDeceasedFlag : GivenWhenThen<ProfileUpdater>
     {
-        private Profile profile;        
+        private Profile profile;
 
         protected override void Given()
         {
-            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname };            
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname};
         }
 
         protected override void When()
@@ -270,9 +276,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.DeceasedFlag.Should().Be(true);
         }
     }
+
     #endregion
 
     #region WhenAdminUpdateSpecialAttributes
+
     [TestClass]
     public class WhenAdminUpdates : GivenWhenThen<ProfileUpdater>
     {
@@ -281,8 +289,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void Given()
         {
-            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, DeceasedFlag = true };
-            message = new AdminUpdateMessage { DeceasedFlag = false };
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, DeceasedFlag = true};
+            message = new AdminUpdateMessage {DeceasedFlag = false};
         }
 
         protected override void When()
@@ -296,5 +304,35 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.DeceasedFlag.Should().Be(false);
         }
     }
+
+    #endregion
+
+
+    #region WhenServiceAustraliaUpdateApprentice`Attributes
+
+    [TestClass]
+    public class WhenServiceAustraliaUpdates : GivenWhenThen<ProfileUpdater>
+    {
+        private Profile profile;
+        private ServiceAustraliaUpdateMessage message;
+
+        protected override void Given()
+        {
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, DeceasedFlag = true};
+            message = new ServiceAustraliaUpdateMessage {CustomerReferenceNumber = ProfileConstants.CustomerReferenceNumber};
+        }
+
+        protected override void When()
+        {
+            ClassUnderTest.UpdateCRN(profile, message);
+        }
+
+        [TestMethod]
+        public void ThrowExceptionWhenCRNExceedsLength()
+        {
+            profile.CustomerReferenceNumber.Should().Be(ProfileConstants.CustomerReferenceNumber);
+        }
+    }
+
     #endregion
 }

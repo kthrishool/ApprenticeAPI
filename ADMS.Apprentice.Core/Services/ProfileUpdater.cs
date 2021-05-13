@@ -1,11 +1,11 @@
-﻿using System.Threading.Tasks;
-using ADMS.Apprentice.Core.Entities;
-using ADMS.Apprentice.Core.Messages;
-using Adms.Shared.Attributes;
-using ADMS.Apprentice.Core.Services.Validators;
-using ADMS.Apprentice.Core.Helpers;
-using System;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using ADMS.Apprentice.Core.Entities;
+using ADMS.Apprentice.Core.Helpers;
+using ADMS.Apprentice.Core.Messages;
+using ADMS.Apprentice.Core.Services.Validators;
+using Adms.Shared.Attributes;
 using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentice.Core.Services
@@ -14,6 +14,7 @@ namespace ADMS.Apprentice.Core.Services
     public class ProfileUpdater : IProfileUpdater
     {
         private readonly IProfileValidator profileValidator;
+
         public ProfileUpdater(IProfileValidator profileValidator)
         {
             this.profileValidator = profileValidator;
@@ -32,11 +33,10 @@ namespace ADMS.Apprentice.Core.Services
 
         public async Task<Profile> Update(Profile profile, UpdateProfileMessage message)
         {
-            
             SetBasicDetails(profile, message);
-            SetContactDetails(profile, message);            
+            SetContactDetails(profile, message);
             SetSchoolDetails(profile, message);
-            SetOtherDetails(profile, message);            
+            SetOtherDetails(profile, message);
 
             await profileValidator.ValidateAsync(profile);
 
@@ -52,7 +52,7 @@ namespace ADMS.Apprentice.Core.Services
             profile.OtherNames = message.BasicDetails.OtherNames.Sanitise();
             profile.PreferredName = message.BasicDetails.PreferredName.Sanitise();
             profile.BirthDate = message.BasicDetails.BirthDate;
-            profile.GenderCode = message.BasicDetails.GenderCode.IsNullOrEmpty()? null :
+            profile.GenderCode = message.BasicDetails.GenderCode.IsNullOrEmpty() ? null :
                 Enum.IsDefined(typeof(GenderType), message.BasicDetails.GenderCode.SanitiseUpper()) ? message.BasicDetails.GenderCode.SanitiseUpper() : null;
             profile.ProfileTypeCode = Enum.IsDefined(typeof(ProfileType), message.BasicDetails.ProfileType.SanitiseUpper()) ? message.BasicDetails.ProfileType.SanitiseUpper() : null;
         }
@@ -62,16 +62,16 @@ namespace ADMS.Apprentice.Core.Services
             if (message?.ContactDetails == null) return;
 
             profile.EmailAddress = message.ContactDetails.EmailAddress.Sanitise();
-            
+
             //remove existing phones
             profile.Phones.Clear();
             profile.Phones = message.ContactDetails.PhoneNumbers?.Select(c => new Phone()
-            { PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag }).ToList();
+                {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList();
 
             //remove the existing addresses
             profile.Addresses.Clear();
             if (message.ContactDetails.ResidentialAddress != null)
-            {                
+            {
                 profile.Addresses.Add(new Address()
                 {
                     SingleLineAddress = message.ContactDetails.ResidentialAddress.SingleLineAddress.Sanitise(),
@@ -122,6 +122,14 @@ namespace ADMS.Apprentice.Core.Services
             profile.IndigenousStatusCode = message.OtherDetails.IndigenousStatusCode.Sanitise();
             profile.SelfAssessedDisabilityCode = message.OtherDetails.SelfAssessedDisabilityCode.SanitiseUpper();
             profile.VisaNumber = message.OtherDetails.VisaNumber.Sanitise();
-        }        
+        }
+
+        public void UpdateCRN(Profile profile, ServiceAustraliaUpdateMessage message)
+        {
+            //
+
+            profile.CustomerReferenceNumber = message.CustomerReferenceNumber.Sanitise();
+            profileValidator.ValidateCRN(profile);
+        }
     }
 }

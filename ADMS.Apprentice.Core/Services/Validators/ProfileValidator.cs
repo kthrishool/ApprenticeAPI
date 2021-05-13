@@ -169,5 +169,11 @@ namespace ADMS.Apprentice.Core.Services.Validators
         }
 
         #endregion
+
+        public void ValidateCRN(Profile profile)
+        {
+            if (profile.CustomerReferenceNumber == null)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidCRN);
+        }
     }
 }

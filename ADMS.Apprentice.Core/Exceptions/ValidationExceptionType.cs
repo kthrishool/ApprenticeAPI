@@ -108,5 +108,8 @@ namespace ADMS.Apprentice.Core.Exceptions
 
         [ExceptionDetails("AP-VAL-0035", "Invalid USI code ")]
         InvalidUSI,
+
+        [ExceptionDetails("AP-VAL-0036", "CRN exceeds 10 characters")]
+        InvalidCRN
     }
 }

@@ -88,7 +88,7 @@ namespace ADMS.Apprentice.Api.Controllers
         public async Task<ActionResult<ProfileModel>> Create([FromBody] ProfileMessage message)
         {
             Profile profile = await profileCreator.CreateAsync(message);
-            await repository.SaveAsync();            
+            await repository.SaveAsync();
             return Created($"/{profile.Id}", new ProfileModel(profile));
         }
 
@@ -109,7 +109,7 @@ namespace ADMS.Apprentice.Api.Controllers
         /// <summary>
         /// Updates an existing apprentice deceased flag to true.
         /// </summary>
-        /// <param name="id">ID of the apprentice</param>        
+        /// <param name="id">ID of the apprentice</param>
         [HttpPut("{id}/deceased")]
         public async Task<ActionResult<ProfileModel>> Deceased(int id)
         {
@@ -129,7 +129,7 @@ namespace ADMS.Apprentice.Api.Controllers
         /// Updates an existing apprentice deceased flag to false and other special department updates.
         /// </summary>
         /// <param name="id">ID of the apprentice</param>
-        /// <param name="message"></param>        
+        /// <param name="message"></param>
         [HttpPut("{id}/admin-update")]
         public async Task<ActionResult<ProfileModel>> AdminUpdate(int id, [FromBody] AdminUpdateMessage message)
         {
@@ -137,6 +137,20 @@ namespace ADMS.Apprentice.Api.Controllers
             profileUpdater.Update(profile, message);
             await repository.SaveAsync();
             return Ok(new ProfileModel(profile));
+        }
+
+        /// <summary>
+        /// Updates  apprentice CRN from Service Australia .
+        /// </summary>
+        /// <param name="id">ID of the apprentice</param>
+        /// <param name="message"></param>
+        [HttpPut("{id}/service-australia-apprentice-update")]
+        public async Task<ActionResult<ProfileModel>> ServiceAustraliaApprenticeUpdate(int id, [FromBody] ServiceAustraliaUpdateMessage message)
+        {
+            Profile profile = await repository.GetAsync<Profile>(id);
+            profileUpdater.UpdateCRN(profile, message);
+            await repository.SaveAsync();
+            return Ok(new ProfileListModel(profile));
         }
     }
 }

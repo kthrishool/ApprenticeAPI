@@ -84,7 +84,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
                 VisaNumber = ProfileConstants.VisaNumber,
                 Qualifications = qualifications,
-                USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = ProfileConstants.USI, ActiveFlag = true, USIStatus = "test"}}
+                USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = ProfileConstants.USI, ActiveFlag = true, USIStatus = "test"}},
+                CustomerReferenceNumber = ProfileConstants.CustomerReferenceNumber
             };
         }
 
@@ -134,6 +135,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.VisaNumber.Should().Be(ProfileConstants.VisaNumber);
             model.USI.USI.Should().Be(ProfileConstants.USI);
             model.USI.USIStatus.Should().Be("test");
+            model.CRNViewFlag.Should().Be(ProfileConstants.CustomerReferenceNumber != null);
         }
 
         [TestMethod]

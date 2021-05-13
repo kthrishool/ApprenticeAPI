@@ -8,5 +8,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
     public interface IProfileValidator
     {
         Task<Profile> ValidateAsync(Profile profile);
+
+        void ValidateCRN(Profile profile);
     }
 }

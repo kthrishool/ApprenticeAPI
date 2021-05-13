@@ -57,6 +57,7 @@ namespace ADMS.Apprentice.UnitTests.Constants
 
         // public static byte[] Version = Convert.ToBase64String("1.1") ;
         public static string USI = "thisisTestUsi";
+        public static string CustomerReferenceNumber = "1234567890";
 
         public static string RandomString(int length)
         {

@@ -36,6 +36,7 @@ namespace ADMS.Apprentice.Core.Models
         public ProfileAddressModel ResidentialAddress { get; set; }
         public ProfileAddressModel PostalAddress { get; set; }
         public List<ProfileQualificationModel> Qualifications { get; set; }
+        public Boolean CRNViewFlag { get; set; }
         public ProfileUSIModel USI { get; set; }
 
         public DateTime? CreatedOn { get; }
@@ -66,6 +67,7 @@ namespace ADMS.Apprentice.Core.Models
             HighestSchoolLevelCode = apprentice.HighestSchoolLevelCode;
             VisaNumber = apprentice.VisaNumber;
             DeceasedFlag = apprentice.DeceasedFlag;
+            CRNViewFlag = apprentice.CustomerReferenceNumber != null;
             ActiveFlag = apprentice.ActiveFlag;
             CreatedOn = apprentice.CreatedOn;
             CreatedBy = apprentice.CreatedBy;
@@ -106,7 +108,7 @@ namespace ADMS.Apprentice.Core.Models
             Qualifications = apprentice.Qualifications?.Select(q => new ProfileQualificationModel(q)).ToList();
             if (apprentice.USIs.Any(c => c.ActiveFlag == true))
             {
-                USI = apprentice.USIs.Where(c => c.ActiveFlag == true).Select(c => new ProfileUSIModel() {USI = c.USI, USIStatus = c.USIStatus}).SingleOrDefault();
+                USI = apprentice.USIs.Where(c => c.ActiveFlag == true).Select(c => new ProfileUSIModel(c)).SingleOrDefault();
             }
         }
     }

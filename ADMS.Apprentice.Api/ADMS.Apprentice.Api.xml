@@ -64,14 +64,21 @@
             <summary>
             Updates an existing apprentice deceased flag to true.
             </summary>
-            <param name="id">ID of the apprentice</param>        
+            <param name="id">ID of the apprentice</param>
         </member>
         <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController.AdminUpdate(System.Int32,ADMS.Apprentice.Core.Messages.AdminUpdateMessage)">
             <summary>
             Updates an existing apprentice deceased flag to false and other special department updates.
             </summary>
             <param name="id">ID of the apprentice</param>
-            <param name="message"></param>        
+            <param name="message"></param>
+        </member>
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController.ServiceAustraliaApprenticeUpdate(System.Int32,ADMS.Apprentice.Core.Messages.ServiceAustraliaUpdateMessage)">
+            <summary>
+            Updates  apprentice CRN from Service Australia .
+            </summary>
+            <param name="id">ID of the apprentice</param>
+            <param name="message"></param>
         </member>
         <member name="T:ADMS.Apprentice.Api.Controllers.ApprenticeQualificationController">
             <summary>
@@ -121,8 +128,8 @@
         <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeUSIController.Verify(System.Int32)">
             <summary>
             Verify provided USI of a given apprentice
-            </summary>     
-            <param name="apprenticeId"></param>        
+            </summary>
+            <param name="apprenticeId"></param>
             <returns></returns>
         </member>
         <member name="T:ADMS.Apprentice.Api.Controllers.Tfn.ApprenticeTFNController">

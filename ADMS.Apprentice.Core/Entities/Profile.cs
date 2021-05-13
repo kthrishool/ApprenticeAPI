@@ -28,6 +28,7 @@ namespace ADMS.Apprentice.Core.Entities
         public bool? InterpretorRequiredFlag { get; set; }
         public bool DeceasedFlag { get; set; }
 
+        public string CustomerReferenceNumber { get; set; }
         public bool ActiveFlag { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }

@@ -11,5 +11,7 @@ namespace ADMS.Apprentice.Core.Services
         Task<Profile> Update(Profile profile, UpdateProfileMessage message);
         void Update(Profile profile, AdminUpdateMessage message);
         void UpdateDeceasedFlag(Profile profile, bool deceased);
+
+        void UpdateCRN(Profile profile, ServiceAustraliaUpdateMessage message);
     }
 }
