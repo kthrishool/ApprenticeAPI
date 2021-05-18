@@ -29,7 +29,9 @@ namespace Adms.Claims.UnitTests.ClaimApplications.Entities
             profile = new Profile();
             apprenticeUSI = new ApprenticeUSI()
             {
-                USI = "test"
+                USI = "test",
+                ActiveFlag = true
+
             };
             profile.USIs.Add(apprenticeUSI);
             validationException = new ValidationException(null, (ValidationError) null);

@@ -24,7 +24,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
         {
             if (profile.USIs.Any())
             {
-                if (profile.USIs.Single().USI.Sanitise() == null)
+                if (profile.USIs.Single(x => x.ActiveFlag == true).USI.Sanitise() == null)
                     throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidUSI);
 
                 // code to be implemented fro additional validation

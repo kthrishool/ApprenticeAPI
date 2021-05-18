@@ -7,6 +7,8 @@ using ADMS.Apprentice.UnitTests.Constants;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -21,39 +23,32 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         protected override void Given()
         {
             profile = new Profile();
-            message = new UpdateProfileMessage(
-                new BasicDetailsMessage
-                {
-                    Surname = ProfileConstants.Surname,
-                    FirstName = ProfileConstants.Firstname,
-                    BirthDate = ProfileConstants.Birthdate,
-                    ProfileType = ProfileConstants.Profiletype,
-                    GenderCode = ProfileConstants.GenderCode,
-                },
-                new ContactDetailsMessage
-                {
-                    EmailAddress = ProfileConstants.Emailaddress,
-                    PhoneNumbers = ProfileConstants.PhoneNumbers,
-                    ResidentialAddress = ProfileConstants.ResidentialAddress,
-                    PostalAddress = ProfileConstants.PostalAddress,
-                    PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
-                },
-                new SchoolDetailsMessage
-                {
-                    HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
-                    LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
-                    LeftSchoolYear = ProfileConstants.LeftSchoolYear,
-                },
-                new OtherDetailsMessage
-                {
-                    IndigenousStatusCode = ProfileConstants.IndigenousStatusCode,
-                    SelfAssessedDisabilityCode = ProfileConstants.SelfAssessedDisabilityCode,
-                    CitizenshipCode = ProfileConstants.CitizenshipCode,
-                    InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
-                    LanguageCode = ProfileConstants.LanguageCode,
-                    CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
-                }
-            );
+            message = new UpdateProfileMessage
+            {
+
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                ProfileType = ProfileConstants.Profiletype,
+                GenderCode = ProfileConstants.GenderCode,
+
+                EmailAddress = ProfileConstants.Emailaddress,
+                PhoneNumbers = ProfileConstants.PhoneNumbers,
+                ResidentialAddress = ProfileConstants.ResidentialAddress,
+                PostalAddress = ProfileConstants.PostalAddress,
+                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
+
+                HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
+                LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
+                LeftSchoolYear = ProfileConstants.LeftSchoolYear,
+
+                IndigenousStatusCode = ProfileConstants.IndigenousStatusCode,
+                SelfAssessedDisabilityCode = ProfileConstants.SelfAssessedDisabilityCode,
+                CitizenshipCode = ProfileConstants.CitizenshipCode,
+                InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
+                LanguageCode = ProfileConstants.LanguageCode,
+                CountryOfBirthCode = ProfileConstants.CountryOfBirthCode
+            };
         }
 
         protected override async void When()
@@ -64,19 +59,19 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void SetsBasicDetails()
         {
-            profile.FirstName.Should().Be(message.BasicDetails.FirstName);
-            profile.Surname.Should().Be(message.BasicDetails.Surname);
-            profile.BirthDate.Should().Be(message.BasicDetails.BirthDate);
-            profile.GenderCode.Should().Contain(message.BasicDetails.GenderCode);
-            profile.ProfileTypeCode.Should().Be(message.BasicDetails.ProfileType);
+            profile.FirstName.Should().Be(message.FirstName);
+            profile.Surname.Should().Be(message.Surname);
+            profile.BirthDate.Should().Be(message.BirthDate);
+            profile.GenderCode.Should().Contain(message.GenderCode);
+            profile.ProfileTypeCode.Should().Be(message.ProfileType);
         }
 
         [TestMethod]
         public void SetsContactDetails()
         {
-            profile.EmailAddress.Should().Be(message.ContactDetails.EmailAddress);
-            profile.Phones.Count().Should().Be(message.ContactDetails.PhoneNumbers.Count());
-            profile.Phones.Select(c => c.PhoneNumber).Should().Contain(message.ContactDetails.PhoneNumbers.Select(c => c.PhoneNumber));
+            profile.EmailAddress.Should().Be(message.EmailAddress);
+            profile.Phones.Count().Should().Be(message.PhoneNumbers.Count());
+            profile.Phones.Select(c => c.PhoneNumber).Should().Contain(message.PhoneNumbers.Select(c => c.PhoneNumber));
             profile.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString())
                 .Select(c => new ProfileAddressMessage()
                 {
@@ -87,7 +82,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                     StreetAddress1 = c.StreetAddress1,
                     StreetAddress2 = c.StreetAddress2,
                     StreetAddress3 = c.StreetAddress3
-                }).Should().Contain(message.ContactDetails.ResidentialAddress);
+                }).Should().Contain(message.ResidentialAddress);
 
             profile.Addresses.Where(c => c.AddressTypeCode == AddressType.POST.ToString())
                 .Select(c => new ProfileAddressMessage()
@@ -100,19 +95,88 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                     StreetAddress2 = c.StreetAddress2,
                     StreetAddress3 = c.StreetAddress3
                 })
-                .Should().Contain(message.ContactDetails.PostalAddress);
-            profile.PreferredContactType.Should().Be(message.ContactDetails.PreferredContactType);
+                .Should().Contain(message.PostalAddress);
+            profile.PreferredContactType.Should().Be(message.PreferredContactType);
         }
 
         [TestMethod]
         public void SetsOtherDetails()
         {
-            profile.InterpretorRequiredFlag.Should().Be(message.OtherDetails.InterpretorRequiredFlag);
-            profile.CitizenshipCode.Should().Be(message.OtherDetails.CitizenshipCode);
-            profile.SelfAssessedDisabilityCode.Should().Be(message.OtherDetails.SelfAssessedDisabilityCode);
-            profile.IndigenousStatusCode.Should().Be(message.OtherDetails.IndigenousStatusCode);
-            profile.LanguageCode.Should().Contain(message.OtherDetails.LanguageCode);
-            profile.CountryOfBirthCode.Should().Contain(message.OtherDetails.CountryOfBirthCode);
+            profile.InterpretorRequiredFlag.Should().Be(message.InterpretorRequiredFlag);
+            profile.CitizenshipCode.Should().Be(message.CitizenshipCode);
+            profile.SelfAssessedDisabilityCode.Should().Be(message.SelfAssessedDisabilityCode);
+            profile.IndigenousStatusCode.Should().Be(message.IndigenousStatusCode);
+            profile.LanguageCode.Should().Contain(message.LanguageCode);
+            profile.CountryOfBirthCode.Should().Contain(message.CountryOfBirthCode);
+        }
+
+        [TestMethod]
+        public async Task UpdateExistingAddresses()
+        {
+            //given
+            profile.Addresses.Clear();
+            profile.Addresses.Add(new Address()
+            {
+                StreetAddress1 = "street address 1",                
+                Locality ="Locality1",
+                StateCode = "ACT",
+                Postcode = "2615",
+                AddressTypeCode = AddressType.RESD.ToString(),
+            });
+            profile.Addresses.Add(new Address()
+            {
+                StreetAddress1 = "post street address 1",
+                Locality = "Locality2",
+                StateCode = "ACT",
+                Postcode = "2615",
+                AddressTypeCode = AddressType.POST.ToString(),
+            });
+            
+            //when
+            profile = await ClassUnderTest.Update(profile, message);
+
+            //then
+            profile.Addresses.Where(c => c.AddressTypeCode == AddressType.POST.ToString()).SingleOrDefault().StreetAddress1.Should().NotBe("post street address 1");
+            profile.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).SingleOrDefault().StreetAddress1.Should().NotBe("street address 1");
+        }
+
+        [TestMethod]
+        public async Task NoAddressesIfNoAddressPassed()
+        {
+            //given
+            profile.Addresses.Clear();
+            profile.Addresses.Add(new Address()
+            {
+                StreetAddress1 = "street address 1",
+                Locality = "Locality1",
+                StateCode = "ACT",
+                Postcode = "2615",
+                AddressTypeCode = AddressType.RESD.ToString(),
+            });
+            profile.Addresses.Add(new Address()
+            {
+                StreetAddress1 = "post street address 1",
+                Locality = "Locality2",
+                StateCode = "ACT",
+                Postcode = "2615",
+                AddressTypeCode = AddressType.POST.ToString(),
+            });
+
+            message = new UpdateProfileMessage
+            {
+
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                ProfileType = ProfileConstants.Profiletype,
+                GenderCode = ProfileConstants.GenderCode
+            };
+
+            //when
+            profile = await ClassUnderTest.Update(profile, message);
+
+            //then
+            profile.Addresses.Count.Should().Be(0);            
         }
 
         [TestMethod]
@@ -124,18 +188,27 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
     #endregion
 
-    #region WhenUpdatingAProfileWithInvalidGenderAndProfileType
+    #region WhenUpdatingUSI
 
     [TestClass]
-    public class WhenUpdatingAProfileWithInvalidGenderAndProfileType : GivenWhenThen<ProfileUpdater>
+    public class WhenUpdatingUSI : GivenWhenThen<ProfileUpdater>
     {
         private Profile profile;
         private UpdateProfileMessage message;
 
         protected override void Given()
         {
-            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
-            message = new UpdateProfileMessage(new BasicDetailsMessage {GenderCode = "Invalid", ProfileType = "Invalid"}, null, null, null);
+            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
+            profile.USIs = new List<ApprenticeUSI>() { new ApprenticeUSI { USI = "currentUSI", ActiveFlag = true } };
+            message = new UpdateProfileMessage
+            {
+
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                ProfileType = ProfileConstants.Profiletype,
+                USI = "updatedUSI"
+            };
         }
 
         protected override async void When()
@@ -144,111 +217,47 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public void GenderAndProfileTypeShouldBeNull()
+        public void ShouldUpdateUSI()
         {
-            profile.GenderCode.Should().BeNull();
-            profile.ProfileTypeCode.Should().BeNull();
-        }
-    }
-
-    #endregion
-
-    #region WhenUpdatingAProfileWithNullGender
-
-    [TestClass]
-    public class WhenUpdatingAProfileWithNullGender : GivenWhenThen<ProfileUpdater>
-    {
-        private Profile profile;
-        private UpdateProfileMessage message;
-
-        protected override void Given()
-        {
-            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
-            message = new UpdateProfileMessage(new BasicDetailsMessage {GenderCode = "", ProfileType = "APPR"}, null, null, null);
-        }
-
-        protected override async void When()
-        {
-            profile = await ClassUnderTest.Update(profile, message);
+            profile.USIs.Count.Should().Be(2);            
+            profile.USIs.Where(x => x.ActiveFlag == true).SingleOrDefault().USI.Should().Be(message.USI);            
         }
 
         [TestMethod]
-        public void GenderAndProfileTypeShouldBeNull()
+        public async Task ShouldAddNewUSI()
         {
-            profile.GenderCode.Should().BeNull();
-        }
-    }
+            //given
+            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
+            profile.USIs.Clear();
 
-    #endregion
-
-    #region WhenUpdatingAProfileWithNoPhoneNumbers
-
-    [TestClass]
-    public class WhenUpdatingAProfileWithNoPhoneNumbers : GivenWhenThen<ProfileUpdater>
-    {
-        private Profile profile;
-        private UpdateProfileMessage message;
-
-        protected override void Given()
-        {
-            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
-            message = new UpdateProfileMessage(null,
-                new ContactDetailsMessage
-                {
-                    EmailAddress = ProfileConstants.Emailaddress,
-                    PhoneNumbers = null,
-                    ResidentialAddress = ProfileConstants.ResidentialAddress,
-                    PostalAddress = ProfileConstants.PostalAddress,
-                    PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
-                }, null, null);
-        }
-
-        protected override async void When()
-        {
+            //when
             profile = await ClassUnderTest.Update(profile, message);
+
+            //then
+            profile.USIs.Count.Should().Be(1);
         }
 
         [TestMethod]
-        public void PhoneNumbersShouldBeNull()
+        public async Task SetExistingUSIFlagToFalseIfNoUSI()
         {
-            profile.Phones.Should().BeNull();
-        }
-    }
+            //given
+            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
+            profile.USIs = new List<ApprenticeUSI>() { new ApprenticeUSI { USI = "currentUSI", ActiveFlag = true } };
+            message = new UpdateProfileMessage
+            {
 
-    #endregion
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                ProfileType = ProfileConstants.Profiletype                
+            };
 
-    #region WhenUpdatingAProfileWithoutProvingAnyInfo
-
-    [TestClass]
-    public class WhenUpdatigAProfileWithoutProvidingAnyInfo : GivenWhenThen<ProfileUpdater>
-    {
-        private Profile profile;
-        private UpdateProfileMessage message;
-
-        protected override void Given()
-        {
-            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname};
-            message = null;
-        }
-
-        protected override async void When()
-        {
+            //when
             profile = await ClassUnderTest.Update(profile, message);
-        }
 
-        [TestMethod]
-        public void ProfileShouldHaveNoChange()
-        {
-            profile.Should().Be(profile);
+            //then
+            profile.USIs.Where(x => x.ActiveFlag == true).SingleOrDefault().Should().Be(null);
         }
-
-        //[TestMethod]
-        //public  void ProfileShouldHaveNoChangeIfMessageIsNull()
-        //{
-        //    message = null;
-        //    //profile = await ClassUnderTest.Update(profile, message);
-        //    profile.Should().Be(profile);
-        //}
     }
 
     #endregion
@@ -262,7 +271,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void Given()
         {
-            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname};
+            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname };
         }
 
         protected override void When()
@@ -289,8 +298,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void Given()
         {
-            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, DeceasedFlag = true};
-            message = new AdminUpdateMessage {DeceasedFlag = false};
+            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, DeceasedFlag = true };
+            message = new AdminUpdateMessage { DeceasedFlag = false };
         }
 
         protected override void When()
