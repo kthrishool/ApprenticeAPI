@@ -1,35 +1,59 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Linq;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
+using ADMS.Apprentice.Core.Helpers;
+using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
+using Adms.Shared.Exceptions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ADMS.Apprentice.Core.Services.Validators
 {
-    public static class PhoneValidator
+  
+    public class PhoneValidator : IPhoneValidator
     {
-        private static readonly string[] startingCode = {"02", "03", "04", "07", "08", "13", "18"};
-        //TODO: more unit testing
-        [ExcludeFromCodeCoverage]
-        public static bool ValidatePhone(ref string phoneNumber, ref PhoneType phoneType, ValidationExceptionType errorMessage)
+        private static readonly string[] startingCode = { "02", "03", "04", "07", "08", "13", "18" };
+
+       
+
+
+        private readonly IExceptionFactory exceptionFactory;
+
+
+        public PhoneValidator(
+            IExceptionFactory exceptionFactory
+        )
         {
-            phoneType = PhoneType.LANDLINE;
-            if (!Enum.IsDefined(typeof(ValidationExceptionType), errorMessage))
-                throw new InvalidEnumArgumentException(nameof(errorMessage), (int) errorMessage, typeof(ValidationExceptionType));
-            phoneNumber = new string(phoneNumber.ToCharArray().Where(char.IsDigit).ToArray());
+            this.exceptionFactory = exceptionFactory;
+        }
+
+        public void ValidatePhonewithType(Phone phone)
+        {
+            phone.PhoneTypeCode = PhoneType.LANDLINE.ToString();
+            phone.PhoneNumber = new string(phone.PhoneNumber.ToCharArray().Where(char.IsDigit).ToArray());
+            if ((phone.PhoneNumber.Length == 11) && phone.PhoneNumber.Substring(0, 2) == "61")
+                phone.PhoneNumber = phone.PhoneNumber.Replace("61", "0");
+
+            if (!(startingCode.Contains(phone.PhoneNumber.Substring(0, 2)) && phone.PhoneNumber.Length == 10))
+            {
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPhoneNumber);
+            }
+            if (phone.PhoneNumber.Substring(0, 2) == "04")
+                phone.PhoneTypeCode = PhoneType.MOBILE.ToString();
+
+        }
+
+        public string ValidatePhone(string phoneNumber)
+        {
+            if (phoneNumber.Sanitise() == null)
+                return null;
+            phoneNumber = new string(phoneNumber.Sanitise().ToCharArray().Where(char.IsDigit).ToArray());
             if ((phoneNumber.Length == 11) && phoneNumber.Substring(0, 2) == "61")
                 phoneNumber = phoneNumber.Replace("61", "0");
 
             if (!(startingCode.Contains(phoneNumber.Substring(0, 2)) && phoneNumber.Length == 10))
-            {
-                errorMessage = ValidationExceptionType.InvalidPhoneNumber;
-                return false;
-            }
-            if (phoneNumber.Substring(0, 2) == "04")
-                phoneType = PhoneType.MOBILE;
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPhoneNumber);
 
-            return true;
+            return phoneNumber;
         }
     }
 }

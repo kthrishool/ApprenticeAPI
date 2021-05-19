@@ -322,54 +322,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile = await ClassUnderTest.ValidateAsync(validProfile);
             validProfile.Phones.Where(x => x.PreferredPhoneFlag == true).Count().Should().Be(1);
         }
-
-        private void PhoneContainerError(string phones)
-        {
-            var number = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = phones};
-
-            ChangeException(ValidationExceptionType.InvalidPhoneNumber);
-
-
-            validProfile.Phones.Add(number);
-            ExecuteTest(validProfile);
-        }
-
-        private async void PhoneContainerPositive(string phones, Boolean needsConversion)
-        {
-            var number = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = phones};
-
-            validProfile.Phones.Add(number);
-            await ClassUnderTest.ValidateAsync(validProfile);
-            if (needsConversion)
-                validProfile.Phones.Select(c => c.PhoneNumber).Should().NotContain(phones);
-            else
-                validProfile.Phones.Select(c => c.PhoneNumber).Should().Contain(phones);
-        }
-
-        [TestMethod]
-        public void ThrowExceptonforInValidPhoneNumbers()
-        {
-            ChangeException(ValidationExceptionType.InvalidPhoneNumber);
-            // total Lenght is Less than 10 chars
-            PhoneContainerError("021234567");
-            // Area code is not valid 
-            PhoneContainerError("9911234567");
-            //Phone Number With Extension
-            PhoneContainerError("0212457896#1234");
-        }
-
-
-        [TestMethod]
-        public void DoNothingWhenaValidPhoneNumberisEntered()
-        {
-            // total Lenght is Less than 10 chars
-            PhoneContainerPositive("+61212457896", true);
-            // Area code is not valid 
-            PhoneContainerPositive("(02) 1245 7896", true);
-            PhoneContainerPositive("1300 777 777", true);
-            PhoneContainerPositive("0212457896", false);
-        }
-
+ 
         #endregion
 
         /// <summary>

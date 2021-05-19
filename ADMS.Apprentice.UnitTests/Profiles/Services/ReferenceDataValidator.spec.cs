@@ -171,6 +171,69 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             ResetExceptionforExceptionValidation(ValidationExceptionType.PhonePreferredContactisInvalid, newProfile);
         }
 
+        #region PreferredContactType
+
+        [TestMethod]
+        public void DOnothingIfPhoneIsPrefferedContactType()
+        {
+        
+
+
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
+
+            newProfile.Phones.Add(new Phone() { PhoneNumber = "0211111111" });
+
+
+            ClassUnderTest.Invoking(c => c.ValidateAsync(this.newProfile))
+                .Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void DOnothingIfEmailIsPrefferedContactType()
+        {
+    
+
+
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.EMAIL.ToString();
+
+            newProfile.EmailAddress = ProfileConstants.Emailaddress;
+
+
+            ClassUnderTest.Invoking(c => c.ValidateAsync(this.newProfile))
+                .Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void DOnothingIfMailIsPrefferedContactType()
+        {
+            
+
+
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.MAIL.ToString();
+            var localAddress = new Address()
+            {
+                StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
+                StreetAddress2 = ProfileConstants.ResidentialAddress.StreetAddress2,
+                StreetAddress3 = ProfileConstants.ResidentialAddress.StreetAddress3,
+                Locality = ProfileConstants.ResidentialAddress.Locality,
+                Postcode = ProfileConstants.ResidentialAddress.Postcode,
+                StateCode = ProfileConstants.ResidentialAddress.StateCode,
+                AddressTypeCode = AddressType.RESD.ToString()
+            };
+            newProfile.Addresses.Add(localAddress);
+
+
+            ClassUnderTest.Invoking(c => c.ValidateAsync(this.newProfile))
+                .Should().NotThrow();
+        }
+
+        #endregion
+
+
+
         [TestMethod]
         public void ThrowValidationExceptionWhenPhoneContactTypeAndNoPhone()
         {
@@ -262,6 +325,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
+
+
 
         #region QualificationValidationUsingReferenceData
         [TestMethod]

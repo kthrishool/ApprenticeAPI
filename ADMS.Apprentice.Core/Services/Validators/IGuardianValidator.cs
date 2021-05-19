@@ -4,9 +4,8 @@ using Adms.Shared.Attributes;
 namespace ADMS.Apprentice.Core.Services.Validators
 {
     [RegisterWithIocContainer]
-    public interface IPhoneValidator
+    public interface IGuardianValidator
     {
-        void ValidatePhonewithType(Phone Phone);
-        string ValidatePhone(string phoneNumber);
+        Guardian ValidateAsync(Guardian guardian);
     }
 }

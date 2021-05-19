@@ -18,16 +18,18 @@ namespace ADMS.Apprentice.Core.Services.Validators
         private readonly IAddressValidator addressValidator;
         private readonly IReferenceDataValidator referenceDataValidator;
         private readonly IUSIValidator usiValidator;
-
+        private readonly IPhoneValidator phoneValidator;
         public ProfileValidator(IExceptionFactory exceptionFactory,
             IAddressValidator addressValidator,
             IReferenceDataValidator referenceDataValidator,
-            IUSIValidator usiValidator)
+            IUSIValidator usiValidator,
+            IPhoneValidator phoneValidator)
         {
             this.exceptionFactory = exceptionFactory;
             this.addressValidator = addressValidator;
             this.referenceDataValidator = referenceDataValidator;
             this.usiValidator = usiValidator;
+            this.phoneValidator = phoneValidator;
         }
 
         public async Task<Profile> ValidateAsync(Profile profile)
@@ -133,25 +135,18 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 foreach (Phone phone in profile.Phones)
                 {
                     if (phone == null || phone.PhoneNumber.IsNullOrEmpty()) continue;
-                    var ErrorMessage = ValidationExceptionType.InvalidPhoneNumber;
-                    string formattedPhone = phone.PhoneNumber;
-                    PhoneType phoneType = PhoneType.MOBILE;
-                    if (!PhoneValidator.ValidatePhone(ref formattedPhone, ref phoneType, ErrorMessage))
-                        throw exceptionFactory.CreateValidationException(ErrorMessage);
-                    if (preferredPhoneSet && Convert.ToBoolean(phone.PreferredPhoneFlag))
+                    Phone newPhoneNumber = phone;
+     
+                    phoneValidator.ValidatePhonewithType(newPhoneNumber);
+                    if (preferredPhoneSet && Convert.ToBoolean(newPhoneNumber.PreferredPhoneFlag))
                     {
-                        phone.PreferredPhoneFlag = false;
+                        newPhoneNumber.PreferredPhoneFlag = false;
                     }
-                    else if (Convert.ToBoolean(phone.PreferredPhoneFlag))
-                        preferredPhoneSet = Convert.ToBoolean(phone.PreferredPhoneFlag);
-                    if (!newPhone.Any(c => phone.PhoneNumber.Contains(c.PhoneNumber)))
+                    else if (Convert.ToBoolean(newPhoneNumber.PreferredPhoneFlag))
+                        preferredPhoneSet = Convert.ToBoolean(newPhoneNumber.PreferredPhoneFlag);
+                    if (!newPhone.Any(c => newPhoneNumber.PhoneNumber.Contains(c.PhoneNumber)))
                     {
-                        newPhone.Add(new Phone()
-                        {
-                            PhoneNumber = formattedPhone,
-                            PhoneTypeCode = phoneType.ToString(),
-                            PreferredPhoneFlag = phone.PreferredPhoneFlag
-                        });
+                        newPhone.Add(newPhoneNumber);
                     }
                 }
                 profile.Phones = newPhone;
