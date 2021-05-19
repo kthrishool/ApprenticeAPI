@@ -9,6 +9,6 @@ namespace ADMS.Apprentice.Core.Services.Validators
     {
         Task<Profile> ValidateAsync(Profile profile);
 
-        void ValidateCRN(Profile profile);
+       
     }
 }

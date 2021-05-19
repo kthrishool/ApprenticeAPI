@@ -163,6 +163,35 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
+        public async Task DoNothingWhenPhoneContactTypeIsValidAsync()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
+            newProfile.Phones.Add(new Phone() { PhoneNumber = "0211111111" });
+            await ClassUnderTest.ValidateAsync(newProfile); 
+        }
+        [TestMethod]
+        public async Task DoNothingWhenEmailContactTypeIsValid()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.EMAIL.ToString();
+            newProfile.EmailAddress = ProfileConstants.Emailaddress;
+            await ClassUnderTest.ValidateAsync(newProfile);
+        }
+        [TestMethod]
+        public async Task DoNothingWhenMailContactTypeIsValid()
+        {
+            newProfile = new Profile();
+            newProfile.PreferredContactType = PreferredContactType.MAIL.ToString();
+            newProfile.Addresses.Add(new Address() { 
+            StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
+            Postcode  = ProfileConstants.ResidentialAddress.Postcode,
+            Locality = ProfileConstants.ResidentialAddress.Locality,
+            StateCode = ProfileConstants.ResidentialAddress.StateCode
+            } );
+            await ClassUnderTest.ValidateAsync(newProfile);
+        }
+        [TestMethod]
         public void ThrowValidationExceptionWhenPhoneContactTypeIsInvalid()
         {
             newProfile = new Profile();

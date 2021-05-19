@@ -173,7 +173,7 @@ namespace ADMS.Apprentice.Core.Services
         public void UpdateCRN(Profile profile, ServiceAustraliaUpdateMessage message)
         {
             profile.CustomerReferenceNumber = message.CustomerReferenceNumber.Sanitise();
-            profileValidator.ValidateCRN(profile);
+             
         }
     }
 }

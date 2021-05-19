@@ -363,29 +363,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Equals(false);
         }
 
-        #region CRN
-
-        [TestMethod]
-        public void ThrowExceptionWhenCRNIsNull()
-        {
-            ChangeException(ValidationExceptionType.InvalidCRN);
-
-            ClassUnderTest
-                .Invoking(c => c.ValidateCRN(validProfile))
-                .Should().Throw<ValidationException>().Where(e => e == validationException);
-        }
-
-        [TestMethod]
-        public void DoNothingIfCRNIsNotNUll()
-        {
-            // ChangeException(ValidationExceptionType.InvalidCRN);
-            validProfile.CustomerReferenceNumber = ProfileConstants.CustomerReferenceNumber;
-            ClassUnderTest
-                .Invoking(c => c.ValidateCRN(validProfile))
-                .Should().NotThrow();
-        }
-
-        #endregion
+        
     }
 
     #endregion
