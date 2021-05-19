@@ -23,6 +23,12 @@ namespace ADMS.Apprentice.UnitTests.Constants
             new PhoneNumberMessage() {PhoneNumber = "0212345678"},
             new PhoneNumberMessage() {PhoneNumber = "+61 2 1234 1111", PreferredPhoneFlag = true}
         };
+        public static List<UpdatePhoneNumberMessage> UpdatedPhoneNumbers = new List<UpdatePhoneNumberMessage>()
+        {
+            new UpdatePhoneNumberMessage() {PhoneNumber = "0212345678", Id = 0},
+            new UpdatePhoneNumberMessage() {PhoneNumber = "0212345678", Id = 1},
+            new UpdatePhoneNumberMessage() {PhoneNumber = "+61 2 1234 1111", PreferredPhoneFlag = true}
+        };
 
         public static List<string> InvalidPhoneNumbers = new List<string>() {"0212345678", "+61 2 1234 1111"};
         public static string Profiletype = "APPR";

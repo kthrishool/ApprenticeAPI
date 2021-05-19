@@ -33,7 +33,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 GenderCode = ProfileConstants.GenderCode,
 
                 EmailAddress = ProfileConstants.Emailaddress,
-                PhoneNumbers = ProfileConstants.PhoneNumbers,
+                PhoneNumbers = ProfileConstants.UpdatedPhoneNumbers,
                 ResidentialAddress = ProfileConstants.ResidentialAddress,
                 PostalAddress = ProfileConstants.PostalAddress,
                 PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
@@ -114,6 +114,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public async Task UpdateExistingAddresses()
         {
             //given
+            profile.Phones.Clear();
             profile.Addresses.Clear();
             profile.Addresses.Add(new Address()
             {
@@ -177,6 +178,55 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             //then
             profile.Addresses.Count.Should().Be(0);            
+        }
+
+        [TestMethod]
+        public async Task UpdateExistingPhoneNumbers()
+        {
+            //given
+            var phonenumber1 = "0212345678";
+            var phonenumber2 = "0412345678";
+            var phonenumber3 = "0412345670";
+
+            profile.Phones.Clear();
+            profile.Phones.Add(new Phone()
+            {
+                PhoneNumber = phonenumber1,
+                PreferredPhoneFlag = true,
+                Id = 1
+            });
+            profile.Phones.Add(new Phone()
+            {
+                PhoneNumber = phonenumber2,
+                PreferredPhoneFlag = false,
+                Id = 2
+            });
+             
+            List<UpdatePhoneNumberMessage> UpdatedPhoneNumbers = new List<UpdatePhoneNumberMessage>()
+            {
+                new UpdatePhoneNumberMessage() {PhoneNumber = phonenumber2, Id = 1},    
+                new UpdatePhoneNumberMessage() {PhoneNumber = phonenumber3, PreferredPhoneFlag = true }
+            };
+            message = new UpdateProfileMessage
+            {
+
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                ProfileType = ProfileConstants.Profiletype,
+                GenderCode = ProfileConstants.GenderCode,
+                PhoneNumbers = UpdatedPhoneNumbers
+            };
+
+            //when
+            profile = await ClassUnderTest.Update(profile, message);
+
+            //then
+            profile.Phones.Count.Should().Be(2);
+            //Id:1 should have been updated
+            profile.Phones.Where(x => x.Id == 1).FirstOrDefault().PhoneNumber.Should().Be(phonenumber2);
+            //Id:2 should have been removed
+            profile.Phones.Where(x => x.Id == 2).FirstOrDefault().Should().Be(null);
         }
 
         [TestMethod]

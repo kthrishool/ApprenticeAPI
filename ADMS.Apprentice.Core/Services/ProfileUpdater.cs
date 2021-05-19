@@ -7,6 +7,7 @@ using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services.Validators;
 using Adms.Shared.Attributes;
 using Adms.Shared.Extensions;
+using System.Collections.Generic;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -42,76 +43,21 @@ namespace ADMS.Apprentice.Core.Services
             profile.ProfileTypeCode = message.ProfileType.SanitiseUpper();
             profile.EmailAddress = message.EmailAddress.Sanitise();
 
-            //remove existing phones            
-            profile.Phones.Clear();
-            profile.Phones = message.PhoneNumbers?.Select(c => new Phone()
-            { PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag }).ToList();
-
+            UpdatePhone(profile, message.PhoneNumbers);            
+           
             //if no addresses specified clear all the addresses.
             if (message.ResidentialAddress == null && message.PostalAddress == null)
                 profile.Addresses.Clear();
 
             if (message.ResidentialAddress != null)
-            {
+            {   
                 //update the existing residential address if exist or add new address
-                if (profile.Addresses.Count > 0 && profile.Addresses.Any(x => x.AddressTypeCode == AddressType.RESD.ToString()))
-                {
-                    var resdAddress = profile.Addresses.Where(x => x.AddressTypeCode == AddressType.RESD.ToString()).SingleOrDefault();
-
-                    resdAddress.SingleLineAddress = message.ResidentialAddress.SingleLineAddress.Sanitise();
-                    resdAddress.StreetAddress1 = message.ResidentialAddress.StreetAddress1.Sanitise();
-                    resdAddress.StreetAddress2 = message.ResidentialAddress.StreetAddress2.Sanitise();
-                    resdAddress.StreetAddress3 = message.ResidentialAddress.StreetAddress3.Sanitise();
-                    resdAddress.Locality = message.ResidentialAddress.Locality.Sanitise();
-                    resdAddress.StateCode = message.ResidentialAddress.StateCode.Sanitise();
-                    resdAddress.Postcode = message.ResidentialAddress.Postcode.Sanitise();
-                    resdAddress.AddressTypeCode = AddressType.RESD.ToString();                                     
-                }
-                else
-                {
-                    profile.Addresses.Add(new Address()
-                    {
-                        SingleLineAddress = message.ResidentialAddress.SingleLineAddress.Sanitise(),
-                        StreetAddress1 = message.ResidentialAddress.StreetAddress1.Sanitise(),
-                        StreetAddress2 = message.ResidentialAddress.StreetAddress2.Sanitise(),
-                        StreetAddress3 = message.ResidentialAddress.StreetAddress3.Sanitise(),
-                        Locality = message.ResidentialAddress.Locality.Sanitise(),
-                        StateCode = message.ResidentialAddress.StateCode.Sanitise(),
-                        Postcode = message.ResidentialAddress.Postcode.Sanitise(),
-                        AddressTypeCode = AddressType.RESD.ToString(),
-                    });
-                }                
+                UpdateAddress(profile, message.ResidentialAddress, AddressType.RESD.ToString());                               
             }
             if (message.PostalAddress != null)
             {
-                //update the existing postal address if exist or add new address
-                if (profile.Addresses.Count > 0 && profile.Addresses.Any(x => x.AddressTypeCode == AddressType.POST.ToString()))
-                {
-                    var postAddress = profile.Addresses.Where(x => x.AddressTypeCode == AddressType.POST.ToString()).SingleOrDefault();
-
-                    postAddress.SingleLineAddress = message.PostalAddress.SingleLineAddress.Sanitise();
-                    postAddress.StreetAddress1 = message.PostalAddress.StreetAddress1.Sanitise();
-                    postAddress.StreetAddress2 = message.PostalAddress.StreetAddress2.Sanitise();
-                    postAddress.StreetAddress3 = message.PostalAddress.StreetAddress3.Sanitise();
-                    postAddress.Locality = message.PostalAddress.Locality.Sanitise();
-                    postAddress.StateCode = message.PostalAddress.StateCode.Sanitise();
-                    postAddress.Postcode = message.PostalAddress.Postcode.Sanitise();
-                    postAddress.AddressTypeCode = AddressType.POST.ToString();
-                }
-                else
-                {
-                    profile.Addresses.Add(new Address()
-                    {
-                        SingleLineAddress = message.PostalAddress.SingleLineAddress.Sanitise(),
-                        StreetAddress1 = message.PostalAddress.StreetAddress1.Sanitise(),
-                        StreetAddress2 = message.PostalAddress.StreetAddress2.Sanitise(),
-                        StreetAddress3 = message.PostalAddress.StreetAddress3.Sanitise(),
-                        Locality = message.PostalAddress.Locality.Sanitise(),
-                        StateCode = message.PostalAddress.StateCode.Sanitise(),
-                        Postcode = message.PostalAddress.Postcode.Sanitise(),
-                        AddressTypeCode = AddressType.POST.ToString(),
-                    });
-                }
+                //update the existing postal address if exist or add new address                
+                UpdateAddress(profile, message.PostalAddress, AddressType.POST.ToString());
             }
             profile.PreferredContactType = message.PreferredContactType.SanitiseUpper();
 
@@ -130,28 +76,99 @@ namespace ADMS.Apprentice.Core.Services
             profile.VisaNumber = message.VisaNumber.Sanitise();
 
             //USI
-            var currentUSI = profile.USIs.Where(x => x.ActiveFlag == true).SingleOrDefault();
-            if (currentUSI == null && !message.USI.IsNullOrEmpty())
-            {
-                //add the new USI
-                profile.USIs.Add(new ApprenticeUSI { USI = message.USI, ActiveFlag = true });
-            }
-            else if (currentUSI != null && !message.USI.IsNullOrEmpty() && currentUSI.USI != message.USI)
-            {
-                //set the activeFlag to false of current active USI and add the new USI                
-                currentUSI.ActiveFlag = false;
-                profile.USIs.Add(new ApprenticeUSI { USI = message.USI, ActiveFlag = true, USIChangeReason = $"Updating USI from { currentUSI.USI } to { message.USI }" });
-            }
-            else if (currentUSI != null && message.USI.IsNullOrEmpty())
-            {
-                //set the activeFlag to false of current active USI               
-                currentUSI.ActiveFlag = false;
-            }
+            UpdateUSI(profile, message.USI);
             
             await profileValidator.ValidateAsync(profile);
 
             return profile;
         }
+
+        public void UpdateAddress(Profile profile, ProfileAddressMessage addressMessage, string addressTypeCode)
+        {
+            if (profile.Addresses.Count > 0 && profile.Addresses.Any(x => x.AddressTypeCode == addressTypeCode))
+            {
+                var updatedAddress = profile.Addresses.Where(x => x.AddressTypeCode == addressTypeCode).SingleOrDefault();
+
+                updatedAddress.SingleLineAddress = addressMessage.SingleLineAddress.Sanitise();
+                updatedAddress.StreetAddress1 = addressMessage.StreetAddress1.Sanitise();
+                updatedAddress.StreetAddress2 = addressMessage.StreetAddress2.Sanitise();
+                updatedAddress.StreetAddress3 = addressMessage.StreetAddress3.Sanitise();
+                updatedAddress.Locality = addressMessage.Locality.Sanitise();
+                updatedAddress.StateCode = addressMessage.StateCode.Sanitise();
+                updatedAddress.Postcode = addressMessage.Postcode.Sanitise();
+                updatedAddress.AddressTypeCode = addressTypeCode;
+            }
+            else
+            {
+                profile.Addresses.Add(new Address()
+                {
+                    SingleLineAddress = addressMessage.SingleLineAddress.Sanitise(),
+                    StreetAddress1 = addressMessage.StreetAddress1.Sanitise(),
+                    StreetAddress2 = addressMessage.StreetAddress2.Sanitise(),
+                    StreetAddress3 = addressMessage.StreetAddress3.Sanitise(),
+                    Locality = addressMessage.Locality.Sanitise(),
+                    StateCode = addressMessage.StateCode.Sanitise(),
+                    Postcode = addressMessage.Postcode.Sanitise(),
+                    AddressTypeCode = addressTypeCode,
+                });
+            }
+        }
+
+        public void UpdateUSI(Profile profile, string usi)
+        {
+            var currentUSI = profile.USIs.Where(x => x.ActiveFlag == true).SingleOrDefault();
+            if (currentUSI == null && !usi.IsNullOrEmpty())
+            {
+                //add the new USI
+                profile.USIs.Add(new ApprenticeUSI { USI = usi, ActiveFlag = true });
+            }
+            else if (currentUSI != null && !usi.IsNullOrEmpty() && currentUSI.USI != usi)
+            {
+                //set the activeFlag to false of current active USI and add the new USI                
+                currentUSI.ActiveFlag = false;
+                profile.USIs.Add(new ApprenticeUSI { USI = usi, ActiveFlag = true, USIChangeReason = $"Updating USI from { currentUSI.USI } to { usi }" });
+            }
+            else if (currentUSI != null && usi.IsNullOrEmpty())
+            {
+                //set the activeFlag to false of current active USI               
+                currentUSI.ActiveFlag = false;
+            }
+        }
+
+        public void UpdatePhone(Profile profile, List<UpdatePhoneNumberMessage> phoneMessage)
+        {
+            if (phoneMessage == null || phoneMessage.Count == 0)
+            {
+                //if no phones message passed, remove existing phones
+                profile.Phones.Clear();
+            }
+            else if (profile.Phones.Count == 0)
+            {
+                //if no phone details for the profile , add the new ones
+                profile.Phones = phoneMessage.Select(c => new Phone()
+                { PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag }).ToList();
+            }
+            else
+            {
+                //update the existing ones, add new ones and remove the ones not in message                
+                
+                var profilePhoneIds = profile.Phones.Select(x => x.Id).ToList();
+                var messagePhoneIds = phoneMessage.Select(x => x.Id).ToList();
+               
+                var toAdd = phoneMessage.Where(x => x.Id == 0).ToList();
+                var toRemove = profile.Phones.Where(x => !messagePhoneIds.Contains(x.Id)).ToList();
+                var toUpdate = phoneMessage.Where(x => profilePhoneIds.Contains(x.Id)).ToList();
+
+                toAdd.ForEach(x => profile.Phones.Add(new Phone() { PhoneNumber = x.PhoneNumber, PreferredPhoneFlag = x.PreferredPhoneFlag }));
+                toRemove.ForEach(x => profile.Phones.Remove(x));
+                toUpdate.ForEach(x =>
+                {
+                    profile.Phones.Where(y => y.Id == x.Id).SingleOrDefault().PhoneNumber = x.PhoneNumber;
+                    profile.Phones.Where(y => y.Id == x.Id).SingleOrDefault().PreferredPhoneFlag = x.PreferredPhoneFlag;
+                });                   
+            }
+        }
+
 
         public void UpdateCRN(Profile profile, ServiceAustraliaUpdateMessage message)
         {
