@@ -6,7 +6,7 @@ namespace ADMS.Apprentice.Core.Services
 {
     [RegisterWithIocContainer]
     public interface IUSIVerify
-    {
-        Task<ApprenticeUSI> VerifyAsync(int apprenticeId);
+    {     
+        ApprenticeUSI Verify(Profile profile);
     }
 }

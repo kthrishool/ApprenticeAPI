@@ -18,7 +18,8 @@ namespace ADMS.Apprentice.Core.Services.Validators
         private readonly IAddressValidator addressValidator;
         private readonly IReferenceDataValidator referenceDataValidator;
         private readonly IUSIValidator usiValidator;
-        private readonly IPhoneValidator phoneValidator;
+        private readonly IPhoneValidator phoneValidator;        
+
         public ProfileValidator(IExceptionFactory exceptionFactory,
             IAddressValidator addressValidator,
             IReferenceDataValidator referenceDataValidator,
@@ -29,7 +30,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
             this.addressValidator = addressValidator;
             this.referenceDataValidator = referenceDataValidator;
             this.usiValidator = usiValidator;
-            this.phoneValidator = phoneValidator;
+            this.phoneValidator = phoneValidator;            
         }
 
         public async Task<Profile> ValidateAsync(Profile profile)

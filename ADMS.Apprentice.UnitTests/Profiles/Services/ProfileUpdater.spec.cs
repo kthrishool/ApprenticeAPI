@@ -9,6 +9,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -227,6 +228,78 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.Phones.Where(x => x.Id == 1).FirstOrDefault().PhoneNumber.Should().Be(phonenumber2);
             //Id:2 should have been removed
             profile.Phones.Where(x => x.Id == 2).FirstOrDefault().Should().Be(null);
+        }
+
+        [TestMethod]
+        public async Task VerifyUsiIfFirstNameChanged()
+        {
+            //given
+            profile.FirstName = "firstName";           
+
+            message = new UpdateProfileMessage
+            {
+
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                ProfileType = ProfileConstants.Profiletype,
+                GenderCode = ProfileConstants.GenderCode,
+                USI = ProfileConstants.USI
+            };
+
+            //when
+            profile = await ClassUnderTest.Update(profile, message);
+
+            //then
+            Container.GetMock<IUSIVerify>().Verify(r => r.Verify(profile));
+        }
+
+        [TestMethod]
+        public async Task VerifyUsiIfBirthDateChanged()
+        {
+            //given            
+            profile.BirthDate = DateTime.Now.AddYears(-30);
+
+            message = new UpdateProfileMessage
+            {
+
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                ProfileType = ProfileConstants.Profiletype,
+                GenderCode = ProfileConstants.GenderCode,
+                USI = ProfileConstants.USI
+            };
+
+            //when
+            profile = await ClassUnderTest.Update(profile, message);
+            
+            //then
+            Container.GetMock<IUSIVerify>().Verify(r => r.Verify(profile));
+        }
+
+        [TestMethod]
+        public async Task VerifyUsiIfSurnameNameChanged()
+        {
+            //given            
+            profile.Surname = "surName";
+            
+            message = new UpdateProfileMessage
+            {
+
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                ProfileType = ProfileConstants.Profiletype,
+                GenderCode = ProfileConstants.GenderCode,
+                USI = ProfileConstants.USI
+            };
+
+            //when
+            profile = await ClassUnderTest.Update(profile, message);
+
+            //then
+            Container.GetMock<IUSIVerify>().Verify(r => r.Verify(profile));
         }
 
         [TestMethod]

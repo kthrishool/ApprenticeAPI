@@ -48,7 +48,13 @@ namespace ADMS.Apprentice.Api.Controllers
         [HttpPost("verify")]
         public async Task<ActionResult<VerifyUsiModel>> Verify(int apprenticeId)
         {
-            ApprenticeUSI apprenticeUSI = await usiVerify.VerifyAsync(apprenticeId);
+            Profile profile = repository.Get<Profile>(apprenticeId);
+            if (profile == null)
+                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
+            ApprenticeUSI apprenticeUSI = usiVerify.Verify(profile);
+            await repository.SaveAsync();
+            if (apprenticeUSI == null)
+                return Ok("No USI to be verified");
             return Ok(new ProfileUSIModel(apprenticeUSI));
         }
     }

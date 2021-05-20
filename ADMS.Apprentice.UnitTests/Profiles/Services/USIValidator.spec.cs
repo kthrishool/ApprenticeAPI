@@ -9,7 +9,7 @@ using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Adms.Claims.UnitTests.ClaimApplications.Entities
+namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
     #region WhenValidatingAUSIValidator
 

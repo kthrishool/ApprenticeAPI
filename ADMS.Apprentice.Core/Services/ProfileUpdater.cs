@@ -15,10 +15,13 @@ namespace ADMS.Apprentice.Core.Services
     public class ProfileUpdater : IProfileUpdater
     {
         private readonly IProfileValidator profileValidator;
+        private readonly IUSIVerify usiVerify;
+        bool triggerUsiVerification = false;
 
-        public ProfileUpdater(IProfileValidator profileValidator)
+        public ProfileUpdater(IProfileValidator profileValidator, IUSIVerify usiVerify)
         {
             this.profileValidator = profileValidator;
+            this.usiVerify = usiVerify;
         }
 
         public void UpdateDeceasedFlag(Profile profile, bool deceased)
@@ -34,6 +37,7 @@ namespace ADMS.Apprentice.Core.Services
 
         public async Task<Profile> Update(Profile profile, UpdateProfileMessage message)
         {
+            triggerUsiVerification = profile.Surname != message.Surname || profile.FirstName != message.FirstName || profile.BirthDate != message.BirthDate;
             profile.Surname = message.Surname;
             profile.FirstName = message.FirstName;
             profile.OtherNames = message.OtherNames.Sanitise();
@@ -80,6 +84,10 @@ namespace ADMS.Apprentice.Core.Services
             
             await profileValidator.ValidateAsync(profile);
 
+            //trigger USI verfication, if USI attributes has changed
+            if (triggerUsiVerification)
+                usiVerify.Verify(profile);
+
             return profile;
         }
 
@@ -121,17 +129,20 @@ namespace ADMS.Apprentice.Core.Services
             {
                 //add the new USI
                 profile.USIs.Add(new ApprenticeUSI { USI = usi, ActiveFlag = true });
+                triggerUsiVerification = true;
             }
             else if (currentUSI != null && !usi.IsNullOrEmpty() && currentUSI.USI != usi)
             {
                 //set the activeFlag to false of current active USI and add the new USI                
                 currentUSI.ActiveFlag = false;
                 profile.USIs.Add(new ApprenticeUSI { USI = usi, ActiveFlag = true, USIChangeReason = $"Updating USI from { currentUSI.USI } to { usi }" });
+                triggerUsiVerification = true;
             }
             else if (currentUSI != null && usi.IsNullOrEmpty())
             {
                 //set the activeFlag to false of current active USI               
                 currentUSI.ActiveFlag = false;
+                triggerUsiVerification = false;
             }
         }
 

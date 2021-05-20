@@ -13,12 +13,15 @@ namespace ADMS.Apprentice.Core.Services
     {
         private readonly IRepository repository;
         private readonly IProfileValidator profileValidator;
+        private readonly IUSIVerify usiVerify;
 
         public ProfileCreator(IRepository repository,
-            IProfileValidator profileValidator)
+            IProfileValidator profileValidator,
+            IUSIVerify usiVerify)
         {
             this.repository = repository;
             this.profileValidator = profileValidator;
+            this.usiVerify = usiVerify;
         }
 
         public async Task<Profile> CreateAsync(ProfileMessage message)
@@ -87,6 +90,8 @@ namespace ADMS.Apprentice.Core.Services
             }
 
             await profileValidator.ValidateAsync(profile);
+            if (message.USI != null) usiVerify.Verify(profile);
+            
             repository.Insert(profile);
 
             return profile;
