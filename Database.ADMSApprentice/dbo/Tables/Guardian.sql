@@ -3,18 +3,21 @@
     [ApprenticeId]      INT             NOT NULL,
     [Surname]           VARCHAR (50)    NOT NULL,
     [FirstName]         VARCHAR (50)    NOT NULL,
-    [GenderCode]        VARCHAR (10)    NOT NULL,
     [EmailAddress]      VARCHAR (320)   NULL,
-	[LandLine]          VARCHAR (15)    NULL,
-	[Mobile]            VARCHAR (15)    NULL,
-	[WorkPhoneNumber]   VARCHAR (15)    NULL,
-	[StreetAddress1]    VARCHAR (100)   NOT NULL,
-	[StreetAddress2]    VARCHAR (100)   NULL,
-	[StreetAddress3]    VARCHAR (100)   NULL,
-	[SingleLineAddress] VARCHAR (375) NULL,
+    [HomePhoneNumber]   VARCHAR (15)    NULL,
+    [Mobile]            VARCHAR (15)    NULL,
+    [WorkPhoneNumber]   VARCHAR (15)    NULL,
+    [StreetAddress1]    VARCHAR (100)   NOT NULL,
+    [StreetAddress2]    VARCHAR (100)   NULL,
+    [StreetAddress3]    VARCHAR (100)   NULL,
     [Locality]          VARCHAR (50)    NOT NULL,
     [StateCode]         VARCHAR (10)    NOT NULL,
     [Postcode]          VARCHAR (10)    NOT NULL,
+    [SingleLineAddress] VARCHAR (375)   NULL,
+    [GeocodeType]       VARCHAR (4)     NULL,
+    [Latitude]          DECIMAL (10, 8) NULL,
+    [Longitude]         DECIMAL (11, 8) NULL,
+    [Confidence]        SMALLINT        NULL,
     [CreatedBy]         NVARCHAR (1024) NOT NULL,
     [CreatedOn]         DATETIME2 (7)   NOT NULL,
     [UpdatedBy]         NVARCHAR (1024) NOT NULL,
@@ -24,6 +27,8 @@
     CONSTRAINT [PK_Guardian] PRIMARY KEY CLUSTERED ([GuardianId] ASC),
     CONSTRAINT [FK_Guardian_Apprentice] FOREIGN KEY ([ApprenticeId]) REFERENCES [dbo].[Apprentice] ([ApprenticeId])
 );
+
+
 
 
 GO
