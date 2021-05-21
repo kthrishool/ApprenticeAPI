@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Exceptions;
 using Adms.Shared.Database;
 using Adms.Shared.Exceptions;
+using Adms.Shared.Helpers;
 using Adms.Shared.Services;
 
 namespace ADMS.Apprentice.Core.Services
@@ -14,21 +15,27 @@ namespace ADMS.Apprentice.Core.Services
     public class ApprenticeTFNCreator : IApprenticeTFNCreator
     {
         private readonly IRepository repository;
+        private readonly IRepository isolatedRepository;
         private readonly ICryptography cryptography;
         private readonly IExceptionFactory exceptionFactory;
         private readonly IContextRetriever contextRetriever;
+        private readonly IServiceBusEventHelper serviceBusEventHelper;
 
 
         public ApprenticeTFNCreator(
             IRepository repository,
             ICryptography cryptography, 
             IContextRetriever contextRetriever,
-            IExceptionFactory exceptionFactory)
+            IExceptionFactory exceptionFactory,
+            IRepository isolatedRepository,
+            IServiceBusEventHelper serviceBusEventHelper)
         {
             this.repository = repository;
             this.cryptography = cryptography;
             this.contextRetriever = contextRetriever;
             this.exceptionFactory = exceptionFactory;
+            this.isolatedRepository = isolatedRepository;
+            this.serviceBusEventHelper = serviceBusEventHelper;
         }
 
         public async Task<ApprenticeTFN> CreateAsync(ApprenticeTFNV1 message)
@@ -55,10 +62,13 @@ namespace ADMS.Apprentice.Core.Services
             
             var tfnEntity = repository
                 .Retrieve<ApprenticeTFN>()
-                .FirstOrDefault(x => x.ApprenticeId == message.ApprenticeId); // TODO check only Active TFNs once that flag/column is added to the table && !x.InactiveFlag
+                .FirstOrDefault(x => x.ApprenticeId == message.ApprenticeId);
 
             if (tfnEntity != null)
             {
+                isolatedRepository.Insert(serviceBusEventHelper.GetServiceBusEvent(new { tfnEntity.ApprenticeId }, "TFNRecordingFailed"));
+                isolatedRepository.Save();
+
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.TFNAlreadyExists);
             }
 
@@ -72,8 +82,10 @@ namespace ADMS.Apprentice.Core.Services
             };
 
             repository.Insert(apprenticeTFN);
-            await repository.SaveAsync();
+            repository.Insert(serviceBusEventHelper.GetServiceBusEvent(new { apprenticeTFN.ApprenticeId }, "TFNRecorded"));
 
+            await repository.SaveAsync();
+            
             return apprenticeTFN;
         }
     }

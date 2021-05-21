@@ -1,4 +1,6 @@
-﻿using ADMS.Apprentice.Core.Messages.TFN;
+﻿using System.IO;
+using System.Text;
+using ADMS.Apprentice.Core.Messages.TFN;
 using ADMS.Apprentice.Core.Services;
 using ADMS.Services.Infrastructure.WebApi;
 using ADMS.Services.Infrastructure.WebApi.Documentation;
@@ -6,6 +8,7 @@ using Adms.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Adms.Shared.Filters;
 
 namespace ADMS.Apprentice.Api.Controllers.Tfn
 {
@@ -64,11 +67,13 @@ namespace ADMS.Apprentice.Api.Controllers.Tfn
         /// <param name="message">Details of the tfn to be created</param>
         /// <response code="201">Returns newly created tfn</response>
         [HttpPost]
+        [DuplicateRequestCheck("TFNCreate")]
         [Consumes("application/json", "application/xml", "text/xml")]
         [Produces("application/json", "application/xml")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<ApprenticeTFNV1>> Post(int apprenticeId, [FromBody] ApprenticeTFNV1 message)
         {
+            
             message.ApprenticeId = apprenticeId;
             var model = await apprenticeTFNCreator.CreateAsync(message);
 

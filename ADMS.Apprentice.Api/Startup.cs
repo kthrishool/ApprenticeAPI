@@ -11,8 +11,9 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ADMS.Apprentice.Core.HttpClients;
 using ADMS.Apprentice.Api.HttpClients;
+using Adms.Shared.Extensions;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable UnusedMemberHierarchy.Global
@@ -67,9 +68,13 @@ namespace ADMS.Apprentice.Api
             ILoggerFactory loggerFactory,
             IServiceProvider svp)
         {
+
+            app.UseRequestBuffering();
+
             app.UseDocumentation(env, loggerFactory, svp);
             app.UseInfrastructure(env, loggerFactory, svp);
         }
 
-    }    
+    }
+
 }
