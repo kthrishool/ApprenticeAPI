@@ -133,8 +133,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.LeftSchoolMonthCode.Should().Be(ProfileConstants.LeftSchoolMonthCode);
             model.LeftSchoolYear.Should().Be(ProfileConstants.LeftSchoolYear);
             model.VisaNumber.Should().Be(ProfileConstants.VisaNumber);
-            model.USI.USI.Should().Be(ProfileConstants.USI);
-            model.USI.USIStatus.Should().Be("test");
+            model.USIVerificationResult.USI.Should().Be(ProfileConstants.USI);
+            model.USIVerificationResult.USIStatus.Should().Be("test");
             model.CRNViewFlag.Should().Be(ProfileConstants.CustomerReferenceNumber != null);
         }
 

@@ -3,8 +3,6 @@ using ADMS.Apprentice.Core.Entities;
 
 namespace ADMS.Apprentice.Core.Models
 {
-    //TODO: implement unit testing
-    [ExcludeFromCodeCoverage]
     public class ProfileUSIModel
     {
         public int ApprenticeId { get; set; }
