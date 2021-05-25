@@ -5,6 +5,7 @@ using Adms.Shared;
 using Adms.Shared.Helpers;
 using Adms.Shared.Paging;
 using Microsoft.Extensions.DependencyInjection;
+using ADMS.Apprentice.Core.Services;
 
 namespace ADMS.Apprentice.Api.Configuration
 {
@@ -32,7 +33,8 @@ namespace ADMS.Apprentice.Api.Configuration
 
             // interfaces which live in a different assembly to their implementation get registered manually here
             services.AddTransient<ISharedSettings, SharedSettings>();
-            services.AddScoped<IRepository, Repository>();            
+            services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IApprenticeRepository, Repository>();
         }
     }
 }

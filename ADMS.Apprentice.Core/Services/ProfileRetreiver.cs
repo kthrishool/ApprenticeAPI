@@ -3,6 +3,10 @@ using ADMS.Apprentice.Core.Entities;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
 using System.Diagnostics.CodeAnalysis;
+using ADMS.Apprentice.Core.Models;
+using ADMS.Apprentice.Core.Messages;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -10,29 +14,40 @@ namespace ADMS.Apprentice.Core.Services
     [ExcludeFromCodeCoverage]
     public class ProfileRetreiver : IProfileRetreiver
     {
-        private readonly IRepository _repository;
+        private readonly IRepository repository;
+        private readonly IApprenticeRepository apprenticeRepository;
         private readonly IExceptionFactory exceptionFactory;
 
         public ProfileRetreiver(
             IRepository repository,
-            IExceptionFactory _exceptionFactory)
+            IApprenticeRepository apprenticeRepository,
+            IExceptionFactory exceptionFactory)
         {
-            _repository = repository;
-            exceptionFactory = _exceptionFactory;
+            this.repository = repository;
+            this.apprenticeRepository = apprenticeRepository;
+            this.exceptionFactory = exceptionFactory;
         }
 
         /// <summary>
-        /// Returns as list of matching apprentice based on the search Criteria
-        /// Search Id.
+        /// Returns as list of apprentices based on the search criteria        
         /// </summary>
-        /// <param name="ProfileSearchCriteria">Search criteria for searching up a profile</param>
-        public IQueryable<Profile> RetreiveList() //(ProfileSearchCriteria criteria)
+        public IQueryable<Profile> RetreiveList() 
         {
-            IQueryable<Profile> tfnRecords = null;
+            IQueryable<Profile> profiles = null;
 
-            tfnRecords = _repository.Retrieve<Profile>().Where(x => x.ActiveFlag == true).AsQueryable().Take(500);
+            profiles = repository.Retrieve<Profile>().Where(x => x.ActiveFlag == true).AsQueryable().Take(500);
 
-            return tfnRecords;
+            return profiles;
+        }
+
+        /// <summary>        
+        /// Returns as list of apprentices based on the search Criteria              
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public  IEnumerable<ProfileSearchResultModel> Search(ProfileSearchMessage message)
+        {
+            return  apprenticeRepository.GetProfilesAsync(message).Result;
         }
     }
 }

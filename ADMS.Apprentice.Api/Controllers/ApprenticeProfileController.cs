@@ -30,7 +30,7 @@ namespace ADMS.Apprentice.Api.Controllers
         private readonly IPagingHelper pagingHelper;
         private readonly IProfileCreator profileCreator;
         private readonly IProfileUpdater profileUpdater;
-        private readonly IProfileRetreiver profileRetreiver;
+        private readonly IProfileRetreiver profileRetreiver;        
 
         /// <summary>Constructor</summary>
         public ApprenticeProfileController(
@@ -46,7 +46,7 @@ namespace ADMS.Apprentice.Api.Controllers
             this.pagingHelper = pagingHelper;
             this.profileCreator = profileCreator;
             this.profileUpdater = profileUpdater;
-            this.profileRetreiver = profileRetreiver;
+            this.profileRetreiver = profileRetreiver;            
         }
 
         /// <summary>
@@ -58,11 +58,26 @@ namespace ADMS.Apprentice.Api.Controllers
         public async Task<ActionResult<PagedList<ProfileListModel>>> List(PagingInfo paging)
         {
             paging ??= new PagingInfo();
-            paging.SetDefaultSorting("id", true);
-            //   PagedList<Profile> profiles = await pagingHelper.ToPagedListAsync(repository.Retrieve<Profile>(), paging);
+            paging.SetDefaultSorting("id", true);            
             PagedList<Profile> profiles = await pagingHelper.ToPagedListAsync(profileRetreiver.RetreiveList(), paging);
             IEnumerable<ProfileListModel> models = profiles.Results.Map(a => new ProfileListModel(a));
             return Ok(new PagedList<ProfileListModel>(profiles, models));
+        }
+
+
+        /// <summary>
+        /// Get all apprentice profile based on the provided search params.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="paging">Paging information</param>
+        [HttpGet("search")]
+        [SupportsPaging(null)]
+        public  ActionResult<PagedList<ProfileSearchResultModel>> Search([FromBody] ProfileSearchMessage message,  PagingInfo paging)
+        {
+            paging ??= new PagingInfo();
+            paging.SetDefaultSorting("ScoreValue", true);
+            PagedInMemoryList<ProfileSearchResultModel> profiles = pagingHelper.ToPagedInMemoryList(profileRetreiver.Search(message), paging);
+            return Ok(profiles);
         }
 
         /// <summary>

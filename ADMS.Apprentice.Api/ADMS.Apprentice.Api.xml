@@ -56,6 +56,13 @@
             </summary>
             <param name="paging">Paging information</param>
         </member>
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController.Search(ADMS.Apprentice.Core.Messages.ProfileSearchMessage,Adms.Shared.Paging.PagingInfo)">
+            <summary>
+            Get all apprentice profile based on the provided search params.
+            </summary>
+            <param name="message"></param>
+            <param name="paging">Paging information</param>
+        </member>
         <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController.Get(System.Int32)">
             <summary>
             Gets all information of a given apprentice id.
