@@ -18,7 +18,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
         private readonly IAddressValidator addressValidator;
         private readonly IReferenceDataValidator referenceDataValidator;
         private readonly IUSIValidator usiValidator;
-        private readonly IPhoneValidator phoneValidator;        
+        private readonly IPhoneValidator phoneValidator;
 
         public ProfileValidator(IExceptionFactory exceptionFactory,
             IAddressValidator addressValidator,
@@ -30,7 +30,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
             this.addressValidator = addressValidator;
             this.referenceDataValidator = referenceDataValidator;
             this.usiValidator = usiValidator;
-            this.phoneValidator = phoneValidator;            
+            this.phoneValidator = phoneValidator;
         }
 
         public async Task<Profile> ValidateAsync(Profile profile)
@@ -61,7 +61,14 @@ namespace ADMS.Apprentice.Core.Services.Validators
             if (profile.Addresses != null)
             {
                 // validation needs to happen
-                profile.Addresses = await addressValidator.ValidateAsync(profile.Addresses.ToList());
+                var updatedAddress = new List<Address>();
+                foreach (Address profileAddress in profile.Addresses)
+                {
+                    IAddressAttributes address = profileAddress;
+                    await addressValidator.ValidateAsync(address);
+                    updatedAddress.Add((Address) address);
+                }
+                profile.Addresses = updatedAddress;
             }
 
             // USI Validator
@@ -137,7 +144,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 {
                     if (phone == null || phone.PhoneNumber.IsNullOrEmpty()) continue;
                     Phone newPhoneNumber = phone;
-     
+
                     phoneValidator.ValidatePhonewithType(newPhoneNumber);
                     if (preferredPhoneSet && Convert.ToBoolean(newPhoneNumber.PreferredPhoneFlag))
                     {
@@ -165,7 +172,5 @@ namespace ADMS.Apprentice.Core.Services.Validators
         }
 
         #endregion
-
-      
     }
 }

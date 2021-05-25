@@ -4,7 +4,7 @@ using ADMS.Services.Infrastructure.Model.Interface;
 
 namespace ADMS.Apprentice.Core.Entities
 {
-    public class Address : IAuditableIdentifier, ITimestampEnabled
+    public class Address : IAuditableIdentifier, ITimestampEnabled,IAddressAttributes
     {
         public int Id { get; set; }
         public int ApprenticeId { get; set; }

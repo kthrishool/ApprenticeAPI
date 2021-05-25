@@ -19,28 +19,30 @@ namespace ADMS.Apprentice.Core.Services
             this.guardianValidator = profileValidator;
         }
 
-        public Guardian CreateAsync(int apprenticeId, ProfileGuardianMessage message)
+        public async Task<Guardian> CreateAsync(ProfileGuardianMessage message)
         {
             var guardian = new Guardian()
             {
                 Surname = message.Surname,
                 FirstName = message.FirstName,
                 EmailAddress = message.EmailAddress.Sanitise(),
-                SingleLineAddress = message.Address.SingleLineAddress.Sanitise(),
-                StreetAddress1 = message.Address.StreetAddress1.Sanitise(),
-                StreetAddress2 = message.Address.StreetAddress2.Sanitise(),
-                StreetAddress3 = message.Address.StreetAddress3.Sanitise(),
-                Locality = message.Address.Locality.Sanitise(),
-                StateCode = message.Address.StateCode.Sanitise(),
-                Postcode = message.Address.Postcode.Sanitise(),
-                LandLine = message.HomePhoneNumber.Sanitise(),
+                HomePhoneNumber = message.HomePhoneNumber.Sanitise(),
                 Mobile = message.Mobile.Sanitise(),
                 WorkPhoneNumber = message.WorkPhoneNumber.Sanitise()
             };
+            if (message.Address != null)
+            {
+                guardian.SingleLineAddress = message.Address.SingleLineAddress.Sanitise();
+                guardian.StreetAddress1 = message.Address.StreetAddress1.Sanitise();
+                guardian.StreetAddress2 = message.Address.StreetAddress2.Sanitise();
+                guardian.StreetAddress3 = message.Address.StreetAddress3.Sanitise();
+                guardian.Locality = message.Address.Locality.Sanitise();
+                guardian.StateCode = message.Address.StateCode.Sanitise();
+                guardian.Postcode = message.Address.Postcode.Sanitise();
+            }
 
-              guardianValidator.ValidateAsync(guardian);
+            await guardianValidator.ValidateAsync(guardian);
             return guardian;
-        
         }
     }
 }

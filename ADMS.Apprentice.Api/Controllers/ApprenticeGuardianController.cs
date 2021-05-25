@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Models;
@@ -27,47 +26,27 @@ namespace ADMS.Apprentice.Api.Controllers
     {
         private readonly IRepository repository;
         private readonly IPagingHelper pagingHelper;
-        private readonly IQualificationCreator qualificationCreator;
-        private readonly IQualificationUpdater qualificationUpdater;
         private readonly IExceptionFactory exceptionFactory;
+        private readonly IGuardianCreator guardianCreator;
 
         /// <summary>Constructor</summary>
         public ApprenticeGuardianController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
             IPagingHelper pagingHelper,
-            IQualificationCreator qualificationCreator,
-            IQualificationUpdater qualificationUpdater,
-            IExceptionFactory exceptionFactory
+            IExceptionFactory exceptionFactory,
+            IGuardianCreator guardianCreator
         ) : base(contextAccessor)
         {
             this.repository = repository;
             this.pagingHelper = pagingHelper;
-            this.qualificationCreator = qualificationCreator;
-            this.qualificationUpdater = qualificationUpdater;
             this.exceptionFactory = exceptionFactory;
+            this.guardianCreator = guardianCreator;
         }
 
-        /// <summary>
-        /// Gets all information of a given qualification id.
-        /// </summary>
-        /// <param name="apprenticeId">Id of the apprentice</param>
-        /// <param name="id">Id of the qualification</param>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ProfileGuardianModel>> Get(int apprenticeId, int id)
-        {
-            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
-            if (profile == null)
-                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
-            Qualification qualification = profile.Qualifications.Single(x => x.Id == id);
-            if (qualification == null)
-                return NotFound();
-
-            return Ok(new ProfileQualificationModel(qualification));
-        }
 
         /// <summary>
-        /// Adds a new qualification for an apprentice
+        /// Adds a new guardian for an apprentice
         /// </summary>
         /// <param name="apprenticeId">apprenticeId</param>
         /// <param name="message">Details of the qualification to be created</param>
@@ -77,7 +56,10 @@ namespace ADMS.Apprentice.Api.Controllers
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
             if (profile == null)
                 throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
- 
+
+            Guardian guardian = await guardianCreator.CreateAsync(message);
+            profile.Guardians.Add(guardian);
+            await repository.SaveAsync();
             return Created($"/{apprenticeId}", new ProfileGuardianModel());
         }
     }

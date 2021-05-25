@@ -1,6 +1,5 @@
-﻿using ADMS.Apprentice.Core.Entities;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using ADMS.Apprentice.Core.Entities;
 
 namespace ADMS.Apprentice.Core.Models
 {

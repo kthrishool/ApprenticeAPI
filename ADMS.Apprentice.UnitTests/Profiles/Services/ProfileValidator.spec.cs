@@ -363,7 +363,65 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Equals(false);
         }
 
-        
+        #region Address Validation 
+
+        [TestMethod]
+        public void DONothingIfAddressIsNotSupplied()
+        {
+            ClassUnderTest.Invoking(c=>c.ValidateAsync(validProfile)).Should().NotThrow<ValidationException>();
+        }
+        [TestMethod]
+        public void DONothingIfOneAddressIsSupplied()
+        {
+            var validAddress = new Address()
+            {
+                StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
+                StreetAddress2 = ProfileConstants.ResidentialAddress.StreetAddress2,
+                StreetAddress3 = ProfileConstants.ResidentialAddress.StreetAddress3,
+                Locality = ProfileConstants.ResidentialAddress.Locality,
+                Postcode = ProfileConstants.ResidentialAddress.Postcode,
+                StateCode = ProfileConstants.ResidentialAddress.StateCode,
+                SingleLineAddress = ProfileConstants.ResidentialAddress.SingleLineAddress,
+                AddressTypeCode = AddressType.RESD.ToString()
+            };
+            validProfile.Addresses.Add(validAddress);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(validProfile)).Should().NotThrow<ValidationException>();
+        }
+
+
+        [TestMethod]
+        public void DONothingIfTwoAddressIsSupplied()
+        {
+            var validAddress = new Address()
+            {
+                StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
+                StreetAddress2 = ProfileConstants.ResidentialAddress.StreetAddress2,
+                StreetAddress3 = ProfileConstants.ResidentialAddress.StreetAddress3,
+                Locality = ProfileConstants.ResidentialAddress.Locality,
+                Postcode = ProfileConstants.ResidentialAddress.Postcode,
+                StateCode = ProfileConstants.ResidentialAddress.StateCode,
+                SingleLineAddress = ProfileConstants.ResidentialAddress.SingleLineAddress,
+                AddressTypeCode = AddressType.RESD.ToString()
+            };
+            var secondAddress = new Address()
+            {
+                StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
+                StreetAddress2 = ProfileConstants.ResidentialAddress.StreetAddress2,
+                StreetAddress3 = ProfileConstants.ResidentialAddress.StreetAddress3,
+                Locality = ProfileConstants.ResidentialAddress.Locality,
+                Postcode = ProfileConstants.ResidentialAddress.Postcode,
+                StateCode = ProfileConstants.ResidentialAddress.StateCode,
+                SingleLineAddress = ProfileConstants.ResidentialAddress.SingleLineAddress,
+                AddressTypeCode = AddressType.RESD.ToString()
+            };
+            validProfile.Addresses.Add(validAddress);
+            validProfile.Addresses.Add(secondAddress);
+            ClassUnderTest.Invoking(c => c.ValidateAsync(validProfile)).Should().NotThrow<ValidationException>();
+        }
+
+        #endregion
+
+
     }
 
     #endregion

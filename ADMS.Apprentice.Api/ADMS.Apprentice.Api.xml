@@ -32,7 +32,7 @@
             Apprentice guardian endpoints of a given apprentice.
             </summary>
         </member>
-        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Paging.IPagingHelper,ADMS.Apprentice.Core.Services.IQualificationCreator,ADMS.Apprentice.Core.Services.IQualificationUpdater,Adms.Shared.Exceptions.IExceptionFactory)">
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Paging.IPagingHelper,Adms.Shared.Exceptions.IExceptionFactory,ADMS.Apprentice.Core.Services.IGuardianCreator)">
             <summary>Constructor</summary>
         </member>
         <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.Get(System.Int32,System.Int32)">

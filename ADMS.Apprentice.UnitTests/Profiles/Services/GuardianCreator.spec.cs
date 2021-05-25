@@ -36,15 +36,15 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             
         }
 
-        protected override void When()
+        protected override async void When()
         {
-            guardian = ClassUnderTest.CreateAsync(profile.Id, guardianMessage);
+            guardian = await ClassUnderTest.CreateAsync( guardianMessage);
         }
 
         [TestMethod]
         public void DONothingWhenGuardianIsValid()
         {
-            ClassUnderTest.Invoking(c => c.CreateAsync(profile.Id, guardianMessage))
+            ClassUnderTest.Invoking(c => c.CreateAsync( guardianMessage))
                 .Should().NotThrow<ValidationException>();
         }
 

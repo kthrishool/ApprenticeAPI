@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
+using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
+using ADMS.Apprentice.Core.Services.Validators;
 using ADMS.Apprentice.UnitTests.Constants;
 using ADMS.Services.Infrastructure.Core.Exceptions;
 using ADMS.Services.Infrastructure.Core.Validation;
@@ -9,10 +12,7 @@ using Adms.Shared.Exceptions;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 using Moq;
-using System.Threading.Tasks;
-using ADMS.Apprentice.Core.Services.Validators;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -52,11 +52,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 Locality = ProfileConstants.ResidentialAddress.Locality,
                 Postcode = "",
                 StateCode = "DONT KNOW",
-                // SingleLineAddress = ProfileConstants.ResidentialAddress.SingleLineAddress,
                 AddressTypeCode = AddressType.RESD.ToString()
             };
-            validSingleLineAddress = new Address() { SingleLineAddress = ProfileConstants.ResidentialSingleLineAddress.SingleLineAddress, AddressTypeCode = AddressType.RESD.ToString() };
-            invalidSingleLineAddress = new Address() { SingleLineAddress = "invalidAddress", AddressTypeCode = AddressType.RESD.ToString() };
+            validSingleLineAddress = new Address() {SingleLineAddress = ProfileConstants.ResidentialSingleLineAddress.SingleLineAddress, AddressTypeCode = AddressType.RESD.ToString()};
+            invalidSingleLineAddress = new Address() {SingleLineAddress = "invalidAddress", AddressTypeCode = AddressType.RESD.ToString()};
 
             detailsAddress = new DetailAddressModel(
                 1, "Bname", "", ProfileConstants.ResidentialAddress.StreetAddress1,
@@ -66,29 +65,29 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 ProfileConstants.ResidentialAddress.Locality,
                 ProfileConstants.ResidentialAddress.StateCode,
                 ProfileConstants.ResidentialAddress.Postcode,
-                "GeoCode", (decimal)32.56, (decimal)45.4, "AddressSource", "SOurceId",
+                "GeoCode", (decimal) 32.56, (decimal) 45.4, "AddressSource", "SOurceId",
                 2, 1, null, 1);
 
             partialAddress = new PartialAddressModel(
                 ProfileConstants.ResidentialAddress.Locality,
                 ProfileConstants.ResidentialAddress.StateCode,
                 ProfileConstants.ResidentialAddress.Postcode,
-                (decimal)32.56, (decimal)45.4, null);
+                (decimal) 32.56, (decimal) 45.4, null);
 
 
-            validationException = new ValidationException(null, (ValidationError)null);
+            validationException = new ValidationException(null, (ValidationError) null);
             Container
                 .GetMock<IExceptionFactory>()
                 .Setup(r => r.CreateValidationException(ValidationExceptionType.AddressRecordNotFound))
                 .Returns(validationException);
 
             Container.GetMock<IReferenceDataClient>()
-               .Setup(x => x.GetDetailAddressByFormattedAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-               .ReturnsAsync(detailsAddress);
+                .Setup(x => x.GetDetailAddressByFormattedAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(detailsAddress);
 
             Container.GetMock<IReferenceDataClient>()
-               .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
-               .ReturnsAsync(partialAddress);
+                .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(partialAddress);
         }
 
         private async Task UpdateAddressColumnAsync(string columnName, string value, ValidationExceptionType exception, bool RaiseException)
@@ -129,7 +128,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             }
 
             newProfile.Addresses = new List<Address>();
-
             newProfile.Addresses.Add(localAddress);
 
             if (RaiseException)
@@ -139,29 +137,38 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                     .Setup(r => r.CreateValidationException(exception))
                     .Returns(validationException);
 
-
                 ClassUnderTest
-                    .Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
+                    .Invoking(async c =>
+                    {
+                        Address address = newProfile.Addresses.SingleOrDefault();
+                        await c.ValidateAsync(address);
+                    })
                     .Should().Throw<ValidationException>();
             }
             else
             {
-               await ClassUnderTest.ValidateAsync(newProfile.Addresses.ToList());
+                await ClassUnderTest.ValidateAsync(newProfile.Addresses.SingleOrDefault());
             }
-
-            //  return localAddress;
         }
 
         protected override async void When()
         {
-            newProfile.Addresses = await ClassUnderTest.ValidateAsync(newProfile.Addresses.ToList());
+            foreach (Address newProfileAddress in newProfile.Addresses)
+            {
+                await ClassUnderTest.ValidateAsync(newProfileAddress);
+            }
         }
 
         [TestMethod]
         public void DoesNothingIfTheAddressIsValid()
         {
-            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
-               .Should().NotThrow<ValidationException>();            
+            newProfile.Addresses.Add(validAddress);
+            ClassUnderTest.Invoking(async c =>
+                {
+                    Address address = newProfile.Addresses.SingleOrDefault();
+                    await c.ValidateAsync(address);
+                })
+                .Should().NotThrow<ValidationException>();
         }
 
         [TestMethod]
@@ -169,7 +176,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             newProfile.Addresses = new List<Address>();
             newProfile.Addresses.Add(invalidAddress);
-            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
+            ClassUnderTest.Invoking(async c =>
+                {
+                    Address address = newProfile.Addresses.SingleOrDefault();
+                    await c.ValidateAsync(address);
+                })
                 .Should().Throw<ValidationException>();
         }
 
@@ -184,7 +195,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public async Task ThrowsValidationExceptionIfStateCodeExceedMaxlength()
         {
             await UpdateAddressColumnAsync("StateCode", ProfileConstants.RandomString(23), ValidationExceptionType.InvalidStateCode, true);
-            
+
             await UpdateAddressColumnAsync("StateCode", "", ValidationExceptionType.AddressRecordNotFound, true);
         }
 
@@ -226,7 +237,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.Addresses.Add(validAddress);
 
-            newProfile.Addresses = await ClassUnderTest.ValidateAsync(newProfile.Addresses.ToList());
+
+            await ClassUnderTest.ValidateAsync(newProfile.Addresses.SingleOrDefault());
 
             newProfile.Addresses.FirstOrDefault().Latitude.Should().NotBe(null);
             newProfile.Addresses.FirstOrDefault().Longitude.Should().NotBe(null);
@@ -243,8 +255,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.Addresses.Add(invalidAddress);
 
             ClassUnderTest
-                    .Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
-                    .Should().Throw<ValidationException>();
+                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Should().Throw<ValidationException>();
         }
 
         [TestMethod]
@@ -264,13 +276,18 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.Addresses.Add(invalidAddress);
             partialAddress = null;
 
+            ThrowExceptionForAddressValidation();
+        }
+
+        private void ThrowExceptionForAddressValidation()
+        {
             Container.GetMock<IReferenceDataClient>()
-               .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
-               .ReturnsAsync(partialAddress);
+                .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(partialAddress);
 
             ClassUnderTest
-                    .Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
-                    .Should().Throw<ValidationException>();
+                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Should().Throw<ValidationException>();
         }
 
         [TestMethod]
@@ -293,15 +310,15 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 null,
                 ProfileConstants.ResidentialAddress.StateCode,
                 ProfileConstants.ResidentialAddress.Postcode,
-                (decimal)0.0, (decimal)0.0, null);
+                (decimal) 0.0, (decimal) 0.0, null);
 
             Container.GetMock<IReferenceDataClient>()
-               .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
-               .ReturnsAsync(partialAddress);
+                .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(partialAddress);
 
             ClassUnderTest
-                    .Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
-                    .Should().Throw<ValidationException>();
+                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Should().Throw<ValidationException>();
         }
 
 
@@ -322,17 +339,17 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.Addresses.Add(invalidAddress);
 
             Container.GetMock<IReferenceDataClient>()
-               .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
-               .ReturnsAsync(partialAddress);
+                .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(partialAddress);
 
             Container
-                    .GetMock<IExceptionFactory>()
-                    .Setup(r => r.CreateValidationException(ValidationExceptionType.PostCodeLocalityMismatch))
-                    .Returns(validationException);
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.PostCodeLocalityMismatch))
+                .Returns(validationException);
 
             ClassUnderTest
-                    .Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
-                    .Should().Throw<ValidationException>();
+                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Should().Throw<ValidationException>();
         }
 
         [TestMethod]
@@ -352,17 +369,17 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.Addresses.Add(invalidAddress);
 
             Container.GetMock<IReferenceDataClient>()
-               .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
-               .ReturnsAsync(partialAddress);
+                .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(partialAddress);
 
             Container
-                    .GetMock<IExceptionFactory>()
-                    .Setup(r => r.CreateValidationException(ValidationExceptionType.PostCodeStateCodeMismatch))
-                    .Returns(validationException);
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.PostCodeStateCodeMismatch))
+                .Returns(validationException);
 
             ClassUnderTest
-                    .Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
-                    .Should().Throw<ValidationException>();
+                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Should().Throw<ValidationException>();
         }
 
         [TestMethod]
@@ -382,17 +399,17 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.Addresses.Add(invalidAddress);
 
             Container.GetMock<IReferenceDataClient>()
-               .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
-               .ReturnsAsync(partialAddress);
+                .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(partialAddress);
 
             Container
-                    .GetMock<IExceptionFactory>()
-                    .Setup(r => r.CreateValidationException(ValidationExceptionType.PostCodeMismatch))
-                    .Returns(validationException);
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.PostCodeMismatch))
+                .Returns(validationException);
 
             ClassUnderTest
-                    .Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
-                    .Should().Throw<ValidationException>();
+                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Should().Throw<ValidationException>();
         }
 
         [TestMethod]
@@ -401,7 +418,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.Addresses.Add(validSingleLineAddress);
 
-            newProfile.Addresses = await ClassUnderTest.ValidateAsync(newProfile.Addresses.ToList());
+            await ClassUnderTest.ValidateAsync(newProfile.Addresses.SingleOrDefault());
 
             newProfile.Addresses.FirstOrDefault().Latitude.Should().NotBe(null);
             newProfile.Addresses.FirstOrDefault().Longitude.Should().NotBe(null);
@@ -416,9 +433,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             newProfile = new Profile();
             newProfile.Addresses.Add(validSingleLineAddress);
-
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.ToList()))
+                .Invoking(async c => { await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()); })
                 .Should().NotThrow();
         }
 
@@ -430,12 +446,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             detailsAddress = null;
 
             Container.GetMock<IReferenceDataClient>()
-               .Setup(x => x.GetDetailAddressByFormattedAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-               .ReturnsAsync(detailsAddress);
+                .Setup(x => x.GetDetailAddressByFormattedAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(detailsAddress);
 
             ClassUnderTest
-                    .Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
-                    .Should().Throw<ValidationException>();
+                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Should().Throw<ValidationException>();
         }
 
         [TestMethod]
@@ -449,19 +465,19 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 ProfileConstants.ResidentialAddress.StreetAddress2,
                 ProfileConstants.ResidentialAddress.StreetAddress3,
                 null, null, null,
-                "GeoCode", (decimal)32.56, (decimal)45.4, "AddressSource", "SOurceId",
+                "GeoCode", (decimal) 32.56, (decimal) 45.4, "AddressSource", "SOurceId",
                 2, 1, null, 1);
 
             Container.GetMock<IReferenceDataClient>()
-               .Setup(x => x.GetDetailAddressByFormattedAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-               .ReturnsAsync(detailsAddress);
+                .Setup(x => x.GetDetailAddressByFormattedAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(detailsAddress);
 
             ClassUnderTest
-                    .Invoking(c => c.ValidateAsync(newProfile.Addresses.ToList()))
-                    .Should().Throw<ValidationException>();
+                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Should().Throw<ValidationException>();
         }
-        #endregion
 
+        #endregion
 
         #endregion
     }

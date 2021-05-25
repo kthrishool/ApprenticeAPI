@@ -110,6 +110,9 @@ namespace ADMS.Apprentice.Core.Exceptions
         InvalidUSI,
 
         [ExceptionDetails("AP-VAL-0036", "CRN exceeds 10 characters")]
-        InvalidCRN
+        InvalidCRN,
+
+        [ExceptionDetails("AP-VAL-0037", "Invalid address details for guardian")]
+        AddressRecordNotFoundForGuardian
     }
 }

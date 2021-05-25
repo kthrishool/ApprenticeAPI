@@ -3,7 +3,7 @@ using ADMS.Services.Infrastructure.Model.Interface;
 
 namespace ADMS.Apprentice.Core.Entities
 {
-    public class Guardian : IAuditableIdentifier, ITimestampEnabled
+    public class Guardian : IAuditableIdentifier, ITimestampEnabled, IAddressAttributes
     {
         public int Id { get; set; }
         public int ApprenticeId { get; set; }
@@ -12,7 +12,7 @@ namespace ADMS.Apprentice.Core.Entities
 
         public string EmailAddress { get; set; }
 
-        public string LandLine { get; set; }
+        public string HomePhoneNumber { get; set; }
 
         public string Mobile { get; set; }
         public string WorkPhoneNumber { get; set; }
@@ -26,12 +26,18 @@ namespace ADMS.Apprentice.Core.Entities
         public string StateCode { get; set; }
         public string Postcode { get; set; }
         public string SingleLineAddress { get; set; }
+        public string GeocodeType { get; set; }
 
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+        public short? Confidence { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string UpdatedBy { get; set; }
         public byte[] Version { get; set; }
         public long AuditEventId { get; set; }
+
+        public virtual Profile Profile { get; set; }
     }
 }

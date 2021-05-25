@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
+using ADMS.Apprentice.Core.Helpers;
 using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
 using Adms.Shared.Extensions;
-using ADMS.Apprentice.Core.Helpers;
 
 namespace ADMS.Apprentice.Core.Services.Validators
 {
@@ -28,29 +27,23 @@ namespace ADMS.Apprentice.Core.Services.Validators
             this.referenceDataClient = referenceDataClient;
         }
 
-        public async Task<List<Address>> ValidateAsync(List<Address> addresses)
+        public async Task ValidateAsync(IAddressAttributes address)
         {
-            var validatedAddress = new List<Address>();
-
-            foreach (Address address in addresses)
+            if (address == null)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
+            if (!string.IsNullOrEmpty(address.SingleLineAddress))
+                await ValidateSingleLineAddressAsync(address);
+            else
             {
-                if (address == null)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
-                if (!string.IsNullOrEmpty(address.SingleLineAddress))
-                    validatedAddress.Add(await ValidateSingleLineAddressAsync(address));
-                else
-                {
-                    //Do the default code validations
-                    ValidateDefaultCodesAsync(address);
-                    //At this point we know we have a valid Locality, State and postcode. So use iGas to get the partical geolocation details
-                    validatedAddress.Add(await ValidatePartialAddressAsync(address));
-                }
+                //Do the default code validations
+                ValidateDefaultCodesAsync(address);
+                //At this point we know we have a valid Locality, State and postcode. So use iGas to get the partical geolocation details
+                await ValidatePartialAddressAsync(address);
             }
-
-            return validatedAddress;
         }
 
-        private void ValidateDefaultCodesAsync(Address address)
+
+        private void ValidateDefaultCodesAsync(IAddressAttributes address)
         {
             // If the single line address is empty we need to check if other details are valid.
             // if the postcode is there then validate it first
@@ -74,7 +67,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.SuburbExceedsMaxLength);
         }
 
-        private async Task<Address> ValidateSingleLineAddressAsync(Address address)
+        private async Task ValidateSingleLineAddressAsync(IAddressAttributes address)
         {
             //Verify the address using iGas
             //If it is a valid single line address, iGas will return a record with geo location details         
@@ -85,6 +78,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
             if (detailAddress.StreetAddressLine1.IsNullOrEmpty() || detailAddress.Locality.IsNullOrEmpty() || detailAddress.State.IsNullOrEmpty() || detailAddress.Postcode.IsNullOrEmpty())
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFound);
+
             //populate geo location + postcode suburb details to profile address from detailsAddress component
             address.SingleLineAddress = detailAddress.FormattedAddress.Sanitise();
             address.StreetAddress1 = detailAddress.StreetAddressLine1.Sanitise();
@@ -97,15 +91,14 @@ namespace ADMS.Apprentice.Core.Services.Validators
             address.Latitude = detailAddress.Latitude;
             address.Longitude = detailAddress.Longitude;
             address.Confidence = (short) detailAddress.Confidence;
-            return address;
         }
 
-        private async Task<Address> ValidatePartialAddressAsync(Address address)
+        private async Task ValidatePartialAddressAsync(IAddressAttributes address)
         {
             //Verify the partial address using iGas. Partial address = Locality + State + postcode
             //If it is a valid, populate geo location details
 
-            string formattedLocality = $"{address.Locality} {address.StateCode} {address.Postcode}".ToUpper();            
+            string formattedLocality = $"{address.Locality} {address.StateCode} {address.Postcode}".ToUpper();
 
             PartialAddressModel partialAddress = await referenceDataClient.GetAddressByFormattedLocality(formattedLocality);
 
@@ -141,8 +134,6 @@ namespace ADMS.Apprentice.Core.Services.Validators
             address.Latitude = partialAddress.Latitude;
             address.Longitude = partialAddress.Longitude;
             address.Confidence = 4;
-
-            return address;
         }
     }
 }
