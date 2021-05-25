@@ -4,7 +4,6 @@ using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Apprentice.Core.Helpers;
 using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
-using Adms.Shared;
 using Adms.Shared.Exceptions;
 using Adms.Shared.Extensions;
 
@@ -12,17 +11,14 @@ namespace ADMS.Apprentice.Core.Services.Validators
 {
     public class AddressValidator : IAddressValidator
     {
-        private readonly IRepository repository;
         private readonly IExceptionFactory exceptionFactory;
         private readonly IReferenceDataClient referenceDataClient;
 
         public AddressValidator(
-            IRepository repository,
             IExceptionFactory exceptionFactory,
             IReferenceDataClient referenceDataClient
         )
         {
-            this.repository = repository;
             this.exceptionFactory = exceptionFactory;
             this.referenceDataClient = referenceDataClient;
         }

@@ -16,7 +16,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
     [TestClass]
     public class WhenValidatingAUSIValidator : GivenWhenThen<USIValidator>
     {
-        //  private AaipClaimApplication application;
         private Profile profile;
         private ApprenticeUSI apprenticeUSI;
         private ValidationException validationException;
@@ -24,14 +23,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void Given()
         {
-            //  application = new AaipClaimApplication();
-
             profile = new Profile();
             apprenticeUSI = new ApprenticeUSI()
             {
                 USI = "test",
                 ActiveFlag = true
-
             };
             profile.USIs.Add(apprenticeUSI);
             validationException = new ValidationException(null, (ValidationError) null);
@@ -43,25 +39,14 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             ClassUnderTest.Validate(profile);
         }
 
-
-        [TestMethod]
-        public void DoesNothingIfUSIIsNull()
+        private void RunPositiveUSITest(Profile profile)
         {
-            profile = new Profile();
             ClassUnderTest.Invoking(c => c.Validate(profile))
                 .Should().NotThrow<ValidationException>();
         }
 
-        /// <summary>
-        /// Insert a profile record and check if the email has been updated .
-        /// </summary>
-        [TestMethod]
-        public void ThrowsValidationExceptionIfUSIIsNull()
+        private void ThrowExceptionForUSITest(Profile profile)
         {
-            profile = new Profile();
-
-            profile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = "", ActiveFlag = true, USIStatus = "test"}};
-
             Container
                 .GetMock<IExceptionFactory>()
                 .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidUSI))
@@ -70,6 +55,64 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             ClassUnderTest
                 .Invoking(c => c.Validate(profile))
                 .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void DoesNothingIfUSIIsNull()
+        {
+            RunPositiveUSITest(new Profile());
+        }
+
+        /// <summary>
+        /// </summary>
+        [TestMethod]
+        public void ThrowsValidationExceptionIfUSIIsNull()
+        {
+            ThrowExceptionForUSITest(new Profile
+            {
+                USIs = new List<ApprenticeUSI>()
+                {
+                    new ApprenticeUSI()
+                    {
+                        USI = "", ActiveFlag = true, USIStatus = "test"
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// </summary>
+        [TestMethod]
+        public void DoNothingIfUSIIsValid()
+        {
+            RunPositiveUSITest(new Profile
+            {
+                USIs = new List<ApprenticeUSI>()
+                {
+                    new ApprenticeUSI()
+                    {
+                        USI = "23456789D1", ActiveFlag = true, USIStatus = "test"
+                    }
+                }
+            });
+        }
+
+
+        /// <summary>
+        /// </summary>
+        [TestMethod]
+        public void ThrowExceptionWhenUSIIsInvalid()
+        {
+            ThrowExceptionForUSITest(new Profile
+            {
+                USIs = new List<ApprenticeUSI>()
+                {
+                    new ApprenticeUSI()
+                    {
+                        USI = "23456789D4", ActiveFlag = true, USIStatus = "test"
+                    }
+                }
+            });
         }
     }
 

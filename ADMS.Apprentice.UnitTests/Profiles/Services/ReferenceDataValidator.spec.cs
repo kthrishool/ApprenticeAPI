@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
-using ADMS.Apprentice.Core.Services;
+using ADMS.Apprentice.Core.Services.Validators;
 using ADMS.Apprentice.UnitTests.Constants;
 using ADMS.Services.Infrastructure.Core.Exceptions;
 using ADMS.Services.Infrastructure.Core.Validation;
@@ -12,7 +12,6 @@ using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using ADMS.Apprentice.Core.Services.Validators;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -108,6 +107,22 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
+        [TestMethod]
+        public async Task DoNothingIfLanguageCodeIsValid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1201", Description = "test",});
+
+
+            Container
+                .GetMock<IReferenceDataClient>()
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(list1);
+
+            newProfile = new Profile();
+            newProfile.LanguageCode = "1201";
+            await ClassUnderTest.ValidateAsync(newProfile);
+        }
 
         [TestMethod]
         public async Task DoesNothingIfLanguageIsValid()
@@ -167,9 +182,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
-            newProfile.Phones.Add(new Phone() { PhoneNumber = "0211111111" });
-            await ClassUnderTest.ValidateAsync(newProfile); 
+            newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
+            await ClassUnderTest.ValidateAsync(newProfile);
         }
+
         [TestMethod]
         public async Task DoNothingWhenEmailContactTypeIsValid()
         {
@@ -178,19 +194,22 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.EmailAddress = ProfileConstants.Emailaddress;
             await ClassUnderTest.ValidateAsync(newProfile);
         }
+
         [TestMethod]
         public async Task DoNothingWhenMailContactTypeIsValid()
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.MAIL.ToString();
-            newProfile.Addresses.Add(new Address() { 
-            StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
-            Postcode  = ProfileConstants.ResidentialAddress.Postcode,
-            Locality = ProfileConstants.ResidentialAddress.Locality,
-            StateCode = ProfileConstants.ResidentialAddress.StateCode
-            } );
+            newProfile.Addresses.Add(new Address()
+            {
+                StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
+                Postcode = ProfileConstants.ResidentialAddress.Postcode,
+                Locality = ProfileConstants.ResidentialAddress.Locality,
+                StateCode = ProfileConstants.ResidentialAddress.StateCode
+            });
             await ClassUnderTest.ValidateAsync(newProfile);
         }
+
         [TestMethod]
         public void ThrowValidationExceptionWhenPhoneContactTypeIsInvalid()
         {
@@ -205,13 +224,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void DOnothingIfPhoneIsPrefferedContactType()
         {
-        
-
-
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
 
-            newProfile.Phones.Add(new Phone() { PhoneNumber = "0211111111" });
+            newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
 
 
             ClassUnderTest.Invoking(c => c.ValidateAsync(this.newProfile))
@@ -221,9 +237,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void DOnothingIfEmailIsPrefferedContactType()
         {
-    
-
-
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.EMAIL.ToString();
 
@@ -237,9 +250,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void DOnothingIfMailIsPrefferedContactType()
         {
-            
-
-
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.MAIL.ToString();
             var localAddress = new Address()
@@ -260,7 +270,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         #endregion
-
 
 
         [TestMethod]
@@ -356,17 +365,17 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
 
-
         #region QualificationValidationUsingReferenceData
+
         [TestMethod]
         public void DoesNothingIfQualificationIsValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "1101", Description = "test", });
+            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
 
             MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualification);
 
-            qualification = ProfileConstants.Qualification;            
+            qualification = ProfileConstants.Qualification;
             ClassUnderTest.Invoking(c => c.ValidateAsync(qualification)).Should().NotThrow();
         }
 
@@ -393,7 +402,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsExceptionIfQualificationANZSCIsInvalid()
         {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>(); 
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             Container
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
@@ -406,12 +415,13 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             qualification = new Qualification();
             qualification.QualificationANZSCOCode = "Invalid";
-            
+
             ClassUnderTest.Invoking(c => c.ValidateAsync(qualification))
                 .Should().Throw<ValidationException>();
         }
+
         #endregion
     }
 
-    #endregion    
+    #endregion
 }

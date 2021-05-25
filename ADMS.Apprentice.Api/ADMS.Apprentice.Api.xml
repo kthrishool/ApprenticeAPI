@@ -32,29 +32,22 @@
             Apprentice guardian endpoints of a given apprentice.
             </summary>
         </member>
-        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Paging.IPagingHelper,Adms.Shared.Exceptions.IExceptionFactory,ADMS.Apprentice.Core.Services.IGuardianCreator)">
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Exceptions.IExceptionFactory,ADMS.Apprentice.Core.Services.IGuardianCreator)">
             <summary>Constructor</summary>
-        </member>
-        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.Get(System.Int32,System.Int32)">
-            <summary>
-            Gets all information of a given qualification id.
-            </summary>
-            <param name="apprenticeId">Id of the apprentice</param>
-            <param name="id">Id of the qualification</param>
         </member>
         <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.Create(System.Int32,ADMS.Apprentice.Core.Messages.ProfileGuardianMessage)">
             <summary>
-            Adds a new qualification for an apprentice
+            Adds a new guardian for an apprentice
             </summary>
             <param name="apprenticeId">apprenticeId</param>
-            <param name="message">Details of the qualification to be created</param>
+            <param name="message">Details of the guardian to be created</param>
         </member>
         <member name="T:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController">
             <summary>
             Apprentice endpoints.
             </summary>
         </member>
-        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Paging.IPagingHelper,ADMS.Apprentice.Core.Services.IProfileCreator,ADMS.Apprentice.Core.Services.IProfileUpdater,ADMS.Apprentice.Core.Services.IProfileRetreiver,ADMS.Apprentice.Core.Services.IUSIVerify)">
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Paging.IPagingHelper,ADMS.Apprentice.Core.Services.IProfileCreator,ADMS.Apprentice.Core.Services.IProfileUpdater,ADMS.Apprentice.Core.Services.IProfileRetreiver)">
             <summary>Constructor</summary>
         </member>
         <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController.List(Adms.Shared.Paging.PagingInfo)">

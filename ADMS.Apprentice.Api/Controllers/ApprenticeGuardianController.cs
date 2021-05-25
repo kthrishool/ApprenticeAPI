@@ -7,7 +7,6 @@ using ADMS.Services.Infrastructure.WebApi;
 using ADMS.Services.Infrastructure.WebApi.Documentation;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
-using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +24,6 @@ namespace ADMS.Apprentice.Api.Controllers
     public class ApprenticeGuardianController : AdmsController
     {
         private readonly IRepository repository;
-        private readonly IPagingHelper pagingHelper;
         private readonly IExceptionFactory exceptionFactory;
         private readonly IGuardianCreator guardianCreator;
 
@@ -33,13 +31,11 @@ namespace ADMS.Apprentice.Api.Controllers
         public ApprenticeGuardianController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
-            IPagingHelper pagingHelper,
             IExceptionFactory exceptionFactory,
             IGuardianCreator guardianCreator
         ) : base(contextAccessor)
         {
             this.repository = repository;
-            this.pagingHelper = pagingHelper;
             this.exceptionFactory = exceptionFactory;
             this.guardianCreator = guardianCreator;
         }
@@ -49,7 +45,7 @@ namespace ADMS.Apprentice.Api.Controllers
         /// Adds a new guardian for an apprentice
         /// </summary>
         /// <param name="apprenticeId">apprenticeId</param>
-        /// <param name="message">Details of the qualification to be created</param>
+        /// <param name="message">Details of the guardian to be created</param>
         [HttpPost]
         public async Task<ActionResult<ProfileGuardianModel>> Create(int apprenticeId, [FromBody] ProfileGuardianMessage message)
         {

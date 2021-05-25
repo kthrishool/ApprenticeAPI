@@ -33,18 +33,17 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 HomePhoneNumber = "0211111111",
                 WorkPhoneNumber = "0411111111"
             };
-            
         }
 
         protected override async void When()
         {
-            guardian = await ClassUnderTest.CreateAsync( guardianMessage);
+            guardian = await ClassUnderTest.CreateAsync(guardianMessage);
         }
 
         [TestMethod]
         public void DONothingWhenGuardianIsValid()
         {
-            ClassUnderTest.Invoking(c => c.CreateAsync( guardianMessage))
+            ClassUnderTest.Invoking(c => c.CreateAsync(guardianMessage))
                 .Should().NotThrow<ValidationException>();
         }
 
@@ -54,7 +53,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             guardian.ApprenticeId.Should().Be(profile.Id);
             guardian.FirstName.Should().Be(guardianMessage.FirstName);
             guardian.Surname.Should().Be(guardianMessage.Surname);
-            //  guardian.ContactTypeCode.Should().Be(guardianMessage.ContactType);
             guardian.EmailAddress.Should().Be(guardianMessage.EmailAddress);
             guardian.StreetAddress1.Should().Be(ProfileConstants.ResidentialAddress.StreetAddress1);
             guardian.StreetAddress2.Should().Be(ProfileConstants.ResidentialAddress.StreetAddress2);

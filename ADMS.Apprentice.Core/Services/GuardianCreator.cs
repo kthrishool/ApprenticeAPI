@@ -3,19 +3,16 @@ using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Helpers;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services.Validators;
-using Adms.Shared;
 
 namespace ADMS.Apprentice.Core.Services
 {
     public class GuardianCreator : IGuardianCreator
     {
         private readonly IGuardianValidator guardianValidator;
-        private readonly IRepository repository;
 
-        public GuardianCreator(IRepository repository,
+        public GuardianCreator(
             IGuardianValidator profileValidator)
         {
-            this.repository = repository;
             this.guardianValidator = profileValidator;
         }
 

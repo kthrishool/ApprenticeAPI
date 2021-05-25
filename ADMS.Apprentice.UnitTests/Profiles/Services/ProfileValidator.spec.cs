@@ -322,7 +322,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile = await ClassUnderTest.ValidateAsync(validProfile);
             validProfile.Phones.Where(x => x.PreferredPhoneFlag == true).Count().Should().Be(1);
         }
- 
+
         #endregion
 
         /// <summary>
@@ -342,16 +342,42 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             await ClassUnderTest.ValidateAsync(invalidProfile);
         }
 
+        private void ExecuteUSITest(string USI, Boolean ActiveFlag, string USIStatus)
+        {
+            ChangeException(ValidationExceptionType.InvalidUSI);
+            validProfile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = USI, ActiveFlag = ActiveFlag, USIStatus = USIStatus}};
+            Container.GetMock<IUSIValidator>()
+                .Setup(r => r.Validate(validProfile))
+                .Returns(false);
+
+
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Equals(false);
+        }
+
         /// <summary>
         /// Insert a profile record and check if the email has been updated .
         /// </summary>
         [TestMethod]
         public void ThrowsValidationExceptionIfUSIIsNull()
         {
+            ExecuteUSITest("", true, "test");
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfUSIIsInvalid()
+        {
+            ExecuteUSITest("12131", true, "test");
+        }
+
+        [TestMethod]
+        public void DoesNothingIfUSIIsValid()
+        {
             ChangeException(ValidationExceptionType.InvalidUSI);
 
 
-            validProfile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = "", ActiveFlag = true, USIStatus = "test"}};
+            validProfile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = "23456789D1", ActiveFlag = true, USIStatus = "test"}};
 
             Container.GetMock<IUSIValidator>()
                 .Setup(r => r.Validate(validProfile))
@@ -360,16 +386,17 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             // ExecuteTest(validProfile);
             ClassUnderTest
                 .Invoking(async c => await c.ValidateAsync(validProfile))
-                .Equals(false);
+                .Equals(true);
         }
 
-        #region Address Validation 
+        #region Address Validation
 
         [TestMethod]
         public void DONothingIfAddressIsNotSupplied()
         {
-            ClassUnderTest.Invoking(c=>c.ValidateAsync(validProfile)).Should().NotThrow<ValidationException>();
+            ClassUnderTest.Invoking(c => c.ValidateAsync(validProfile)).Should().NotThrow<ValidationException>();
         }
+
         [TestMethod]
         public void DONothingIfOneAddressIsSupplied()
         {
@@ -420,8 +447,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         #endregion
-
-
     }
 
     #endregion

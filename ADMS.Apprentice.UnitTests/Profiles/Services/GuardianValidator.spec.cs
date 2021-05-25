@@ -68,7 +68,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void DoNothingIfEmailIsValid()
         {
             guardian.EmailAddress = ProfileConstants.Emailaddress;
-            // guardian.SingleLineAddress = "14 mort street, canberra center act 2601";
             ClassUnderTest.Invoking(c => c.ValidateAsync(guardian)).Should().NotThrow<ValidationException>();
         }
 

@@ -31,7 +31,6 @@ namespace ADMS.Apprentice.Api.Controllers
         private readonly IProfileCreator profileCreator;
         private readonly IProfileUpdater profileUpdater;
         private readonly IProfileRetreiver profileRetreiver;
-        private readonly IUSIVerify usiVerify;
 
         /// <summary>Constructor</summary>
         public ApprenticeProfileController(
@@ -40,8 +39,7 @@ namespace ADMS.Apprentice.Api.Controllers
             IPagingHelper pagingHelper,
             IProfileCreator profileCreator,
             IProfileUpdater profileUpdater,
-            IProfileRetreiver profileRetreiver,
-            IUSIVerify usiVerify
+            IProfileRetreiver profileRetreiver
         ) : base(contextAccessor)
         {
             this.repository = repository;
@@ -49,7 +47,6 @@ namespace ADMS.Apprentice.Api.Controllers
             this.profileCreator = profileCreator;
             this.profileUpdater = profileUpdater;
             this.profileRetreiver = profileRetreiver;
-            this.usiVerify = usiVerify;
         }
 
         /// <summary>
