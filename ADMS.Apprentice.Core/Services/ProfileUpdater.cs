@@ -47,11 +47,14 @@ namespace ADMS.Apprentice.Core.Services
             profile.ProfileTypeCode = message.ProfileType.SanitiseUpper();
             profile.EmailAddress = message.EmailAddress.Sanitise();
 
-            UpdatePhone(profile, message.PhoneNumbers);            
-           
-            //if no addresses specified clear all the addresses.
-            if (message.ResidentialAddress == null && message.PostalAddress == null)
-                profile.Addresses.Clear();
+            UpdatePhone(profile, message.PhoneNumbers);
+
+            //if no addresses specified clear address if exists.
+            if (message.ResidentialAddress == null)
+                profile.Addresses.Remove(profile.Addresses.Where(x => x.AddressTypeCode == AddressType.RESD.ToString()).SingleOrDefault());
+
+            if (message.PostalAddress == null)
+                profile.Addresses.Remove(profile.Addresses.Where(x => x.AddressTypeCode == AddressType.POST.ToString()).SingleOrDefault());
 
             if (message.ResidentialAddress != null)
             {   
