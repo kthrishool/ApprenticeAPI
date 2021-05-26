@@ -24,6 +24,8 @@
 );
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_ApprenticeAddress_ApprenticeId]
     ON [dbo].[ApprenticeAddress]([ApprenticeId] ASC) WITH (FILLFACTOR = 90);
