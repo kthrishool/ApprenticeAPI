@@ -66,7 +66,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
                     throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidUSI);
 
                 // code to be implemented fro additional validation
-                if (VerifyKey(profile.USIs.Single(x => x.ActiveFlag == true).USI.Sanitise()))
+                if (!VerifyKey(profile.USIs.Single(x => x.ActiveFlag == true).USI.Sanitise()))
                     throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidUSI);
             }
             return true;

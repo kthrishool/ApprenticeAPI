@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Models;
@@ -56,7 +57,26 @@ namespace ADMS.Apprentice.Api.Controllers
             Guardian guardian = await guardianCreator.CreateAsync(message);
             profile.Guardians.Add(guardian);
             await repository.SaveAsync();
-            return Created($"/{apprenticeId}", new ProfileGuardianModel());
+            return Created($"/{apprenticeId}", new ProfileGuardianModel(guardian));
+        }
+
+
+        /// <summary>
+        /// Gets all information of a given guardian id.
+        /// </summary>
+        /// <param name="apprenticeId">Id of the apprentice</param>
+        /// <param name="id">Id of the parent / guardian</param>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProfileGuardianModel>> Get(int apprenticeId, int id)
+        {
+            Guardian guardian;
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
+            if (profile.Guardians.Any(c => c.Id == id))
+                guardian = profile.Guardians.SingleOrDefault(x => x.Id == id);
+            else
+                return NotFound();
+
+            return Ok(new ProfileGuardianModel(guardian));
         }
     }
 }

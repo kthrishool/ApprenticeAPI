@@ -42,6 +42,13 @@
             <param name="apprenticeId">apprenticeId</param>
             <param name="message">Details of the guardian to be created</param>
         </member>
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets all information of a given guardian id.
+            </summary>
+            <param name="apprenticeId">Id of the apprentice</param>
+            <param name="id">Id of the parent / guardian</param>
+        </member>
         <member name="T:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController">
             <summary>
             Apprentice endpoints.

@@ -34,18 +34,26 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public void IsFalseIfNoClaimTypes()
+        public void NoExceptionIfUSIIsNull()
         {
+            profile = new Profile();
             ClassUnderTest.Validate(profile);
         }
 
-        private void RunPositiveUSITest(Profile profile)
+        [TestMethod]
+        public void ThrowExceptionWhenUSIIsLessthan10Char()
         {
-            ClassUnderTest.Invoking(c => c.Validate(profile))
-                .Should().NotThrow<ValidationException>();
+            profile = new Profile();
+            apprenticeUSI = new ApprenticeUSI()
+            {
+                USI = "test",
+                ActiveFlag = true
+            };
+            profile.USIs.Add(apprenticeUSI);
+            RunNegativeUSIText(profile);
         }
 
-        private void ThrowExceptionForUSITest(Profile profile)
+        private void RunNegativeUSIText(Profile profile)
         {
             Container
                 .GetMock<IExceptionFactory>()
@@ -55,6 +63,17 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             ClassUnderTest
                 .Invoking(c => c.Validate(profile))
                 .Should().Throw<ValidationException>();
+        }
+
+        private void RunPositiveUSITest(Profile profile)
+        {
+            ClassUnderTest.Invoking(c => c.Validate(profile))
+                .Should().NotThrow<ValidationException>();
+        }
+
+        private void ThrowExceptionForUsiTest(Profile profile)
+        {
+            RunNegativeUSIText(profile);
         }
 
         [TestMethod]
@@ -68,7 +87,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsValidationExceptionIfUSIIsNull()
         {
-            ThrowExceptionForUSITest(new Profile
+            ThrowExceptionForUsiTest(new Profile
             {
                 USIs = new List<ApprenticeUSI>()
                 {
@@ -103,7 +122,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowExceptionWhenUSIIsInvalid()
         {
-            ThrowExceptionForUSITest(new Profile
+            RunPositiveUSITest(new Profile
             {
                 USIs = new List<ApprenticeUSI>()
                 {
