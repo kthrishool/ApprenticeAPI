@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Models;
@@ -68,9 +67,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
                 GenderCode = ProfileConstants.GenderCode,
                 InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
-                LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
-                LeftSchoolYear = ProfileConstants.LeftSchoolYear,
-                LeftSchoolDate = new DateTime(ProfileConstants.LeftSchoolYear.Value, 01, 01),
+                LeftSchoolDate = ProfileConstants.LeftSchoolDate,
                 DeceasedFlag = ProfileConstants.DeceasedFlag,
                 ActiveFlag = ProfileConstants.ActiveFlag,
                 Addresses = add,
@@ -130,8 +127,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             model.LanguageCode.Should().Be(ProfileConstants.LanguageCode);
             model.PreferredContactType.Should().Be(ProfileConstants.PreferredContactType.ToString());
             model.HighestSchoolLevelCode.Should().Be(ProfileConstants.HighestSchoolLevelCode);
-            model.LeftSchoolMonthCode.Should().Be(ProfileConstants.LeftSchoolMonthCode);
-            model.LeftSchoolYear.Should().Be(ProfileConstants.LeftSchoolYear);
+            model.LeftSchoolDate.Should().Be(ProfileConstants.LeftSchoolDate);
             model.VisaNumber.Should().Be(ProfileConstants.VisaNumber);
             model.USIVerificationResult.USI.Should().Be(ProfileConstants.USI);
             model.USIVerificationResult.USIStatus.Should().Be("test");

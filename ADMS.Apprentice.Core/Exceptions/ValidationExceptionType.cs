@@ -113,6 +113,9 @@ namespace ADMS.Apprentice.Core.Exceptions
         InvalidCRN,
 
         [ExceptionDetails("AP-VAL-0037", "Invalid address details for guardian")]
-        AddressRecordNotFoundForGuardian
+        AddressRecordNotFoundForGuardian,
+
+        [ExceptionDetails("AP-VAL-0038", "Invalid guardian phone number")]
+        InvalidGuardianNumber
     }
 }

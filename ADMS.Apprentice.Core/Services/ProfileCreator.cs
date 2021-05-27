@@ -46,8 +46,7 @@ namespace ADMS.Apprentice.Core.Services
 
                 LanguageCode = message.LanguageCode.SanitiseUpper(),
                 HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),
-                LeftSchoolMonthCode = message.LeftSchoolMonthCode.SanitiseUpper(),
-                LeftSchoolYear = message.LeftSchoolYear,
+                LeftSchoolDate = message.LeftSchoolDate,
                 VisaNumber = message.VisaNumber.Sanitise(),
             };
 
@@ -91,7 +90,7 @@ namespace ADMS.Apprentice.Core.Services
 
             await profileValidator.ValidateAsync(profile);
             if (message.USI != null) usiVerify.Verify(profile);
-            
+
             repository.Insert(profile);
 
             return profile;

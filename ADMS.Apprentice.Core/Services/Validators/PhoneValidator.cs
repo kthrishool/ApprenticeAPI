@@ -2,18 +2,13 @@
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Apprentice.Core.Helpers;
-using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 using Adms.Shared.Exceptions;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ADMS.Apprentice.Core.Services.Validators
 {
-  
     public class PhoneValidator : IPhoneValidator
     {
-        private static readonly string[] startingCode = { "02", "03", "04", "07", "08", "13", "18" };
-
-       
+        private static readonly string[] startingCode = {"02", "03", "04", "07", "08", "13", "18"};
 
 
         private readonly IExceptionFactory exceptionFactory;
@@ -39,10 +34,9 @@ namespace ADMS.Apprentice.Core.Services.Validators
             }
             if (phone.PhoneNumber.Substring(0, 2) == "04")
                 phone.PhoneTypeCode = PhoneType.MOBILE.ToString();
-
         }
 
-        public string ValidatePhone(string phoneNumber)
+        public string ValidatePhone(string phoneNumber, ValidationExceptionType exception)
         {
             if (phoneNumber.Sanitise() == null)
                 return null;
@@ -51,7 +45,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 phoneNumber = phoneNumber.Replace("61", "0");
 
             if (!(startingCode.Contains(phoneNumber.Substring(0, 2)) && phoneNumber.Length == 10))
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPhoneNumber);
+                throw exceptionFactory.CreateValidationException(exception);
 
             return phoneNumber;
         }

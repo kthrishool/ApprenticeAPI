@@ -41,8 +41,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
                 CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
-                LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
-                LeftSchoolYear = ProfileConstants.LeftSchoolYear,
+                LeftSchoolDate = ProfileConstants.LeftSchoolDate,
                 VisaNumber = ProfileConstants.VisaNumber,
                 USI = ProfileConstants.USI
             };
@@ -203,16 +202,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.HighestSchoolLevelCode.Should().Contain(ProfileConstants.HighestSchoolLevelCode);
         }
 
-        [TestMethod]
-        public void ShouldSetLeftSchoolMonthCode()
-        {
-            profile.LeftSchoolMonthCode.Should().Contain(ProfileConstants.LeftSchoolMonthCode);
-        }
 
         [TestMethod]
         public void ShouldSetLeftSchoolYearCode()
         {
-            profile.LeftSchoolYear.Should().Be(ProfileConstants.LeftSchoolYear);
+            profile.LeftSchoolDate.Should().Be(ProfileConstants.LeftSchoolDate);
         }
 
         [TestMethod]

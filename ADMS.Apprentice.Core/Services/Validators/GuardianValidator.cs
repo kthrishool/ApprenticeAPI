@@ -37,9 +37,9 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
         private void PhoneValidation(Guardian guardian)
         {
-            guardian.HomePhoneNumber = phoneValidator.ValidatePhone(guardian.HomePhoneNumber);
-            guardian.Mobile = phoneValidator.ValidatePhone(guardian.Mobile);
-            guardian.WorkPhoneNumber = phoneValidator.ValidatePhone(guardian.WorkPhoneNumber);
+            guardian.HomePhoneNumber = phoneValidator.ValidatePhone(guardian.HomePhoneNumber, ValidationExceptionType.InvalidGuardianNumber);
+            guardian.Mobile = phoneValidator.ValidatePhone(guardian.Mobile, ValidationExceptionType.InvalidGuardianNumber);
+            guardian.WorkPhoneNumber = phoneValidator.ValidatePhone(guardian.WorkPhoneNumber, ValidationExceptionType.InvalidGuardianNumber);
         }
 
         private void EmailValidation(Guardian guardian)

@@ -79,13 +79,9 @@ namespace ADMS.Apprentice.Core.Messages
         [MaxLength(10, ErrorMessage = "Highest School Level Code Exceeds 10 Characters")]
         public string HighestSchoolLevelCode { get; init; }
 
-        [MaxLength(10, ErrorMessage = "Left School Month code Exceeds 10 Characters")]
-        public string LeftSchoolMonthCode { get; init; }
-
-        public int? LeftSchoolYear { get; init; }
+        public DateTime? LeftSchoolDate { get; init; }
 
         [MaxLength(11, ErrorMessage = "Visa number exceeds 11 Characters")]
-        [RegularExpression("^[a-zA-Z0-9]{11}$", ErrorMessage = "Visa number must be a 11 character string with only alphanumeric characters")]
         public string VisaNumber { get; init; }
 
         [Display(Name = "Apprentice USI")]

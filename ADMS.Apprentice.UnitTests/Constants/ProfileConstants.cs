@@ -23,6 +23,7 @@ namespace ADMS.Apprentice.UnitTests.Constants
             new PhoneNumberMessage() {PhoneNumber = "0212345678"},
             new PhoneNumberMessage() {PhoneNumber = "+61 2 1234 1111", PreferredPhoneFlag = true}
         };
+
         public static List<UpdatePhoneNumberMessage> UpdatedPhoneNumbers = new List<UpdatePhoneNumberMessage>()
         {
             new UpdatePhoneNumberMessage() {PhoneNumber = "0212345678", Id = 0},
@@ -53,6 +54,7 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static ProfileType ProfileTypeCode = ProfileType.APPR;
         public static PreferredContactType PreferredContactType = PreferredContactType.MOBILE;
         public static Qualification Qualification = new Qualification() {QualificationCode = "QCode", QualificationDescription = "QDescription", QualificationLevel = "1101", QualificationANZSCOCode = "1101", StartDate = new DateTime(2000, 10, 1), EndDate = new DateTime(2002, 10, 1)};
+        public static DateTime LeftSchoolDate = DateTime.Now.AddYears(-5);
 
         public static ProfileQualificationMessage QualificationMessage = new ProfileQualificationMessage()
             {QualificationCode = "QCode", QualificationDescription = "QDescription", StartMonth = "JAN", StartYear = 2000, EndMonth = "DEC", EndYear = 2004};

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
@@ -7,7 +7,6 @@ using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services.Validators;
 using Adms.Shared.Attributes;
 using Adms.Shared.Extensions;
-using System.Collections.Generic;
 
 namespace ADMS.Apprentice.Core.Services
 {
@@ -43,7 +42,7 @@ namespace ADMS.Apprentice.Core.Services
             profile.OtherNames = message.OtherNames.Sanitise();
             profile.PreferredName = message.PreferredName.Sanitise();
             profile.BirthDate = message.BirthDate;
-            profile.GenderCode = message.GenderCode.SanitiseUpper();            
+            profile.GenderCode = message.GenderCode.SanitiseUpper();
             profile.ProfileTypeCode = message.ProfileType.SanitiseUpper();
             profile.EmailAddress = message.EmailAddress.Sanitise();
 
@@ -51,15 +50,15 @@ namespace ADMS.Apprentice.Core.Services
 
             //if no addresses specified clear address if exists.
             if (message.ResidentialAddress == null)
-                profile.Addresses.Remove(profile.Addresses.Where(x => x.AddressTypeCode == AddressType.RESD.ToString()).SingleOrDefault());
+                profile.Addresses.Remove(profile.Addresses.SingleOrDefault(x => x.AddressTypeCode == AddressType.RESD.ToString()));
 
             if (message.PostalAddress == null)
-                profile.Addresses.Remove(profile.Addresses.Where(x => x.AddressTypeCode == AddressType.POST.ToString()).SingleOrDefault());
+                profile.Addresses.Remove(profile.Addresses.SingleOrDefault(x => x.AddressTypeCode == AddressType.POST.ToString()));
 
             if (message.ResidentialAddress != null)
-            {   
+            {
                 //update the existing residential address if exist or add new address
-                UpdateAddress(profile, message.ResidentialAddress, AddressType.RESD.ToString());                               
+                UpdateAddress(profile, message.ResidentialAddress, AddressType.RESD.ToString());
             }
             if (message.PostalAddress != null)
             {
@@ -70,8 +69,7 @@ namespace ADMS.Apprentice.Core.Services
 
             //school details
             profile.HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise();
-            profile.LeftSchoolMonthCode = message.LeftSchoolMonthCode.SanitiseUpper();
-            profile.LeftSchoolYear = message.LeftSchoolYear;
+            profile.LeftSchoolDate = message.LeftSchoolDate;
 
             //characteristics
             profile.LanguageCode = message.LanguageCode.SanitiseUpper();
@@ -84,7 +82,7 @@ namespace ADMS.Apprentice.Core.Services
 
             //USI
             UpdateUSI(profile, message.USI);
-            
+
             await profileValidator.ValidateAsync(profile);
 
             //trigger USI verfication, if USI attributes has changed
@@ -98,7 +96,7 @@ namespace ADMS.Apprentice.Core.Services
         {
             if (profile.Addresses.Count > 0 && profile.Addresses.Any(x => x.AddressTypeCode == addressTypeCode))
             {
-                var updatedAddress = profile.Addresses.Where(x => x.AddressTypeCode == addressTypeCode).SingleOrDefault();
+                var updatedAddress = profile.Addresses.SingleOrDefault(x => x.AddressTypeCode == addressTypeCode);
 
                 updatedAddress.SingleLineAddress = addressMessage.SingleLineAddress.Sanitise();
                 updatedAddress.StreetAddress1 = addressMessage.StreetAddress1.Sanitise();
@@ -127,18 +125,18 @@ namespace ADMS.Apprentice.Core.Services
 
         public void UpdateUSI(Profile profile, string usi)
         {
-            var currentUSI = profile.USIs.Where(x => x.ActiveFlag == true).SingleOrDefault();
+            var currentUSI = profile.USIs.SingleOrDefault(x => x.ActiveFlag == true);
             if (currentUSI == null && !usi.IsNullOrEmpty())
             {
                 //add the new USI
-                profile.USIs.Add(new ApprenticeUSI { USI = usi, ActiveFlag = true });
+                profile.USIs.Add(new ApprenticeUSI {USI = usi, ActiveFlag = true});
                 triggerUsiVerification = true;
             }
             else if (currentUSI != null && !usi.IsNullOrEmpty() && currentUSI.USI != usi)
             {
                 //set the activeFlag to false of current active USI and add the new USI                
                 currentUSI.ActiveFlag = false;
-                profile.USIs.Add(new ApprenticeUSI { USI = usi, ActiveFlag = true, USIChangeReason = $"Updating USI from { currentUSI.USI } to { usi }" });
+                profile.USIs.Add(new ApprenticeUSI {USI = usi, ActiveFlag = true, USIChangeReason = $"Updating USI from {currentUSI.USI} to {usi}"});
                 triggerUsiVerification = true;
             }
             else if (currentUSI != null && usi.IsNullOrEmpty())
@@ -160,26 +158,26 @@ namespace ADMS.Apprentice.Core.Services
             {
                 //if no phone details for the profile , add the new ones
                 profile.Phones = phoneMessage.Select(c => new Phone()
-                { PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag }).ToList();
+                    {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList();
             }
             else
             {
                 //update the existing ones, add new ones and remove the ones not in message                
-                
+
                 var profilePhoneIds = profile.Phones.Select(x => x.Id).ToList();
                 var messagePhoneIds = phoneMessage.Select(x => x.Id).ToList();
-               
+
                 var toAdd = phoneMessage.Where(x => x.Id == 0).ToList();
                 var toRemove = profile.Phones.Where(x => !messagePhoneIds.Contains(x.Id)).ToList();
                 var toUpdate = phoneMessage.Where(x => profilePhoneIds.Contains(x.Id)).ToList();
 
-                toAdd.ForEach(x => profile.Phones.Add(new Phone() { PhoneNumber = x.PhoneNumber, PreferredPhoneFlag = x.PreferredPhoneFlag }));
+                toAdd.ForEach(x => profile.Phones.Add(new Phone() {PhoneNumber = x.PhoneNumber, PreferredPhoneFlag = x.PreferredPhoneFlag}));
                 toRemove.ForEach(x => profile.Phones.Remove(x));
                 toUpdate.ForEach(x =>
                 {
-                    profile.Phones.Where(y => y.Id == x.Id).SingleOrDefault().PhoneNumber = x.PhoneNumber;
-                    profile.Phones.Where(y => y.Id == x.Id).SingleOrDefault().PreferredPhoneFlag = x.PreferredPhoneFlag;
-                });                   
+                    profile.Phones.SingleOrDefault(y => y.Id == x.Id).PhoneNumber = x.PhoneNumber;
+                    profile.Phones.SingleOrDefault(y => y.Id == x.Id).PreferredPhoneFlag = x.PreferredPhoneFlag;
+                });
             }
         }
 
@@ -187,7 +185,6 @@ namespace ADMS.Apprentice.Core.Services
         public void UpdateCRN(Profile profile, ServiceAustraliaUpdateMessage message)
         {
             profile.CustomerReferenceNumber = message.CustomerReferenceNumber.Sanitise();
-             
         }
     }
 }

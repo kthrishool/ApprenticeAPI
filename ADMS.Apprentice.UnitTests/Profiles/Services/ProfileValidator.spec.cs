@@ -110,31 +110,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         #region LeftSchoolDetailsValidation
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfLeftSchoolYearIsInvalid()
+        public void ThrowsValidationExceptionIfLeftSchoolIsLesstahnDOB()
         {
-            //should accept year between 1900 and current year
-            validProfile.LeftSchoolYear = 1800;
-            ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
-                .Should().Throw<ValidationException>();
-        }
-
-        [TestMethod]
-        public void ThrowsValidationExceptionIfLeftSchoolMonthIsInvalid()
-        {
-            validProfile.LeftSchoolYear = 2000;
-            validProfile.LeftSchoolMonthCode = "Invalid";
-            ChangeException(ValidationExceptionType.InvalidMonthCode);
-            ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
-                .Should().Throw<ValidationException>();
-        }
-
-        [TestMethod]
-        public void ThrowsValidationExceptionIfLeftSchoolMonthIsMissing()
-        {
-            validProfile.LeftSchoolYear = 2000;
-            validProfile.LeftSchoolMonthCode = null;
+            validProfile.LeftSchoolDate = ProfileConstants.Birthdate.AddDays(-1);
             ChangeException(ValidationExceptionType.InvalidLeftSchoolDetails);
             ClassUnderTest
                 .Invoking(async c => await c.ValidateAsync(validProfile))
@@ -142,23 +120,17 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfLeftSchoolYearIsMissing()
+        public async Task DoNothingIsDayLeftSchoolIsValid()
         {
-            validProfile.LeftSchoolYear = null;
-            validProfile.LeftSchoolMonthCode = "JAN";
-            ChangeException(ValidationExceptionType.InvalidLeftSchoolDetails);
-            ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
-                .Should().Throw<ValidationException>();
-        }
-
-        [TestMethod]
-        public async Task SetsLeftSchoolDateIfLeftSchoolMonthYearIsValid()
-        {
-            validProfile.LeftSchoolYear = 2000;
-            validProfile.LeftSchoolMonthCode = "JAN";
+            validProfile.LeftSchoolDate = ProfileConstants.Birthdate.AddYears(10);
             await ClassUnderTest.ValidateAsync(validProfile);
-            validProfile.LeftSchoolDate.Should().Be(new DateTime(2000, 1, 1));
+        }
+
+        [TestMethod]
+        public async Task DoNothingIsDayLeftSchoolIsEqual()
+        {
+            validProfile.LeftSchoolDate = ProfileConstants.Birthdate;
+            await ClassUnderTest.ValidateAsync(validProfile);
         }
 
         #endregion

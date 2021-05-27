@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services;
@@ -7,9 +10,6 @@ using ADMS.Apprentice.UnitTests.Constants;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -26,7 +26,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile = new Profile();
             message = new UpdateProfileMessage
             {
-
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
@@ -38,11 +37,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 ResidentialAddress = ProfileConstants.ResidentialAddress,
                 PostalAddress = ProfileConstants.PostalAddress,
                 PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
-
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
-                LeftSchoolMonthCode = ProfileConstants.LeftSchoolMonthCode,
-                LeftSchoolYear = ProfileConstants.LeftSchoolYear,
-
+                LeftSchoolDate = ProfileConstants.LeftSchoolDate,
                 IndigenousStatusCode = ProfileConstants.IndigenousStatusCode,
                 SelfAssessedDisabilityCode = ProfileConstants.SelfAssessedDisabilityCode,
                 CitizenshipCode = ProfileConstants.CitizenshipCode,
@@ -119,8 +115,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.Addresses.Clear();
             profile.Addresses.Add(new Address()
             {
-                StreetAddress1 = "street address 1",                
-                Locality ="Locality1",
+                StreetAddress1 = "street address 1",
+                Locality = "Locality1",
                 StateCode = "ACT",
                 Postcode = "2615",
                 AddressTypeCode = AddressType.RESD.ToString(),
@@ -133,7 +129,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 Postcode = "2615",
                 AddressTypeCode = AddressType.POST.ToString(),
             });
-            
+
             //when
             profile = await ClassUnderTest.Update(profile, message);
 
@@ -166,7 +162,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             message = new UpdateProfileMessage
             {
-
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
@@ -178,7 +173,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile = await ClassUnderTest.Update(profile, message);
 
             //then
-            profile.Addresses.Count.Should().Be(0);            
+            profile.Addresses.Count.Should().Be(0);
         }
 
         [TestMethod]
@@ -202,15 +197,14 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PreferredPhoneFlag = false,
                 Id = 2
             });
-             
+
             List<UpdatePhoneNumberMessage> UpdatedPhoneNumbers = new List<UpdatePhoneNumberMessage>()
             {
-                new UpdatePhoneNumberMessage() {PhoneNumber = phonenumber2, Id = 1},    
-                new UpdatePhoneNumberMessage() {PhoneNumber = phonenumber3, PreferredPhoneFlag = true }
+                new UpdatePhoneNumberMessage() {PhoneNumber = phonenumber2, Id = 1},
+                new UpdatePhoneNumberMessage() {PhoneNumber = phonenumber3, PreferredPhoneFlag = true}
             };
             message = new UpdateProfileMessage
             {
-
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
@@ -234,11 +228,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public async Task VerifyUsiIfFirstNameChanged()
         {
             //given
-            profile.FirstName = "firstName";           
+            profile.FirstName = "firstName";
 
             message = new UpdateProfileMessage
             {
-
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
@@ -262,7 +255,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             message = new UpdateProfileMessage
             {
-
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
@@ -273,7 +265,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             //when
             profile = await ClassUnderTest.Update(profile, message);
-            
+
             //then
             Container.GetMock<IUSIVerify>().Verify(r => r.Verify(profile));
         }
@@ -283,10 +275,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             //given            
             profile.Surname = "surName";
-            
+
             message = new UpdateProfileMessage
             {
-
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
@@ -321,11 +312,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void Given()
         {
-            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
-            profile.USIs = new List<ApprenticeUSI>() { new ApprenticeUSI { USI = "currentUSI", ActiveFlag = true } };
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
+            profile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI {USI = "currentUSI", ActiveFlag = true}};
             message = new UpdateProfileMessage
             {
-
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
@@ -342,15 +332,15 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldUpdateUSI()
         {
-            profile.USIs.Count.Should().Be(2);            
-            profile.USIs.Where(x => x.ActiveFlag == true).SingleOrDefault().USI.Should().Be(message.USI);            
+            profile.USIs.Count.Should().Be(2);
+            profile.USIs.Where(x => x.ActiveFlag == true).SingleOrDefault().USI.Should().Be(message.USI);
         }
 
         [TestMethod]
         public async Task ShouldAddNewUSI()
         {
             //given
-            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
             profile.USIs.Clear();
 
             //when
@@ -364,15 +354,14 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public async Task SetExistingUSIFlagToFalseIfNoUSI()
         {
             //given
-            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
-            profile.USIs = new List<ApprenticeUSI>() { new ApprenticeUSI { USI = "currentUSI", ActiveFlag = true } };
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
+            profile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI {USI = "currentUSI", ActiveFlag = true}};
             message = new UpdateProfileMessage
             {
-
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
-                ProfileType = ProfileConstants.Profiletype                
+                ProfileType = ProfileConstants.Profiletype
             };
 
             //when
@@ -394,7 +383,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void Given()
         {
-            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname };
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname};
         }
 
         protected override void When()
@@ -421,8 +410,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void Given()
         {
-            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, DeceasedFlag = true };
-            message = new AdminUpdateMessage { DeceasedFlag = false };
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, DeceasedFlag = true};
+            message = new AdminUpdateMessage {DeceasedFlag = false};
         }
 
         protected override void When()

@@ -44,9 +44,6 @@ namespace ADMS.Apprentice.Core.Entities
         public virtual ICollection<Qualification> Qualifications { get; set; }
 
         public virtual ICollection<Guardian> Guardians { get; set; }
-        //Not mapped fields
-        public string LeftSchoolMonthCode;
-        public int? LeftSchoolYear;
         public virtual ICollection<ApprenticeUSI> USIs { get; set; }
 
         public Profile()

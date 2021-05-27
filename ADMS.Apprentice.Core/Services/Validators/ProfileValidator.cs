@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
@@ -47,12 +46,12 @@ namespace ADMS.Apprentice.Core.Services.Validators
             if (!EmailValidation(profile.EmailAddress))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidEmailAddress);
 
-            if (ValidateLeftSchoolDetails(profile.LeftSchoolMonthCode, profile.LeftSchoolYear))
+            if (profile.LeftSchoolDate != null)
             {
-                //At this point we know we have a valid month and year..
-                //so create the date out of it if Months and Years exist.
-                profile.LeftSchoolDate = profile.LeftSchoolYear.HasValue ? new DateTime(profile.LeftSchoolYear.Value, DateTime.ParseExact(profile.LeftSchoolMonthCode, "MMM", CultureInfo.CurrentCulture).Month, 1) : null;
+                if (Convert.ToDateTime(profile.LeftSchoolDate) < profile.BirthDate)
+                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidLeftSchoolDetails);
             }
+
 
             // Phone validation
             PhoneValidation(profile);
@@ -111,23 +110,6 @@ namespace ADMS.Apprentice.Core.Services.Validators
             var age = DateTime.Now.Year - birthDate.Year;
             if (DateTime.Now.DayOfYear < birthDate.DayOfYear) age--;
             return age >= 12;
-        }
-
-        private bool ValidateLeftSchoolDetails(string monthCode, int? year)
-        {
-            //check month code
-            if (!monthCode.IsNullOrEmpty() && !Enum.IsDefined(typeof(MonthCode), monthCode))
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidMonthCode);
-
-            //check valid year
-            if (year.HasValue && (year < 1900 || year > DateTime.Now.Year))
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidLeftSchoolYear);
-
-            //if month exist, need year and vice versa
-            if ((year.HasValue && monthCode.IsNullOrEmpty()) || (!monthCode.IsNullOrEmpty() && !year.HasValue))
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidLeftSchoolDetails);
-
-            return true;
         }
 
 
