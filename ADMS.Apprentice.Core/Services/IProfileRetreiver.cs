@@ -12,6 +12,6 @@ namespace ADMS.Apprentice.Core.Services
     public interface IProfileRetreiver
     {
         IQueryable<Profile> RetreiveList();
-        IEnumerable<ProfileSearchResultModel> Search(ProfileSearchMessage message);        
+        ICollection<ProfileSearchResultModel> Search(ProfileSearchMessage message);        
     }
 }

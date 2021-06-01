@@ -12,16 +12,17 @@ namespace ADMS.Apprentice.Core.Models
     /// </summary>
     public record ProfileSearchResultModel
     (
-        int ApprenticeId ,
-        //string CustomerReferenceNumber,
-        string ProfileTypeCode,
-        //string TitleCode,
-        string FirstName,
-        string OtherNames,
+        int ApprenticeId,        
+        string ProfileTypeCode,        
+        string FirstName,        
         string Surname,
-        string GenderCode,
+        string OtherNames,
         DateTime BirthDate,
+        string EmailAddress,
+        string USI,
+        string PhoneNumber,
+        string ResidentialAddress,
+        string PostalAddress,
         int ScoreValue
-        //int? PreviousApprenticeId
     );
 }

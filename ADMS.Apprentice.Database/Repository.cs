@@ -28,7 +28,10 @@ namespace ADMS.Apprentice.Database
 
         public async Task<ICollection<ProfileSearchResultModel>> GetProfilesAsync(ProfileSearchMessage searchMessage)
         {
-            FormattableString query = $"ApprenticeFuzzySearch @Surname = {searchMessage.Surname}, @FirstName = {searchMessage.FirstName}, @BirthDateStartRange = {searchMessage.BirthDate}, @BirthDateEndRange = {searchMessage.BirthDate}";
+            FormattableString query = $@"ApprenticeAdvancedSearch @Surname = {searchMessage.Surname}, @FirstName = {searchMessage.FirstName}, 
+                @BirthDateStartRange = {searchMessage.BirthDate}, @BirthDateEndRange = {searchMessage.BirthDate}, @EmailAddress = {searchMessage.EmailAddress}, 
+                @USI = {searchMessage.USI}, @PhoneNumber = {searchMessage.Phonenumber}";//, @AddressString = {searchMessage.Address}";
+
             return await Set<ProfileSearchResultModel>()
                 .FromSqlInterpolated(query).ToListAsync();         
                    

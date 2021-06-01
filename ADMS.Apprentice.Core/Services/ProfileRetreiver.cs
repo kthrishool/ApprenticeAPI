@@ -2,7 +2,6 @@
 using ADMS.Apprentice.Core.Entities;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
-using System.Diagnostics.CodeAnalysis;
 using ADMS.Apprentice.Core.Models;
 using ADMS.Apprentice.Core.Messages;
 using System.Threading.Tasks;
@@ -10,8 +9,6 @@ using System.Collections.Generic;
 
 namespace ADMS.Apprentice.Core.Services
 {
-    //TODO: implement unit testing
-    [ExcludeFromCodeCoverage]
     public class ProfileRetreiver : IProfileRetreiver
     {
         private readonly IRepository repository;
@@ -29,7 +26,7 @@ namespace ADMS.Apprentice.Core.Services
         }
 
         /// <summary>
-        /// Returns as list of apprentices based on the search criteria        
+        /// Returns as list of apprentices       
         /// </summary>
         public IQueryable<Profile> RetreiveList() 
         {
@@ -45,9 +42,9 @@ namespace ADMS.Apprentice.Core.Services
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public  IEnumerable<ProfileSearchResultModel> Search(ProfileSearchMessage message)
-        {
-            return  apprenticeRepository.GetProfilesAsync(message).Result;
+        public ICollection<ProfileSearchResultModel> Search(ProfileSearchMessage message)
+        {            
+            return apprenticeRepository.GetProfilesAsync(message).Result;
         }
     }
 }
