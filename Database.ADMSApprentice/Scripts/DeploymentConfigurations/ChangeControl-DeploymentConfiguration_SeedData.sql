@@ -1,4 +1,4 @@
-﻿--[ChangeControl-DeploymentConfiguration_SeedData.sql|2.0]
+﻿--[ChangeControl-DeploymentConfiguration_SeedData.sql|2.2]
 RAISERROR('STARTING ChangeControl-DeploymentConfiguration_SeedData.sql...',10,1) WITH NOWAIT;
 SET NOCOUNT ON;
 
@@ -39,10 +39,28 @@ UNION	SELECT		'ALL'			,'DeloymentStartDtm'												, CONVERT(VARCHAR(100),GET
 --UNION	SELECT		'ALL'			,'AdminConfiguration_Enable_ReapplyReleaseTasks'					,'1'
 UNION	SELECT		'ALL'			,'AdminConfiguration_Disable_DeleteSecurity'						,'1' 
 )
-INSERT INTO #DeploymentConfigurations (ConfigurationName, ConfigurationValue) 
-SELECT		ConfigurationName, ConfigurationValue
-FROM		general_configurations													
-WHERE		Environment  IN ( @DeploymentConfiguration_SeedData_Environment, 'ALL' )
+,filter_environment AS
+(
+SELECT DISTINCT e.Element																						AS EnvironmentName
+				,v.ConfigurationName
+				,v.ConfigurationValue
+FROM			general_configurations																			v
+CROSS APPLY		[DeploymentAdmin].ChangeControl.UDF_SplitStringToTable_varcharmax(v.Environment,',')			e
+WHERE			e.Element	IN ( @DeploymentConfiguration_SeedData_Environment, 'ALL'	)
+)
+,ranked_configurations AS
+(
+SELECT			ROW_NUMBER() OVER (PARTITION BY ConfigurationName ORDER BY CASE WHEN EnvironmentName = 'ALL' THEN 0 ELSE 1 END DESC) AS configuration_rank
+				,ConfigurationName
+				,ConfigurationValue
+FROM			filter_environment
+)
+INSERT INTO		#DeploymentConfigurations (ConfigurationName, ConfigurationValue)
+SELECT			ConfigurationName
+				,ConfigurationValue
+FROM			ranked_configurations 
+WHERE			configuration_rank							= 1 --de-dupe any configurations
+
 
 SELECT @DeploymentConfiguration_SeedData_NewVersionNumber = ConfigurationValue FROM #DeploymentConfigurations WHERE ConfigurationName = 'NewVersionNumber'
 
@@ -51,10 +69,10 @@ SELECT @DeploymentConfiguration_SeedData_NewVersionNumber = ConfigurationValue F
 ------------------------------------------------CDC Configurations------------------------------------------------
 --which cdc enabled tables have changes for the next release?  i.e. CDC tables to be stopped 
 ;WITH cdc_tables_with_changes 
-(					tbl_schema				,tbl_name									,NewVersionNumber) 
+(					tbl_schema				,tbl_name) 
 AS
 (
-		SELECT		NULL					,NULL										,NULL
+		SELECT		NULL					,NULL										
 )
 --which tables should be enabled for CDC?
 ,cdc_enabled_tables 
@@ -64,34 +82,47 @@ AS
 		SELECT		NULL					,NULL
 )
 ,cdc_job_configurations 
-(					Environment				,ConfigurationName						,ConfigurationValue)
+(					Environment				,ConfigurationName							,ConfigurationValue)
 AS
 (
-		SELECT		'PROD,PREPROD'			,'CDC_Cleanup_retention'				,'10080'	--7 days
-UNION	SELECT		'DEV,TEST'				,'CDC_Cleanup_retention'				,'4320'		--3 days
+		SELECT		'PROD,PREPROD'			,'CDC_Cleanup_retention'					,'10080'	--7 days
+UNION	SELECT		'DEV,TEST'				,'CDC_Cleanup_retention'					,'4320'		--3 days
 
-UNION	SELECT		'ALL'					,'CDC_Capture_maxtrans'					,'500'
-UNION	SELECT		'ALL'					,'CDC_Capture_maxscans'					,'10'
+UNION	SELECT		'ALL'					,'CDC_Capture_maxtrans'						,'500'
+UNION	SELECT		'ALL'					,'CDC_Capture_maxscans'						,'10'
+
+UNION	SELECT		'ALL'					,'CDC_Role_Name'							,'CDCRole'
+UNION	SELECT		'ALL'					,'CDC_Support_Net_Changes'					,'1'		--default behaviour 0/off
+UNION	SELECT		'ALL'					,'CDC_Additional_Backup_Columns'			,'1'		--default behaviour 0/off
 )
-,cdc_tables_with_changes_filtered (tbl_schema ,tbl_name) 
-AS
+,filter_environment AS
 (
-SELECT		c.tbl_schema 
-			,c.tbl_name 
-FROM		cdc_tables_with_changes																										c
-WHERE		c.NewVersionNumber = @DeploymentConfiguration_SeedData_NewVersionNumber
+SELECT DISTINCT e.Element																						AS EnvironmentName
+				,v.ConfigurationName
+				,v.ConfigurationValue
+FROM			cdc_job_configurations																			v
+CROSS APPLY		[DeploymentAdmin].ChangeControl.UDF_SplitStringToTable_varcharmax(v.Environment,',')			e
+WHERE			e.Element	IN ( @DeploymentConfiguration_SeedData_Environment, 'ALL'	)
 )
-INSERT INTO #DeploymentConfigurations (ConfigurationName, ConfigurationValue) 
-SELECT		n.ConfigurationName																											AS ConfigurationName
-			,n.ConfigurationValue																										AS ConfigurationValue
-FROM		cdc_job_configurations																										n
-WHERE		n.Environment  IN ( @DeploymentConfiguration_SeedData_Environment, 'ALL' )
+,ranked_configurations AS
+(
+SELECT			ROW_NUMBER() OVER (PARTITION BY ConfigurationName ORDER BY CASE WHEN EnvironmentName = 'ALL' THEN 0 ELSE 1 END DESC) AS configuration_rank
+				,ConfigurationName
+				,ConfigurationValue
+FROM			filter_environment
+)
+INSERT INTO		#DeploymentConfigurations (ConfigurationName, ConfigurationValue)
+SELECT			ConfigurationName
+				,ConfigurationValue
+FROM			ranked_configurations 
+WHERE			configuration_rank							= 1 --de-dupe any configurations
 UNION
-SELECT		'CDCEnabledTables'																											AS ConfigurationName
-			,SUBSTRING((SELECT ',' + tbl_schema + '.' + tbl_name FROM cdc_enabled_tables FOR XML PATH ( '' ) ), 2, 50000)				AS ConfigurationValue
+SELECT			'CDCEnabledTables'																											AS ConfigurationName
+				,SUBSTRING((SELECT ',' + tbl_schema + '.' + tbl_name FROM cdc_enabled_tables FOR XML PATH ( '' ) ), 2, 50000)				AS ConfigurationValue
 UNION
-SELECT		'CDCTablesWithChanges'																										AS ConfigurationName
-			,SUBSTRING((SELECT ',' + tbl_schema + '.' + tbl_name FROM cdc_tables_with_changes_filtered FOR XML PATH ( '' ) ), 2, 50000)	AS ConfigurationValue
+SELECT			'CDCTablesWithChanges'																										AS ConfigurationName
+				,SUBSTRING((SELECT ',' + tbl_schema + '.' + tbl_name FROM cdc_tables_with_changes FOR XML PATH ( '' ) ), 2, 50000)			AS ConfigurationValue
+
 
 
 BEGIN TRY
@@ -119,4 +150,4 @@ BEGIN CATCH
 	--failure of this script should prevent further predeployment scripts from being run (treat as a showstopper)
 	SET NOEXEC ON;
 END CATCH
---[ChangeControl-DeploymentConfiguration_SeedData.sql|2.0]
+--[ChangeControl-DeploymentConfiguration_SeedData.sql|2.2]
