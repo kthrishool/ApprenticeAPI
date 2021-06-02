@@ -11,7 +11,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ADMS.Apprentice.Core.Services
 {
-    [ExcludeFromCodeCoverage]
     public class ProfileRetreiver : IProfileRetreiver
     {
         private readonly IRepository repository;
@@ -53,8 +52,8 @@ namespace ADMS.Apprentice.Core.Services
 
             if (message.EmailAddress?.Length < 4 && message.FirstName == null && message.Surname == null && message.OtherNames == null &&
                 message.BirthDate == null && message.Address == null && message.Phonenumber == null && message.USI == null)
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidEmailAddress);
-            
+                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidEmailSearch);
+
             return apprenticeRepository.GetProfilesAsync(message).Result;
         }
     }
