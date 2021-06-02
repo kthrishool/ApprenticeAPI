@@ -48,7 +48,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
             if (profile.LeftSchoolDate != null)
             {
-                if (Convert.ToDateTime(profile.LeftSchoolDate) < profile.BirthDate)
+                if (Convert.ToDateTime(profile.LeftSchoolDate) < profile.BirthDate || Convert.ToDateTime(profile.LeftSchoolDate) > DateTime.Now)
                     throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidLeftSchoolDetails);
             }
 
