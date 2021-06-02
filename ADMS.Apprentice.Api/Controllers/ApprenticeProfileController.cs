@@ -30,7 +30,7 @@ namespace ADMS.Apprentice.Api.Controllers
         private readonly IPagingHelper pagingHelper;
         private readonly IProfileCreator profileCreator;
         private readonly IProfileUpdater profileUpdater;
-        private readonly IProfileRetreiver profileRetreiver;        
+        private readonly IProfileRetreiver profileRetreiver;
 
         /// <summary>Constructor</summary>
         public ApprenticeProfileController(
@@ -70,9 +70,9 @@ namespace ADMS.Apprentice.Api.Controllers
         /// </summary>
         /// <param name="message"></param>
         /// <param name="paging">Paging information</param>
-        [HttpGet("search")]
+        [HttpPost("search")]
         [SupportsPaging(null)]
-        public  ActionResult<PagedList<ProfileSearchResultModel>> Search([FromBody] ProfileSearchMessage message,  PagingInfo paging)
+        public  ActionResult<PagedList<ProfileSearchResultModel>> Search([FromBody] ProfileSearchMessage message, [FromQuery] PagingInfo paging)
         {
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("ScoreValue", true);

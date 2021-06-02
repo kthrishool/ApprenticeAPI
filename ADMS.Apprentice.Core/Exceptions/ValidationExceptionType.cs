@@ -116,6 +116,12 @@ namespace ADMS.Apprentice.Core.Exceptions
         AddressRecordNotFoundForGuardian,
 
         [ExceptionDetails("AP-VAL-0038", "Invalid guardian phone number")]
-        InvalidGuardianNumber
+        InvalidGuardianNumber,
+
+        [ExceptionDetails("AP-VAL-0039", "Minimum 8 numbers if searching only by phonenumber")]
+        InvalidPhonenumberSearch,
+
+        [ExceptionDetails("AP-VAL-0040", "Minimum 4 characters if searching only by email address")]
+        InvalidEmailSearch
     }
 }

@@ -6,9 +6,12 @@ using ADMS.Apprentice.Core.Models;
 using ADMS.Apprentice.Core.Messages;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using ADMS.Apprentice.Core.Exceptions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ADMS.Apprentice.Core.Services
 {
+    [ExcludeFromCodeCoverage]
     public class ProfileRetreiver : IProfileRetreiver
     {
         private readonly IRepository repository;
@@ -43,7 +46,15 @@ namespace ADMS.Apprentice.Core.Services
         /// <param name="message"></param>
         /// <returns></returns>
         public ICollection<ProfileSearchResultModel> Search(ProfileSearchMessage message)
-        {            
+        {       
+            if ( message.Phonenumber?.Length < 8 && message.FirstName == null && message.Surname == null && message.OtherNames == null && 
+                message.BirthDate == null && message.Address == null && message.EmailAddress == null && message.USI == null)
+                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPhonenumberSearch);
+
+            if (message.EmailAddress?.Length < 4 && message.FirstName == null && message.Surname == null && message.OtherNames == null &&
+                message.BirthDate == null && message.Address == null && message.Phonenumber == null && message.USI == null)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidEmailAddress);
+            
             return apprenticeRepository.GetProfilesAsync(message).Result;
         }
     }
