@@ -34,12 +34,18 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
         public async Task<Profile> ValidateAsync(Profile profile)
         {
+            if (profile.EmailAddress == null && (profile.Phones == null || profile.Phones.Count == 0))
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.MandatoryContact);
+
             if (profile.BirthDate.Year == 0001)
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidDOB);
+
             if (!ValidateAge(profile.BirthDate))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeAge);
+
             if (profile.ProfileTypeCode.IsNullOrEmpty())
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType);
+
             if (!(Enum.IsDefined(typeof(ProfileType), profile.ProfileTypeCode)))
                 throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType);
 
@@ -50,7 +56,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
             {
                 if (Convert.ToDateTime(profile.LeftSchoolDate) < profile.BirthDate || Convert.ToDateTime(profile.LeftSchoolDate) > DateTime.Now)
                     throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidLeftSchoolDetails);
-            }
+            }            
 
 
             // Phone validation

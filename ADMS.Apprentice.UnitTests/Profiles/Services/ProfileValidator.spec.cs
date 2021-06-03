@@ -97,6 +97,27 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
+        public void ThrowsValidationExceptionIfNoContact()
+        {
+            validProfile.EmailAddress = null;
+            ChangeException(ValidationExceptionType.MandatoryContact);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfNoPhone()
+        {
+            validProfile.EmailAddress = null;
+            validProfile.Phones = null;
+            ChangeException(ValidationExceptionType.MandatoryContact);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
         public void ThrowsValidationExceptionIfTypeIsInvalid()
         {
             validProfile.ProfileTypeCode = "Invalid";
@@ -110,7 +131,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         #region LeftSchoolDetailsValidation
 
         [TestMethod]
-        public void ThrowsValidationExceptionIfLeftSchoolIsLesstahnDOB()
+        public void ThrowsValidationExceptionIfLeftSchoolIsLessThanDOB()
         {
             validProfile.LeftSchoolDate = ProfileConstants.Birthdate.AddDays(-1);
             ChangeException(ValidationExceptionType.InvalidLeftSchoolDetails);
@@ -120,11 +141,23 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task DoNothingIsDayLeftSchoolIsValid()
+        public void ThrowsValidationExceptionIfLeftSchoolIsGreaterThanToday()
+        {
+            validProfile.LeftSchoolDate = DateTime.Today.AddDays(1);
+            ChangeException(ValidationExceptionType.InvalidLeftSchoolDetails);
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void DoNothingIsDayLeftSchoolIsValid()
         {
             validProfile.LeftSchoolDate = ProfileConstants.Birthdate.AddYears(10);
-            await ClassUnderTest.ValidateAsync(validProfile);
-        }
+            ClassUnderTest
+                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Should().NotThrow<ValidationException>();
+        }        
 
         [TestMethod]
         public async Task DoNothingIsDayLeftSchoolIsEqual()
@@ -135,9 +168,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         #endregion
 
-        /// <summary>
-        /// Insert a profile record and check if the email has been updated .
-        /// </summary>
+        
         [TestMethod]
         public async Task DoesNothingIfEmailIsEmpty()
         {
@@ -146,7 +177,13 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = DateTime.Now.AddYears(-14),
-                ProfileTypeCode = ProfileConstants.Profiletype
+                ProfileTypeCode = ProfileConstants.Profiletype,
+                Phones = new List<Phone> { new Phone()
+                {
+                    PhoneNumber = "0411111111",
+                    PhoneTypeCode = "MOBILE",
+                    PreferredPhoneFlag = true
+                } }                
             };
 
             await ClassUnderTest.ValidateAsync(invalidProfile);
@@ -308,7 +345,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = DateTime.Now.AddYears(-14),
-                ProfileTypeCode = ProfileConstants.Profiletype
+                ProfileTypeCode = ProfileConstants.Profiletype,
+                EmailAddress = ProfileConstants.Emailaddress
             };
 
             await ClassUnderTest.ValidateAsync(invalidProfile);
