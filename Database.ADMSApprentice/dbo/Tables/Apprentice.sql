@@ -15,7 +15,7 @@
     [EducationLevelCode]         VARCHAR (10)    NULL,
     [LeftSchoolDate]             DATE            NULL,
     [ProfileTypeCode]            VARCHAR (10)    NOT NULL,
-    [VisaNumber]                 VARCHAR (11)    NULL,
+    [VisaNumber]                 VARCHAR (25)    NULL,
     [CountryOfBirthCode]         VARCHAR (10)    NULL,
     [LanguageCode]               VARCHAR (10)    NULL,
     [InterpretorRequiredFlag]    BIT             NULL,
