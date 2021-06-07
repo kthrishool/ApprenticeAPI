@@ -51,8 +51,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             message = new ProfileSearchMessage
             {
-                Surname = ProfileConstants.Surname,
-                FirstName = ProfileConstants.Firstname,
+                Name = ProfileConstants.Surname,                
                 BirthDate = ProfileConstants.Birthdate
             };
         }

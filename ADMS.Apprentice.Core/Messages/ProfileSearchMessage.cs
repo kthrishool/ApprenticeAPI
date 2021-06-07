@@ -6,11 +6,9 @@ namespace ADMS.Apprentice.Core.Messages
 {
     public record ProfileSearchMessage
     {
-        public string Surname { get; init; }
+        public int? ApprenticeID { get; init; }
 
-        public string FirstName { get; init; }
-
-        public string OtherNames { get; init; }
+        public string Name { get; init; }        
 
         public DateTime? BirthDate { get; init; }
 

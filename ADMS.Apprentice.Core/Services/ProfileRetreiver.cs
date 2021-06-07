@@ -46,11 +46,11 @@ namespace ADMS.Apprentice.Core.Services
         /// <returns></returns>
         public ICollection<ProfileSearchResultModel> Search(ProfileSearchMessage message)
         {       
-            if ( message.Phonenumber?.Length < 8 && message.FirstName == null && message.Surname == null && message.OtherNames == null && 
+            if ( message.Phonenumber?.Length < 8 && message.Name == null && 
                 message.BirthDate == null && message.Address == null && message.EmailAddress == null && message.USI == null)
                     throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPhonenumberSearch);
 
-            if (message.EmailAddress?.Length < 4 && message.FirstName == null && message.Surname == null && message.OtherNames == null &&
+            if (message.EmailAddress?.Length < 4 && message.Name == null &&
                 message.BirthDate == null && message.Address == null && message.Phonenumber == null && message.USI == null)
                     throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidEmailSearch);
 

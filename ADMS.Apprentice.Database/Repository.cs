@@ -28,8 +28,8 @@ namespace ADMS.Apprentice.Database
 
         public async Task<ICollection<ProfileSearchResultModel>> GetProfilesAsync(ProfileSearchMessage searchMessage)
         {
-            FormattableString query = $@"ApprenticeAdvancedSearch @Surname = {searchMessage.Surname}, @FirstName = {searchMessage.FirstName}, 
-                @BirthDateStartRange = {searchMessage.BirthDate}, @BirthDateEndRange = {searchMessage.BirthDate}, @EmailAddress = {searchMessage.EmailAddress}, 
+            FormattableString query = $@"ApprenticeAdvancedSearch @Names = {searchMessage.Name}, @ApprenticeID = {searchMessage.ApprenticeID}, 
+                @BirthDate = {searchMessage.BirthDate}, @EmailAddress = {searchMessage.EmailAddress}, 
                 @USI = {searchMessage.USI}, @PhoneNumber = {searchMessage.Phonenumber}, @AddressString = {searchMessage.Address}";
 
             return await Set<ProfileSearchResultModel>()
