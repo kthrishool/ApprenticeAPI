@@ -124,7 +124,7 @@ namespace ADMS.Apprentice.Core.Exceptions
         [ExceptionDetails("AP-VAL-0040", "Minimum 4 characters if searching only by email address")]
         InvalidEmailSearch,
 
-        [ExceptionDetails("AP-VAL-0041", "Atleast one contact information (Phone or Email) is mandatory")]
+        [ExceptionDetails("AP-VAL-0041", "A phone or email address must be provided")]
         MandatoryContact
     }
 }
