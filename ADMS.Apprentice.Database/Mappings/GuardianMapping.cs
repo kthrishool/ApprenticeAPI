@@ -38,8 +38,7 @@ namespace ADMS.Apprentice.Database.Mappings
                 .HasColumnName("WorkPhoneNumber")
                 .HasMaxLength(15);
             entity.Property(x => x.StreetAddress1)
-                .HasColumnName("StreetAddress1")
-                .IsRequired()
+                .HasColumnName("StreetAddress1")                
                 .HasMaxLength(100);
 
             entity.Property(x => x.StreetAddress2)
@@ -54,18 +53,15 @@ namespace ADMS.Apprentice.Database.Mappings
                 .HasMaxLength(375);
 
             entity.Property(x => x.Locality)
-                .HasColumnName("Locality")
-                .IsRequired()
+                .HasColumnName("Locality")                
                 .HasMaxLength(50);
 
             entity.Property(x => x.StateCode)
-                .HasColumnName("StateCode")
-                .IsRequired()
+                .HasColumnName("StateCode")                
                 .HasMaxLength(10);
 
             entity.Property(x => x.Postcode)
-                .HasColumnName("Postcode")
-                .IsRequired()
+                .HasColumnName("Postcode")                
                 .HasMaxLength(10);
 
             entity.Property(x => x.Version)

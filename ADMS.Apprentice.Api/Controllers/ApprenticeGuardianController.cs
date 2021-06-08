@@ -10,6 +10,7 @@ using Adms.Shared;
 using Adms.Shared.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Adms.Shared.Filters;
 
 namespace ADMS.Apprentice.Api.Controllers
 {
@@ -27,20 +28,58 @@ namespace ADMS.Apprentice.Api.Controllers
         private readonly IRepository repository;
         private readonly IExceptionFactory exceptionFactory;
         private readonly IGuardianCreator guardianCreator;
+        private readonly IGuardianUpdater guardianUpdater;
 
         /// <summary>Constructor</summary>
         public ApprenticeGuardianController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
             IExceptionFactory exceptionFactory,
-            IGuardianCreator guardianCreator
+            IGuardianCreator guardianCreator,
+            IGuardianUpdater guardianUpdater
         ) : base(contextAccessor)
         {
             this.repository = repository;
             this.exceptionFactory = exceptionFactory;
             this.guardianCreator = guardianCreator;
+            this.guardianUpdater = guardianUpdater;
         }
 
+        /// <summary>
+        /// List all guardians of an apprentice.
+        /// </summary>
+        /// <param name="apprenticeId">apprenticeId</param>
+        [HttpGet]        
+        public async Task<ActionResult<ProfileGuardianModel[]>> List(int apprenticeId)
+        {
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
+            if (profile == null)
+                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());            
+
+            ProfileGuardianModel[] models = profile.Guardians
+                .OrderByDescending(x => x.Id)
+                .Select(x => new ProfileGuardianModel(x))
+                .ToArray();
+            return Ok(models);
+        }
+
+        /// <summary>
+        /// Gets all information of a given guardian id.
+        /// </summary>
+        /// <param name="apprenticeId">Id of the apprentice</param>
+        /// <param name="id">Id of the parent / guardian</param>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProfileGuardianModel>> Get(int apprenticeId, int id)
+        {
+            Guardian guardian;
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
+            guardian = profile.Guardians.SingleOrDefault(x => x.Id == id);
+
+            if(guardian == null)
+                throw exceptionFactory.CreateNotFoundException("Apprentice guardian", id.ToString());
+
+            return Ok(new ProfileGuardianModel(guardian));
+        }
 
         /// <summary>
         /// Adds a new guardian for an apprentice
@@ -60,22 +99,26 @@ namespace ADMS.Apprentice.Api.Controllers
             return Created($"/{apprenticeId}", new ProfileGuardianModel(guardian));
         }
 
-
         /// <summary>
-        /// Gets all information of a given guardian id.
+        /// Updates an existing parent/guardian.
         /// </summary>
-        /// <param name="apprenticeId">Id of the apprentice</param>
-        /// <param name="id">Id of the parent / guardian</param>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ProfileGuardianModel>> Get(int apprenticeId, int id)
+        /// <param name="apprenticeId">ID of the apprentice</param>
+        /// <param name="id">ID of the  parent/guardian to be updated</param>
+        /// <param name="message">Details of the information to be updated</param>
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ProfileGuardianModel>> Update(int apprenticeId, int id, [FromBody] ProfileGuardianMessage message)
         {
-            Guardian guardian;
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
-            if (profile.Guardians.Any(c => c.Id == id))
-                guardian = profile.Guardians.SingleOrDefault(x => x.Id == id);
-            else
-                return NotFound();
+            if (profile == null)
+                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
 
+            Guardian guardian = profile.Guardians.SingleOrDefault(x => x.Id == id);
+            if (guardian == null)
+                throw exceptionFactory.CreateNotFoundException("Apprentice guardian ", id.ToString());
+
+            await guardianUpdater.Update(guardian, message);
+
+            await repository.SaveAsync();
             return Ok(new ProfileGuardianModel(guardian));
         }
     }

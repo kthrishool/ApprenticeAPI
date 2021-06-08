@@ -32,8 +32,21 @@
             Apprentice guardian endpoints of a given apprentice.
             </summary>
         </member>
-        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Exceptions.IExceptionFactory,ADMS.Apprentice.Core.Services.IGuardianCreator)">
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Exceptions.IExceptionFactory,ADMS.Apprentice.Core.Services.IGuardianCreator,ADMS.Apprentice.Core.Services.IGuardianUpdater)">
             <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.List(System.Int32)">
+            <summary>
+            List all guardians of an apprentice.
+            </summary>
+            <param name="apprenticeId">apprenticeId</param>
+        </member>
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets all information of a given guardian id.
+            </summary>
+            <param name="apprenticeId">Id of the apprentice</param>
+            <param name="id">Id of the parent / guardian</param>
         </member>
         <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.Create(System.Int32,ADMS.Apprentice.Core.Messages.ProfileGuardianMessage)">
             <summary>
@@ -42,12 +55,13 @@
             <param name="apprenticeId">apprenticeId</param>
             <param name="message">Details of the guardian to be created</param>
         </member>
-        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.Get(System.Int32,System.Int32)">
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController.Update(System.Int32,System.Int32,ADMS.Apprentice.Core.Messages.ProfileGuardianMessage)">
             <summary>
-            Gets all information of a given guardian id.
+            Updates an existing parent/guardian.
             </summary>
-            <param name="apprenticeId">Id of the apprentice</param>
-            <param name="id">Id of the parent / guardian</param>
+            <param name="apprenticeId">ID of the apprentice</param>
+            <param name="id">ID of the  parent/guardian to be updated</param>
+            <param name="message">Details of the information to be updated</param>
         </member>
         <member name="T:ADMS.Apprentice.Api.Controllers.ApprenticeProfileController">
             <summary>
