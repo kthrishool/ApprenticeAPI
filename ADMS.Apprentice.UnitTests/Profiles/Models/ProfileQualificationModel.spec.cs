@@ -41,25 +41,18 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Models
             qualificationModel.QualificationDescription.Should().Be(ProfileConstants.Qualification.QualificationDescription);
             qualificationModel.QualificationLevel.Should().Be(ProfileConstants.Qualification.QualificationLevel);
             qualificationModel.QualificationANZSCOCode.Should().Be(ProfileConstants.Qualification.QualificationANZSCOCode);
-            qualificationModel.StartMonth.Should().Be(ProfileConstants.Qualification.StartDate?.ToString("MMM").ToUpper());
-            qualificationModel.StartYear.Should().Be(ProfileConstants.Qualification.StartDate?.Year);
-            qualificationModel.EndMonth.Should().Be(ProfileConstants.Qualification.EndDate?.ToString("MMM").ToUpper());
-            qualificationModel.EndYear.Should().Be(ProfileConstants.Qualification.EndDate?.Year); 
+            qualificationModel.StartDate.Should().Be(ProfileConstants.Qualification.StartDate);
+            qualificationModel.EndDate.Should().Be(ProfileConstants.Qualification.EndDate);
         }
 
         [TestMethod]
-        public void StartAndEndMonthYearNullIfDateIsNull()
+        public void StartAndEndDateIsNull()
         {
-            //given
             qualification.StartDate = null;
             qualification.EndDate = null;
-            //when
             qualificationModel = new ProfileQualificationModel(qualification);
-            //then
-            qualificationModel.StartMonth.Should().BeNull();
-            qualificationModel.StartYear.Should().BeNull();
-            qualificationModel.EndMonth.Should().BeNull();
-            qualificationModel.EndYear.Should().BeNull();
+            qualificationModel.StartDate.Should().BeNull();
+            qualificationModel.EndDate.Should().BeNull();
         }
     }
 

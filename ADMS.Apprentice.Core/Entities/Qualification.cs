@@ -23,12 +23,6 @@ namespace ADMS.Apprentice.Core.Entities
         public byte[] Version { get; set; }
         public long AuditEventId { get; set; }
 
-        //Not mapped fields
-        public string StartMonth;
-        public int? StartYear;
-        public string EndMonth; 
-        public int? EndYear;
-
         public virtual Profile Profile { get; set; }
     }
 }

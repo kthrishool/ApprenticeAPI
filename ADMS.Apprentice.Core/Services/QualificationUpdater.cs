@@ -25,10 +25,8 @@ namespace ADMS.Apprentice.Core.Services
             qualification.QualificationDescription = message.QualificationDescription.Sanitise();
             qualification.QualificationLevel = message.QualificationLevel.Sanitise();
             qualification.QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise();
-            qualification.StartMonth = message.StartMonth.SanitiseUpper();
-            qualification.StartYear = message.StartYear;
-            qualification.EndMonth = message.EndMonth.SanitiseUpper();
-            qualification.EndYear = message.EndYear;
+            qualification.StartDate = message.StartDate;
+            qualification.EndDate = message.EndDate;
 
             await qualificationValidator.ValidateAsync(qualification);
 

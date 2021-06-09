@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ADMS.Apprentice.Core.Messages
 {
@@ -17,12 +18,8 @@ namespace ADMS.Apprentice.Core.Messages
         [MaxLength(10, ErrorMessage = "ANZSCO code cannot exceed 10 characters in length")]
         public string QualificationANZSCOCode { get; set; }
 
-        public string StartMonth { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        public int? StartYear { get; set; }
-
-        public string EndMonth { get; set; }
-
-        public int? EndYear { get; set; }        
+        public DateTime? EndDate { get; set; }
     }
 }
