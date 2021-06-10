@@ -16,10 +16,11 @@ namespace ADMS.Apprentice.Core.Services
             this.guardianValidator = profileValidator;
         }
 
-        public async Task<Guardian> CreateAsync(ProfileGuardianMessage message)
+        public async Task<Guardian> CreateAsync(int apprenticeId, ProfileGuardianMessage message)
         {
             var guardian = new Guardian()
             {
+                ApprenticeId = apprenticeId,
                 Surname = message.Surname,
                 FirstName = message.FirstName,
                 EmailAddress = message.EmailAddress.Sanitise(),

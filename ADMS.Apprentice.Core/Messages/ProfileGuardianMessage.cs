@@ -15,7 +15,6 @@ namespace ADMS.Apprentice.Core.Messages
         [MaxLength(50, ErrorMessage = "First name exceeds 50 characters")]
         public string FirstName { get; init; }
 
-
         [Display(Name = "Email address")]
         [MaxLength(256, ErrorMessage = "Email address exceeds 256 characters")]
         public string EmailAddress { get; init; }
@@ -27,8 +26,7 @@ namespace ADMS.Apprentice.Core.Messages
         public string Mobile { get; init; }
 
         [Display(Name = "Work phone number")]
-        public string WorkPhoneNumber { get; init; }
- 
+        public string WorkPhoneNumber { get; init; } 
 
         [Display(Name = "Guardian address")]
         public ProfileAddressMessage Address { get; init; }

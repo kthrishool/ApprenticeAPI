@@ -65,7 +65,7 @@ namespace ADMS.Apprentice.Api.Controllers
         public async Task<ActionResult<ProfileGuardianModel>> Create(int apprenticeId, [FromBody] ProfileGuardianMessage message)
         {
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);            
-            Guardian guardian = await guardianCreator.CreateAsync(message);
+            Guardian guardian = await guardianCreator.CreateAsync(apprenticeId, message);
             profile.Guardian = guardian;
             await repository.SaveAsync();
             return Created($"/{guardian.Id}", new ProfileGuardianModel(guardian));

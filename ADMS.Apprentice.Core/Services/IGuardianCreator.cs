@@ -8,6 +8,6 @@ namespace ADMS.Apprentice.Core.Services
     [RegisterWithIocContainer]
     public interface IGuardianCreator
     {
-        Task<Guardian> CreateAsync(ProfileGuardianMessage message);
+        Task<Guardian> CreateAsync(int apprenticeId, ProfileGuardianMessage message);
     }
 }

@@ -13,7 +13,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
     [TestClass]
     public class WhenCreatingAGuardian : GivenWhenThen<GuardianCreator>
-    {
+    {        
         private Guardian guardian;
         private ProfileGuardianMessage guardianMessage;
         private Profile profile;
@@ -21,7 +21,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         //  private Guard message;
         protected override void Given()
         {
-            profile = new Profile();
+            profile = new Profile { Id = 1};
             guardian = new Guardian();
             guardianMessage = new ProfileGuardianMessage()
             {
@@ -37,13 +37,13 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override async void When()
         {
-            guardian = await ClassUnderTest.CreateAsync(guardianMessage);
+            guardian = await ClassUnderTest.CreateAsync(profile.Id, guardianMessage);
         }
 
         [TestMethod]
         public void DONothingWhenGuardianIsValid()
         {
-            ClassUnderTest.Invoking(c => c.CreateAsync(guardianMessage))
+            ClassUnderTest.Invoking(c => c.CreateAsync(profile.Id, guardianMessage))
                 .Should().NotThrow<ValidationException>();
         }
 
