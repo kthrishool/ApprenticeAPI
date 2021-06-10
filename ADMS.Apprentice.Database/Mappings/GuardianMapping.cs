@@ -72,8 +72,8 @@ namespace ADMS.Apprentice.Database.Mappings
                 .HasColumnName("_AuditEventId");
 
             entity.HasOne(e => e.Profile)
-                .WithMany(c => c.Guardians)
-                .HasForeignKey(e => e.ApprenticeId)
+                .WithOne(c => c.Guardian)
+                .HasForeignKey<Guardian>(e => e.ApprenticeId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

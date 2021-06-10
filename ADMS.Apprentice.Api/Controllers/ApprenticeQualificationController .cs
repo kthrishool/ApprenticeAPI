@@ -65,8 +65,6 @@ namespace ADMS.Apprentice.Api.Controllers
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("id", true);
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
-            if (profile == null)
-                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
 
             IQueryable<Qualification> query = profile.Qualifications.AsQueryable();            
             PagedList<Qualification> qualifications = pagingHelper.ToPagedList(query, paging);
@@ -82,13 +80,8 @@ namespace ADMS.Apprentice.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfileQualificationModel>> Get(int apprenticeId, int id)
         {            
-            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
-            if (profile == null)
-                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);            
             Qualification qualification = profile.Qualifications.Single(x => x.Id == id);
-            if (qualification == null)
-                return NotFound();
-
             return Ok(new ProfileQualificationModel(qualification));
         }
 
@@ -102,9 +95,6 @@ namespace ADMS.Apprentice.Api.Controllers
         public async Task<ActionResult<ProfileQualificationModel>> Create(int apprenticeId, [FromBody] ProfileQualificationMessage message)
         {
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
-            if (profile == null)
-                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
-
             Qualification qualification = await qualificationCreator.CreateAsync(message);
             profile.Qualifications.Add(qualification);            
 
@@ -122,9 +112,6 @@ namespace ADMS.Apprentice.Api.Controllers
         public async Task<ActionResult<ProfileQualificationModel>> Update(int apprenticeId, int id, [FromBody] ProfileQualificationMessage message)
         {
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
-            if (profile == null)
-                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", apprenticeId.ToString());
-
             Qualification qualification = profile.Qualifications.SingleOrDefault(x => x.Id == id);
             if (qualification == null)
                 throw exceptionFactory.CreateNotFoundException("Apprentice Qualification ", id.ToString());

@@ -43,7 +43,7 @@ namespace ADMS.Apprentice.Core.Entities
         public virtual ICollection<ApprenticeTFN> TFNs { get; set; }
         public virtual ICollection<Qualification> Qualifications { get; set; }
 
-        public virtual ICollection<Guardian> Guardians { get; set; }
+        public virtual Guardian Guardian { get; set; }
         public virtual ICollection<ApprenticeUSI> USIs { get; set; }
 
         public Profile()

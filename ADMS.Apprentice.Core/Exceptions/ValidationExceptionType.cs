@@ -125,6 +125,9 @@ namespace ADMS.Apprentice.Core.Exceptions
         InvalidEmailSearch,
 
         [ExceptionDetails("AP-VAL-0041", "A phone or email address must be provided")]
-        MandatoryContact
+        MandatoryContact,
+
+        [ExceptionDetails("AP-VAL-0042", "A guardian already exists for this apprentice")]
+        GuardianExists
     }
 }

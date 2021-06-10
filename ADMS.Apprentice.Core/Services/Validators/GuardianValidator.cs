@@ -30,11 +30,18 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
         public async Task ValidateAsync(Guardian guardian)
         {
+            await Exists(guardian);
             PhoneValidation(guardian);
             EmailValidation(guardian);
             await AddressValidation(guardian);
         }
 
+        private async Task Exists(Guardian guardian)
+        {
+            Profile profile = await repository.GetAsync<Profile>(guardian.ApprenticeId, true);
+            if (profile.Guardian != null)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.GuardianExists);
+        }
         private void PhoneValidation(Guardian guardian)
         {
             guardian.HomePhoneNumber = phoneValidator.ValidatePhone(guardian.HomePhoneNumber, ValidationExceptionType.InvalidGuardianNumber);
