@@ -7,6 +7,7 @@
     [QualificationANZSCOCode]   VARCHAR (10)    NULL,
     [StartDate]                 DATE            NULL,
     [EndDate]                   DATE            NULL,
+    [ApprenticeshipId]          INT             NULL,
     [CreatedBy]                 NVARCHAR (1024) NOT NULL,
     [CreatedOn]                 DATETIME2 (7)   NOT NULL,
     [UpdatedBy]                 NVARCHAR (1024) NOT NULL,
