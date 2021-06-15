@@ -6,6 +6,11 @@ using ADMS.Services.Infrastructure.Core.Exceptions;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Adms.Shared.Exceptions;
+using ADMS.Apprentice.Core.Exceptions;
+using ADMS.Services.Infrastructure.Core.Validation;
+using Adms.Shared;
+using System.Threading.Tasks;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -17,6 +22,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private Guardian guardian;
         private ProfileGuardianMessage guardianMessage;
         private Profile profile;
+        private ValidationException validationException;
 
         //  private Guard message;
         protected override void Given()
@@ -33,6 +39,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 HomePhoneNumber = "0211111111",
                 WorkPhoneNumber = "0411111111"
             };
+
+            validationException = new ValidationException(null, (ValidationError)null);
+            Container
+               .GetMock<IRepository>()
+               .Setup(r => r.GetAsync<Profile>(profile.Id, true))
+               .Returns(Task.FromResult(profile));
         }
 
         protected override async void When()
@@ -59,6 +71,18 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             guardian.Locality.Should().Be(ProfileConstants.ResidentialAddress.Locality);
             guardian.Postcode.Should().Be(ProfileConstants.ResidentialAddress.Postcode);
             guardian.StateCode.Should().Be(ProfileConstants.ResidentialAddress.StateCode);
+        }
+
+        [TestMethod]
+        public void ThrowExceptionIfGuardianExists()
+        {
+            profile.Guardian = guardian;
+
+            Container.GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.GuardianExists))
+                .Returns(validationException);
+
+            ClassUnderTest.Invoking(c => c.CreateAsync(profile.Id, guardianMessage)).Should().Throw<ValidationException>();
         }
     }
 

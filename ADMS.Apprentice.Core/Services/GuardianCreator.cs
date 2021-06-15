@@ -1,5 +1,8 @@
 ﻿using System.Threading.Tasks;
+using Adms.Shared;
+using Adms.Shared.Exceptions;
 using ADMS.Apprentice.Core.Entities;
+using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Apprentice.Core.Helpers;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Services.Validators;
@@ -9,15 +12,22 @@ namespace ADMS.Apprentice.Core.Services
     public class GuardianCreator : IGuardianCreator
     {
         private readonly IGuardianValidator guardianValidator;
+        private readonly IRepository repository;
+        private readonly IExceptionFactory exceptionFactory;
 
         public GuardianCreator(
+            IRepository repository,
+            IExceptionFactory exceptionFactory,
             IGuardianValidator profileValidator)
         {
+            this.repository = repository;
+            this.exceptionFactory = exceptionFactory;
             this.guardianValidator = profileValidator;
         }
 
         public async Task<Guardian> CreateAsync(int apprenticeId, ProfileGuardianMessage message)
         {
+            await CheckGuardianExists(apprenticeId);
             var guardian = new Guardian()
             {
                 ApprenticeId = apprenticeId,
@@ -41,6 +51,13 @@ namespace ADMS.Apprentice.Core.Services
 
             await guardianValidator.ValidateAsync(guardian);
             return guardian;
+        }
+
+        private async Task CheckGuardianExists(int apprenticeId)
+        {
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
+            if (profile.Guardian != null)
+                throw exceptionFactory.CreateValidationException(ValidationExceptionType.GuardianExists);
         }
     }
 }

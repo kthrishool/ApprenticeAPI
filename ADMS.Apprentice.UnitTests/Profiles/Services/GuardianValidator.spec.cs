@@ -101,18 +101,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Returns(validationException);
             guardian.EmailAddress = "test";
             ClassUnderTest.Invoking(c => c.ValidateAsync(guardian)).Should().Throw<ValidationException>();
-        }
-
-        [TestMethod]
-        public void ThrowExceptionIfGuardianExists()
-        {
-            profile.Guardian = guardian;
-
-            Container.GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.GuardianExists))
-                .Returns(validationException);
-
-            ClassUnderTest.Invoking(c => c.ValidateAsync(guardian)).Should().Throw<ValidationException>();
-        }
+        }        
     }
 }

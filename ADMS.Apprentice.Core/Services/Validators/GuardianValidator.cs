@@ -9,39 +9,28 @@ namespace ADMS.Apprentice.Core.Services.Validators
 {
     public class GuardianValidator : IGuardianValidator
     {
-        private readonly IRepository repository;
         private readonly IExceptionFactory exceptionFactory;
         private readonly IAddressValidator addressValidator;
-
         private readonly IPhoneValidator phoneValidator;
 
-        public GuardianValidator(
-            IRepository repository,
+        public GuardianValidator(            
             IExceptionFactory exceptionFactory,
             IAddressValidator addressValidator,
             IPhoneValidator phoneValidator
         )
-        {
-            this.repository = repository;
+        {           
             this.exceptionFactory = exceptionFactory;
             this.addressValidator = addressValidator;
             this.phoneValidator = phoneValidator;
         }
 
         public async Task ValidateAsync(Guardian guardian)
-        {
-            await Exists(guardian);
+        {            
             PhoneValidation(guardian);
             EmailValidation(guardian);
             await AddressValidation(guardian);
         }
-
-        private async Task Exists(Guardian guardian)
-        {
-            Profile profile = await repository.GetAsync<Profile>(guardian.ApprenticeId, true);
-            if (profile.Guardian != null)
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.GuardianExists);
-        }
+        
         private void PhoneValidation(Guardian guardian)
         {
             guardian.HomePhoneNumber = phoneValidator.ValidatePhone(guardian.HomePhoneNumber, ValidationExceptionType.InvalidGuardianNumber);
