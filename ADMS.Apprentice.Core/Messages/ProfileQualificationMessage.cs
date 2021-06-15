@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace ADMS.Apprentice.Core.Messages
 {
     public record ProfileQualificationMessage
-    {
+    {        
         [Required(ErrorMessage = "Qualification code is required")]
         [MaxLength(10, ErrorMessage = "Qualification code cannot exceed 10 characters in length")]
         public string QualificationCode { get; set; }
@@ -18,8 +18,7 @@ namespace ADMS.Apprentice.Core.Messages
         
         [MaxLength(10, ErrorMessage = "ANZSCO code cannot exceed 10 characters in length")]
         public string QualificationANZSCOCode { get; set; }
-
-        public Profile profile { get; set; }
+       
         public DateTime? StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }

@@ -21,15 +21,17 @@ namespace ADMS.Apprentice.Core.Services
             this.qualificationValidator = qualificationValidator;
         }
 
-        public async Task<Qualification> CreateAsync(ProfileQualificationMessage message)
+        public async Task<Qualification> CreateAsync(int apprenticeId, ProfileQualificationMessage message)
         {
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
+
             Qualification qualification = new Qualification
             {
                 QualificationCode = message.QualificationCode.Sanitise(),
                 QualificationDescription = message.QualificationDescription.Sanitise(),
                 QualificationLevel = message.QualificationLevel.Sanitise(),
                 QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise(),
-                Profile = message.profile,
+                Profile = profile,
                 StartDate = message.StartDate,
                 EndDate = message.EndDate
             };

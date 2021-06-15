@@ -20,15 +20,17 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
     {
         private Qualification qualification;
         private ProfileQualificationMessage message;
+        private int apprenticeId;
 
         protected override void Given()
         {
+            apprenticeId = 1;
             message = ProfileConstants.QualificationMessage;            
         }
 
         protected override async void When()
         {
-            qualification = await ClassUnderTest.CreateAsync(message);
+            qualification = await ClassUnderTest.CreateAsync(apprenticeId, message);
         }
 
         [TestMethod]

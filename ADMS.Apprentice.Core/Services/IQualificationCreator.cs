@@ -8,6 +8,6 @@ namespace ADMS.Apprentice.Core.Services
     [RegisterWithIocContainer]
     public interface IQualificationCreator
     {
-        Task<Qualification> CreateAsync(ProfileQualificationMessage message);
+        Task<Qualification> CreateAsync(int apprenticeId, ProfileQualificationMessage message);
     }
 }

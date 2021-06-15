@@ -95,8 +95,8 @@ namespace ADMS.Apprentice.Api.Controllers
         public async Task<ActionResult<ProfileQualificationModel>> Create(int apprenticeId, [FromBody] ProfileQualificationMessage message)
         {
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
-            message.profile = profile;
-            Qualification qualification = await qualificationCreator.CreateAsync(message);
+
+            Qualification qualification = await qualificationCreator.CreateAsync(apprenticeId, message);
             profile.Qualifications.Add(qualification);            
 
             await repository.SaveAsync();
