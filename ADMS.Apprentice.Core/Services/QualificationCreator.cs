@@ -29,6 +29,7 @@ namespace ADMS.Apprentice.Core.Services
                 QualificationDescription = message.QualificationDescription.Sanitise(),
                 QualificationLevel = message.QualificationLevel.Sanitise(),
                 QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise(),
+                Profile = message.profile,
                 StartDate = message.StartDate,
                 EndDate = message.EndDate
             };
