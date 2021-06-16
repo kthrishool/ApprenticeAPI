@@ -8,6 +8,8 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ADMS.Apprentice.Core.Services.Validators;
 using System.Threading.Tasks;
+using Adms.Shared.Exceptions;
+using Moq;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -33,6 +35,14 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 HomePhoneNumber = "0211111111",
                 WorkPhoneNumber = "0411111111"
             };
+
+            Container.GetMock<IGuardianValidator>()
+                .Setup(s => s.ValidateAsync(guardian))
+                .ReturnsAsync(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+
+            Container.GetMock<IValidatorExceptionBuilderFactory>()
+                .Setup(f => f.CreateExceptionBuilder())
+                .Returns(() => new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         protected override async void When()

@@ -31,13 +31,22 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             };
             profile.USIs.Add(apprenticeUSI);
             validationException = new ValidationException(null, (ValidationError) null);
+
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidUSI))
+                .Returns(validationException);
+
+            Container.GetMock<IValidatorExceptionBuilderFactory>()
+                .Setup(ebf => ebf.CreateExceptionBuilder())
+                .Returns(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         [TestMethod]
         public void NoExceptionIfUSIIsNull()
         {
             profile = new Profile();
-            ClassUnderTest.Validate(profile);
+            ClassUnderTest.Validate(profile).ThrowAnyExceptions();
         }
 
         [TestMethod]
@@ -55,19 +64,14 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         private void RunNegativeUSIText(Profile profile)
         {
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidUSI))
-                .Returns(validationException);
-
             ClassUnderTest
-                .Invoking(c => c.Validate(profile))
+                .Invoking(c => c.Validate(profile).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
         private void RunPositiveUSITest(Profile profile)
         {
-            ClassUnderTest.Invoking(c => c.Validate(profile))
+            ClassUnderTest.Invoking(c => c.Validate(profile).ThrowAnyExceptions())
                 .Should().NotThrow<ValidationException>();
         }
 
@@ -110,7 +114,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 {
                     new ApprenticeUSI()
                     {
-                        USI = "23456789D1", ActiveFlag = true, USIStatus = "test"
+                        USI = "147852369Q", ActiveFlag = true, USIStatus = "test"
                     }
                 }
             });
@@ -122,13 +126,13 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowExceptionWhenUSIIsInvalid()
         {
-            RunPositiveUSITest(new Profile
+            ThrowExceptionForUsiTest(new Profile
             {
                 USIs = new List<ApprenticeUSI>()
                 {
                     new ApprenticeUSI()
                     {
-                        USI = "23456789D4", ActiveFlag = true, USIStatus = "test"
+                        USI = "147852369I", ActiveFlag = true, USIStatus = "test"
                     }
                 }
             });

@@ -10,6 +10,8 @@ using ADMS.Apprentice.UnitTests.Constants;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using Adms.Shared.Exceptions;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -46,6 +48,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 LanguageCode = ProfileConstants.LanguageCode,
                 CountryOfBirthCode = ProfileConstants.CountryOfBirthCode
             };
+            Container.GetMock<IProfileValidator>()
+                .Setup(s => s.ValidateAsync(It.IsAny<Profile>()))
+                .ReturnsAsync(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         protected override async void When()
@@ -322,6 +327,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 ProfileType = ProfileConstants.Profiletype,
                 USI = "updatedUSI"
             };
+            Container.GetMock<IProfileValidator>()
+                .Setup(s => s.ValidateAsync(It.IsAny<Profile>()))
+                .ReturnsAsync(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         protected override async void When()

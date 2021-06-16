@@ -6,6 +6,8 @@ using ADMS.Services.Infrastructure.Core.Exceptions;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ADMS.Apprentice.Core.Services.Validators;
+using Moq;
 using Adms.Shared.Exceptions;
 using ADMS.Apprentice.Core.Exceptions;
 using ADMS.Services.Infrastructure.Core.Validation;
@@ -40,6 +42,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 WorkPhoneNumber = "0411111111"
             };
 
+            Container.GetMock<IGuardianValidator>()
+                .Setup(s => s.ValidateAsync(It.IsAny<Guardian>()))
+                .ReturnsAsync(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+
             validationException = new ValidationException(null, (ValidationError)null);
             Container
                .GetMock<IRepository>()
@@ -55,7 +61,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void DONothingWhenGuardianIsValid()
         {
-            ClassUnderTest.Invoking(c => c.CreateAsync(profile.Id, guardianMessage))
+            ClassUnderTest.Invoking(async c => await c.CreateAsync(profile.Id, guardianMessage))
                 .Should().NotThrow<ValidationException>();
         }
 
@@ -82,7 +88,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Setup(r => r.CreateValidationException(ValidationExceptionType.GuardianExists))
                 .Returns(validationException);
 
-            ClassUnderTest.Invoking(c => c.CreateAsync(profile.Id, guardianMessage)).Should().Throw<ValidationException>();
+            ClassUnderTest.Invoking(async c => await c.CreateAsync(profile.Id, guardianMessage)).Should().Throw<ValidationException>();
         }
     }
 

@@ -83,7 +83,8 @@ namespace ADMS.Apprentice.Core.Services
             //USI
             UpdateUSI(profile, message.USI);
 
-            await profileValidator.ValidateAsync(profile);
+            var exceptionBuilder = await profileValidator.ValidateAsync(profile);
+            exceptionBuilder.ThrowAnyExceptions();
 
             //trigger USI verfication, if USI attributes has changed
             if (triggerUsiVerification)

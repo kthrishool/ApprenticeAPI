@@ -46,11 +46,46 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             };
 
             validationException = new ValidationException(null, (ValidationError) null);
+
             ChangeException(ValidationExceptionType.InvalidApprenticeAge);
             ChangeException(ValidationExceptionType.InvalidLeftSchoolYear);
+
+            Container.GetMock<IExceptionFactory>()
+                .Setup(ef => ef.CreateValidationException(It.IsAny<ValidationExceptionType>()))
+                .Returns(validationException);
+            Container.GetMock<IExceptionFactory>()
+                .Setup(ef => ef.CreateValidationException(It.IsAny<ValidationExceptionType[]>()))
+                .Returns(validationException);
+
+            var exceptionFactory = Container.GetMock<IExceptionFactory>().Object;
+
+            var exceptionBuilderFactory = Container.GetMock<IValidatorExceptionBuilderFactory>();
+
+            exceptionBuilderFactory
+                .Setup(ebf => ebf.CreateExceptionBuilder())
+                .Returns(() =>
+                    new ValidatorExceptionBuilder(exceptionFactory));
+
             Container.GetMock<IQualificationValidator>()
                 .Setup(r => r.ValidateAsync(It.IsAny<List<Qualification>>()))
-                .ReturnsAsync(new List<Qualification>());
+                .ReturnsAsync(new ValidatorExceptionBuilder(exceptionFactory));
+
+            Container.GetMock<IUSIValidator>()
+                .Setup(r => r.Validate(It.IsAny<Profile>()))
+                .Returns(() => new ValidatorExceptionBuilder(exceptionFactory));
+
+            Container.GetMock<IAddressValidator>()
+                .Setup(r => r.ValidateAsync(It.IsAny<IAddressAttributes>()))
+                .ReturnsAsync(new ValidatorExceptionBuilder(exceptionFactory));
+            
+            Container.GetMock<IPhoneValidator>()
+                .Setup(a => a.ValidatePhonewithType(It.IsAny<IValidatorExceptionBuilder>(), It.IsAny<Phone>()))
+            ;
+            
+            Container.GetMock<IReferenceDataValidator>()
+                .Setup(r => r.ValidateAsync(It.IsAny<Profile>()))
+                .ReturnsAsync(new ValidatorExceptionBuilder(exceptionFactory));
+
         }
 
         private void ChangeException(ValidationExceptionType exceptionMessage)
@@ -65,7 +100,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public async Task DoesNothingIfTheProfileIsValid()
         {
-            await ClassUnderTest.ValidateAsync(validProfile);
+            (await ClassUnderTest.ValidateAsync(validProfile)).ThrowAnyExceptions();
         }
 
         [TestMethod]
@@ -74,7 +109,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile.ProfileTypeCode = null;
             ChangeException(ValidationExceptionType.InvalidApprenticeprofileType);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -82,7 +117,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public void ThrowsValidationExceptionIfProfileTypeIsNull()
         {
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(invalidProfile))
+                .Invoking(async c => (await c.ValidateAsync(invalidProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -92,7 +127,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile.BirthDate = new DateTime(0001, 01, 01);
             ChangeException(ValidationExceptionType.InvalidDOB);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -102,7 +137,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile.EmailAddress = null;
             ChangeException(ValidationExceptionType.MandatoryContact);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -113,7 +148,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile.Phones = null;
             ChangeException(ValidationExceptionType.MandatoryContact);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -123,7 +158,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile.ProfileTypeCode = "Invalid";
             ChangeException(ValidationExceptionType.InvalidApprenticeprofileType);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -136,7 +171,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile.LeftSchoolDate = ProfileConstants.Birthdate.AddDays(-1);
             ChangeException(ValidationExceptionType.InvalidLeftSchoolDetails);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -146,7 +181,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile.LeftSchoolDate = DateTime.Today.AddDays(1);
             ChangeException(ValidationExceptionType.InvalidLeftSchoolDetails);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -155,7 +190,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             validProfile.LeftSchoolDate = ProfileConstants.Birthdate.AddYears(10);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().NotThrow<ValidationException>();
         }        
 
@@ -163,7 +198,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         public async Task DoNothingIsDayLeftSchoolIsEqual()
         {
             validProfile.LeftSchoolDate = ProfileConstants.Birthdate;
-            await ClassUnderTest.ValidateAsync(validProfile);
+            (await ClassUnderTest.ValidateAsync(validProfile)).ThrowAnyExceptions();
         }
 
         #endregion
@@ -186,7 +221,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 } }                
             };
 
-            await ClassUnderTest.ValidateAsync(invalidProfile);
+            (await ClassUnderTest.ValidateAsync(invalidProfile)).ThrowAnyExceptions();
         }
 
         private void GetsTheValidationExceptionIfEmailIsInvalid(string EmailAddress)
@@ -198,7 +233,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             // ExecuteTest(validProfile);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
@@ -227,6 +262,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             {
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
+                ProfileTypeCode = ProfileConstants.Profiletype,
                 BirthDate = DateTime.Now.AddYears(-10),
                 EmailAddress = ProfileConstants.RandomString(64) + "@" + ProfileConstants.RandomString(256) + "." + ProfileConstants.RandomString(50)
             };
@@ -237,7 +273,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private void ExecuteTest(Profile profiledata)
         {
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(profiledata))
+                .Invoking(async c => (await c.ValidateAsync(profiledata)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
@@ -273,7 +309,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             validProfile.Phones = null; //.Add(phones);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
 
@@ -284,7 +320,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             Phone phone = null;
             validProfile.Phones.Add(phone);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
 
@@ -294,7 +330,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             var phone = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = ""};
             validProfile.Phones.Add(phone);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
 
@@ -305,7 +341,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             validProfile.Phones.Add(phones);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
 
@@ -316,7 +352,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             validProfile.Phones.Add(phones);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
 
@@ -328,7 +364,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             validProfile.Phones.Add(phone1);
             validProfile.Phones.Add(phone2);
-            validProfile = await ClassUnderTest.ValidateAsync(validProfile);
+            (await ClassUnderTest.ValidateAsync(validProfile)).ThrowAnyExceptions();
             validProfile.Phones.Where(x => x.PreferredPhoneFlag == true).Count().Should().Be(1);
         }
 
@@ -349,7 +385,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 EmailAddress = ProfileConstants.Emailaddress
             };
 
-            await ClassUnderTest.ValidateAsync(invalidProfile);
+            (await ClassUnderTest.ValidateAsync(invalidProfile)).ThrowAnyExceptions();
         }
 
         private void ExecuteUSITest(string USI, Boolean ActiveFlag, string USIStatus)
@@ -358,12 +394,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = USI, ActiveFlag = ActiveFlag, USIStatus = USIStatus}};
             Container.GetMock<IUSIValidator>()
                 .Setup(r => r.Validate(validProfile))
-                .Returns(false);
+                .Returns(() => new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
 
 
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
-                .Equals(false);
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions());
         }
 
         /// <summary>
@@ -390,13 +425,12 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = "23456789D1", ActiveFlag = true, USIStatus = "test"}};
 
             Container.GetMock<IUSIValidator>()
-                .Setup(r => r.Validate(validProfile))
-                .Returns(false);
+                .Setup(r => r.Validate(validProfile));
 
             // ExecuteTest(validProfile);
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(validProfile))
-                .Equals(true);
+                .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
+                .Invoke();
         }
 
         #region Address Validation
@@ -404,7 +438,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         [TestMethod]
         public void DONothingIfAddressIsNotSupplied()
         {
-            ClassUnderTest.Invoking(c => c.ValidateAsync(validProfile)).Should().NotThrow<ValidationException>();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
+                .Should().NotThrow<ValidationException>();
         }
 
         [TestMethod]
@@ -422,7 +457,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 AddressTypeCode = AddressType.RESD.ToString()
             };
             validProfile.Addresses.Add(validAddress);
-            ClassUnderTest.Invoking(c => c.ValidateAsync(validProfile)).Should().NotThrow<ValidationException>();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
+                .Should().NotThrow<ValidationException>();
         }
 
 
@@ -453,9 +489,41 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             };
             validProfile.Addresses.Add(validAddress);
             validProfile.Addresses.Add(secondAddress);
-            ClassUnderTest.Invoking(c => c.ValidateAsync(validProfile)).Should().NotThrow<ValidationException>();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
+                .Should().NotThrow<ValidationException>();
         }
 
+        [TestMethod]
+        public void ThrowExceptionIfSecondAddressIsNotValid()
+        {
+            var validAddress = new Address()
+            {
+                StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
+                StreetAddress2 = ProfileConstants.ResidentialAddress.StreetAddress2,
+                StreetAddress3 = ProfileConstants.ResidentialAddress.StreetAddress3,
+                Locality = ProfileConstants.ResidentialAddress.Locality,
+                Postcode = ProfileConstants.ResidentialAddress.Postcode,
+                StateCode = ProfileConstants.ResidentialAddress.StateCode,
+                SingleLineAddress = ProfileConstants.ResidentialAddress.SingleLineAddress,
+                AddressTypeCode = AddressType.RESD.ToString()
+            };
+            var secondAddress = new Address()
+            {
+                StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
+                StreetAddress2 = ProfileConstants.ResidentialAddress.StreetAddress2,
+                StreetAddress3 = ProfileConstants.ResidentialAddress.StreetAddress3,
+                Locality = ProfileConstants.ResidentialAddress.Locality,
+                Postcode = ProfileConstants.ResidentialAddress.Postcode,
+                StateCode = ProfileConstants.ResidentialAddress.StateCode,
+                SingleLineAddress = ProfileConstants.ResidentialAddress.SingleLineAddress,
+                AddressTypeCode = AddressType.RESD.ToString()
+            };
+            validProfile.Addresses.Add(validAddress);
+            validProfile.Addresses.Add(secondAddress);
+            Container.GetMock<IAddressValidator>().Setup(av => av.ValidateAsync(secondAddress)).Throws(validationException);
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
+                .Should().Throw<ValidationException>();
+        }
         #endregion
     }
 

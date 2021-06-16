@@ -9,6 +9,8 @@ using Adms.Shared;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Adms.Shared.Exceptions;
+using Moq;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -45,6 +47,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 VisaNumber = ProfileConstants.VisaNumber,
                 USI = ProfileConstants.USI
             };
+            Container.GetMock<IProfileValidator>()
+                .Setup(s => s.ValidateAsync(It.IsAny<Profile>()))
+                .ReturnsAsync(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         protected override async void When()

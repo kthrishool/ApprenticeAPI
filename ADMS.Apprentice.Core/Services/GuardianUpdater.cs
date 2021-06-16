@@ -36,7 +36,8 @@ namespace ADMS.Apprentice.Core.Services
             guardian.StateCode = message.Address?.StateCode.Sanitise();
             guardian.Postcode = message.Address?.Postcode.Sanitise();
             
-            await guardianValidator.ValidateAsync(guardian);
+            var exceptionBuilder = await guardianValidator.ValidateAsync(guardian);
+            exceptionBuilder.ThrowAnyExceptions();
             return guardian;
         }
 

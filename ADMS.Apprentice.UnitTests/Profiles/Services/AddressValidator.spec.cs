@@ -81,6 +81,15 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Setup(r => r.CreateValidationException(ValidationExceptionType.AddressRecordNotFound))
                 .Returns(validationException);
 
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(It.IsAny<ValidationExceptionType>()))
+                .Returns(validationException);
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(It.IsAny<ValidationExceptionType[]>()))
+                .Returns(validationException);
+
             Container.GetMock<IReferenceDataClient>()
                 .Setup(x => x.GetDetailAddressByFormattedAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(detailsAddress);
@@ -88,6 +97,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             Container.GetMock<IReferenceDataClient>()
                 .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(partialAddress);
+            
+            Container.GetMock<IValidatorExceptionBuilderFactory>()
+                .Setup(x => x.CreateExceptionBuilder())
+                .Returns(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         private async Task UpdateAddressColumnAsync(string columnName, string value, ValidationExceptionType exception, bool RaiseException)
@@ -141,13 +154,13 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                     .Invoking(async c =>
                     {
                         Address address = newProfile.Addresses.SingleOrDefault();
-                        await c.ValidateAsync(address);
+                        (await c.ValidateAsync(address)).ThrowAnyExceptions();
                     })
                     .Should().Throw<ValidationException>();
             }
             else
             {
-                await ClassUnderTest.ValidateAsync(newProfile.Addresses.SingleOrDefault());
+                (await ClassUnderTest.ValidateAsync(newProfile.Addresses.SingleOrDefault())).ThrowAnyExceptions();
             }
         }
 
@@ -155,7 +168,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             foreach (Address newProfileAddress in newProfile.Addresses)
             {
-                await ClassUnderTest.ValidateAsync(newProfileAddress);
+                (await ClassUnderTest.ValidateAsync(newProfileAddress)).ThrowAnyExceptions();
             }
         }
 
@@ -166,7 +179,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             ClassUnderTest.Invoking(async c =>
                 {
                     Address address = newProfile.Addresses.SingleOrDefault();
-                    await c.ValidateAsync(address);
+                    (await c.ValidateAsync(address)).ThrowAnyExceptions();
                 })
                 .Should().NotThrow<ValidationException>();
         }
@@ -179,7 +192,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             ClassUnderTest.Invoking(async c =>
                 {
                     Address address = newProfile.Addresses.SingleOrDefault();
-                    await c.ValidateAsync(address);
+                    (await c.ValidateAsync(address)).ThrowAnyExceptions();
                 })
                 .Should().Throw<ValidationException>();
         }
@@ -255,7 +268,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.Addresses.Add(invalidAddress);
 
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Invoking(async c => (await c.ValidateAsync(newProfile.Addresses.SingleOrDefault())).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -286,7 +299,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .ReturnsAsync(partialAddress);
 
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Invoking(async c => (await c.ValidateAsync(newProfile.Addresses.SingleOrDefault())).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -317,7 +330,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .ReturnsAsync(partialAddress);
 
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Invoking(async c => (await c.ValidateAsync(newProfile.Addresses.SingleOrDefault())).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -348,7 +361,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Returns(validationException);
 
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Invoking(async c => (await c.ValidateAsync(newProfile.Addresses.SingleOrDefault())).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -378,7 +391,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Returns(validationException);
 
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Invoking(async c => (await c.ValidateAsync(newProfile.Addresses.SingleOrDefault())).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -408,7 +421,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Returns(validationException);
 
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Invoking(async c => (await c.ValidateAsync(newProfile.Addresses.SingleOrDefault())).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -418,7 +431,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.Addresses.Add(validSingleLineAddress);
 
-            await ClassUnderTest.ValidateAsync(newProfile.Addresses.SingleOrDefault());
+            (await ClassUnderTest.ValidateAsync(newProfile.Addresses.SingleOrDefault())).ThrowAnyExceptions();
 
             newProfile.Addresses.FirstOrDefault().Latitude.Should().NotBe(null);
             newProfile.Addresses.FirstOrDefault().Longitude.Should().NotBe(null);
@@ -434,7 +447,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.Addresses.Add(validSingleLineAddress);
             ClassUnderTest
-                .Invoking(async c => { await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()); })
+                .Invoking(async c => (await c.ValidateAsync(newProfile.Addresses.SingleOrDefault())).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
 
@@ -450,7 +463,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .ReturnsAsync(detailsAddress);
 
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Invoking(async c => (await c.ValidateAsync(newProfile.Addresses.SingleOrDefault())).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -473,7 +486,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .ReturnsAsync(detailsAddress);
 
             ClassUnderTest
-                .Invoking(async c => await c.ValidateAsync(newProfile.Addresses.SingleOrDefault()))
+                .Invoking(async c => (await c.ValidateAsync(newProfile.Addresses.SingleOrDefault())).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 

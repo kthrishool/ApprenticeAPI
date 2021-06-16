@@ -28,6 +28,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             newProfile = new Profile();
 
+            Container.GetMock<IValidatorExceptionBuilderFactory>()
+                .Setup(s => s.CreateExceptionBuilder())
+                .Returns(() => new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
             validationException = new ValidationException(null, (ValidationError) null);
@@ -40,7 +43,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Setup(r => r.CreateValidationException(exception))
                 .Returns(validationException);
 
-            ClassUnderTest.Invoking(c => c.ValidateAsync(this.newProfile))
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(this.newProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
@@ -73,7 +76,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             newProfile = new Profile();
             newProfile.CountryOfBirthCode = "1101";
-            await ClassUnderTest.ValidateAsync(newProfile);
+            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
         }
 
 
@@ -88,7 +91,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.CountryOfBirthCode = "dasdas";
 
 
-            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
@@ -103,7 +106,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.LanguageCode = "dasdas";
 
 
-            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
@@ -121,7 +124,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             newProfile = new Profile();
             newProfile.LanguageCode = "1201";
-            await ClassUnderTest.ValidateAsync(newProfile);
+            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
         }
 
         [TestMethod]
@@ -135,7 +138,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             newProfile = new Profile();
             newProfile.CountryOfBirthCode = "1200";
-            await ClassUnderTest.ValidateAsync(newProfile);
+            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
         }
 
         [TestMethod]
@@ -144,7 +147,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.PreferredContactType = ProfileConstants.PreferredContactType.ToString();
             newProfile.Phones.Add(new Phone() {PhoneNumber = "0411111111"});
-            await ClassUnderTest.ValidateAsync(newProfile);
+            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
         }
 
         [TestMethod]
@@ -183,7 +186,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
             newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
-            await ClassUnderTest.ValidateAsync(newProfile);
+            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
         }
 
         [TestMethod]
@@ -192,7 +195,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.EMAIL.ToString();
             newProfile.EmailAddress = ProfileConstants.Emailaddress;
-            await ClassUnderTest.ValidateAsync(newProfile);
+            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
         }
 
         [TestMethod]
@@ -207,7 +210,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 Locality = ProfileConstants.ResidentialAddress.Locality,
                 StateCode = ProfileConstants.ResidentialAddress.StateCode
             });
-            await ClassUnderTest.ValidateAsync(newProfile);
+            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
         }
 
         [TestMethod]
@@ -230,7 +233,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
 
 
-            ClassUnderTest.Invoking(c => c.ValidateAsync(this.newProfile))
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(this.newProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
 
@@ -243,7 +246,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.EmailAddress = ProfileConstants.Emailaddress;
 
 
-            ClassUnderTest.Invoking(c => c.ValidateAsync(this.newProfile))
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(this.newProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
 
@@ -265,7 +268,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile.Addresses.Add(localAddress);
 
 
-            ClassUnderTest.Invoking(c => c.ValidateAsync(this.newProfile))
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(this.newProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
 
@@ -346,7 +349,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.HighestSchoolLevelCode = "99";
 
-            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
 
@@ -360,7 +363,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.HighestSchoolLevelCode = "invalidCode";
 
-            ClassUnderTest.Invoking(c => c.ValidateAsync(newProfile))
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>().Where(e => e == validationException);
         }
 
@@ -376,7 +379,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualification);
 
             qualification = ProfileConstants.Qualification;
-            ClassUnderTest.Invoking(c => c.ValidateAsync(qualification)).Should().NotThrow();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions()).Should().NotThrow();
         }
 
         [TestMethod]
@@ -395,7 +398,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Returns(validationException);
             qualification = new Qualification();
             qualification.QualificationLevel = "Invalid";
-            ClassUnderTest.Invoking(c => c.ValidateAsync(qualification))
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 
@@ -416,7 +419,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             qualification = new Qualification();
             qualification.QualificationANZSCOCode = "Invalid";
 
-            ClassUnderTest.Invoking(c => c.ValidateAsync(qualification))
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions())
                 .Should().Throw<ValidationException>();
         }
 

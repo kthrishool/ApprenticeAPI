@@ -8,6 +8,8 @@ using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ADMS.Apprentice.Core.Services.Validators;
+using Moq;
+using Adms.Shared.Exceptions;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -24,6 +26,9 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             qualification = new Qualification();
             qualification.QualificationCode = "something";
             message = ProfileConstants.QualificationMessage;
+            Container.GetMock<IQualificationValidator>()
+                .Setup(s => s.ValidateAsync(It.IsAny<Qualification>()))
+                .ReturnsAsync(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         protected override async void When()

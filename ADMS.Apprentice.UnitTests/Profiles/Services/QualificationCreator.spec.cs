@@ -10,6 +10,9 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
+using Adms.Shared.Exceptions;
+using Moq;
+using System.Collections.Generic;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -21,11 +24,22 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private Qualification qualification;
         private ProfileQualificationMessage message;
         private int apprenticeId;
+        private Profile profile;
 
         protected override void Given()
         {
+            profile = new Profile();
+            profile.Id = apprenticeId;
+            profile.Qualifications = new List<Qualification>();
             apprenticeId = 1;
             message = ProfileConstants.QualificationMessage;            
+
+            Container.GetMock<IRepository>()
+                .Setup(s => s.GetAsync<Profile>(apprenticeId, true))
+                .ReturnsAsync(profile);
+            Container.GetMock<IQualificationValidator>()
+                .Setup(s => s.ValidateAsync(It.IsAny<Qualification>()))
+                .ReturnsAsync(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         protected override async void When()

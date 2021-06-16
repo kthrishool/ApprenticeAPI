@@ -9,45 +9,47 @@ namespace ADMS.Apprentice.Core.Services.Validators
 {
     public class GuardianValidator : IGuardianValidator
     {
-        private readonly IExceptionFactory exceptionFactory;
+        private readonly IValidatorExceptionBuilderFactory exceptionBuilderFactory;
         private readonly IAddressValidator addressValidator;
         private readonly IPhoneValidator phoneValidator;
 
-        public GuardianValidator(            
-            IExceptionFactory exceptionFactory,
+        public GuardianValidator(
+            IValidatorExceptionBuilderFactory exceptionBuilderFactory,
             IAddressValidator addressValidator,
             IPhoneValidator phoneValidator
         )
-        {           
-            this.exceptionFactory = exceptionFactory;
+        {
+            this.exceptionBuilderFactory = exceptionBuilderFactory;
             this.addressValidator = addressValidator;
             this.phoneValidator = phoneValidator;
         }
 
-        public async Task ValidateAsync(Guardian guardian)
-        {            
-            PhoneValidation(guardian);
-            EmailValidation(guardian);
-            await AddressValidation(guardian);
-        }
-        
-        private void PhoneValidation(Guardian guardian)
+        public async Task<IValidatorExceptionBuilder> ValidateAsync(Guardian guardian)
         {
-            guardian.HomePhoneNumber = phoneValidator.ValidatePhone(guardian.HomePhoneNumber, ValidationExceptionType.InvalidGuardianNumber);
-            guardian.Mobile = phoneValidator.ValidatePhone(guardian.Mobile, ValidationExceptionType.InvalidGuardianNumber);
-            guardian.WorkPhoneNumber = phoneValidator.ValidatePhone(guardian.WorkPhoneNumber, ValidationExceptionType.InvalidGuardianNumber);
+            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
+            PhoneValidation(exceptionBuilder, guardian);
+            EmailValidation(exceptionBuilder, guardian);
+            await AddressValidation(exceptionBuilder, guardian);
+            return exceptionBuilder;
         }
 
-        private void EmailValidation(Guardian guardian)
+        private void PhoneValidation(IValidatorExceptionBuilder exceptionBuilder, Guardian guardian)
+        {
+            guardian.HomePhoneNumber = phoneValidator.ValidatePhone(exceptionBuilder, guardian.HomePhoneNumber, ValidationExceptionType.InvalidGuardianNumber);
+            guardian.Mobile = phoneValidator.ValidatePhone(exceptionBuilder, guardian.Mobile, ValidationExceptionType.InvalidGuardianNumber);
+            guardian.WorkPhoneNumber = phoneValidator.ValidatePhone(exceptionBuilder, guardian.WorkPhoneNumber, ValidationExceptionType.InvalidGuardianNumber);
+        }
+
+        private void EmailValidation(IValidatorExceptionBuilder exceptionBuilder, Guardian guardian)
         {
             if (guardian.EmailAddress.SanitiseUpper() != null)
             {
                 if (!EmailAddressHelper.EmailValidation(guardian.EmailAddress.SanitiseUpper()))
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidEmailAddress);
+                    exceptionBuilder.Add(ValidationExceptionType.InvalidEmailAddress);
             }
         }
 
-        private async Task AddressValidation(Guardian guardian)
+        private async Task AddressValidation(IValidatorExceptionBuilder exceptionBuilder, Guardian guardian)
         {
             if (guardian.StreetAddress1.Sanitise() == null
                 && guardian.StreetAddress2.Sanitise() == null
@@ -62,9 +64,9 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 || guardian.Locality.Sanitise() == null)
             {
                 if (guardian.SingleLineAddress.Sanitise() == null)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.AddressRecordNotFoundForGuardian);
+                    exceptionBuilder.Add(ValidationExceptionType.AddressRecordNotFoundForGuardian);
             }
-            await addressValidator.ValidateAsync(guardian);
+            exceptionBuilder.AddExceptions(await addressValidator.ValidateAsync(guardian));
         }
     }
 }

@@ -18,6 +18,8 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private Profile newProfile;
         private Phone phone;
         private ValidationException validationException;
+        
+        private IValidatorExceptionBuilder exceptionBuilder;
 
         protected override void Given()
         {
@@ -29,6 +31,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PreferredPhoneFlag = true
             };
             validationException = new ValidationException(null, (ValidationError) null);
+            exceptionBuilder = new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object);
+
+            Container.GetMock<IValidatorExceptionBuilderFactory>()
+                .Setup(f => f.CreateExceptionBuilder())
+                .Returns(exceptionBuilder);
 
             Container
                 .GetMock<IExceptionFactory>()
@@ -38,15 +45,16 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void When()
         {
-            ClassUnderTest.ValidatePhonewithType(phone);
+            ClassUnderTest.ValidatePhonewithType(exceptionBuilder, phone);
         }
 
         [TestMethod]
         public void DoesNothingIfTheAddressIsValid()
         {
             ClassUnderTest
-                .Invoking(c => c.ValidatePhonewithType(phone))
-                .Should().NotThrow<ValidationException>();
+                .Invoking(c => c.ValidatePhonewithType(exceptionBuilder, phone)).Invoke();
+            exceptionBuilder.HasExceptions()
+                .Should().Be(false);
         }
 
         [TestMethod]
@@ -57,8 +65,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PhoneNumber = "+61 411111111"
             };
             ClassUnderTest
-                .Invoking(c => c.ValidatePhonewithType(phone))
-                .Should().NotThrow<ValidationException>();
+                .Invoking(c => c.ValidatePhonewithType(exceptionBuilder, phone)).Invoke();
+
+            exceptionBuilder.HasExceptions()
+                .Should().Be(false);
         }
 
         [TestMethod]
@@ -69,8 +79,10 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PhoneNumber = "+61 41111111"
             };
             ClassUnderTest
-                .Invoking(c => c.ValidatePhonewithType(phone))
-                .Should().Throw<ValidationException>();
+                .Invoking(c => c.ValidatePhonewithType(exceptionBuilder, phone)).Invoke();
+
+            exceptionBuilder.HasExceptions()
+                .Should().Be(true);
         }
     }
 
@@ -85,6 +97,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private Profile newProfile;
         private Phone phone;
         private ValidationException validationException;
+        private IValidatorExceptionBuilder exceptionBuilder;
 
         protected override void Given()
         {
@@ -96,6 +109,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PreferredPhoneFlag = true
             };
             validationException = new ValidationException(null, (ValidationError) null);
+            exceptionBuilder = new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object);
 
             Container
                 .GetMock<IExceptionFactory>()
@@ -105,15 +119,17 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
         protected override void When()
         {
-            ClassUnderTest.ValidatePhone(phone.PhoneNumber, ValidationExceptionType.InvalidPhoneNumber);
+            ClassUnderTest.ValidatePhone(exceptionBuilder, phone.PhoneNumber, ValidationExceptionType.InvalidPhoneNumber);
         }
 
         [TestMethod]
         public void DoesNothingIfTheAddressIsValid()
         {
             ClassUnderTest
-                .Invoking(c => c.ValidatePhone(phone.PhoneNumber, ValidationExceptionType.InvalidPhoneNumber))
-                .Should().NotThrow<ValidationException>();
+                .Invoking(c => c.ValidatePhone(exceptionBuilder, phone.PhoneNumber, ValidationExceptionType.InvalidPhoneNumber))
+                .Invoke();
+            exceptionBuilder.HasExceptions()
+                .Should().Be(false);
         }
 
         [TestMethod]
@@ -124,8 +140,11 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PhoneNumber = "+61 411111111"
             };
             ClassUnderTest
-                .Invoking(c => c.ValidatePhone("+61 411111111", ValidationExceptionType.InvalidPhoneNumber))
-                .Should().NotThrow<ValidationException>();
+                .Invoking(c => c.ValidatePhone(exceptionBuilder, "+61 411111111", ValidationExceptionType.InvalidPhoneNumber))
+                .Invoke();
+
+            exceptionBuilder.HasExceptions()
+                .Should().Be(false);
         }
 
         [TestMethod]
@@ -136,16 +155,76 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PhoneNumber = "+61 41111111"
             };
             ClassUnderTest
-                .Invoking(c => c.ValidatePhone("+61 41111111", ValidationExceptionType.InvalidPhoneNumber))
-                .Should().Throw<ValidationException>();
+                .Invoking(c => c.ValidatePhone(exceptionBuilder, "+61 41111111", ValidationExceptionType.InvalidPhoneNumber))
+                .Invoke();
+
+            exceptionBuilder.HasExceptions().Should().Be(true);
         }
 
         [TestMethod]
-        public void DoNothingWhenPhoneisNull()
+        public void WhenPhoneisNull()
         {
             ClassUnderTest
-                .Invoking(c => c.ValidatePhone("", ValidationExceptionType.InvalidPhoneNumber))
-                .Should().NotThrow<ValidationException>();
+                .Invoking(c => c.ValidatePhone(exceptionBuilder, "", ValidationExceptionType.InvalidPhoneNumber))
+                .Invoke();
+
+            exceptionBuilder.HasExceptions().Should().Be(false);
+        }
+
+        [TestMethod]
+        public void HaveExceptionWhenPhoneNumberisTooLong()
+        {
+            var phoneNumber = "+61 41234567891011";
+            ClassUnderTest
+                .Invoking(c => c.ValidatePhone(exceptionBuilder, phoneNumber, ValidationExceptionType.InvalidPhoneNumber))
+                .Invoke();
+
+            exceptionBuilder.HasExceptions().Should().Be(true);
+        }
+
+        [TestMethod]
+        public void HaveExceptionWhenPhoneNmberAreaCodeIsInvalid()
+        {
+            var phoneNumber = "(09) 6121 8390";
+            ClassUnderTest
+                .Invoking(c => c.ValidatePhone(exceptionBuilder, phoneNumber, ValidationExceptionType.InvalidPhoneNumber))
+                .Invoke();
+
+            exceptionBuilder.HasExceptions().Should().Be(true);
+        }
+
+        [TestMethod]
+        public void HaveExceptionWhenPhoneAreaCodeIsInvalid()
+        {
+            phone.PhoneNumber = "(09) 6121 8390";
+            ClassUnderTest
+                .Invoking(c => c.ValidatePhonewithType(exceptionBuilder, phone))
+                .Invoke();
+
+            exceptionBuilder.HasExceptions().Should().Be(true);
+        }
+
+
+        [TestMethod]
+        public void HasExceptionWhenPhoneNumberIsEmpty()
+        {
+            phone.PhoneNumber = "";
+            ClassUnderTest
+                .Invoking(c => c.ValidatePhonewithType(exceptionBuilder, phone))
+                .Invoke();
+            exceptionBuilder.HasExceptions()
+                .Should().Be(true);
+        }
+
+        [TestMethod]
+        public void HaveExceptionWhenPhoneisTooLong()
+        {
+            phone.PhoneNumber = "+61 41234567891011";
+            ClassUnderTest
+                .Invoking(c => c.ValidatePhonewithType(exceptionBuilder, phone))
+                .Invoke();
+
+            exceptionBuilder.HasExceptions().Should().Be(true);
         }
     }
 

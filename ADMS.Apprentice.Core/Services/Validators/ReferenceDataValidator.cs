@@ -15,31 +15,31 @@ namespace ADMS.Apprentice.Core.Services.Validators
     public class ReferenceDataValidator : IReferenceDataValidator
     {
         private readonly IRepository repository;
-        private readonly IExceptionFactory exceptionFactory;
+        private readonly IValidatorExceptionBuilderFactory exceptionBuilderFactory;
         private readonly IReferenceDataClient referenceDataClient;
 
         public ReferenceDataValidator(
             IRepository repository,
-            IExceptionFactory exceptionFactory,
+            IValidatorExceptionBuilderFactory exceptionBuilderFactory,
             IReferenceDataClient referenceDataClient
         )
         {
             this.repository = repository;
-            this.exceptionFactory = exceptionFactory;
+            this.exceptionBuilderFactory = exceptionBuilderFactory;
             this.referenceDataClient = referenceDataClient;
         }
 
 
-        private async Task ValidateCode(String CodeName, string codevalue, ValidationExceptionType exception)
+        private async Task ValidateCode(IValidatorExceptionBuilder exceptionBuilder, String CodeName, string codevalue, ValidationExceptionType exception)
         {
             IList<ListCodeResponseV1> validCodes = await referenceDataClient.GetListCodes(CodeName, codevalue, true, true);
             if (!validCodes.Any())
             {
-                throw exceptionFactory.CreateValidationException(exception);
+                exceptionBuilder.Add(exception);
             }
         }
          
-        private void ValidatePreferredContactType(Profile profile)
+        private void ValidatePreferredContactType(IValidatorExceptionBuilder exceptionBuilder, Profile profile)
         {
             // if profileType is Mobile we need atleast one mobile phone.
             switch (profile.PreferredContactType)
@@ -47,63 +47,73 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 case nameof(PreferredContactType.MOBILE) or nameof(PreferredContactType.SMS):
                     if (profile.Phones == null || profile.Phones.Any(c => c.PhoneNumber.StartsWith("04")) == false)
                     {
-                        throw exceptionFactory.CreateValidationException(ValidationExceptionType.MobilePreferredContactIsInvalid);
+                        exceptionBuilder.Add(ValidationExceptionType.MobilePreferredContactIsInvalid);
                     }
                     break;
                 case nameof(PreferredContactType.PHONE):
                     if (profile.Phones == null || profile.Phones.Any() == false)
                     {
-                        throw exceptionFactory.CreateValidationException(ValidationExceptionType.PhonePreferredContactisInvalid);
+                        exceptionBuilder.Add(ValidationExceptionType.PhonePreferredContactisInvalid);
                     }
                     break;
                 case nameof(PreferredContactType.EMAIL):
                     if (string.IsNullOrEmpty(profile.EmailAddress))
                     {
-                        throw exceptionFactory.CreateValidationException(ValidationExceptionType.EmailPreferredContactisInvalid);
+                        exceptionBuilder.Add(ValidationExceptionType.EmailPreferredContactisInvalid);
                     }
                     break;
                 case nameof(PreferredContactType.MAIL):
                     if (profile.Addresses == null || profile.Addresses.Any() == false)
                     {
-                        throw exceptionFactory.CreateValidationException(ValidationExceptionType.MailPreferredContactisInvalid);
+                        exceptionBuilder.Add(ValidationExceptionType.MailPreferredContactisInvalid);
                     }
                     break;
                 default:
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPreferredContactCode);
+                    exceptionBuilder.Add(ValidationExceptionType.InvalidPreferredContactCode);
+                    break;
             }
             // validate rules based on the type of contact
         }
 
-        public async Task ValidateAsync(Profile profile)
+        public async Task<IValidatorExceptionBuilder> ValidateAsync(Profile profile)
         {
+            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
+            var tasks = new List<Task>();
+
             if (!string.IsNullOrEmpty(profile.CountryOfBirthCode))
             {
-                await ValidateCode(CodeTypes.country, profile.CountryOfBirthCode, ValidationExceptionType.InvalidCountryCode);
+                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.country, profile.CountryOfBirthCode, ValidationExceptionType.InvalidCountryCode));
             }
             if (!string.IsNullOrEmpty(profile.LanguageCode))
             {
-                await ValidateCode(CodeTypes.language, profile.LanguageCode, ValidationExceptionType.InvalidLanguageCode);
+                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.language, profile.LanguageCode, ValidationExceptionType.InvalidLanguageCode));
             }
             if (!string.IsNullOrEmpty(profile.HighestSchoolLevelCode))
             {
-                await ValidateCode(CodeTypes.schoolLevel, profile.HighestSchoolLevelCode, ValidationExceptionType.InvalidHighestSchoolLevelCode);
+                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.schoolLevel, profile.HighestSchoolLevelCode, ValidationExceptionType.InvalidHighestSchoolLevelCode));
             }
             if (!string.IsNullOrEmpty(profile.PreferredContactType))
             {
-                 ValidatePreferredContactType(profile);
+                 ValidatePreferredContactType(exceptionBuilder, profile);
             }            
+            await tasks.WaitAndThrowAnyExceptionFound(); 
+            return exceptionBuilder;
         }
 
-        public async Task ValidateAsync(Qualification qualification)
+        public async Task<IValidatorExceptionBuilder> ValidateAsync(Qualification qualification)
         {
+            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
+            var tasks = new List<Task>();
             if (!qualification.QualificationLevel.IsNullOrEmpty())
             {
-                await ValidateCode(CodeTypes.qualificationLevel, qualification.QualificationLevel, ValidationExceptionType.InvalidQualificationLevel);
+                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.qualificationLevel, qualification.QualificationLevel, ValidationExceptionType.InvalidQualificationLevel));
             }
             if (!qualification.QualificationANZSCOCode.IsNullOrEmpty())
             {
-                await ValidateCode(CodeTypes.ANZSCOCode, qualification.QualificationANZSCOCode, ValidationExceptionType.InvalidQualificationANZSCO);
+                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.ANZSCOCode, qualification.QualificationANZSCOCode, ValidationExceptionType.InvalidQualificationANZSCO));
             }
+            await tasks.WaitAndThrowAnyExceptionFound();
+            return exceptionBuilder;
         }
     }
 }

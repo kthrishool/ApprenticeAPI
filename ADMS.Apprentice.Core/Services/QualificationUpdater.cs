@@ -28,7 +28,8 @@ namespace ADMS.Apprentice.Core.Services
             qualification.StartDate = message.StartDate;
             qualification.EndDate = message.EndDate;
 
-            await qualificationValidator.ValidateAsync(qualification);
+            var exceptionBuilder = await qualificationValidator.ValidateAsync(qualification);
+            exceptionBuilder.ThrowAnyExceptions();
 
             return qualification;
         }

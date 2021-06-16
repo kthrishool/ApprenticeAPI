@@ -13,83 +13,91 @@ namespace ADMS.Apprentice.Core.Services.Validators
 {
     public class ProfileValidator : IProfileValidator
     {
-        private readonly IExceptionFactory exceptionFactory;
+        private readonly IValidatorExceptionBuilderFactory exceptionBuilderFactory;
         private readonly IAddressValidator addressValidator;
         private readonly IReferenceDataValidator referenceDataValidator;
         private readonly IUSIValidator usiValidator;
         private readonly IPhoneValidator phoneValidator;
 
-        public ProfileValidator(IExceptionFactory exceptionFactory,
+        public ProfileValidator(IValidatorExceptionBuilderFactory exceptionBuilderFactory,
             IAddressValidator addressValidator,
             IReferenceDataValidator referenceDataValidator,
             IUSIValidator usiValidator,
             IPhoneValidator phoneValidator)
         {
-            this.exceptionFactory = exceptionFactory;
+            this.exceptionBuilderFactory = exceptionBuilderFactory;
             this.addressValidator = addressValidator;
             this.referenceDataValidator = referenceDataValidator;
             this.usiValidator = usiValidator;
             this.phoneValidator = phoneValidator;
         }
 
-        public async Task<Profile> ValidateAsync(Profile profile)
+        public async Task<IValidatorExceptionBuilder> ValidateAsync(Profile profile)
         {
+            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
+            var tasks = new List<Task<IValidatorExceptionBuilder>>();
             if (profile.EmailAddress == null && (profile.Phones == null || profile.Phones.Count == 0))
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.MandatoryContact);
+                exceptionBuilder.Add(ValidationExceptionType.MandatoryContact);
 
             if (profile.BirthDate.Year == 0001)
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidDOB);
+                exceptionBuilder.Add(ValidationExceptionType.InvalidDOB);
 
             if (!ValidateAge(profile.BirthDate))
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeAge);
+                exceptionBuilder.Add(ValidationExceptionType.InvalidApprenticeAge);
 
-            if (profile.ProfileTypeCode.IsNullOrEmpty())
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType);
+            if (profile.ProfileTypeCode.IsNullOrEmpty() ||
+                !(Enum.IsDefined(typeof(ProfileType), profile.ProfileTypeCode)))
+                exceptionBuilder.Add(ValidationExceptionType.InvalidApprenticeprofileType);
 
-            if (!(Enum.IsDefined(typeof(ProfileType), profile.ProfileTypeCode)))
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeprofileType);
 
             if (!EmailValidation(profile.EmailAddress))
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidEmailAddress);
+                exceptionBuilder.Add(ValidationExceptionType.InvalidEmailAddress);
 
             if (profile.LeftSchoolDate != null)
             {
                 if (Convert.ToDateTime(profile.LeftSchoolDate) < profile.BirthDate || Convert.ToDateTime(profile.LeftSchoolDate) > DateTime.Now)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidLeftSchoolDetails);
+                    exceptionBuilder.Add(ValidationExceptionType.InvalidLeftSchoolDetails);
             }            
 
 
             // Phone validation
-            PhoneValidation(profile);
+            exceptionBuilder.AddExceptions(PhoneValidation(profile));
 
-            // Address validation
-            if (profile.Addresses != null)
-            {
-                // validation needs to happen
-                var updatedAddress = new List<Address>();
-                foreach (Address profileAddress in profile.Addresses)
-                {
-                    IAddressAttributes address = profileAddress;
-                    await addressValidator.ValidateAsync(address);
-                    updatedAddress.Add((Address) address);
-                }
-                profile.Addresses = updatedAddress;
-            }
+            tasks.Add(ValidateAddressesAsync(profile));
 
             // USI Validator
-            USIValidation(profile);
+            exceptionBuilder.AddExceptions(USIValidation(profile));
 
             // Codes validation
             // Country of Birth
             // language
             // Completed School level
             // Preferred Contact            
-            await referenceDataValidator.ValidateAsync(profile);
+            tasks.Add(referenceDataValidator.ValidateAsync(profile));
+            exceptionBuilder.AddExceptions(await tasks.WaitAndReturnExceptionBuilder());
 
-            return profile;
+            return exceptionBuilder;
         }
-
-
+        
+        protected async Task<IValidatorExceptionBuilder> ValidateAddressesAsync(Profile profile)
+        {
+            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
+            var tasks = new List<Task<IValidatorExceptionBuilder>>();
+            // Address validation
+            if (profile.Addresses != null)
+            {
+                // validation needs to happen
+                foreach (Address profileAddress in profile.Addresses)
+                {
+                    IAddressAttributes address = profileAddress;
+                    tasks.Add(addressValidator.ValidateAsync(address));
+                }
+                if(tasks.Any())
+                    exceptionBuilder.AddExceptions(await tasks.WaitAndReturnExceptionBuilder());
+            }
+            return exceptionBuilder;
+        } 
+        
         // All email Validations are done in this function
         private bool EmailValidation(string? emailAddress)
         {
@@ -121,8 +129,9 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
         #region Phone validation
 
-        private void PhoneValidation(Profile profile)
+        private IValidatorExceptionBuilder PhoneValidation(Profile profile)
         {
+            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
             if (profile.Phones != null)
             {
                 var newPhone = new List<Phone>();
@@ -133,7 +142,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
                     if (phone == null || phone.PhoneNumber.IsNullOrEmpty()) continue;
                     Phone newPhoneNumber = phone;
 
-                    phoneValidator.ValidatePhonewithType(newPhoneNumber);
+                    phoneValidator.ValidatePhonewithType(exceptionBuilder, newPhoneNumber);
                     if (preferredPhoneSet && Convert.ToBoolean(newPhoneNumber.PreferredPhoneFlag))
                     {
                         newPhoneNumber.PreferredPhoneFlag = false;
@@ -147,6 +156,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 }
                 profile.Phones = newPhone;
             }
+            return exceptionBuilder;
         }
 
         #endregion
@@ -154,9 +164,9 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
         #region USI validation
 
-        private void USIValidation(Profile profile)
+        private IValidatorExceptionBuilder USIValidation(Profile profile)
         {
-            usiValidator.Validate(profile);
+            return usiValidator.Validate(profile);
         }
 
         #endregion

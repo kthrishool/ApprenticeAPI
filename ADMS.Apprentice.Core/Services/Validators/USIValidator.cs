@@ -9,12 +9,12 @@ namespace ADMS.Apprentice.Core.Services.Validators
 {
     public class USIValidator : IUSIValidator
     {
-        private readonly IExceptionFactory exceptionFactory;
+        private readonly IValidatorExceptionBuilderFactory exceptionBuilderFactory;
 
 
-        public USIValidator(IExceptionFactory exceptionFactory)
+        public USIValidator(IValidatorExceptionBuilderFactory exceptionBuilderFactory)
         {
-            this.exceptionFactory = exceptionFactory;
+            this.exceptionBuilderFactory = exceptionBuilderFactory;
         }
 
         static readonly char[] validChars =
@@ -58,18 +58,19 @@ namespace ADMS.Apprentice.Core.Services.Validators
             return validChars[checkCodePoint];
         }
 
-        public Boolean Validate(Profile profile)
+        public IValidatorExceptionBuilder Validate(Profile profile)
         {
+            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
             if (profile.USIs.Any())
             {
-                if (profile.USIs.Single(x => x.ActiveFlag == true).USI.Sanitise() == null)
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidUSI);
+                if (profile.USIs.Single(x => x.ActiveFlag == true).USI.Sanitise() == null) 
+                    exceptionBuilder.Add(ValidationExceptionType.InvalidUSI);
 
                 // code to be implemented fro additional validation
-                if (!VerifyKey(profile.USIs.Single(x => x.ActiveFlag == true).USI.Sanitise()))
-                    throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidUSI);
+                if (!exceptionBuilder.HasExceptions() && !VerifyKey(profile.USIs.Single(x => x.ActiveFlag == true).USI.Sanitise()))
+                    exceptionBuilder.Add(ValidationExceptionType.InvalidUSI);
             }
-            return true;
+            return exceptionBuilder;
         }
     }
 }

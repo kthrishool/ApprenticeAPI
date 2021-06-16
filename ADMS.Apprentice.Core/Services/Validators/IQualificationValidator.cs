@@ -8,9 +8,9 @@ namespace ADMS.Apprentice.Core.Services.Validators
     [RegisterWithIocContainer]
     public interface IQualificationValidator
     {
-        Task<List<Qualification>> ValidateAsync(List<Qualification> qualifications);
-        Task<Qualification> ValidateAsync(Qualification qualifications);
+        Task<IValidatorExceptionBuilder> ValidateAsync(List<Qualification> qualifications);
+        Task<IValidatorExceptionBuilder> ValidateAsync(Qualification qualifications);
 
-        void CheckForDuplicates(List<Qualification> qualifications);
+        IValidatorExceptionBuilder CheckForDuplicates(List<Qualification> qualifications);
     }
 }

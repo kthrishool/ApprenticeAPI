@@ -88,7 +88,9 @@ namespace ADMS.Apprentice.Core.Services
                 profile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = message.USI, ActiveFlag = true}};
             }
 
-            await profileValidator.ValidateAsync(profile);
+            var exceptionBuilder = await profileValidator.ValidateAsync(profile);
+            exceptionBuilder.ThrowAnyExceptions();
+            
             if (message.USI != null) usiVerify.Verify(profile);
 
             repository.Insert(profile);

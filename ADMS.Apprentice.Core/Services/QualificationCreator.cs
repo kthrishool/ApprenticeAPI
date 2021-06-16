@@ -31,12 +31,15 @@ namespace ADMS.Apprentice.Core.Services
                 QualificationDescription = message.QualificationDescription.Sanitise(),
                 QualificationLevel = message.QualificationLevel.Sanitise(),
                 QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise(),
-                Profile = profile,
                 StartDate = message.StartDate,
                 EndDate = message.EndDate
             };
 
-            await qualificationValidator.ValidateAsync(qualification);           
+            var exceptionBuilder = await qualificationValidator.ValidateAsync(qualification);           
+            exceptionBuilder.ThrowAnyExceptions();
+
+            profile.Qualifications.Add(qualification);
+
 
             return qualification;
         }
