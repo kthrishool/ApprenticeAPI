@@ -4,13 +4,13 @@ namespace ADMS.Apprentice.Core.Entities
 {
     public enum ProfileType
     {
-        [Description("Apprentice")]
+        [Description("Australian Apprentice")]
         APPR,
 
         [Description("Initial Assessment")]
         INIT,
 
-        [Description("Gateway")]
-        GWAY
+        [Description("Apprentice Seeker")]
+        SEEK
     }
 }
