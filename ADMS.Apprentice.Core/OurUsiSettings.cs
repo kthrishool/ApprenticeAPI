@@ -12,5 +12,6 @@ namespace ADMS.Apprentice.Core
         public string SigningCertficateThumbprint { get; set; }
         public string OrganisationId { get; set; }
         public string AdfsDomainName { get; set; }
+        public bool USIVerifyDisabled { get; set; }
     }
 }

@@ -56,7 +56,7 @@ namespace ADMS.Apprentice.Api
 
             SettingsConfiguration.Configure(services, Configuration);
             HttpClientConfiguration.Configure(services, Configuration);
-            DependencyInjectionConfiguration.ConfigureServices(services);
+            DependencyInjectionConfiguration.ConfigureServices(services, Configuration);
         }
 
         /// <summary>

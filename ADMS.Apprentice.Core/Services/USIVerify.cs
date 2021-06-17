@@ -3,6 +3,7 @@ using Adms.Shared.Exceptions;
 using Adms.Shared.Extensions;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.HttpClients.USI;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -16,6 +17,7 @@ namespace ADMS.Apprentice.Core.Services
         private readonly IRepository repository;
         private readonly IUSIClient usiClient;
         private readonly IExceptionFactory exceptionFactory;
+
         public USIVerify(IRepository repository, IUSIClient usiClient, IExceptionFactory exceptionFactory)
         {
             this.repository = repository;

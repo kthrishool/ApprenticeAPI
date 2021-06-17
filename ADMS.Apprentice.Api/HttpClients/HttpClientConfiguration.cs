@@ -8,6 +8,7 @@ using Refit;
 using ADMS.Apprentice.Core.HttpClients.USI;
 using System.Net.Http;
 using System.Net;
+using ADMS.Apprentice.Core.Services;
 
 namespace ADMS.Apprentice.Api.HttpClients
 {
@@ -24,13 +25,8 @@ namespace ADMS.Apprentice.Api.HttpClients
             services.AddTransient<JwtPassThroughMessageHandler>();
             services.AddTransient<UsiAuthorizationMessageHandler>();
 
-            IConfigurationSection ourHttpClientSettingsSection = configuration.GetSection(nameof(OurHttpClientSettings));
-            services.Configure<OurHttpClientSettings>(ourHttpClientSettingsSection);
-            OurHttpClientSettings settings = ourHttpClientSettingsSection.Get<OurHttpClientSettings>();
-
-            IConfigurationSection OurUsiSettingsSection = configuration.GetSection(nameof(OurUsiSettings));
-            services.Configure<OurUsiSettings>(OurUsiSettingsSection);
-            OurUsiSettings usiSettings = OurUsiSettingsSection.Get<OurUsiSettings>();
+            var settings = new OurHttpClientSettings();
+            configuration.GetSection(nameof(OurHttpClientSettings)).Bind(settings);
 
             services
                 .AddHttpClient("referenceData", c => { c.BaseAddress = new Uri(settings.ReferenceDataEndpointBaseUrl); })

@@ -19,6 +19,8 @@ namespace ADMS.Apprentice.Api.Configuration
             services.Configure<OurEnvironmentSettings>(configuration.GetSection(nameof(OurEnvironmentSettings)));
             services.Configure<OurDatabaseSettings>(configuration.GetSection(nameof(OurDatabaseSettings)));
             services.Configure<OurTestingSettings>(configuration.GetSection(nameof(OurTestingSettings)));
+            services.Configure<OurUsiSettings>(configuration.GetSection(nameof(OurUsiSettings)));
+            services.Configure<OurHttpClientSettings>(configuration.GetSection(nameof(OurHttpClientSettings)));
         }
     }
 }

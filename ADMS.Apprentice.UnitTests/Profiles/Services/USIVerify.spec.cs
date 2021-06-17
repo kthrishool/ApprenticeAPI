@@ -21,7 +21,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
     {
         private Profile profile;
         private ApprenticeUSI apprenticeUSI;
-        private List<VerifyUsiModel> verifymodel = new List<VerifyUsiModel>();
+        private List<VerifyUsiModel> verifymodel = new List<VerifyUsiModel>();        
 
         protected override void Given()
         {
@@ -45,7 +45,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             Container
                 .GetMock<IUSIClient>()
                 .Setup(r => r.VerifyUsi(It.IsAny<List<VerifyUsiMessage>>()))
-                .ReturnsAsync(verifymodel);
+                .ReturnsAsync(verifymodel);           
         }
 
         protected override void When()
@@ -67,6 +67,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             apprenticeUSI = ClassUnderTest.Verify(profile);
             apprenticeUSI.Should().BeNull();
         }
+       
 
         [TestMethod]
         public void ReturnsNullIfApprenticeUSIisNull()

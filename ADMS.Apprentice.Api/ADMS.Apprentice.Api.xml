@@ -13,7 +13,7 @@
             <summary>
             Configures dependency injection
             </summary>
-            <param name="services">Services collection</param>
+            <param name="services">Services collection</param>        
         </member>
         <member name="T:ADMS.Apprentice.Api.Configuration.SettingsConfiguration">
             <summary>
