@@ -39,6 +39,8 @@ namespace ADMS.Apprentice.Core.Services.Validators
             {
                 //Do the default code validations
                 exceptionBuilder.AddExceptions(ValidateDefaultCodes(address));
+                if (exceptionBuilder.HasExceptions())
+                    return exceptionBuilder;
                 //At this point we know we have a valid Locality, State and postcode. So use iGas to get the partical geolocation details
                 exceptionBuilder.AddExceptions(await ValidatePartialAddressAsync(address));
             }

@@ -45,7 +45,7 @@ namespace ADMS.Apprentice.Core.Services
                 guardian.StreetAddress2 = message.Address.StreetAddress2.Sanitise();
                 guardian.StreetAddress3 = message.Address.StreetAddress3.Sanitise();
                 guardian.Locality = message.Address.Locality.Sanitise();
-                guardian.StateCode = message.Address.StateCode.Sanitise();
+                guardian.StateCode = message.Address.StateCode.SanitiseUpper();
                 guardian.Postcode = message.Address.Postcode.Sanitise();
             }
 

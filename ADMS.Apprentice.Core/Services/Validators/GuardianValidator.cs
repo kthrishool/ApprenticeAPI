@@ -52,21 +52,21 @@ namespace ADMS.Apprentice.Core.Services.Validators
         private async Task AddressValidation(IValidatorExceptionBuilder exceptionBuilder, Guardian guardian)
         {
             if (guardian.StreetAddress1.Sanitise() == null
-                && guardian.StreetAddress2.Sanitise() == null
-                && guardian.StreetAddress3.Sanitise() == null
                 && guardian.Locality.Sanitise() == null
                 && guardian.Postcode.Sanitise() == null
                 && guardian.StateCode.Sanitise() == null
                 && guardian.SingleLineAddress.Sanitise() == null)
                 return;
-            // address is manditory so need to throw exception when its null
-            if (guardian.StreetAddress1.Sanitise() == null
-                || guardian.Locality.Sanitise() == null)
-            {
-                if (guardian.SingleLineAddress.Sanitise() == null)
-                    exceptionBuilder.Add(ValidationExceptionType.AddressRecordNotFoundForGuardian);
+            // address is entered, Street, Locality, State and postcode is mandatory
+            if (guardian.SingleLineAddress == null && (guardian.StreetAddress1 == null
+                || guardian.Locality == null || guardian.StateCode == null || guardian.Postcode == null))
+            {                
+                exceptionBuilder.Add(ValidationExceptionType.AddressRecordNotFoundForGuardian);               
             }
-            exceptionBuilder.AddExceptions(await addressValidator.ValidateAsync(guardian));
+            else
+            {
+                exceptionBuilder.AddExceptions(await addressValidator.ValidateAsync(guardian));
+            }            
         }
     }
 }
