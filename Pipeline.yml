@@ -57,6 +57,8 @@ stages:
           value: false
         - name: "OurDatabaseSettings.SeedSampleData"
           value: true
+        - name: "OurUSISettings.USIVerifyDisabled"
+          value: true
         - name: "OurDatabaseSettings.DatabaseConnectionString"
           value: '$(AdmsApprenticeConnectionString)'
         - name: "OurHttpClientSettings.ReferenceDataEndpointBaseUrl"
