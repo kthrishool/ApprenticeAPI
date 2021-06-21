@@ -9,11 +9,12 @@
             Configuration for dependency injection
             </summary>
         </member>
-        <member name="M:ADMS.Apprentice.Api.Configuration.DependencyInjectionConfiguration.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:ADMS.Apprentice.Api.Configuration.DependencyInjectionConfiguration.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             Configures dependency injection
             </summary>
-            <param name="services">Services collection</param>        
+            <param name="services">Services collection</param>
+            <param name="configuration"></param>
         </member>
         <member name="T:ADMS.Apprentice.Api.Configuration.SettingsConfiguration">
             <summary>
