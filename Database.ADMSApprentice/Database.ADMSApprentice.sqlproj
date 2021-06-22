@@ -182,5 +182,6 @@
     <None Include="Scripts\Security\DeleteSecurity.sql" />
     <Build Include="Scripts\Security\Schemas.sql" />
     <Build Include="Storage\temp.sql" />
+    <Build Include="Storage\AddressStoplist.sql" />
   </ItemGroup>
 </Project>

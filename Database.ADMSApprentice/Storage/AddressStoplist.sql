@@ -1,0 +1,3 @@
+﻿CREATE FULLTEXT STOPLIST [AddressStoplist]
+    AUTHORIZATION [dbo];
+
