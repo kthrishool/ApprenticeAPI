@@ -12,9 +12,6 @@ namespace ADMS.Apprentice.Core.Services.Validators
     {
         private static readonly string[] startingCode = {"02", "03", "04", "07", "08", "13", "18"};
 
-
-
-
         public PhoneValidator(
         )
         {
@@ -22,8 +19,6 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
         public void ValidatePhonewithType(IValidatorExceptionBuilder exceptionBuilder, Phone phone)
         {
-            phone.PhoneTypeCode = PhoneType.LANDLINE.ToString();
-
             phone.PhoneNumber = phone.PhoneNumber.Sanitise();
 
             if(phone.PhoneNumber.IsNullOrEmpty()) {
@@ -50,7 +45,19 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 exceptionBuilder.Add(ValidationExceptionType.InvalidPhoneNumber);
 
             if (phone.PhoneNumber.Substring(0, 2) == "04")
-                phone.PhoneTypeCode = PhoneType.MOBILE.ToString();
+            {
+                if (phone.PhoneTypeCode.IsNullOrEmpty() || phone.PhoneTypeCode == PhoneType.MOBILE.ToString())
+                    phone.PhoneTypeCode = PhoneType.MOBILE.ToString();
+                else
+                    exceptionBuilder.Add(ValidationExceptionType.InvalidPhoneNumber);
+            }
+            else
+            {
+                if (phone.PhoneTypeCode.IsNullOrEmpty() || phone.PhoneTypeCode == PhoneType.LANDLINE.ToString())
+                    phone.PhoneTypeCode = PhoneType.LANDLINE.ToString();
+                else
+                    exceptionBuilder.Add(ValidationExceptionType.InvalidPhoneNumber);
+            }
         }
 
         public string ValidatePhone(IValidatorExceptionBuilder exceptionBuilder, string phoneNumber, ValidationExceptionType exception)

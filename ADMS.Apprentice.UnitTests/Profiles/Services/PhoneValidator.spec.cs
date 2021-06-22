@@ -72,6 +72,50 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
+        public void MobileNumberWithInvalidTypeThrowException()
+        {
+            phone = new Phone()
+            {
+                PhoneNumber = "+61 411111111",
+                PhoneTypeCode = PhoneType.LANDLINE.ToString()
+
+            };
+            ClassUnderTest
+                .Invoking(c => c.ValidatePhonewithType(exceptionBuilder, phone)).Invoke();
+
+            exceptionBuilder.HasExceptions()
+                .Should().Be(true);
+        }
+
+        [TestMethod]
+        public void LandLineWithInvalidTypeThrowException()
+        {
+            phone = new Phone()
+            {
+                PhoneNumber = "0262400387",
+                PhoneTypeCode = PhoneType.MOBILE.ToString()
+
+            };
+            ClassUnderTest
+                .Invoking(c => c.ValidatePhonewithType(exceptionBuilder, phone)).Invoke();
+
+            exceptionBuilder.HasExceptions()
+                .Should().Be(true);
+        }
+
+        [TestMethod]
+        public void SetPhoneTypeAsLandLine()
+        {
+            phone = new Phone()
+            {
+                PhoneNumber = "+61262400387"
+            };
+            ClassUnderTest.ValidatePhonewithType(exceptionBuilder, phone);
+
+            phone.PhoneTypeCode.Should().Be(PhoneType.LANDLINE.ToString());
+        }
+
+        [TestMethod]
         public void throwExceptionWhenpassingAInvalidNumber()
         {
             phone = new Phone()

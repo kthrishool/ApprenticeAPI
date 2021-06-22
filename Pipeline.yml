@@ -99,7 +99,7 @@ stages:
 
   - stage: Test
     dependsOn: DeployDatabase_Test
-    condition:  and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-deploy')))
+    condition:  and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), startsWith(variables['Build.SourceBranch'], 'refs/tags/test-deploy')))
     variables:
         - group: ServiceAccounts
         - group: TestSettings

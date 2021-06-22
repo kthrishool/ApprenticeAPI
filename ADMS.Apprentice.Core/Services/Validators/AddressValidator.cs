@@ -128,9 +128,13 @@ namespace ADMS.Apprentice.Core.Services.Validators
 
             //if iGas couldnt resolve the partial address
             if (string.IsNullOrEmpty(partialAddress.Locality) || string.IsNullOrEmpty(partialAddress.State) || string.IsNullOrEmpty(partialAddress.Postcode))
+            {
                 exceptionBuilder.Add(ValidationExceptionType.AddressRecordNotFound);
+                return exceptionBuilder;
+            }                
 
-            if (partialAddress.Locality != address.Locality.ToUpper())
+            //Looking for contains rather than exact match on Locality in case of spelling erros or terminologies like Civic, Civic square, Toowoomba city, Toowoomba DC etc
+            if (!partialAddress.Locality.Contains(address.Locality.ToUpper()))
                 exceptionBuilder.Add(ValidationExceptionType.PostCodeLocalityMismatch);
 
             if (partialAddress.State != address.StateCode.ToUpper())
@@ -152,7 +156,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
             if(exceptionBuilder.HasExceptions())
                 return exceptionBuilder;
 
-            address.Locality = partialAddress.Locality;
+            address.Locality = address.Locality.ToUpper();
             address.StateCode = partialAddress.State;
             address.Postcode = partialAddress.Postcode;
             address.Latitude = partialAddress.Latitude;

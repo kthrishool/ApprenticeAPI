@@ -134,27 +134,27 @@ namespace ADMS.Apprentice.Core.Services.Validators
             var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
             if (profile.Phones != null)
             {
-                var newPhone = new List<Phone>();
+                var newPhones = new List<Phone>();
                 var preferredPhoneSet = false;
 
                 foreach (Phone phone in profile.Phones)
                 {
                     if (phone == null || phone.PhoneNumber.IsNullOrEmpty()) continue;
-                    Phone newPhoneNumber = phone;
+                    Phone newPhone = phone;
 
-                    phoneValidator.ValidatePhonewithType(exceptionBuilder, newPhoneNumber);
-                    if (preferredPhoneSet && Convert.ToBoolean(newPhoneNumber.PreferredPhoneFlag))
+                    phoneValidator.ValidatePhonewithType(exceptionBuilder, newPhone);
+                    if (preferredPhoneSet && Convert.ToBoolean(newPhone.PreferredPhoneFlag))
                     {
-                        newPhoneNumber.PreferredPhoneFlag = false;
+                        newPhone.PreferredPhoneFlag = false;
                     }
-                    else if (Convert.ToBoolean(newPhoneNumber.PreferredPhoneFlag))
-                        preferredPhoneSet = Convert.ToBoolean(newPhoneNumber.PreferredPhoneFlag);
-                    if (!newPhone.Any(c => newPhoneNumber.PhoneNumber.Contains(c.PhoneNumber)))
+                    else if (Convert.ToBoolean(newPhone.PreferredPhoneFlag))
+                        preferredPhoneSet = Convert.ToBoolean(newPhone.PreferredPhoneFlag);
+                    if (!newPhones.Any(c => newPhone.PhoneNumber.Contains(c.PhoneNumber)))
                     {
-                        newPhone.Add(newPhoneNumber);
+                        newPhones.Add(newPhone);
                     }
                 }
-                profile.Phones = newPhone;
+                profile.Phones = newPhones;
             }
             return exceptionBuilder;
         }

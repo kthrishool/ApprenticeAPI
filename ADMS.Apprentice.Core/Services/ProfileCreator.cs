@@ -40,7 +40,7 @@ namespace ADMS.Apprentice.Core.Services
                 CitizenshipCode = message.CitizenshipCode.SanitiseUpper(),
                 ProfileTypeCode = message.ProfileType.SanitiseUpper(),
                 Phones = message.PhoneNumbers?.Select(c => new Phone()
-                    {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList(),
+                    {PhoneNumber = c.PhoneNumber, PhoneTypeCode = c.PhoneTypeCode, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList(),
                 CountryOfBirthCode = message.CountryOfBirthCode.SanitiseUpper(),
                 PreferredContactType = message.PreferredContactType.SanitiseUpper(),
 
