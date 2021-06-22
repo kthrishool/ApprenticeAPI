@@ -39,6 +39,8 @@
 );
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_Apprentice_ActiveFlag]
     ON [dbo].[Apprentice]([ActiveFlag] ASC);
@@ -93,7 +95,7 @@ Based upon EMP.JobSeeker.[trg_JobSeeker_FTMaintenance] by Mick Vullo
 			SELECT  
 				 i.ApprenticeId 
 				,ProfileTypeCode		= i.ProfileTypeCode 
-				,TermList		= REPLACE(CAST(ISNULL(i.FirstName,'') + ISNULL(' ' + i.OtherNames,'') + ISNULL(' ' + i.Surname,'')  + ISNULL(' ' + i.PreferredName,'') AS VARCHAR(MAX)) COLLATE SQL_Latin1_General_CP1_CI_AS, CHAR(0), '') 
+				,TermList		= REPLACE(CAST(ISNULL(i.FirstName,'') + ISNULL(' ' + i.OtherNames,'') + ISNULL(' ' + i.Surname,'')  + ISNULL(' ' + i.PreferredName,'') + CASE WHEN i.Surname LIKE '% %' THEN ISNULL(' ' + REPLACE(i.Surname,' ','') ,'') ELSE '' END AS VARCHAR(MAX)) COLLATE SQL_Latin1_General_CP1_CI_AS, CHAR(0), '') 
 				,FilterTermList = CASE i.[GenderCode] WHEN 'M' THEN '0M' WHEN 'F' THEN '0F' ELSE '0M 0F' END + ' '  + RIGHT(CAST(YEAR(i.BirthDate) AS VARCHAR),2) +  ' ' + '0' + i.ProfileTypeCode 
 			FROM  
 				Inserted i 
@@ -134,7 +136,7 @@ Based upon EMP.JobSeeker.[trg_JobSeeker_FTMaintenance] by Mick Vullo
 		SELECT  
 			i.ApprenticeId 
 			,ProfileTypeCode			= i.ProfileTypeCode 
-			,TermList			= REPLACE(CAST(ISNULL(i.FirstName,'') + ISNULL(' ' + i.OtherNames,'') + ISNULL(' ' + i.Surname,'')  + ISNULL(' ' + i.PreferredName,'') AS VARCHAR(MAX)) COLLATE SQL_Latin1_General_CP1_CI_AS, CHAR(0), '') 
+			,TermList			= REPLACE(CAST(ISNULL(i.FirstName,'') + ISNULL(' ' + i.OtherNames,'') + ISNULL(' ' + i.Surname,'')  + ISNULL(' ' + i.PreferredName,'') + CASE WHEN i.Surname LIKE '% %' THEN ISNULL(' ' + REPLACE(i.Surname,' ','') ,'') ELSE '' END AS VARCHAR(MAX)) COLLATE SQL_Latin1_General_CP1_CI_AS, CHAR(0), '') 
 			,FilterTermList = CASE i.[GenderCode] WHEN 'M' THEN '0M' WHEN 'F' THEN '0F' ELSE '0M 0F' END + ' '  + RIGHT(CAST(YEAR(i.BirthDate) AS VARCHAR),2) +  ' ' + '0' + i.ProfileTypeCode 
 			,[ProcessStatus]	= 0 
 			,[ProcessDate]		= GETDATE() 
