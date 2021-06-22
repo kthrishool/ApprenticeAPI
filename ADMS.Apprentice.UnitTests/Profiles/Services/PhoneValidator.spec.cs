@@ -116,11 +116,27 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public void throwExceptionWhenpassingAInvalidNumber()
+        public void ThrowExceptionWhenpassingAInvalidNumber()
         {
             phone = new Phone()
             {
                 PhoneNumber = "+61 41111111"
+            };
+            ClassUnderTest
+                .Invoking(c => c.ValidatePhonewithType(exceptionBuilder, phone)).Invoke();
+
+            exceptionBuilder.HasExceptions()
+                .Should().Be(true);
+        }
+
+        [TestMethod]
+        public void ThrowExceptionIfPhoneTypeIsNotValid()
+        {
+            phone = new Phone()
+            {
+                PhoneNumber = "+61 411111111",
+                PhoneTypeCode = "InvalidType"
+
             };
             ClassUnderTest
                 .Invoking(c => c.ValidatePhonewithType(exceptionBuilder, phone)).Invoke();

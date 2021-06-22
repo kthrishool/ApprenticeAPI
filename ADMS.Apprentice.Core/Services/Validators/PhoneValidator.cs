@@ -18,7 +18,8 @@ namespace ADMS.Apprentice.Core.Services.Validators
         }
 
         public void ValidatePhonewithType(IValidatorExceptionBuilder exceptionBuilder, Phone phone)
-        {
+        {            
+
             phone.PhoneNumber = phone.PhoneNumber.Sanitise();
 
             if(phone.PhoneNumber.IsNullOrEmpty()) {
@@ -26,6 +27,12 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 return;
             }
 
+            if (!phone.PhoneTypeCode.IsNullOrEmpty() && !(Enum.IsDefined(typeof(PhoneType), phone.PhoneTypeCode)))
+            {
+                exceptionBuilder.Add(ValidationExceptionType.InvalidPhoneTypeCode);
+                return;
+            }
+            
             phone.PhoneNumber = new string(phone.PhoneNumber.ToCharArray().Where(char.IsDigit).ToArray());
 
             if(phone.PhoneNumber.Substring(0,2) == "61") 

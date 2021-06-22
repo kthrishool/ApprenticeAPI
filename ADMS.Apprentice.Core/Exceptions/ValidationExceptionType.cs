@@ -128,6 +128,9 @@ namespace ADMS.Apprentice.Core.Exceptions
         MandatoryContact,
 
         [ExceptionDetails("AP-VAL-0042", "A guardian already exists for this apprentice")]
-        GuardianExists
+        GuardianExists,
+
+        [ExceptionDetails("AP-VAL-0043", "Invalid phone type code")]
+        InvalidPhoneTypeCode
     }
 }

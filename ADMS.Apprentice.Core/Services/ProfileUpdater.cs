@@ -159,7 +159,7 @@ namespace ADMS.Apprentice.Core.Services
             {
                 //if no phone details for the profile , add the new ones
                 profile.Phones = phoneMessage.Select(c => new Phone()
-                    {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList();
+                    {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag, PhoneTypeCode = c.PhoneTypeCode}).ToList();
             }
             else
             {
@@ -172,12 +172,13 @@ namespace ADMS.Apprentice.Core.Services
                 var toRemove = profile.Phones.Where(x => !messagePhoneIds.Contains(x.Id)).ToList();
                 var toUpdate = phoneMessage.Where(x => profilePhoneIds.Contains(x.Id)).ToList();
 
-                toAdd.ForEach(x => profile.Phones.Add(new Phone() {PhoneNumber = x.PhoneNumber, PreferredPhoneFlag = x.PreferredPhoneFlag}));
+                toAdd.ForEach(x => profile.Phones.Add(new Phone() {PhoneNumber = x.PhoneNumber, PreferredPhoneFlag = x.PreferredPhoneFlag, PhoneTypeCode = x.PhoneTypeCode}));
                 toRemove.ForEach(x => profile.Phones.Remove(x));
                 toUpdate.ForEach(x =>
                 {
                     profile.Phones.SingleOrDefault(y => y.Id == x.Id).PhoneNumber = x.PhoneNumber;
                     profile.Phones.SingleOrDefault(y => y.Id == x.Id).PreferredPhoneFlag = x.PreferredPhoneFlag;
+                    profile.Phones.SingleOrDefault(y => y.Id == x.Id).PhoneTypeCode = x.PhoneTypeCode;
                 });
             }
         }
