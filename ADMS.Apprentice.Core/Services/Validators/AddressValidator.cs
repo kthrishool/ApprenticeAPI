@@ -7,6 +7,7 @@ using ADMS.Apprentice.Core.HttpClients.ReferenceDataApi;
 using Adms.Shared.Exceptions;
 using Adms.Shared.Extensions;
 using System.Collections.Generic;
+using System;
 
 namespace ADMS.Apprentice.Core.Services.Validators
 {
@@ -14,23 +15,23 @@ namespace ADMS.Apprentice.Core.Services.Validators
     {
         private readonly IReferenceDataClient referenceDataClient;
         
-        private readonly IValidatorExceptionBuilderFactory exceptionBuilderFactory;
+        private readonly IExceptionFactory exceptionFactory;
 
         public AddressValidator(
-            IValidatorExceptionBuilderFactory exceptionBuilderFactory,
+            IExceptionFactory exceptionFactory,
             IReferenceDataClient referenceDataClient
         )
         {
             this.referenceDataClient = referenceDataClient;
-            this.exceptionBuilderFactory = exceptionBuilderFactory;
+            this.exceptionFactory = exceptionFactory;
 
         }
 
-        public async Task<IValidatorExceptionBuilder> ValidateAsync(IAddressAttributes address)
+        public async Task<ValidationExceptionBuilder> ValidateAsync(IAddressAttributes address)
         {
-            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
+            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
             if (address == null) {
-                exceptionBuilder.Add(ValidationExceptionType.AddressRecordNotFound);
+                exceptionBuilder.AddException(ValidationExceptionType.AddressRecordNotFound);
                 return exceptionBuilder;
             }
             if (!string.IsNullOrEmpty(address.SingleLineAddress))
@@ -48,51 +49,51 @@ namespace ADMS.Apprentice.Core.Services.Validators
         }
 
 
-        private IValidatorExceptionBuilder ValidateDefaultCodes(IAddressAttributes address)
+        private ValidationExceptionBuilder ValidateDefaultCodes(IAddressAttributes address)
         {
-            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
+            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
             // If the single line address is empty we need to check if other details are valid.
             // if the postcode is there then validate it first
             if (string.IsNullOrWhiteSpace(address.Postcode) ||
                 string.IsNullOrWhiteSpace(address.Locality) ||
                 string.IsNullOrWhiteSpace(address.StateCode))
-                exceptionBuilder.Add(ValidationExceptionType.AddressRecordNotFound);
+                exceptionBuilder.AddException(ValidationExceptionType.AddressRecordNotFound);
             if (address.Postcode.Length != 4 || address.Postcode.All(char.IsDigit) == false)
-                exceptionBuilder.Add(ValidationExceptionType.InvalidPostcode);
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidPostcode);
             if (address.StateCode.Length > 10)
-                exceptionBuilder.Add(ValidationExceptionType.InvalidStateCode);
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidStateCode);
 
             if (address.Locality.Length > 40)
-                exceptionBuilder.Add(ValidationExceptionType.SuburbExceedsMaxLength);
+                exceptionBuilder.AddException(ValidationExceptionType.SuburbExceedsMaxLength);
             if (address.StreetAddress2?.Length > 80)
-                exceptionBuilder.Add(ValidationExceptionType.StreetAddressExceedsMaxLength);
+                exceptionBuilder.AddException(ValidationExceptionType.StreetAddressExceedsMaxLength);
             if (address.StreetAddress3?.Length > 80)
-                exceptionBuilder.Add(ValidationExceptionType.StreetAddressExceedsMaxLength);
+                exceptionBuilder.AddException(ValidationExceptionType.StreetAddressExceedsMaxLength);
 
             if (string.IsNullOrWhiteSpace(address.StreetAddress1)) {
-                exceptionBuilder.Add(ValidationExceptionType.StreetAddressLine1CannotBeNull);
+                exceptionBuilder.AddException(ValidationExceptionType.StreetAddressLine1CannotBeNull);
                 return exceptionBuilder;
             }
             if (address.StreetAddress1.Length > 80)
-                exceptionBuilder.Add(ValidationExceptionType.StreetAddressExceedsMaxLength);
+                exceptionBuilder.AddException(ValidationExceptionType.StreetAddressExceedsMaxLength);
             return exceptionBuilder;
         }
 
-        private async Task<IValidatorExceptionBuilder> ValidateSingleLineAddressAsync(IAddressAttributes address)
+        private async Task<ValidationExceptionBuilder> ValidateSingleLineAddressAsync(IAddressAttributes address)
         {
-            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
+            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
             //Verify the address using iGas
             //If it is a valid single line address, iGas will return a record with geo location details         
 
             DetailAddressModel detailAddress = await referenceDataClient.GetDetailAddressByFormattedAddress(address.SingleLineAddress);
             //no chance to have detail address to be null, but in case of reasons..
             if (detailAddress == null) {
-                exceptionBuilder.Add(ValidationExceptionType.AddressRecordNotFound);
+                exceptionBuilder.AddException(ValidationExceptionType.AddressRecordNotFound);
                 return exceptionBuilder;
             }
 
             if (detailAddress.StreetAddressLine1.IsNullOrEmpty() || detailAddress.Locality.IsNullOrEmpty() || detailAddress.State.IsNullOrEmpty() || detailAddress.Postcode.IsNullOrEmpty()) {
-                exceptionBuilder.Add(ValidationExceptionType.AddressRecordNotFound);
+                exceptionBuilder.AddException(ValidationExceptionType.AddressRecordNotFound);
                 return exceptionBuilder;
             }
 
@@ -111,9 +112,9 @@ namespace ADMS.Apprentice.Core.Services.Validators
             return exceptionBuilder;
         }
 
-        private async Task<IValidatorExceptionBuilder> ValidatePartialAddressAsync(IAddressAttributes address)
+        private async Task<ValidationExceptionBuilder> ValidatePartialAddressAsync(IAddressAttributes address)
         {
-            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
+            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
             //Verify the partial address using iGas. Partial address = Locality + State + postcode
             //If it is a valid, populate geo location details
 
@@ -122,26 +123,26 @@ namespace ADMS.Apprentice.Core.Services.Validators
             PartialAddressModel partialAddress = await referenceDataClient.GetAddressByFormattedLocality(formattedLocality);
 
             if (partialAddress == null) {
-                exceptionBuilder.Add(ValidationExceptionType.AddressRecordNotFound);
+                exceptionBuilder.AddException(ValidationExceptionType.AddressRecordNotFound);
                 return exceptionBuilder;
             }
 
             //if iGas couldnt resolve the partial address
             if (string.IsNullOrEmpty(partialAddress.Locality) || string.IsNullOrEmpty(partialAddress.State) || string.IsNullOrEmpty(partialAddress.Postcode))
-            {
-                exceptionBuilder.Add(ValidationExceptionType.AddressRecordNotFound);
+            { 
+                exceptionBuilder.AddException(ValidationExceptionType.AddressRecordNotFound);
                 return exceptionBuilder;
-            }                
-
+            }
+        
             //Looking for contains rather than exact match on Locality in case of spelling erros or terminologies like Civic, Civic square, Toowoomba city, Toowoomba DC etc
-            if (!partialAddress.Locality.Contains(address.Locality.ToUpper()))
-                exceptionBuilder.Add(ValidationExceptionType.PostCodeLocalityMismatch);
+            if (!partialAddress.Locality .Contains(address.Locality.ToUpper()))
+                exceptionBuilder.AddException(ValidationExceptionType.PostCodeLocalityMismatch);
 
             if (partialAddress.State != address.StateCode.ToUpper())
-                exceptionBuilder.Add(ValidationExceptionType.PostCodeStateCodeMismatch);
+                exceptionBuilder.AddException(ValidationExceptionType.PostCodeStateCodeMismatch);
 
             if (partialAddress.Postcode != address.Postcode)
-                exceptionBuilder.Add(ValidationExceptionType.PostCodeMismatch);
+                exceptionBuilder.AddException(ValidationExceptionType.PostCodeMismatch);
             //update address with geo location details
             //partial address doenst provide confidence info, but according to below info assigning confidence level of 4
             //The confidence level from GNAF for the address and Geocode.Should be used in conjunction with Geo Code Type

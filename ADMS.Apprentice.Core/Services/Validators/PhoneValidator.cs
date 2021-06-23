@@ -17,19 +17,20 @@ namespace ADMS.Apprentice.Core.Services.Validators
         {
         }
 
-        public void ValidatePhonewithType(IValidatorExceptionBuilder exceptionBuilder, Phone phone)
-        {            
+        public void ValidatePhonewithType(ValidationExceptionBuilder exceptionBuilder, Phone phone)
+        {
+          //  phone.PhoneTypeCode = PhoneType.LANDLINE.ToString();
 
             phone.PhoneNumber = phone.PhoneNumber.Sanitise();
 
             if(phone.PhoneNumber.IsNullOrEmpty()) {
-                exceptionBuilder.Add(ValidationExceptionType.InvalidPhoneNumber);
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidPhoneNumber);
                 return;
             }
 
             if (!phone.PhoneTypeCode.IsNullOrEmpty() && !(Enum.IsDefined(typeof(PhoneType), phone.PhoneTypeCode)))
             {
-                exceptionBuilder.Add(ValidationExceptionType.InvalidPhoneTypeCode);
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidPhoneTypeCode);
                 return;
             }
             
@@ -39,35 +40,35 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 phone.PhoneNumber = "0" + phone.PhoneNumber.Substring(2, phone.PhoneNumber.Length - 2);
 
             if(phone.PhoneNumber.Length < 10) {
-                exceptionBuilder.Add(ValidationExceptionType.InvalidPhoneNumber);
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidPhoneNumber);
                 return;
             }
 
             if (!(startingCode.Contains(phone.PhoneNumber.Substring(0, 2)) && phone.PhoneNumber.Length == 10))
             {
-                exceptionBuilder.Add(ValidationExceptionType.InvalidPhoneNumber);
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidPhoneNumber);
             }
 
             if(phone.PhoneNumber.Length != 10) 
-                exceptionBuilder.Add(ValidationExceptionType.InvalidPhoneNumber);
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidPhoneNumber);
 
             if (phone.PhoneNumber.Substring(0, 2) == "04")
             {
                 if (phone.PhoneTypeCode.IsNullOrEmpty() || phone.PhoneTypeCode == PhoneType.MOBILE.ToString())
                     phone.PhoneTypeCode = PhoneType.MOBILE.ToString();
                 else
-                    exceptionBuilder.Add(ValidationExceptionType.InvalidPhoneNumber);
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPhoneNumber);
             }
             else
             {
                 if (phone.PhoneTypeCode.IsNullOrEmpty() || phone.PhoneTypeCode == PhoneType.LANDLINE.ToString())
                     phone.PhoneTypeCode = PhoneType.LANDLINE.ToString();
                 else
-                    exceptionBuilder.Add(ValidationExceptionType.InvalidPhoneNumber);
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPhoneNumber);
             }
         }
 
-        public string ValidatePhone(IValidatorExceptionBuilder exceptionBuilder, string phoneNumber, ValidationExceptionType exception)
+        public string ValidatePhone(ValidationExceptionBuilder exceptionBuilder, string phoneNumber, ValidationExceptionType exception)
         {
             if (phoneNumber.Sanitise() == null) {
                 return null;
@@ -78,15 +79,15 @@ namespace ADMS.Apprentice.Core.Services.Validators
                 phoneNumber = "0" + phoneNumber.Substring(2, phoneNumber.Length - 2);
 
             if(phoneNumber.Length < 10) {
-                exceptionBuilder.Add(ValidationExceptionType.InvalidPhoneNumber);
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidPhoneNumber);
                 return phoneNumber;
             }
 
             if (!(startingCode.Contains(phoneNumber.Substring(0, 2)) && phoneNumber.Length == 10))
-                exceptionBuilder.Add(exception);
+                exceptionBuilder.AddException(exception);
 
             if(phoneNumber.Length != 10)
-                exceptionBuilder.Add(exception);
+                exceptionBuilder.AddException(exception);
 
             return phoneNumber;
         }

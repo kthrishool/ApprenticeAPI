@@ -57,7 +57,7 @@ namespace ADMS.Apprentice.UnitTests.Constants
         public static DateTime LeftSchoolDate = DateTime.Now.AddYears(-5);
 
         public static ProfileQualificationMessage QualificationMessage = new ProfileQualificationMessage()
-            {QualificationCode = "QCode", QualificationDescription = "QDescription", StartDate = new DateTime(2010, 1, 1), EndDate = new DateTime(2020, 1, 1) };
+            {QualificationCode = "QCode", QualificationDescription = "QDescription", StartDate = new DateTime(2010, 1, 1), EndDate = new DateTime(2020, 1, 1), ApprenticeshipId = null };
 
         public static bool ActiveFlag = true;
 

@@ -50,7 +50,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             };
             Container.GetMock<IProfileValidator>()
                 .Setup(s => s.ValidateAsync(It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         protected override async void When()
@@ -329,7 +329,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             };
             Container.GetMock<IProfileValidator>()
                 .Setup(s => s.ValidateAsync(It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         protected override async void When()

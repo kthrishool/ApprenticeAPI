@@ -14,6 +14,7 @@ using System;
 using System.Globalization;
 using ADMS.Apprentice.Core.Services.Validators;
 using Moq;
+using ADMS.Apprentice.Core.TYIMS.Entities;
 
 namespace ADMS.Apprentice.UnitTests.Profiles.Services
 {
@@ -27,7 +28,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private Profile profile;
         private ValidationException validationException;
         
-        private IValidatorExceptionBuilder exceptionBuilder;
+        private ValidationExceptionBuilder exceptionBuilder;
 
         protected override void Given()
         {
@@ -46,13 +47,14 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validationException = new ValidationException(null, (ValidationError)null);
 
             var exceptionFactory = Container.GetMock<IExceptionFactory>().Object;
-            Container.GetMock<IValidatorExceptionBuilderFactory>()
-                .Setup(ebf => ebf.CreateExceptionBuilder())
-                .Returns(() => new ValidatorExceptionBuilder(exceptionFactory));
+
+            // Container.GetMock<ValidationExceptionBuilderFactory>()
+            //     .Setup(ebf => ebf.CreateExceptionBuilder())
+            //     .Returns(() => new ValidatorExceptionBuilder(exceptionFactory));
             
             Container.GetMock<IReferenceDataValidator>()
                 .Setup(r => r.ValidateAsync(It.IsAny<Qualification>()))
-                .ReturnsAsync(() => new ValidatorExceptionBuilder(exceptionFactory));
+                .ReturnsAsync(() => new ValidationExceptionBuilder(exceptionFactory));
 
             Container
                 .GetMock<IExceptionFactory>()
@@ -261,7 +263,128 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(profile.Qualifications.ToList())).ThrowAnyExceptions())
                 .Should().NotThrow();
-        }       
+        }
+        
+        [TestMethod]
+        public void WhenQualificationBelongsToAnApprenticeshipAndHasNoEndDate_ThenAnExceptionOccurs()
+        {
+            qualification.ApprenticeshipId = 10;
+            qualification.EndDate = null;
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions())
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void WhenQualificationBelongsToAnApprenticeshipAndHasNoStartDate_ThenAnExceptionOccurs()
+        {
+            qualification.ApprenticeshipId = 10;
+            qualification.StartDate = null;
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions())
+                .Should().Throw<ValidationException>();
+        }
     }
     #endregion
+    
+    #region "Qualification Validation with Apprenticeship"
+    [TestClass]
+    public class WhenValidatingAQualificationWithAnApprenticeship : GivenWhenThen<QualificationValidator>
+    {
+        private ValidationException validationException;
+        private Qualification qualification;
+        //private Address invalidAddress;
+        private Profile profile;
+        private Registration registration;
+        protected override void Given()
+        {
+            profile = new Profile();
+            qualification = new Qualification()
+            {
+                QualificationCode = "QCode",
+                QualificationDescription = "QDescription",
+                QualificationLevel = "524",
+                QualificationANZSCOCode = "ANZS",
+                StartDate = new DateTime(2010, 1, 1),
+                EndDate = new DateTime(2020, 1, 1),
+                ApprenticeshipId = 20,
+            };
+            profile.Qualifications.Add(qualification);
+            profile.BirthDate = ProfileConstants.Birthdate;
+            validationException = new ValidationException(null, (ValidationError)null);
+
+            registration = new Registration()
+            {
+                CurrentEndReasonCode = "CMPS",
+                StartDate = new DateTime(2010, 1, 1),
+                EndDate = new DateTime(2020, 1, 1),
+                RegistrationId = qualification.ApprenticeshipId.Value,
+                QualificationCode = "QCode",
+                TrainingContractId = 100,
+            };
+
+            var exceptionFactory = Container.GetMock<IExceptionFactory>().Object;
+
+            base.Given();
+            Container.GetMock<IExceptionFactory>()
+                .Setup(ef => ef.CreateValidationException(It.IsAny<ValidationExceptionType[]>()))
+                .Returns(validationException)
+                ;
+            
+            Container.GetMock<IReferenceDataValidator>()
+                .Setup(r => r.ValidateAsync(It.IsAny<Qualification>()))
+                .ReturnsAsync(() => new ValidationExceptionBuilder(exceptionFactory));
+
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidQualification))
+                .Returns(validationException);
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.DuplicateQualification))
+                .Returns(validationException);
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(It.IsAny<ValidationExceptionType[]>()))
+                .Returns(validationException);
+        }
+        
+        [TestMethod]
+        public void WhenRegistrationIsValid_ThenNoErrorsOccur()
+        {
+            ClassUnderTest.ValidateAgainstApprenticeshipQualification(qualification, registration).HasExceptions()
+                .Should().Equals(false);
+
+        } 
+
+        [TestMethod]
+        public void WhenRegistrationIsNull_ThenErrorsOccur()
+        {
+            ClassUnderTest.ValidateAgainstApprenticeshipQualification(qualification, null).HasExceptions()
+                .Should().Equals(true);
+        } 
+
+        [TestMethod]
+        public void WhenRegistrationEndDateIsNull_ThenErrorsOccur()
+        {
+            registration.EndDate = null;
+            ClassUnderTest.ValidateAgainstApprenticeshipQualification(qualification, registration).HasExceptions()
+                .Should().Equals(true);
+        } 
+
+        [TestMethod]
+        public void WhenRegistrationEndReasonCodeIsNotCMPS_ThenErrorsOccur()
+        {
+            registration.CurrentEndReasonCode = "SUSP";
+            ClassUnderTest.ValidateAgainstApprenticeshipQualification(qualification, registration).HasExceptions()
+                .Should().Equals(true);
+        } 
+
+        [TestMethod]
+        public void WhenRegistrationQualificationCodeDoesNotEqualQualification_ThenErrorsOccur()
+        {
+            registration.QualificationCode = "OTH";
+            ClassUnderTest.ValidateAgainstApprenticeshipQualification(qualification, registration).HasExceptions()
+                .Should().Equals(true);
+        } 
+    }
+    #endregion "Qualification Validation with Apprenticeship"
 }

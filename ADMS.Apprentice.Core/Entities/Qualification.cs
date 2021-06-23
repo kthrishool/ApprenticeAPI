@@ -5,10 +5,15 @@ using ADMS.Services.Infrastructure.Model.Interface;
 
 namespace ADMS.Apprentice.Core.Entities
 {
+    ///<summary>
+    /// A Qualification an apprentice has completed.
+    ///</summary> 
     public class Qualification : IAuditableIdentifier, ITimestampEnabled
     {
         public int Id { get; set; }
         public int ApprenticeId { get; set; }
+        
+        public int? ApprenticeshipId { get; set; }
 
         public string QualificationCode { get; set; }
         public string QualificationDescription { get; set; }

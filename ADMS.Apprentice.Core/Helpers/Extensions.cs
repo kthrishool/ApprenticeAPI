@@ -61,14 +61,14 @@ namespace ADMS.Apprentice.Core.Services.Validators
         ///         await tasks.WaitAndThrowAnyExceptionFound();
         ///     </code>
         /// </example>
-        public async static Task<IValidatorExceptionBuilder> WaitAndReturnExceptionBuilder(this IEnumerable<Task<IValidatorExceptionBuilder>> tasksWaiting)
+        public async static Task<ValidationExceptionBuilder> WaitAndReturnExceptionBuilder(this IEnumerable<Task<ValidationExceptionBuilder>> tasksWaiting)
         { 
-            var tasks = new List<Task<IValidatorExceptionBuilder>>();
+            var tasks = new List<Task<ValidationExceptionBuilder>>();
             tasks.AddRange(tasksWaiting);
-            IValidatorExceptionBuilder exceptionBuilder = null;
+            ValidationExceptionBuilder exceptionBuilder = null;
             while(tasks.Any())
             {
-                Task<IValidatorExceptionBuilder> completedTask = await Task.WhenAny(tasks);
+                Task<ValidationExceptionBuilder> completedTask = await Task.WhenAny(tasks);
                 if(completedTask.Exception != null)
                 {
                     throw completedTask.Exception;

@@ -7,7 +7,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
     [RegisterWithIocContainer]
     public interface IPhoneValidator
     {
-        void ValidatePhonewithType(IValidatorExceptionBuilder exceptionBuilder, Phone Phone);
-        string ValidatePhone(IValidatorExceptionBuilder exceptionBuilder, string phoneNumber, ValidationExceptionType exception);
+        void ValidatePhonewithType(ValidationExceptionBuilder exceptionBuilder, Phone Phone);
+        string ValidatePhone(ValidationExceptionBuilder exceptionBuilder, string phoneNumber, ValidationExceptionType exception);
     }
 }

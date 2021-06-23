@@ -131,6 +131,15 @@ namespace ADMS.Apprentice.Core.Exceptions
         GuardianExists,
 
         [ExceptionDetails("AP-VAL-0043", "Invalid phone type code")]
-        InvalidPhoneTypeCode
+        InvalidPhoneTypeCode,
+
+        [ExceptionDetails("AP-VAL-0044", "The apprenticeship referenced by the qualification does not exist")]
+        QualificationApprenticeshipDoesNotExist,
+
+        [ExceptionDetails("AP-VAL-0045", "The apprenticeship referenced by the qualification has a different qualification code")]
+        QualificationApprenticeshipQualificationCodeDoesNotMatch,
+
+        [ExceptionDetails("AP-VAL-0046", "The apprenticeship referenced by the qualification is not yet complete")]
+        QualificationApprenticeshipIsNotComplete,
     }
 }

@@ -18,6 +18,8 @@ namespace ADMS.Apprentice.Core.Messages
         
         [MaxLength(10, ErrorMessage = "ANZSCO code cannot exceed 10 characters in length")]
         public string QualificationANZSCOCode { get; set; }
+        
+        public int? ApprenticeshipId { get; set; }
        
         public DateTime? StartDate { get; set; }
 

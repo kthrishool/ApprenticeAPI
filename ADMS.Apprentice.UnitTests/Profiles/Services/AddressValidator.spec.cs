@@ -97,10 +97,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             Container.GetMock<IReferenceDataClient>()
                 .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(partialAddress);
-            
-            Container.GetMock<IValidatorExceptionBuilderFactory>()
-                .Setup(x => x.CreateExceptionBuilder())
-                .Returns(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         private async Task UpdateAddressColumnAsync(string columnName, string value, ValidationExceptionType exception, bool RaiseException)
@@ -490,6 +486,36 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .Should().Throw<ValidationException>();
         }
 
+        [TestMethod]
+        public async Task ThrowsReturnMultipleErrorsIfMismatchExceptionIfManualAddressPostCodeIsInvalid1()
+        {
+            newProfile = new Profile();
+            invalidAddress = new Address()
+            {
+                StreetAddress1 = "14 Mort street",
+                StreetAddress2 = null,
+                StreetAddress3 = null,
+                Locality = "Braddon",
+                Postcode = "0000",
+                StateCode = "Invalid",
+                AddressTypeCode = AddressType.RESD.ToString()
+            };
+            newProfile.Addresses.Add(invalidAddress);
+
+            Container.GetMock<IReferenceDataClient>()
+                .Setup(x => x.GetAddressByFormattedLocality(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(partialAddress);
+
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.PostCodeMismatch))
+                .Returns(validationException);
+
+            /* Slightly more complex code test for code coverage */
+            var validationExceptionBuilder = new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object);
+            validationExceptionBuilder.AddExceptions((await ClassUnderTest.ValidateAsync(newProfile.Addresses.SingleOrDefault())).GetValidationExceptions());
+            validationExceptionBuilder.GetValidationExceptions().Should().HaveCountGreaterThan(1);
+        }
         #endregion
 
         #endregion

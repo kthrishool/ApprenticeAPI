@@ -7,7 +7,7 @@ namespace ADMS.Apprentice.Core.Services.Validators
     [RegisterWithIocContainer]
     public interface IReferenceDataValidator
     {
-        Task<IValidatorExceptionBuilder> ValidateAsync(Profile profile);
-        Task<IValidatorExceptionBuilder> ValidateAsync(Qualification qualification);
+        Task<ValidationExceptionBuilder> ValidateAsync(Profile profile);
+        Task<ValidationExceptionBuilder> ValidateAsync(Qualification qualification);
     }
 }

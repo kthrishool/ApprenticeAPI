@@ -36,10 +36,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 .GetMock<IExceptionFactory>()
                 .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidUSI))
                 .Returns(validationException);
-
-            Container.GetMock<IValidatorExceptionBuilderFactory>()
-                .Setup(ebf => ebf.CreateExceptionBuilder())
-                .Returns(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         [TestMethod]

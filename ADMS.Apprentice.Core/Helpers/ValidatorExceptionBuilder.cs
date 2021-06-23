@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Adms.Shared.Exceptions;
@@ -6,33 +7,53 @@ using ADMS.Apprentice.Core.Exceptions;
 
 namespace ADMS.Apprentice.Core.Services.Validators
 {
-    public class ValidatorExceptionBuilder : List<ValidationExceptionType>, IValidatorExceptionBuilder
+    public class ValidationExceptionBuilder : ExceptionBuilder<ValidationExceptionType>
     {
-        private readonly IExceptionFactory exceptionFactory;
-        public ValidatorExceptionBuilder(IExceptionFactory exceptionFactory)
+        public ValidationExceptionBuilder(IExceptionFactory exceptionFactory) : base(exceptionFactory)
         {
-            this.exceptionFactory = exceptionFactory;
+
         }
 
-        public void AddExceptions(IValidatorExceptionBuilder exceptionBuilder)
+    }
+    public class ExceptionBuilder<TExceptionType>
+        where TExceptionType : Enum
+    {
+        private readonly IExceptionFactory exceptionFactory;
+        private readonly List<TExceptionType> exceptions;
+        public ExceptionBuilder(IExceptionFactory exceptionFactory)
         {
-            this.AddRange(exceptionBuilder.GetExceptions());
+            this.exceptionFactory = exceptionFactory;
+            this.exceptions = new List<TExceptionType>();
+        }
+        
+        public void AddException(TExceptionType exceptionType) {
+            exceptions.Add(exceptionType);
+        }
+
+        public void AddExceptions(IEnumerable<TExceptionType> exceptionBuilder)
+        {
+            exceptions.AddRange(exceptionBuilder);
+        }
+
+        public void AddExceptions(ExceptionBuilder<TExceptionType> exceptionBuilder)
+        {
+            exceptions.AddRange(exceptionBuilder.GetValidationExceptions());
         }
 
         public bool HasExceptions()
         {
-            return this.Any();
+            return exceptions.Any();
         }
         
-        public IEnumerable<ValidationExceptionType> GetExceptions()
+        public IEnumerable<TExceptionType> GetValidationExceptions()
         {
-            return this;
+            return exceptions;
         }
 
         public void ThrowAnyExceptions()
         {
-            if(this.Any()){
-                throw exceptionFactory.CreateValidationException(this.Distinct().ToArray());
+            if(exceptions.Any()){
+                throw exceptionFactory.CreateValidationException<TExceptionType>(exceptions.Distinct().ToArray());
             }
         }
     }

@@ -9,23 +9,24 @@ using Adms.Shared.Exceptions;
 using ADMS.Apprentice.Core.Helpers;
 using System;
 using System.Globalization;
+using ADMS.Apprentice.Core.TYIMS.Entities;
 
 namespace ADMS.Apprentice.Core.Services.Validators
 {
     public class QualificationValidator : IQualificationValidator
     {
-        private readonly IValidatorExceptionBuilderFactory exceptionBuilderFactory;
+        private readonly IExceptionFactory exceptionFactory;
         private readonly IReferenceDataValidator referenceDataValidator;
 
-        public QualificationValidator(IValidatorExceptionBuilderFactory exceptionBuilderFactory, IReferenceDataValidator referenceDataValidator)     
+        public QualificationValidator(IExceptionFactory exceptionFactory, IReferenceDataValidator referenceDataValidator)     
         {            
-            this.exceptionBuilderFactory = exceptionBuilderFactory;
+            this.exceptionFactory = exceptionFactory;
             this.referenceDataValidator = referenceDataValidator;
         }
 
-        public async Task<IValidatorExceptionBuilder> ValidateAsync(List<Qualification> qualifications)
+        public async Task<ValidationExceptionBuilder> ValidateAsync(List<Qualification> qualifications)
         {
-            var tasks = new List<Task<IValidatorExceptionBuilder>>();
+            var tasks = new List<Task<ValidationExceptionBuilder>>();
 
             foreach (Qualification qualification in qualifications)
             {
@@ -35,49 +36,76 @@ namespace ADMS.Apprentice.Core.Services.Validators
             return await tasks.WaitAndReturnExceptionBuilder();
         }
         
-        public async Task<IValidatorExceptionBuilder> ValidateAsync(Qualification qualification)
+        public async Task<ValidationExceptionBuilder> ValidateAsync(Qualification qualification)
         {
-            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
+            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
             //check if mandatory fields presents
             
             if (qualification.QualificationCode.IsNullOrEmpty()) {
-                exceptionBuilder.Add(ValidationExceptionType.InvalidQualification);
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidQualification);
             }
 
             //check if StartDate < endDate if startDate and EndDate not null
             if (qualification.StartDate?.Date > qualification.EndDate?.Date)
-                exceptionBuilder.Add(ValidationExceptionType.InvalidQualification);
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidQualification);
 
             //check if start date can not be less than apprentice DOB +12 years
             if ((qualification.StartDate != null && qualification.Profile != null))
             {
               if (qualification.StartDate.Value.Date < qualification.Profile.BirthDate.AddYears(+12))
-                    exceptionBuilder.Add(ValidationExceptionType.InvalidQualification);
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidQualification);
             }
             //check if end date can not be less than apprentice DOB +12 years
             if (qualification.EndDate != null && qualification.Profile != null)
             {
                 if (qualification.EndDate.Value.Date < qualification.Profile.BirthDate.AddYears(+12))
-                    exceptionBuilder.Add(ValidationExceptionType.InvalidQualification);
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidQualification);
             }
             //check if start date and end date can not be greater than today's date.
             if (qualification.StartDate != null && qualification.EndDate != null)
             {
                 if (qualification.StartDate.Value.Date > DateTime.Today || qualification.EndDate.Value.Date > DateTime.Today)
-                    exceptionBuilder.Add(ValidationExceptionType.InvalidQualification);
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidQualification);
             }
+            
+            if (qualification.ApprenticeshipId != null)
+                if (qualification.StartDate == null || qualification.EndDate == null)
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidQualification);
 
             exceptionBuilder.AddExceptions(await referenceDataValidator.ValidateAsync(qualification));
 
             return exceptionBuilder;
         }
 
-        public IValidatorExceptionBuilder CheckForDuplicates(List<Qualification> qualifications)
+        public ValidationExceptionBuilder CheckForDuplicates(List<Qualification> qualifications)
         {
-            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
+            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
             //check for duplicates based on Qcode
             if (qualifications.GroupBy(x => x.QualificationCode.ToUpper()).Any(g => g.Count() > 1))
-                exceptionBuilder.Add(ValidationExceptionType.DuplicateQualification);
+                exceptionBuilder.AddException(ValidationExceptionType.DuplicateQualification);
+            return exceptionBuilder;
+        }
+
+        public ValidationExceptionBuilder ValidateAgainstApprenticeshipQualification(Qualification qualification, Registration registration)
+        {
+            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            if(registration == null) {
+                exceptionBuilder.AddException(ValidationExceptionType.QualificationApprenticeshipDoesNotExist);        
+                return exceptionBuilder;
+            }
+            /* Should never happen is a bug if code occurs */
+            // if(registration.RegistrationId != qualification.ApprenticeshipId) {
+            //     exceptionBuilder.AddException(ValidationExceptionType.QualificationApprenticeshipDoesNotExist);        
+            // }
+            if(qualification.QualificationCode != registration.QualificationCode) {
+                exceptionBuilder.AddException(ValidationExceptionType.QualificationApprenticeshipQualificationCodeDoesNotMatch);        
+            }
+            if(registration.EndDate == null) {
+                exceptionBuilder.AddException(ValidationExceptionType.QualificationApprenticeshipIsNotComplete);
+            }
+            if(registration.CurrentEndReasonCode != "CMPS") {
+                exceptionBuilder.AddException(ValidationExceptionType.QualificationApprenticeshipIsNotComplete);
+            }
             return exceptionBuilder;
         }
     }

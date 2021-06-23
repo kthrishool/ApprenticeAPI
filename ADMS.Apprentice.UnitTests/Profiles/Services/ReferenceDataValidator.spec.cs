@@ -28,9 +28,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         {
             newProfile = new Profile();
 
-            Container.GetMock<IValidatorExceptionBuilderFactory>()
-                .Setup(s => s.CreateExceptionBuilder())
-                .Returns(() => new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
             validationException = new ValidationException(null, (ValidationError) null);

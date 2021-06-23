@@ -38,11 +38,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             Container.GetMock<IGuardianValidator>()
                 .Setup(s => s.ValidateAsync(guardian))
-                .ReturnsAsync(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
-
-            Container.GetMock<IValidatorExceptionBuilderFactory>()
-                .Setup(f => f.CreateExceptionBuilder())
-                .Returns(() => new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         protected override async void When()

@@ -59,32 +59,25 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
 
             var exceptionFactory = Container.GetMock<IExceptionFactory>().Object;
 
-            var exceptionBuilderFactory = Container.GetMock<IValidatorExceptionBuilderFactory>();
-
-            exceptionBuilderFactory
-                .Setup(ebf => ebf.CreateExceptionBuilder())
-                .Returns(() =>
-                    new ValidatorExceptionBuilder(exceptionFactory));
-
             Container.GetMock<IQualificationValidator>()
                 .Setup(r => r.ValidateAsync(It.IsAny<List<Qualification>>()))
-                .ReturnsAsync(new ValidatorExceptionBuilder(exceptionFactory));
+                .ReturnsAsync(new ValidationExceptionBuilder(exceptionFactory));
 
             Container.GetMock<IUSIValidator>()
                 .Setup(r => r.Validate(It.IsAny<Profile>()))
-                .Returns(() => new ValidatorExceptionBuilder(exceptionFactory));
+                .Returns(() => new ValidationExceptionBuilder(exceptionFactory));
 
             Container.GetMock<IAddressValidator>()
                 .Setup(r => r.ValidateAsync(It.IsAny<IAddressAttributes>()))
-                .ReturnsAsync(new ValidatorExceptionBuilder(exceptionFactory));
+                .ReturnsAsync(new ValidationExceptionBuilder(exceptionFactory));
             
             Container.GetMock<IPhoneValidator>()
-                .Setup(a => a.ValidatePhonewithType(It.IsAny<IValidatorExceptionBuilder>(), It.IsAny<Phone>()))
+                .Setup(a => a.ValidatePhonewithType(It.IsAny<ValidationExceptionBuilder>(), It.IsAny<Phone>()))
             ;
             
             Container.GetMock<IReferenceDataValidator>()
                 .Setup(r => r.ValidateAsync(It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidatorExceptionBuilder(exceptionFactory));
+                .ReturnsAsync(new ValidationExceptionBuilder(exceptionFactory));
 
         }
 
@@ -394,7 +387,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             validProfile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = USI, ActiveFlag = ActiveFlag, USIStatus = USIStatus}};
             Container.GetMock<IUSIValidator>()
                 .Setup(r => r.Validate(validProfile))
-                .Returns(() => new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .Returns(() => new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
 
 
             ClassUnderTest

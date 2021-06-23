@@ -28,6 +28,20 @@
             <param name="services">Service collection</param>
             <param name="configuration">Configuration</param>
         </member>
+        <member name="T:ADMS.Apprentice.Api.Controllers.ApprenticeErrorsController">
+            <summary>
+                List all the error messages available.
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeErrorsController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.Exceptions.IExceptionFactory)">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeErrorsController.List">
+            <summary>List available error message </summary>
+        </member>
+        <member name="M:ADMS.Apprentice.Api.Controllers.ApprenticeErrorsController.Get(System.String)">
+            <summary>Get the details of errors for the specified errorType</summary>
+        </member>
         <member name="T:ADMS.Apprentice.Api.Controllers.ApprenticeGuardianController">
             <summary>
             Apprentice guardian endpoints of a given apprentice.

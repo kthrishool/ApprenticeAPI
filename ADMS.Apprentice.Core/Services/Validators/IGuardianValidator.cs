@@ -7,6 +7,6 @@ namespace ADMS.Apprentice.Core.Services.Validators
     [RegisterWithIocContainer]
     public interface IGuardianValidator
     {
-        Task<IValidatorExceptionBuilder> ValidateAsync(Guardian guardian);
+        Task<ValidationExceptionBuilder> ValidateAsync(Guardian guardian);
     }
 }

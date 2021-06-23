@@ -32,12 +32,6 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             };
             guardian = new Guardian { Id = 1, ApprenticeId = 1 };
 
-            Container.GetMock<IValidatorExceptionBuilderFactory>()
-                .Setup(ebf => ebf.CreateExceptionBuilder())
-                .Returns(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
-
-            Assert.IsNotNull(Container.GetMock<IValidatorExceptionBuilderFactory>().Object.CreateExceptionBuilder());
-
             validationException = new ValidationException(null, (ValidationError) null);
             Container
                 .GetMock<IExceptionFactory>()
@@ -50,7 +44,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
             Container
                 .GetMock<IAddressValidator>()
                 .Setup(av => av.ValidateAsync(It.IsAny<IAddressAttributes>()))
-                .ReturnsAsync(new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 
         protected override void When()

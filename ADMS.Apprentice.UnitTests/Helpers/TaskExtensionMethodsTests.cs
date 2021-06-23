@@ -10,28 +10,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ADMS.Apprentice.UnitTests.Helpers
 {
     [TestClass]
-    public class ValidatorExceptionBuilderFactoryTest : GivenWhenThen<ValidatorExceptionBuilderFactory>
-    {
-
-        protected override void Given()
-        {
-            base.Given();
-        }
-        
-        protected override void When()
-        {
-            base.When();
-        }
-        
-        [TestMethod]
-        public void ThenAValidatorExceptionBuilderIsCreated()
-        {
-            ClassUnderTest.CreateExceptionBuilder()
-                .Should().NotBeNull();
-        }
-    }
-
-    [TestClass]
     public class ExceptionsThrownFromTasks : GivenWhenThen
     {
         protected List<Task> tasks;

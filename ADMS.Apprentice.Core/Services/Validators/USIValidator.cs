@@ -9,12 +9,12 @@ namespace ADMS.Apprentice.Core.Services.Validators
 {
     public class USIValidator : IUSIValidator
     {
-        private readonly IValidatorExceptionBuilderFactory exceptionBuilderFactory;
+        private readonly IExceptionFactory exceptionFactory;
 
 
-        public USIValidator(IValidatorExceptionBuilderFactory exceptionBuilderFactory)
+        public USIValidator(IExceptionFactory exceptionFactory)
         {
-            this.exceptionBuilderFactory = exceptionBuilderFactory;
+            this.exceptionFactory = exceptionFactory;
         }
 
         static readonly char[] validChars =
@@ -58,17 +58,17 @@ namespace ADMS.Apprentice.Core.Services.Validators
             return validChars[checkCodePoint];
         }
 
-        public IValidatorExceptionBuilder Validate(Profile profile)
+        public ValidationExceptionBuilder Validate(Profile profile)
         {
-            var exceptionBuilder = exceptionBuilderFactory.CreateExceptionBuilder();
+            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
             if (profile.USIs.Any())
             {
                 if (profile.USIs.Single(x => x.ActiveFlag == true).USI.Sanitise() == null) 
-                    exceptionBuilder.Add(ValidationExceptionType.InvalidUSI);
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidUSI);
 
                 // code to be implemented fro additional validation
                 if (!exceptionBuilder.HasExceptions() && !VerifyKey(profile.USIs.Single(x => x.ActiveFlag == true).USI.Sanitise()))
-                    exceptionBuilder.Add(ValidationExceptionType.InvalidUSI);
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidUSI);
             }
             return exceptionBuilder;
         }

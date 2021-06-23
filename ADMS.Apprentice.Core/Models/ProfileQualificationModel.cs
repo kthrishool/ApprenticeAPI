@@ -17,6 +17,8 @@ namespace ADMS.Apprentice.Core.Models
         public string CreatedBy { get; }
         public DateTime? UpdatedOn { get; }
         public string UpdatedBy { get; }
+        
+        public int? ApprenticeshipId { get; }
 
         public ProfileQualificationModel(Qualification qualification)
         {
@@ -27,6 +29,7 @@ namespace ADMS.Apprentice.Core.Models
             QualificationANZSCOCode = qualification.QualificationANZSCOCode;
             StartDate = qualification.StartDate;
             EndDate = qualification.EndDate;
+            ApprenticeshipId = qualification.ApprenticeshipId;
             CreatedOn = qualification.CreatedOn;
             CreatedBy = qualification.CreatedBy;
             UpdatedOn = qualification.UpdatedOn;

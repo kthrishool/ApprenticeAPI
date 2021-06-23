@@ -19,7 +19,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private Phone phone;
         private ValidationException validationException;
         
-        private IValidatorExceptionBuilder exceptionBuilder;
+        private ValidationExceptionBuilder exceptionBuilder;
 
         protected override void Given()
         {
@@ -31,11 +31,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PreferredPhoneFlag = true
             };
             validationException = new ValidationException(null, (ValidationError) null);
-            exceptionBuilder = new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object);
-
-            Container.GetMock<IValidatorExceptionBuilderFactory>()
-                .Setup(f => f.CreateExceptionBuilder())
-                .Returns(exceptionBuilder);
+            exceptionBuilder = new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object);
 
             Container
                 .GetMock<IExceptionFactory>()
@@ -157,7 +153,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
         private Profile newProfile;
         private Phone phone;
         private ValidationException validationException;
-        private IValidatorExceptionBuilder exceptionBuilder;
+        private ValidationExceptionBuilder exceptionBuilder;
 
         protected override void Given()
         {
@@ -169,7 +165,7 @@ namespace ADMS.Apprentice.UnitTests.Profiles.Services
                 PreferredPhoneFlag = true
             };
             validationException = new ValidationException(null, (ValidationError) null);
-            exceptionBuilder = new ValidatorExceptionBuilder(Container.GetMock<IExceptionFactory>().Object);
+            exceptionBuilder = new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object);
 
             Container
                 .GetMock<IExceptionFactory>()

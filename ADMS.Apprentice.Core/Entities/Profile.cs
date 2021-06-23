@@ -41,6 +41,8 @@ namespace ADMS.Apprentice.Core.Entities
         public virtual ICollection<Phone> Phones { get; set; }
         public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<ApprenticeTFN> TFNs { get; set; }
+        
+        /// <summary>The Qualifications the apprentice has completed.</summary>
         public virtual ICollection<Qualification> Qualifications { get; set; }
 
         public virtual Guardian Guardian { get; set; }

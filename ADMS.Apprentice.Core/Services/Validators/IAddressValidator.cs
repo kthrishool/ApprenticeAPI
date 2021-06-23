@@ -9,6 +9,6 @@ namespace ADMS.Apprentice.Core.Services.Validators
     [RegisterWithIocContainer]
     public interface IAddressValidator
     {
-        Task<IValidatorExceptionBuilder> ValidateAsync(IAddressAttributes addresses);
+        Task<ValidationExceptionBuilder> ValidateAsync(IAddressAttributes addresses);
     }
 }
