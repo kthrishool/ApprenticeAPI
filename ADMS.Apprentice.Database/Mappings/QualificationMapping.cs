@@ -23,7 +23,7 @@ namespace ADMS.Apprentice.Database.Mappings
                 .IsRequired();
             entity.Property(e => e.QualificationDescription)
                 .HasColumnName("QualificationDescription")
-                .HasMaxLength(50);
+                .HasMaxLength(200);
             entity.Property(e => e.QualificationLevel)
                 .HasColumnName("QualificationLevel")
                 .HasMaxLength(10);

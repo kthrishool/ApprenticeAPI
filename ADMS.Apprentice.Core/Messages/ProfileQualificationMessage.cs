@@ -10,7 +10,7 @@ namespace ADMS.Apprentice.Core.Messages
         [MaxLength(10, ErrorMessage = "Qualification code cannot exceed 10 characters in length")]
         public string QualificationCode { get; set; }
 
-        [MaxLength(50, ErrorMessage = "Qualification description cannot exceed 100 characters in length")]
+        [MaxLength(200, ErrorMessage = "Qualification description cannot exceed 200 characters in length")]
         public string QualificationDescription { get; set; }
         
         [MaxLength(10, ErrorMessage = "Qualification level cannot exceed 10 characters in length")]
