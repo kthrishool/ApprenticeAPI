@@ -57,7 +57,10 @@ namespace ADMS.Apprentice.Core.Services.Validators
             if (string.IsNullOrWhiteSpace(address.Postcode) ||
                 string.IsNullOrWhiteSpace(address.Locality) ||
                 string.IsNullOrWhiteSpace(address.StateCode))
+            {
                 exceptionBuilder.AddException(ValidationExceptionType.AddressRecordNotFound);
+                return exceptionBuilder;
+            }                
             if (address.Postcode.Length != 4 || address.Postcode.All(char.IsDigit) == false)
                 exceptionBuilder.AddException(ValidationExceptionType.InvalidPostcode);
             if (address.StateCode.Length > 10)
