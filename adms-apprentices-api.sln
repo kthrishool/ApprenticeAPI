@@ -14,13 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7A406B
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Apprentice.Core", "ADMS.Apprentice.Core\ADMS.Apprentice.Core.csproj", "{514893F2-6C4F-4FE7-8854-B179D49293A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Apprentices.Core", "ADMS.Apprentices.Core\ADMS.Apprentices.Core.csproj", "{514893F2-6C4F-4FE7-8854-B179D49293A0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Apprentice.Database", "ADMS.Apprentice.Database\ADMS.Apprentice.Database.csproj", "{9223CE90-C63D-4E0C-9C21-D1D584F76B52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Apprentices.Database", "ADMS.Apprentices.Database\ADMS.Apprentices.Database.csproj", "{9223CE90-C63D-4E0C-9C21-D1D584F76B52}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Apprentice.UnitTests", "ADMS.Apprentice.UnitTests\ADMS.Apprentice.UnitTests.csproj", "{61FB8360-C8ED-4841-9B52-D63006B6C46B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Apprentices.UnitTests", "ADMS.Apprentices.UnitTests\ADMS.Apprentices.UnitTests.csproj", "{61FB8360-C8ED-4841-9B52-D63006B6C46B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Apprentice.Api", "ADMS.Apprentice.Api\ADMS.Apprentice.Api.csproj", "{F250CE53-0643-482C-97A7-8C15C8477CF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Apprentices.Api", "ADMS.Apprentices.Api\ADMS.Apprentices.Api.csproj", "{F250CE53-0643-482C-97A7-8C15C8477CF8}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database.ADMSApprentice", "Database.ADMSApprentice\Database.ADMSApprentice.sqlproj", "{B8E48A08-7D3E-4989-84A7-E35189F883D5}"
 EndProject

@@ -1,1 +1,1 @@
-dotnet run -p .\Adms.Apprentice.Api\
+dotnet run -p .\ADMS.Apprentices.Api\

@@ -1,0 +1,324 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ADMS.Apprentices.Api</name>
+    </assembly>
+    <members>
+        <member name="T:ADMS.Apprentices.Api.Configuration.DependencyInjectionConfiguration">
+            <summary>
+            Configuration for dependency injection
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Configuration.DependencyInjectionConfiguration.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Configures dependency injection
+            </summary>
+            <param name="services">Services collection</param>
+            <param name="configuration"></param>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.Configuration.SettingsConfiguration">
+            <summary>
+            Configuration for settings
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Configuration.SettingsConfiguration.Configure(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Maps our configuration classes to the configuration held in app.config
+            </summary>
+            <param name="services">Service collection</param>
+            <param name="configuration">Configuration</param>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.Controllers.ApprenticeErrorsController">
+            <summary>
+                List all the error messages available.
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeErrorsController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.Exceptions.IExceptionFactory)">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeErrorsController.List">
+            <summary>List available error message </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeErrorsController.Get(System.String)">
+            <summary>Get the details of errors for the specified errorType</summary>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.Controllers.ApprenticeGuardianController">
+            <summary>
+            Apprentice guardian endpoints of a given apprentice.
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeGuardianController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,ADMS.Apprentices.Core.Services.IGuardianCreator,ADMS.Apprentices.Core.Services.IGuardianRetreiver,ADMS.Apprentices.Core.Services.IGuardianUpdater)">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeGuardianController.Get(System.Int32)">
+            <summary>
+            Gets guardian information of a given apprentice id.
+            </summary>
+            <param name="apprenticeId">Id of the apprentice</param>        
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeGuardianController.Create(System.Int32,ADMS.Apprentices.Core.Messages.ProfileGuardianMessage)">
+            <summary>
+            Adds a guardian for an apprentice
+            </summary>
+            <param name="apprenticeId">apprenticeId</param>
+            <param name="message">Details of the guardian to be created</param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeGuardianController.Update(System.Int32,ADMS.Apprentices.Core.Messages.ProfileGuardianMessage)">
+            <summary>
+            Updates an existing parent/guardian.
+            </summary>
+            <param name="apprenticeId">ID of the apprentice</param>        
+            <param name="message">Details of the information to be updated</param>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.Controllers.ApprenticeProfileController">
+            <summary>
+            Apprentice endpoints.
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeProfileController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Paging.IPagingHelper,ADMS.Apprentices.Core.Services.IProfileCreator,ADMS.Apprentices.Core.Services.IProfileUpdater,ADMS.Apprentices.Core.Services.IProfileRetreiver)">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeProfileController.List(Adms.Shared.Paging.PagingInfo)">
+            <summary>
+            List all apprentice profile and returns generic summary information for each apprentice.
+            </summary>
+            <param name="paging">Paging information</param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeProfileController.Search(ADMS.Apprentices.Core.Messages.ProfileSearchMessage,Adms.Shared.Paging.PagingInfo)">
+            <summary>
+            Get all apprentice profile based on the provided search params.
+            </summary>
+            <param name="message"></param>
+            <param name="paging">Paging information</param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeProfileController.Get(System.Int32)">
+            <summary>
+            Gets all information of a given apprentice id.
+            </summary>
+            <param name="id">Id of the apprentice</param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeProfileController.Create(ADMS.Apprentices.Core.Messages.ProfileMessage)">
+            <summary>
+            Creates a new apprentice profile
+            </summary>
+            <param name="message">Details of the apprentice profile to be created</param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeProfileController.Update(System.Int32,ADMS.Apprentices.Core.Messages.UpdateProfileMessage)">
+            <summary>
+            Updates an existing apprentice.
+            </summary>
+            <param name="id">ID of the application to be updated</param>
+            <param name="message">Details of the information to be updated</param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeProfileController.Deceased(System.Int32)">
+            <summary>
+            Updates an existing apprentice deceased flag to true.
+            </summary>
+            <param name="id">ID of the apprentice</param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeProfileController.AdminUpdate(System.Int32,ADMS.Apprentices.Core.Messages.AdminUpdateMessage)">
+            <summary>
+            Updates an existing apprentice deceased flag to false and other special department updates.
+            </summary>
+            <param name="id">ID of the apprentice</param>
+            <param name="message"></param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeProfileController.ServiceAustraliaApprenticeUpdate(System.Int32,ADMS.Apprentices.Core.Messages.ServiceAustraliaUpdateMessage)">
+            <summary>
+            Updates  apprentice CRN from Service Australia .
+            </summary>
+            <param name="id">ID of the apprentice</param>
+            <param name="message"></param>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.Controllers.ApprenticeQualificationController">
+            <summary>
+            Apprentice qualification endpoints of a given apprentice.
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeQualificationController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,ADMS.Apprentices.Core.Services.IQualificationCreator,ADMS.Apprentices.Core.Services.IQualificationUpdater,Adms.Shared.Helpers.ICollectionHelper)">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeQualificationController.List(System.Int32)">
+            <summary>
+            List all qualifications for an apprentice.
+            </summary>
+            <param name="apprenticeId">ID of the apprentice</param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeQualificationController.Get(System.Int32,System.Int32)">
+            <summary>
+            Gets all information of a given qualification id.
+            </summary>
+            <param name="apprenticeId">Id of the apprentice</param>
+            <param name="id">Id of the qualification</param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeQualificationController.Create(System.Int32,ADMS.Apprentices.Core.Messages.ProfileQualificationMessage)">
+            <summary>
+            Adds a new qualification for an apprentice
+            </summary>
+            <param name="apprenticeId">apprenticeId</param>
+            <param name="message">Details of the qualification to be created</param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeQualificationController.Update(System.Int32,System.Int32,ADMS.Apprentices.Core.Messages.ProfileQualificationMessage)">
+            <summary>
+            Updates an existing qualification claim application.
+            </summary>
+            <param name="apprenticeId">ID of the apprentice</param>
+            <param name="id">ID of the qualification to be updated</param>
+            <param name="message">Details of the information to be updated</param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeQualificationController.Remove(System.Int32,System.Int32)">
+            <summary>
+            Removes a qualification from an apprentice profile
+            </summary>
+            <param name="apprenticeId">ID of the apprentice</param>
+            <param name="id">ID of the qualification to be removed</param>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.Controllers.ApprenticeUSIController">
+            <summary>
+            Apprentice usi endpoints.
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeUSIController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,Adms.Shared.Exceptions.IExceptionFactory,ADMS.Apprentices.Core.Services.IUSIVerify)">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.ApprenticeUSIController.Verify(System.Int32)">
+            <summary>
+            Verify provided USI of a given apprentice
+            </summary>
+            <param name="apprenticeId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.Controllers.Tfn.ApprenticeTFNController">
+            <summary>
+            Apprentice TFN endpoints.
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.Tfn.ApprenticeTFNController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.IRepository,ADMS.Apprentices.Core.Services.IApprenticeTFNCreator,ADMS.Apprentices.Core.Services.IApprenticeTFNRetreiver,ADMS.Apprentices.Core.Services.IApprenticeTFNUpdater)">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.Tfn.ApprenticeTFNController.Get(System.Int32)">
+            <summary>
+            Get all information regarding the current active TFN record.
+            </summary>
+            <param name="apprenticeId">Id of the Apprentice.</param>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.Tfn.ApprenticeTFNController.Post(System.Int32,ADMS.Apprentices.Core.Messages.TFN.ApprenticeTFNV1)">
+            <summary>
+            Create a new ApprenticeTFN record
+            </summary>
+            <remarks>
+            Create a new ApprenticeTFN record and return details.
+            </remarks>
+            <param name="apprenticeId"></param>
+            <param name="message">Details of the tfn to be created</param>
+            <response code="201">Returns newly created tfn</response>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.Tfn.ApprenticeTFNController.Patch(System.Int32,ADMS.Apprentices.Core.Messages.TFN.ApprenticeTFNV1)">
+            <summary>
+            Patch an ApprenticeTFN record
+            </summary>
+            <remarks>
+            patch an existing ApprenticeTFN record and return all details.
+            </remarks>
+            <param name="apprenticeId"></param>
+            <param name="message">Details of the tfn to be patched</param>
+            <response code="201">Returns newly created tfn</response>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.Controllers.Tfn.TFNStatsController">
+            <summary>TFNStats endpoints</summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.Tfn.TFNStatsController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Adms.Shared.Paging.IPagingHelper,ADMS.Apprentices.Core.Services.ITFNStatsRetriever)">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Controllers.Tfn.TFNStatsController.List(Adms.Shared.Paging.PagingInfo,ADMS.Apprentices.Core.Messages.TFN.TFNStatsCriteria)">
+            <summary>
+            Get all stats related to TFN records.
+            </summary>
+            <param name="paging">paging metadata.</param>
+            <param name="criteria">Search criteria</param>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.Filters.DbWriteAttribute">
+            <summary>DbWriteAttribute</summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Filters.DbWriteAttribute.#ctor">
+            <summary>Constructor</summary>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.HttpClients.HttpClientConfiguration">
+            <summary>
+            Configuration for the HTTP client
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.HttpClients.HttpClientConfiguration.Configure(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Configures the HTTP client
+            </summary>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.HttpClients.JwtPassThroughMessageHandler">
+            <summary>
+            Adds authorization token from incoming requests to outgoing HttpClient requests
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.HttpClients.JwtPassThroughMessageHandler.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.HttpClients.JwtPassThroughMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            SendAsync
+            </summary>
+            <param name="request"></param>
+            <param name="cancelToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.HttpClients.UsiAuthorizationMessageHandler">
+            <summary>
+            Generate and adds authorization token to outgoing HttpClient requests
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.HttpClients.UsiAuthorizationMessageHandler.#ctor(Microsoft.Extensions.Options.IOptions{ADMS.Apprentices.Core.OurUsiSettings})">
+            <summary>Constructor</summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.HttpClients.UsiAuthorizationMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            SendAsync
+            </summary>
+            <param name="request"></param>
+            <param name="cancelToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.Program">
+            <summary>
+            Application start point
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Program.Main(System.String[])">
+            <summary>
+            Start point for the application
+            </summary>
+        </member>
+        <member name="T:ADMS.Apprentices.Api.Startup">
+            <summary>
+            Application startup
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:ADMS.Apprentices.Api.Startup.Configuration">
+            <summary>
+            Configuration
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Configures services
+            </summary>
+        </member>
+        <member name="M:ADMS.Apprentices.Api.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.Extensions.Logging.ILoggerFactory,System.IServiceProvider)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+        </member>
+    </members>
+</doc>
