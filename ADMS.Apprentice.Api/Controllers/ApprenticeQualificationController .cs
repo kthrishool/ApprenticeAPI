@@ -1,21 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentice.Core.Entities;
 using ADMS.Apprentice.Core.Messages;
 using ADMS.Apprentice.Core.Models;
+using ADMS.Apprentice.Core.Services;
 using ADMS.Services.Infrastructure.WebApi;
 using ADMS.Services.Infrastructure.WebApi.Documentation;
 using Adms.Shared;
 using Adms.Shared.Extensions;
-using Adms.Shared.Filters;
-using Adms.Shared.Paging;
+using Adms.Shared.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using ADMS.Apprentice.Core.Helpers;
-using ADMS.Apprentice.Core.Services.Validators;
-using ADMS.Apprentice.Core.Services;
-using Adms.Shared.Exceptions;
 
 namespace ADMS.Apprentice.Api.Controllers
 {
@@ -31,45 +26,35 @@ namespace ADMS.Apprentice.Api.Controllers
     public class ApprenticeQualificationController : AdmsController
     {
         private readonly IRepository repository;
-        private readonly IPagingHelper pagingHelper;
         private readonly IQualificationCreator qualificationCreator;
         private readonly IQualificationUpdater qualificationUpdater;
-        private readonly IExceptionFactory exceptionFactory;
+        private readonly ICollectionHelper collectionHelper;
 
         /// <summary>Constructor</summary>
         public ApprenticeQualificationController(
             IHttpContextAccessor contextAccessor,
             IRepository repository,
-            IPagingHelper pagingHelper,
             IQualificationCreator qualificationCreator,
             IQualificationUpdater qualificationUpdater,
-            IExceptionFactory exceptionFactory
+            ICollectionHelper collectionHelper
         ) : base(contextAccessor)
         {
             this.repository = repository;
-            this.pagingHelper = pagingHelper;
             this.qualificationCreator = qualificationCreator;
             this.qualificationUpdater = qualificationUpdater;
-            this.exceptionFactory = exceptionFactory;
+            this.collectionHelper = collectionHelper;
         }
 
         /// <summary>
-        /// List all qualifications of an apprentice.
+        /// List all qualifications for an apprentice.
         /// </summary>
-        /// <param name="apprenticeId">apprenticeId</param>
-        /// <param name="paging">Paging information</param>
+        /// <param name="apprenticeId">ID of the apprentice</param>
         [HttpGet]
-        [SupportsPaging(null)]
-        public async Task<ActionResult<PagedList<ProfileQualificationModel>>> List(int apprenticeId, PagingInfo paging)
+        public async Task<ActionResult<ProfileQualificationModel[]>> List(int apprenticeId)
         {
-            paging ??= new PagingInfo();
-            paging.SetDefaultSorting("id", true);
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
-
-            IQueryable<Qualification> query = profile.Qualifications.AsQueryable();            
-            PagedList<Qualification> qualifications = pagingHelper.ToPagedList(query, paging);
-            IEnumerable<ProfileQualificationModel> models = qualifications.Results.Map(a => new ProfileQualificationModel(a));
-            return Ok(new PagedList<ProfileQualificationModel>(qualifications, models));
+            ProfileQualificationModel[] models = profile.Qualifications.Map(a => new ProfileQualificationModel(a)).ToArray();
+            return Ok(models);
         }
 
         /// <summary>
@@ -79,12 +64,11 @@ namespace ADMS.Apprentice.Api.Controllers
         /// <param name="id">Id of the qualification</param>
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfileQualificationModel>> Get(int apprenticeId, int id)
-        {            
-            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);            
-            Qualification qualification = profile.Qualifications.Single(x => x.Id == id);
+        {
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
+            Qualification qualification = collectionHelper.Get(profile.Qualifications, q => q.Id, id);
             return Ok(new ProfileQualificationModel(qualification));
         }
-
 
         /// <summary>
         /// Adds a new qualification for an apprentice
@@ -95,7 +79,6 @@ namespace ADMS.Apprentice.Api.Controllers
         public async Task<ActionResult<ProfileQualificationModel>> Create(int apprenticeId, [FromBody] ProfileQualificationMessage message)
         {
             Qualification qualification = await qualificationCreator.CreateAsync(apprenticeId, message);
-
             await repository.SaveAsync();
             return Created($"/{qualification.Id}", new ProfileQualificationModel(qualification));
         }
@@ -109,11 +92,24 @@ namespace ADMS.Apprentice.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ProfileQualificationModel>> Update(int apprenticeId, int id, [FromBody] ProfileQualificationMessage message)
         {
-
             var qualification = await qualificationUpdater.Update(apprenticeId, id, message);
-            
             await repository.SaveAsync();
             return Ok(new ProfileQualificationModel(qualification));
+        }
+
+        /// <summary>
+        /// Removes a qualification from an apprentice profile
+        /// </summary>
+        /// <param name="apprenticeId">ID of the apprentice</param>
+        /// <param name="id">ID of the qualification to be removed</param>
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Remove(int apprenticeId, int id)
+        {
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId);
+            Qualification qualification = collectionHelper.Get(profile.Qualifications, q => q.Id, id);
+            profile.Qualifications.Remove(qualification);
+            await repository.SaveAsync();
+            return new NoContentResult();
         }
     }
 }
