@@ -77,9 +77,9 @@ namespace ADMS.Apprentices.Core.Models
             {
                 PreferredContactType = apprentice.PreferredContactType;
                 EmailAddress = apprentice.EmailAddress;
-                if (apprentice.Phones?.Count > 0)
+                if (apprentice.Phones.Count > 0)
                     PhoneNumbers = apprentice.Phones.Select(c => new PhoneNumberModel() {Id = c.Id, PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag, PhoneTypeCode = c.PhoneTypeCode}).ToList();
-                if (apprentice.Addresses?.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
+                if (apprentice.Addresses.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))
                     ResidentialAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.RESD.ToString()).Select(c => new ProfileAddressModel
                     {
                         Postcode = c.Postcode,
@@ -90,7 +90,7 @@ namespace ADMS.Apprentices.Core.Models
                         StreetAddress2 = c.StreetAddress2,
                         StreetAddress3 = c.StreetAddress3
                     }).SingleOrDefault();
-                if (apprentice.Addresses?.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.POST.ToString()))
+                if (apprentice.Addresses.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.POST.ToString()))
                     PostalAddress = apprentice.Addresses.Where(c => c.AddressTypeCode == AddressType.POST.ToString()).Select(c => new ProfileAddressModel
                     {
                         Postcode = c.Postcode,
@@ -103,7 +103,7 @@ namespace ADMS.Apprentices.Core.Models
                     }).SingleOrDefault();
             }
 
-            Qualifications = apprentice.Qualifications?.Select(q => new ProfileQualificationModel(q)).ToList();
+            Qualifications = apprentice.Qualifications.Select(q => new ProfileQualificationModel(q)).ToList();
             if (apprentice.USIs.Any(c => c.ActiveFlag == true))
             {
                 USIVerificationResult = apprentice.USIs.Where(c => c.ActiveFlag == true).Select(c => new ProfileUSIModel(c)).SingleOrDefault();

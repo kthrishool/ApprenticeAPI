@@ -136,7 +136,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                     break;
             }
 
-            newProfile.Addresses = new List<Address>();
+            newProfile.Addresses.Clear();
             newProfile.Addresses.Add(localAddress);
 
             if (RaiseException)
@@ -183,7 +183,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsValidationExceptionIfAddressIsInValid()
         {
-            newProfile.Addresses = new List<Address>();
+            newProfile.Addresses.Clear();
             newProfile.Addresses.Add(invalidAddress);
             ClassUnderTest.Invoking(async c =>
                 {

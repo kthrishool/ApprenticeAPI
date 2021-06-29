@@ -72,7 +72,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ReturnsNullIfApprenticeUSIisNull()
         {
-            profile.USIs = null;
+            profile.USIs.Clear();
             apprenticeUSI = ClassUnderTest.Verify(profile);
             apprenticeUSI.Should().BeNull();
         }

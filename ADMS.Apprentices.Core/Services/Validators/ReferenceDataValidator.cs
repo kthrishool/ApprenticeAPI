@@ -41,17 +41,17 @@ namespace ADMS.Apprentices.Core.Services.Validators
          
         private void ValidatePreferredContactType(ValidationExceptionBuilder exceptionBuilder, Profile profile)
         {
-            // if profileType is Mobile we need atleast one mobile phone.
+            // if preferredContactType is Mobile we need atleast one mobile phone.
             switch (profile.PreferredContactType)
             {
                 case nameof(PreferredContactType.MOBILE) or nameof(PreferredContactType.SMS):
-                    if (profile.Phones == null || profile.Phones.Any(c => c.PhoneNumber.StartsWith("04")) == false)
+                    if (profile.Phones.Any(c => c.PhoneNumber.StartsWith("04")) == false)
                     {
                         exceptionBuilder.AddException(ValidationExceptionType.MobilePreferredContactIsInvalid);
                     }
                     break;
                 case nameof(PreferredContactType.PHONE):
-                    if (profile.Phones == null || profile.Phones.Any() == false)
+                    if (profile.Phones.Any() == false)
                     {
                         exceptionBuilder.AddException(ValidationExceptionType.PhonePreferredContactisInvalid);
                     }
@@ -63,7 +63,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
                     }
                     break;
                 case nameof(PreferredContactType.MAIL):
-                    if (profile.Addresses == null || profile.Addresses.Any() == false)
+                    if (profile.Addresses.Any() == false)
                     {
                         exceptionBuilder.AddException(ValidationExceptionType.MailPreferredContactisInvalid);
                     }

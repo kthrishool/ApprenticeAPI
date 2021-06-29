@@ -277,7 +277,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
-            newProfile.Phones = null;
+            newProfile.Phones.Clear();
             ResetExceptionforExceptionValidation(ValidationExceptionType.PhonePreferredContactisInvalid, newProfile);
         }
 
@@ -298,7 +298,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.SMS.ToString();
 
-            newProfile.Phones = null;
+            newProfile.Phones.Clear();
 
             ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
         }
@@ -321,7 +321,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.MAIL.ToString();
 
-            newProfile.Addresses = null;
+            newProfile.Addresses.Clear();
 
             ResetExceptionforExceptionValidation(ValidationExceptionType.MailPreferredContactisInvalid, newProfile);
         }

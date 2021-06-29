@@ -87,16 +87,16 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsValidationExceptionIfUSIIsNull()
         {
-            ThrowExceptionForUsiTest(new Profile
+            profile = new Profile();
+            apprenticeUSI = new ApprenticeUSI()
             {
-                USIs = new List<ApprenticeUSI>()
-                {
-                    new ApprenticeUSI()
-                    {
-                        USI = "", ActiveFlag = true, USIStatus = "test"
-                    }
-                }
-            });
+                USI = "",
+                ActiveFlag = true,
+                USIStatus = "test"
+            };
+            profile.USIs.Add(apprenticeUSI);
+
+            ThrowExceptionForUsiTest(profile);
         }
 
         /// <summary>
@@ -104,16 +104,16 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void DoNothingIfUSIIsValid()
         {
-            RunPositiveUSITest(new Profile
+            profile = new Profile();
+            apprenticeUSI = new ApprenticeUSI()
             {
-                USIs = new List<ApprenticeUSI>()
-                {
-                    new ApprenticeUSI()
-                    {
-                        USI = "147852369Q", ActiveFlag = true, USIStatus = "test"
-                    }
-                }
-            });
+                USI = "147852369Q",
+                ActiveFlag = true,
+                USIStatus = "test"
+            };
+            profile.USIs.Add(apprenticeUSI);
+
+            RunPositiveUSITest(profile);
         }
 
 
@@ -122,16 +122,16 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowExceptionWhenUSIIsInvalid()
         {
-            ThrowExceptionForUsiTest(new Profile
+            profile = new Profile();
+            apprenticeUSI = new ApprenticeUSI()
             {
-                USIs = new List<ApprenticeUSI>()
-                {
-                    new ApprenticeUSI()
-                    {
-                        USI = "147852369I", ActiveFlag = true, USIStatus = "test"
-                    }
-                }
-            });
+                USI = "147852369I",
+                ActiveFlag = true,
+                USIStatus = "test"
+            };
+            profile.USIs.Add(apprenticeUSI);
+
+            ThrowExceptionForUsiTest(profile);
         }
     }
 

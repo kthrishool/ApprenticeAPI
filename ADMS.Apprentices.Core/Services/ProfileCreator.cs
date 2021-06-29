@@ -38,18 +38,27 @@ namespace ADMS.Apprentices.Core.Services
                 SelfAssessedDisabilityCode = message.SelfAssessedDisabilityCode.SanitiseUpper(),
                 InterpretorRequiredFlag = message.InterpretorRequiredFlag,
                 CitizenshipCode = message.CitizenshipCode.SanitiseUpper(),
-                ProfileTypeCode = message.ProfileType.SanitiseUpper(),
-                Phones = message.PhoneNumbers?.Select(c => new Phone()
-                    {PhoneNumber = c.PhoneNumber, PhoneTypeCode = c.PhoneTypeCode, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList(),
+                ProfileTypeCode = message.ProfileType.SanitiseUpper(),                
                 CountryOfBirthCode = message.CountryOfBirthCode.SanitiseUpper(),
                 PreferredContactType = message.PreferredContactType.SanitiseUpper(),
-
                 LanguageCode = message.LanguageCode.SanitiseUpper(),
                 HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),
                 LeftSchoolDate = message.LeftSchoolDate,
                 VisaNumber = message.VisaNumber.Sanitise(),
             };
-
+            if (message.PhoneNumbers != null)
+            {
+                foreach (PhoneNumberMessage phone in message.PhoneNumbers)
+                {
+                    profile.Phones.Add(new Phone
+                    {
+                        PhoneNumber = phone.PhoneNumber,
+                        PhoneTypeCode = phone.PhoneTypeCode.SanitiseUpper(),
+                        PreferredPhoneFlag = phone.PreferredPhoneFlag
+                    });
+                }
+            }
+            
             if (message.GenderCode != null)
             {
                 profile.GenderCode = message.GenderCode.SanitiseUpper();
@@ -85,7 +94,11 @@ namespace ADMS.Apprentices.Core.Services
             }
             if (message.USI != null)
             {
-                profile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = message.USI, ActiveFlag = true}};
+                profile.USIs.Add(new ApprenticeUSI 
+                { 
+                    USI = message.USI,
+                    ActiveFlag = true
+                });
             }
 
             var exceptionBuilder = await profileValidator.ValidateAsync(profile);

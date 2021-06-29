@@ -138,7 +138,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public void ThrowsValidationExceptionIfNoPhone()
         {
             validProfile.EmailAddress = null;
-            validProfile.Phones = null;
+            validProfile.Phones.Clear();
             ChangeException(ValidationExceptionType.MandatoryContact);
             ClassUnderTest
                 .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
@@ -205,14 +205,14 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = DateTime.Now.AddYears(-14),
-                ProfileTypeCode = ProfileConstants.Profiletype,
-                Phones = new List<Phone> { new Phone()
-                {
-                    PhoneNumber = "0411111111",
-                    PhoneTypeCode = "MOBILE",
-                    PreferredPhoneFlag = true
-                } }                
+                ProfileTypeCode = ProfileConstants.Profiletype,                           
             };
+            invalidProfile.Phones.Add(new Phone()
+            {
+                PhoneNumber = "0411111111",
+                PhoneTypeCode = "MOBILE",
+                PreferredPhoneFlag = true
+            });
 
             (await ClassUnderTest.ValidateAsync(invalidProfile)).ThrowAnyExceptions();
         }
@@ -297,10 +297,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void DoesNothingIfForPhonePositiveTesting()
         {
-            // Phone Number is null
-            var phones = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "0212345678"};
-
-            validProfile.Phones = null; //.Add(phones);
+            validProfile.Phones.Clear(); 
             ClassUnderTest
                 .Invoking(async c => (await c.ValidateAsync(validProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
@@ -384,7 +381,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         private void ExecuteUSITest(string USI, Boolean ActiveFlag, string USIStatus)
         {
             ChangeException(ValidationExceptionType.InvalidUSI);
-            validProfile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = USI, ActiveFlag = ActiveFlag, USIStatus = USIStatus}};
+            validProfile.USIs.Add( new ApprenticeUSI() {USI = USI, ActiveFlag = ActiveFlag, USIStatus = USIStatus});
             Container.GetMock<IUSIValidator>()
                 .Setup(r => r.Validate(validProfile))
                 .Returns(() => new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
@@ -414,8 +411,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             ChangeException(ValidationExceptionType.InvalidUSI);
 
-
-            validProfile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = "23456789D1", ActiveFlag = true, USIStatus = "test"}};
+            validProfile.USIs.Clear();
+            validProfile.USIs.Add( new ApprenticeUSI() {USI = "23456789D1", ActiveFlag = true, USIStatus = "test"});
 
             Container.GetMock<IUSIValidator>()
                 .Setup(r => r.Validate(validProfile));

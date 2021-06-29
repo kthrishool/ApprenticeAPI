@@ -36,7 +36,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
         {
             var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
             var tasks = new List<Task<ValidationExceptionBuilder>>();
-            if (profile.EmailAddress == null && (profile.Phones == null || profile.Phones.Count == 0))
+            if (profile.EmailAddress == null && profile.Phones.Count == 0)
                 exceptionBuilder.AddException(ValidationExceptionType.MandatoryContact);
 
             if (profile.BirthDate.Year == 0001)
@@ -133,28 +133,21 @@ namespace ADMS.Apprentices.Core.Services.Validators
         {
             var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
             if (profile.Phones != null)
-            {
-                var newPhones = new List<Phone>();
+            {               
                 var preferredPhoneSet = false;
 
                 foreach (Phone phone in profile.Phones)
                 {
-                    if (phone == null || phone.PhoneNumber.IsNullOrEmpty()) continue;
-                    Phone newPhone = phone;
+                    if (phone == null || phone.PhoneNumber.IsNullOrEmpty()) continue;                    
 
-                    phoneValidator.ValidatePhonewithType(exceptionBuilder, newPhone);
-                    if (preferredPhoneSet && Convert.ToBoolean(newPhone.PreferredPhoneFlag))
+                    phoneValidator.ValidatePhonewithType(exceptionBuilder, phone);
+                    if (preferredPhoneSet && Convert.ToBoolean(phone.PreferredPhoneFlag))
                     {
-                        newPhone.PreferredPhoneFlag = false;
+                        phone.PreferredPhoneFlag = false;
                     }
-                    else if (Convert.ToBoolean(newPhone.PreferredPhoneFlag))
-                        preferredPhoneSet = Convert.ToBoolean(newPhone.PreferredPhoneFlag);
-                    if (!newPhones.Any(c => newPhone.PhoneNumber.Contains(c.PhoneNumber)))
-                    {
-                        newPhones.Add(newPhone);
-                    }
+                    else if (Convert.ToBoolean(phone.PreferredPhoneFlag))
+                        preferredPhoneSet = Convert.ToBoolean(phone.PreferredPhoneFlag);                    
                 }
-                profile.Phones = newPhones;
             }
             return exceptionBuilder;
         }

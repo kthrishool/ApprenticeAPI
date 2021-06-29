@@ -158,8 +158,15 @@ namespace ADMS.Apprentices.Core.Services
             else if (profile.Phones.Count == 0)
             {
                 //if no phone details for the profile , add the new ones
-                profile.Phones = phoneMessage.Select(c => new Phone()
-                    {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag, PhoneTypeCode = c.PhoneTypeCode}).ToList();
+                foreach (PhoneNumberMessage phone in phoneMessage)
+                {
+                    profile.Phones.Add(new Phone
+                    {
+                        PhoneNumber = phone.PhoneNumber,
+                        PhoneTypeCode = phone.PhoneTypeCode,
+                        PreferredPhoneFlag = phone.PreferredPhoneFlag
+                    });
+                }
             }
             else
             {

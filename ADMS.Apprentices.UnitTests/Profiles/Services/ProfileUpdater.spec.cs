@@ -318,7 +318,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         protected override void Given()
         {
             profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
-            profile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI {USI = "currentUSI", ActiveFlag = true}};
+            profile.USIs.Add( new ApprenticeUSI {USI = "currentUSI", ActiveFlag = true});
             message = new UpdateProfileMessage
             {
                 Surname = ProfileConstants.Surname,
@@ -363,7 +363,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             //given
             profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
-            profile.USIs = new List<ApprenticeUSI>() {new ApprenticeUSI {USI = "currentUSI", ActiveFlag = true}};
+            profile.USIs.Clear();
+            profile.USIs.Add(new ApprenticeUSI { USI = "currentUSI", ActiveFlag = true });
             message = new UpdateProfileMessage
             {
                 Surname = ProfileConstants.Surname,

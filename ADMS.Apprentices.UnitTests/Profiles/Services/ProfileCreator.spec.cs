@@ -233,12 +233,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 PhoneNumbers = null
             };
             profile = await ClassUnderTest.CreateAsync(message);
-            profile.Phones.Should().BeNull();
+            profile.Phones.Should().BeEmpty();
         }
 
-        /// <summary>
-        /// Insert a profile record and check if the email has been updated .
-        /// </summary>
+       
         [TestMethod]
         public async Task ShouldSetUSI()
         {

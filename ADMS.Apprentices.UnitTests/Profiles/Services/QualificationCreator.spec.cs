@@ -39,7 +39,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             apprenticeId = 1;
             apprenticeshipId = 11;
             profile.Id = apprenticeId;
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             var q = ProfileConstants.QualificationMessage;            
             message = new ProfileQualificationMessage()
                             {QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,

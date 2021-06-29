@@ -38,15 +38,15 @@ namespace ADMS.Apprentices.Core.Entities
         public long AuditEventId { get; set; }
 
 
-        public virtual ICollection<Phone> Phones { get; set; }
-        public virtual ICollection<Address> Addresses { get; set; }
-        public virtual ICollection<ApprenticeTFN> TFNs { get; set; }
+        public virtual ICollection<Phone> Phones { get; }
+        public virtual ICollection<Address> Addresses { get; }
+        public virtual ICollection<ApprenticeTFN> TFNs { get; }
         
         /// <summary>The Qualifications the apprentice has completed.</summary>
-        public virtual ICollection<Qualification> Qualifications { get; set; }
+        public virtual ICollection<Qualification> Qualifications { get; }
 
         public virtual Guardian Guardian { get; set; }
-        public virtual ICollection<ApprenticeUSI> USIs { get; set; }
+        public virtual ICollection<ApprenticeUSI> USIs { get; }
 
         public Profile()
         {

@@ -89,7 +89,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void NoExceptionIfStartDateIsNull()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.StartDate = null;
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(profile.Qualifications.ToList())).ThrowAnyExceptions())
@@ -99,7 +99,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void NoExceptionIfEndDateIsNull()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.EndDate = null;
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(profile.Qualifications.ToList())).ThrowAnyExceptions())
@@ -108,8 +108,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
         [TestMethod]
         public void ThrowsValidationExceptionIfFoundDuplicate()
-        {           
-            profile.Qualifications = new List<Qualification>();            
+        {
+            profile.Qualifications.Clear();            
             profile.Qualifications.Add(qualification);            
             profile.Qualifications.Add(qualification);
 
@@ -120,7 +120,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void DoesNotThrowValidationExceptionIfNoDuplicate()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             profile.Qualifications.Add(qualification);
 
             ClassUnderTest.Invoking(c => c.CheckForDuplicates(profile.Qualifications.ToList()).ThrowAnyExceptions())
@@ -130,7 +130,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsValidationExceptionIfQCodeIsNull()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.QualificationCode = null;
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(profile.Qualifications.ToList())).ThrowAnyExceptions())
@@ -140,7 +140,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsExceptionIfEndDateIsLessThanStartDate()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.StartDate = new DateTime(2020, 1, 2);
             qualification.EndDate = new DateTime(2020, 1, 1);
             profile.Qualifications.Add(qualification);
@@ -152,7 +152,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsExceptionIfStartDateIsGreaterThanTodaysDate()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.StartDate = DateTime.Now.AddDays(+1);
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(profile.Qualifications.ToList())).ThrowAnyExceptions())
@@ -162,7 +162,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsExceptionIfEndDateIsGraterThanTodaysDate()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.EndDate = DateTime.Now.AddDays(+1);
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(profile.Qualifications.ToList())).ThrowAnyExceptions())
@@ -172,7 +172,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsExceptionIfStartDateEndDateIsGraterThanTodaysDate()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.StartDate = DateTime.Now.AddDays(+1);
             qualification.EndDate = DateTime.Now.AddDays(+1);
             profile.Qualifications.Add(qualification);
@@ -183,7 +183,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsExceptionIfStartDateIsLessThanDateofBirthPlus12Years()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.StartDate = ProfileConstants.Birthdate.AddYears(+11);
             qualification.Profile = new Profile()
             {
@@ -197,7 +197,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsExceptionIfEndDateIsLessThanDateofBirthPlus12Years()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.StartDate = null;
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(+12);
             qualification.Profile = new Profile()
@@ -212,7 +212,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ThrowsExceptionIfStartDateEndDateIsLessThanDateofBirthPlus12Years()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.StartDate = ProfileConstants.Birthdate.AddYears(+10);
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(+11);
             qualification.Profile = new Profile()
@@ -227,7 +227,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void NotThrowExceptionIfStartDateEndDateIsGreaterThanDateofBirthPlus12Years()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.StartDate = ProfileConstants.Birthdate.AddYears(+13);
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(+14);
             qualification.Profile = new Profile()
@@ -242,7 +242,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void NotThrowExceptionIfEndDateIsGreaterThanDateofBirthPlus12Years()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(+14);
             qualification.Profile = new Profile()
             {
@@ -257,7 +257,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void NotThrowExceptionIfEndDateIsNotNullAndProfileisNUll()
         {
-            profile.Qualifications = new List<Qualification>();
+            profile.Qualifications.Clear();
             qualification.EndDate = null;
             qualification.Profile = null;
             profile.Qualifications.Add(qualification);

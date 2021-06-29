@@ -21,7 +21,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
 
         protected override void Given()
         {
-            ICollection<Address> add = new List<Address>();
+            ICollection<Address> addresses = new List<Address>();
 
             RestAddress = new Address()
             {
@@ -45,8 +45,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
                 SingleLineAddress = ProfileConstants.PostalAddress.SingleLineAddress,
                 AddressTypeCode = AddressType.POST.ToString()
             };
-            add.Add(RestAddress);
-            add.Add(postal);
+            addresses.Add(RestAddress);
+            addresses.Add(postal);
 
             ICollection<Qualification> qualifications = new List<Qualification>();
             qualifications.Add(ProfileConstants.Qualification);
@@ -69,21 +69,22 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolDate = ProfileConstants.LeftSchoolDate,
                 DeceasedFlag = ProfileConstants.DeceasedFlag,
-                ActiveFlag = ProfileConstants.ActiveFlag,
-                Addresses = add,
+                ActiveFlag = ProfileConstants.ActiveFlag,                
                 CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
                 CreatedOn = ProfileConstants.Createdon,
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,
-                UpdatedBy = ProfileConstants.Updatedby,
-                Phones = ProfileConstants.PhoneNumbers.Select(c => new Phone() {PhoneNumber = c.PhoneNumber, PreferredPhoneFlag = c.PreferredPhoneFlag}).ToList(),
+                UpdatedBy = ProfileConstants.Updatedby,                
                 LanguageCode = ProfileConstants.LanguageCode,
                 PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
                 VisaNumber = ProfileConstants.VisaNumber,
-                Qualifications = qualifications,
-                USIs = new List<ApprenticeUSI>() {new ApprenticeUSI() {USI = ProfileConstants.USI, ActiveFlag = true, USIStatus = "test"}},
                 CustomerReferenceNumber = ProfileConstants.CustomerReferenceNumber
             };
+            profile.Addresses.Add(postal);
+            profile.Addresses.Add(RestAddress);
+            profile.Phones.Add(new Phone() { PhoneNumber = ProfileConstants.PhoneNumbers.FirstOrDefault().PhoneNumber, PreferredPhoneFlag = ProfileConstants.PhoneNumbers.FirstOrDefault().PreferredPhoneFlag });
+            profile.Qualifications.Add(ProfileConstants.Qualification);
+            profile.USIs.Add(new ApprenticeUSI() { USI = ProfileConstants.USI, ActiveFlag = true, USIStatus = "test" });
         }
 
         protected override void When()
@@ -137,7 +138,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
         [TestMethod]
         public void SetAddressToNullIfNoAddress()
         {
-            profile.Addresses = null;
+            profile.Addresses.Clear();
             model = new ProfileModel(profile);
             model.PostalAddress.Should().BeNull();
             model.ResidentialAddress.Should().BeNull();
@@ -146,17 +147,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
         [TestMethod]
         public void SetPhonesToNullIfNoPhones()
         {
-            profile.Phones = null;
+            profile.Phones.Clear();
             model = new ProfileModel(profile);
             model.PhoneNumbers.Should().BeNull();
-        }
-
-        [TestMethod]
-        public void SetQualificationsToNullIfNoQuals()
-        {
-            profile.Qualifications = null;
-            model = new ProfileModel(profile);
-            model.Qualifications.Should().BeNull();
         }
     }
 
