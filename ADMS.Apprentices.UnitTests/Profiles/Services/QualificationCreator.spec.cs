@@ -67,7 +67,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .Setup(s => s.GetAsync<Profile>(apprenticeId, true))
                 .ReturnsAsync(profile);
             Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidateAsync(It.IsAny<Qualification>()))
+                .Setup(s => s.ValidateAsync(It.IsAny<Qualification>(), It.IsAny<Profile>()))
                 .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
             Container.GetMock<IQualificationValidator>()
                 .Setup(s => s.ValidateAgainstApprenticeshipQualification(It.IsAny<Qualification>(), registration))
@@ -91,7 +91,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public async Task ShouldValidatesTheQualificationRequest()
         {
             qualification = await ClassUnderTest.CreateAsync(apprenticeId, message);
-            Container.GetMock<IQualificationValidator>().Verify(r => r.ValidateAsync(qualification));
+            Container.GetMock<IQualificationValidator>().Verify(r => r.ValidateAsync(qualification, profile));
         }
 
         [TestMethod]

@@ -88,8 +88,8 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0027", "Invalid preferred contact type code")]
         InvalidPreferredContactCode,
 
-        [ExceptionDetails("AP-VAL-0028", "Invalid qualification details")]
-        InvalidQualification,
+        [ExceptionDetails("AP-VAL-0028", "Missing qualification code")]
+        MissingQualificationCode,
 
         [ExceptionDetails("AP-VAL-0030", "Invalid qualification level")]
         InvalidQualificationLevel,
@@ -141,5 +141,17 @@ namespace ADMS.Apprentices.Core.Exceptions
 
         [ExceptionDetails("AP-VAL-0046", "The apprenticeship referenced by the qualification is not yet complete")]
         QualificationApprenticeshipIsNotComplete,
+
+        [ExceptionDetails("AP-VAL-0047", "Date completed cannot be before Date commenced")]
+        DateMismatch,
+
+        [ExceptionDetails("AP-VAL-0048", "Date commenced and Date completed cannot be before apprentice DOB +12 years")]
+        DOBDateMismatch,
+
+        [ExceptionDetails("AP-VAL-0049", "Date commenced and Date completed cannot be after today's date")]
+        InvalidDate,
+
+        [ExceptionDetails("AP-VAL-0050", "Apprenticeship qualification should have a start date and end date")]        
+        InvalidApprenticeshipQualification,
     }
 }

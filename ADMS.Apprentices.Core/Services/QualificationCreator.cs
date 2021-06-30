@@ -44,7 +44,6 @@ namespace ADMS.Apprentices.Core.Services
 
             profile.Qualifications.Add(qualification);
 
-
             return qualification;
         }
         
@@ -54,8 +53,8 @@ namespace ADMS.Apprentices.Core.Services
             
             // Repository will throw an error if profile cannot be found.
             Task<Profile> profileTask = repository.GetAsync<Profile>(apprenticeId, true);
-            Task<ValidationExceptionBuilder> exceptionBuilderTask = qualificationValidator.ValidateAsync(qualification);           
-            var tasks = new List<Task>() { profileTask, exceptionBuilderTask };
+                     
+            var tasks = new List<Task>() { profileTask };
 
             Task<Registration> registrationTask = null;
             if(registrationId != null) {
@@ -65,8 +64,8 @@ namespace ADMS.Apprentices.Core.Services
 
             // WaitAll will throw any exceptions so we don't need to look for them.
             await Task.WhenAll(tasks.ToArray());
-            
-            var exceptionBuilder = exceptionBuilderTask.Result;
+
+            var exceptionBuilder = await qualificationValidator.ValidateAsync(qualification, profileTask.Result);           
             
             if(registrationTask != null) /* If registration could not be found then the validator will throw an exception for us */
                 exceptionBuilder.AddExceptions(qualificationValidator.ValidateAgainstApprenticeshipQualification(qualification, registrationTask.Result));

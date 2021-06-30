@@ -11,6 +11,7 @@ using Adms.Shared;
 using Adms.Shared.Exceptions;
 using ADMS.Apprentices.Core.TYIMS.Entities;
 using System.Collections.Generic;
+using Adms.Shared.Helpers;
 
 namespace ADMS.Apprentices.Core.Services
 {
@@ -20,14 +21,15 @@ namespace ADMS.Apprentices.Core.Services
         private readonly IQualificationValidator qualificationValidator;
         private readonly IRepository repository;
         private readonly ITYIMSRepository tyimsRepository;
-        private readonly IExceptionFactory exceptionFactory;
+        private readonly IExceptionFactory exceptionFactory;       
 
-        public QualificationUpdater(IRepository repository, ITYIMSRepository tyimsRepository, IExceptionFactory exceptionFactory, IQualificationValidator qualificationValidator)
+        public QualificationUpdater(IRepository repository, ITYIMSRepository tyimsRepository,
+            IExceptionFactory exceptionFactory, IQualificationValidator qualificationValidator)
         {
             this.repository = repository;
             this.tyimsRepository = tyimsRepository;
             this.qualificationValidator = qualificationValidator;
-            this.exceptionFactory = exceptionFactory;
+            this.exceptionFactory = exceptionFactory;            
         }
 
         public async Task<Qualification> Update(int apprenticeId, int qualificationId, ProfileQualificationMessage message)
@@ -59,7 +61,7 @@ namespace ADMS.Apprentices.Core.Services
             qualification.StartDate = message.StartDate;
             qualification.EndDate = message.EndDate;
 
-            var exceptionBuilder = await qualificationValidator.ValidateAsync(qualification);
+            var exceptionBuilder = await qualificationValidator.ValidateAsync(qualification, profile);
             if (registrationTask != null)
                 exceptionBuilder.AddExceptions(qualificationValidator.ValidateAgainstApprenticeshipQualification(qualification, registrationTask.Result));
             exceptionBuilder.ThrowAnyExceptions();

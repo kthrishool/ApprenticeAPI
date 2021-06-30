@@ -373,7 +373,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
 
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualification);
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
 
             qualification = ProfileConstants.Qualification;
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions()).Should().NotThrow();

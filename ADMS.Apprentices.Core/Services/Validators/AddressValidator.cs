@@ -138,7 +138,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
             }
         
             //Looking for contains rather than exact match on Locality in case of spelling erros or terminologies like Civic, Civic square, Toowoomba city, Toowoomba DC etc
-            if (!partialAddress.Locality .Contains(address.Locality.ToUpper()))
+            if (!partialAddress.Locality.Contains(address.Locality.ToUpper()) && !address.Locality.ToUpper().Contains(partialAddress.Locality))
                 exceptionBuilder.AddException(ValidationExceptionType.PostCodeLocalityMismatch);
 
             if (partialAddress.State != address.StateCode.ToUpper())

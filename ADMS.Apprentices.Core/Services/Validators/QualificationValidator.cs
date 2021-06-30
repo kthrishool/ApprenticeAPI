@@ -24,53 +24,53 @@ namespace ADMS.Apprentices.Core.Services.Validators
             this.referenceDataValidator = referenceDataValidator;
         }
 
-        public async Task<ValidationExceptionBuilder> ValidateAsync(List<Qualification> qualifications)
-        {
-            var tasks = new List<Task<ValidationExceptionBuilder>>();
+        //public async Task<ValidationExceptionBuilder> ValidateAsync(List<Qualification> qualifications)
+        //{
+        //    var tasks = new List<Task<ValidationExceptionBuilder>>();
 
-            foreach (Qualification qualification in qualifications)
-            {
-                tasks.Add(ValidateAsync(qualification));
-            }
+        //    foreach (Qualification qualification in qualifications)
+        //    {
+        //        tasks.Add(ValidateAsync(qualification));
+        //    }
 
-            return await tasks.WaitAndReturnExceptionBuilder();
-        }
+        //    return await tasks.WaitAndReturnExceptionBuilder();
+        //}
         
-        public async Task<ValidationExceptionBuilder> ValidateAsync(Qualification qualification)
+        public async Task<ValidationExceptionBuilder> ValidateAsync(Qualification qualification, Profile profile)
         {
             var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
             //check if mandatory fields presents
             
             if (qualification.QualificationCode.IsNullOrEmpty()) {
-                exceptionBuilder.AddException(ValidationExceptionType.InvalidQualification);
+                exceptionBuilder.AddException(ValidationExceptionType.MissingQualificationCode);
             }
 
             //check if StartDate < endDate if startDate and EndDate not null
             if (qualification.StartDate?.Date > qualification.EndDate?.Date)
-                exceptionBuilder.AddException(ValidationExceptionType.InvalidQualification);
+                exceptionBuilder.AddException(ValidationExceptionType.DateMismatch);
 
             //check if start date can not be less than apprentice DOB +12 years
-            if ((qualification.StartDate != null && qualification.Profile != null))
+            if ((qualification.StartDate != null && profile != null))
             {
-              if (qualification.StartDate.Value.Date < qualification.Profile.BirthDate.AddYears(+12))
-                    exceptionBuilder.AddException(ValidationExceptionType.InvalidQualification);
+              if (qualification.StartDate.Value.Date < profile.BirthDate.AddYears(+12))
+                    exceptionBuilder.AddException(ValidationExceptionType.DOBDateMismatch);
             }
             //check if end date can not be less than apprentice DOB +12 years
-            if (qualification.EndDate != null && qualification.Profile != null)
+            if (qualification.EndDate != null && profile != null)
             {
-                if (qualification.EndDate.Value.Date < qualification.Profile.BirthDate.AddYears(+12))
-                    exceptionBuilder.AddException(ValidationExceptionType.InvalidQualification);
+                if (qualification.EndDate.Value.Date < profile.BirthDate.AddYears(+12))
+                    exceptionBuilder.AddException(ValidationExceptionType.DOBDateMismatch);
             }
             //check if start date and end date can not be greater than today's date.
             if (qualification.StartDate != null && qualification.EndDate != null)
             {
                 if (qualification.StartDate.Value.Date > DateTime.Today || qualification.EndDate.Value.Date > DateTime.Today)
-                    exceptionBuilder.AddException(ValidationExceptionType.InvalidQualification);
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidDate);
             }
             
             if (qualification.ApprenticeshipId != null)
                 if (qualification.StartDate == null || qualification.EndDate == null)
-                    exceptionBuilder.AddException(ValidationExceptionType.InvalidQualification);
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidApprenticeshipQualification);
 
             exceptionBuilder.AddExceptions(await referenceDataValidator.ValidateAsync(qualification));
 

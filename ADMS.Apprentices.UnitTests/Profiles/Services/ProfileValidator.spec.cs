@@ -59,9 +59,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
             var exceptionFactory = Container.GetMock<IExceptionFactory>().Object;
 
-            Container.GetMock<IQualificationValidator>()
-                .Setup(r => r.ValidateAsync(It.IsAny<List<Qualification>>()))
-                .ReturnsAsync(new ValidationExceptionBuilder(exceptionFactory));
+            //Container.GetMock<IQualificationValidator>()
+            //    .Setup(r => r.ValidateAsync(It.IsAny<List<Qualification>>()))
+            //    .ReturnsAsync(new ValidationExceptionBuilder(exceptionFactory));
 
             Container.GetMock<IUSIValidator>()
                 .Setup(r => r.Validate(It.IsAny<Profile>()))
