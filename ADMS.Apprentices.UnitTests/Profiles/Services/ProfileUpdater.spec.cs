@@ -318,14 +318,15 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         protected override void Given()
         {
             profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
-            profile.USIs.Add( new ApprenticeUSI {USI = "currentUSI", ActiveFlag = true});
+            profile.USIs.Add(new ApprenticeUSI { USI = "currentUSI", ActiveFlag = true });
             message = new UpdateProfileMessage
             {
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
                 ProfileType = ProfileConstants.Profiletype,
-                USI = "updatedUSI"
+                USI = "updatedUSI",
+                USIChangeReason = "Incorrect USI entered"
             };
             Container.GetMock<IProfileValidator>()
                 .Setup(s => s.ValidateAsync(It.IsAny<Profile>()))
@@ -356,6 +357,22 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
             //then
             profile.USIs.Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public async Task ShouldAddNewUSIWithChangeReason()
+        {
+            //given
+            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
+            profile.USIs.Clear();
+            profile.USIs.Add(new ApprenticeUSI { USI = "currentUSI", ActiveFlag = true, USIVerifyFlag = true });
+
+            //when
+            profile = await ClassUnderTest.Update(profile, message);
+
+            //then
+            ApprenticeUSI profileUSI = profile.USIs.Where(x => x.ActiveFlag == true).SingleOrDefault();
+            profileUSI.USIChangeReason.Should().Be("Incorrect USI entered");
         }
 
         [TestMethod]

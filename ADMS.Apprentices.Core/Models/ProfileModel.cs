@@ -38,6 +38,7 @@ namespace ADMS.Apprentices.Core.Models
         public Boolean CRNViewFlag { get; set; }
         public ProfileUSIModel USIVerificationResult { get; set; }
         public string USI { get; set; }
+        public string USIChangeReason { get; set; }
         public DateTime? CreatedOn { get; }
         public string CreatedBy { get; }
         public DateTime? UpdatedOn { get; }
@@ -108,7 +109,8 @@ namespace ADMS.Apprentices.Core.Models
             {
                 USIVerificationResult = apprentice.USIs.Where(c => c.ActiveFlag == true).Select(c => new ProfileUSIModel(c)).SingleOrDefault();
                 USI = USIVerificationResult.USI;
-            }
+                USIChangeReason = USIVerificationResult.USIChangeReason;
+    }
         }
     }
 }

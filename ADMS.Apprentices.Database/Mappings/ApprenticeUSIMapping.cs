@@ -27,7 +27,7 @@ namespace ADMS.Apprentices.Database.Mappings
 
             entity.Property(e => e.USIChangeReason)
                 .HasColumnName("USIChangeReason")
-                .HasMaxLength(150);
+                .HasMaxLength(300);
             entity.Property(e => e.USIVerifyFlag)
                 .HasColumnName("USIVerifyFlag");
             entity.Property(e => e.FirstNameMatchedFlag)

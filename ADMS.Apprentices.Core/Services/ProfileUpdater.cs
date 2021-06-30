@@ -81,7 +81,7 @@ namespace ADMS.Apprentices.Core.Services
             profile.VisaNumber = message.VisaNumber.Sanitise();
 
             //USI
-            UpdateUSI(profile, message.USI);
+            UpdateUSI(profile, message.USI, message.USIChangeReason);
 
             var exceptionBuilder = await profileValidator.ValidateAsync(profile);
             exceptionBuilder.ThrowAnyExceptions();
@@ -124,7 +124,7 @@ namespace ADMS.Apprentices.Core.Services
             }
         }
 
-        public void UpdateUSI(Profile profile, string usi)
+        public void UpdateUSI(Profile profile, string usi, string usichangereason)
         {
             var currentUSI = profile.USIs.SingleOrDefault(x => x.ActiveFlag == true);
             if (currentUSI == null && !usi.IsNullOrEmpty())
@@ -137,7 +137,8 @@ namespace ADMS.Apprentices.Core.Services
             {
                 //set the activeFlag to false of current active USI and add the new USI                
                 currentUSI.ActiveFlag = false;
-                profile.USIs.Add(new ApprenticeUSI {USI = usi, ActiveFlag = true, USIChangeReason = $"Updating USI from {currentUSI.USI} to {usi}"});
+                profile.USIs.Add(new ApprenticeUSI { USI = usi, ActiveFlag = true, USIChangeReason = usichangereason });
+                               
                 triggerUsiVerification = true;
             }
             else if (currentUSI != null && usi.IsNullOrEmpty())
