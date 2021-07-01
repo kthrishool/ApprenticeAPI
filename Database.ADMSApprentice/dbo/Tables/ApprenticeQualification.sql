@@ -17,4 +17,6 @@
     CONSTRAINT [PK_ApprenticeQualification] PRIMARY KEY CLUSTERED ([ApprenticeQualificationId] ASC),
     CONSTRAINT [FK_ApprenticeQualification_Apprentice] FOREIGN KEY ([ApprenticeId]) REFERENCES [dbo].[Apprentice] ([ApprenticeId])
 );
-
+GO
+CREATE NONCLUSTERED INDEX [IX_ApprenticeQualification_ApprenticeId]
+    ON [dbo].[ApprenticeQualification]([ApprenticeId] ASC) WITH (FILLFACTOR = 90);
