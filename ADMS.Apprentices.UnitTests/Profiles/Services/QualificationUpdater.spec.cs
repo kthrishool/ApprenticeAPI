@@ -58,7 +58,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .Setup(s => s.ValidateAsync(It.IsAny<Qualification>(), It.IsAny<Profile>()))
                 .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
             Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidateAgainstApprenticeshipQualification(qualification, registration))
+                .Setup(s => s.ValidateAgainstApprenticeshipQualification(qualification, registration, It.IsAny<Profile>()))
                 .Returns(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
         }
 

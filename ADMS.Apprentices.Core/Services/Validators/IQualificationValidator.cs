@@ -12,6 +12,6 @@ namespace ADMS.Apprentices.Core.Services.Validators
         //Task<ValidationExceptionBuilder> ValidateAsync(List<Qualification> qualifications);
         Task<ValidationExceptionBuilder> ValidateAsync(Qualification qualification, Profile profile);
         ValidationExceptionBuilder CheckForDuplicates(List<Qualification> qualifications);
-        ValidationExceptionBuilder ValidateAgainstApprenticeshipQualification(Qualification qualification, Registration registration);
+        ValidationExceptionBuilder ValidateAgainstApprenticeshipQualification(Qualification qualification, Registration registration,Profile profile);
     }
 }

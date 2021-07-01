@@ -86,7 +86,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
             return exceptionBuilder;
         }
 
-        public ValidationExceptionBuilder ValidateAgainstApprenticeshipQualification(Qualification qualification, Registration registration)
+        public ValidationExceptionBuilder ValidateAgainstApprenticeshipQualification(Qualification qualification, Registration registration,Profile profile)
         {
             var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
             if(registration == null) {
@@ -105,6 +105,10 @@ namespace ADMS.Apprentices.Core.Services.Validators
             }
             if(registration.CurrentEndReasonCode != "CMPS") {
                 exceptionBuilder.AddException(ValidationExceptionType.QualificationApprenticeshipIsNotComplete);
+            }
+            if (registration.ClientId != profile.Id)
+            {
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidApprenticeshipIDForQualification);
             }
             return exceptionBuilder;
         }

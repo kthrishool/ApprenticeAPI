@@ -63,7 +63,7 @@ namespace ADMS.Apprentices.Core.Services
 
             var exceptionBuilder = await qualificationValidator.ValidateAsync(qualification, profile);
             if (registrationTask != null)
-                exceptionBuilder.AddExceptions(qualificationValidator.ValidateAgainstApprenticeshipQualification(qualification, registrationTask.Result));
+                exceptionBuilder.AddExceptions(qualificationValidator.ValidateAgainstApprenticeshipQualification(qualification, registrationTask.Result, profile));
             exceptionBuilder.ThrowAnyExceptions();
 
             return qualification;

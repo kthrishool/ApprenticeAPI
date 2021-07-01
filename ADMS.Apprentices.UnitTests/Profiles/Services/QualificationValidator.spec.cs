@@ -257,6 +257,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 StartDate = new DateTime(2010, 1, 1),
                 EndDate = new DateTime(2020, 1, 1),
                 ApprenticeshipId = 20,
+                Id = ProfileConstants.Id
             };
             profile.Qualifications.Add(qualification);
             profile.BirthDate = ProfileConstants.Birthdate;
@@ -270,6 +271,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 RegistrationId = qualification.ApprenticeshipId.Value,
                 QualificationCode = "QCode",
                 TrainingContractId = 100,
+                ClientId = ProfileConstants.Id
             };
 
             var exceptionFactory = Container.GetMock<IExceptionFactory>().Object;
@@ -290,10 +292,14 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .Returns(validationException);
         }
         
+        private ValidationExceptionBuilder callApprenticeshipQualification(Qualification qualification, Registration registration, Profile profile)
+        {
+            return ClassUnderTest.ValidateAgainstApprenticeshipQualification(qualification, registration, profile);
+        }
         [TestMethod]
         public void WhenRegistrationIsValid_ThenNoErrorsOccur()
         {
-            ClassUnderTest.ValidateAgainstApprenticeshipQualification(qualification, registration).HasExceptions()
+            callApprenticeshipQualification(qualification, registration, profile).HasExceptions()
                 .Should().Equals(false);
 
         } 
@@ -301,7 +307,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void WhenRegistrationIsNull_ThenErrorsOccur()
         {
-            ClassUnderTest.ValidateAgainstApprenticeshipQualification(qualification, null).HasExceptions()
+            callApprenticeshipQualification(qualification, null, profile).HasExceptions()
                 .Should().Equals(true);
         } 
 
@@ -309,7 +315,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public void WhenRegistrationEndDateIsNull_ThenErrorsOccur()
         {
             registration.EndDate = null;
-            ClassUnderTest.ValidateAgainstApprenticeshipQualification(qualification, registration).HasExceptions()
+            callApprenticeshipQualification(qualification, registration,profile).HasExceptions()
                 .Should().Equals(true);
         } 
 
@@ -317,7 +323,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public void WhenRegistrationEndReasonCodeIsNotCMPS_ThenErrorsOccur()
         {
             registration.CurrentEndReasonCode = "SUSP";
-            ClassUnderTest.ValidateAgainstApprenticeshipQualification(qualification, registration).HasExceptions()
+            callApprenticeshipQualification(qualification, registration,profile).HasExceptions()
                 .Should().Equals(true);
         } 
 
@@ -325,9 +331,17 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public void WhenRegistrationQualificationCodeDoesNotEqualQualification_ThenErrorsOccur()
         {
             registration.QualificationCode = "OTH";
-            ClassUnderTest.ValidateAgainstApprenticeshipQualification(qualification, registration).HasExceptions()
+            callApprenticeshipQualification(qualification, registration, profile).HasExceptions()
                 .Should().Equals(true);
-        } 
+        }
+        [TestMethod]
+        public void WhenRegistrationClientIdDoesNotEqualProfileId_ThenErrorsOccur()
+        {
+            registration.ClientId = ProfileConstants.Id + 10;
+            callApprenticeshipQualification(qualification, registration, profile).HasExceptions()
+                .Should().Equals(true);
+        }
+        
     }
     #endregion "Qualification Validation with Apprenticeship"
 }

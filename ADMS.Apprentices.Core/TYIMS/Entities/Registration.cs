@@ -11,5 +11,7 @@ namespace ADMS.Apprentices.Core.TYIMS.Entities
         public DateTime? EndDate { get; set; }
         public string CurrentEndReasonCode { get; set; }
         public int TrainingContractId { get; set; }
+
+        public int ClientId { get; set; }
     }
 }

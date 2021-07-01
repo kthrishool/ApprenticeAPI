@@ -70,7 +70,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .Setup(s => s.ValidateAsync(It.IsAny<Qualification>(), It.IsAny<Profile>()))
                 .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
             Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidateAgainstApprenticeshipQualification(It.IsAny<Qualification>(), registration))
+                .Setup(s => s.ValidateAgainstApprenticeshipQualification(It.IsAny<Qualification>(), registration,It.IsAny<Profile>()))
                 .Returns(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
 
         }
@@ -121,7 +121,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
             exceptionBuilder.AddException(ValidationExceptionType.QualificationApprenticeshipIsNotComplete);
             Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidateAgainstApprenticeshipQualification(It.IsAny<Qualification>(), registration))
+                .Setup(s => s.ValidateAgainstApprenticeshipQualification(It.IsAny<Qualification>(), registration , It.IsAny<Profile>()))
                 .Returns(exceptionBuilder);
 
             ClassUnderTest.Invoking(c => c.CreateAsync(apprenticeId, message))

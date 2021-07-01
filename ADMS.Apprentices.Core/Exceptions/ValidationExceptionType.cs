@@ -153,5 +153,8 @@ namespace ADMS.Apprentices.Core.Exceptions
 
         [ExceptionDetails("AP-VAL-0050", "Apprenticeship qualification should have a start date and end date")]        
         InvalidApprenticeshipQualification,
+
+        [ExceptionDetails("AP-VAL-0051", "ApprenticeshipId does not belong to the apprentice")]
+        InvalidApprenticeshipIDForQualification,
     }
 }
