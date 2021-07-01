@@ -12,7 +12,7 @@
     [SelfAssessedDisabilityCode] VARCHAR (10)    NULL,
     [IndigenousStatusCode]       VARCHAR (10)    NULL,
     [CitizenshipCode]            VARCHAR (10)    NULL,
-    [EducationLevelCode]         VARCHAR (10)    NULL,
+    [HighestCompletedSchoolLevelCode]            VARCHAR (10)    NULL,
     [LeftSchoolDate]             DATE            NULL,
     [ProfileTypeCode]            VARCHAR (10)    NOT NULL,
     [VisaNumber]                 VARCHAR (25)    NULL,
@@ -37,6 +37,8 @@
     CONSTRAINT [PK_Apprentice] PRIMARY KEY CLUSTERED ([ApprenticeId] ASC),
     CONSTRAINT [FK_Apprentice_Apprentice] FOREIGN KEY ([NewApprenticeId]) REFERENCES [dbo].[Apprentice] ([ApprenticeId])
 );
+
+
 
 
 
