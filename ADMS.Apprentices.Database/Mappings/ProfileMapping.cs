@@ -44,7 +44,7 @@ namespace ADMS.Apprentices.Database.Mappings
             entity.Property(e => e.CitizenshipCode)
                 .HasColumnName("CitizenshipCode");
             entity.Property(e => e.HighestSchoolLevelCode)
-                .HasColumnName("EducationLevelCode");           
+                .HasColumnName("HighestCompletedSchoolLevelCode");           
             entity.Property(e => e.LeftSchoolDate)
                 .HasColumnName("LeftSchoolDate")
                 .HasColumnType("date");
