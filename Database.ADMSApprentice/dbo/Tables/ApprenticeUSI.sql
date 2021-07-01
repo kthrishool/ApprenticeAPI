@@ -3,7 +3,7 @@
     [ApprenticeId]           INT             NOT NULL,
     [USI]                    VARCHAR (10)    NULL,
     [ActiveFlag]             BIT             NOT NULL,
-    [USIChangeReason]        VARCHAR (150)   NULL,
+    [USIChangeReason]        VARCHAR (300)   NULL,
     [USIVerifyFlag]          BIT             NULL,
     [FirstNameMatchedFlag]   BIT             NULL,
     [SurnameMatchedFlag]     BIT             NULL,
