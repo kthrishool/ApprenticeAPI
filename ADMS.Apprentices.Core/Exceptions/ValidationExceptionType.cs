@@ -7,7 +7,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0001", "Apprentice must be at least 12 years old")]
         InvalidApprenticeAge,
 
-        [ExceptionDetails("AP-VAL-0002", "Invalid apprentice profile type ")]
+        [ExceptionDetails("AP-VAL-0002", "Invalid apprentice profile type")]
         InvalidApprenticeprofileType,
 
         [ExceptionDetails("AP-VAL-0003", "ApprenticeId is not valid")]
@@ -19,7 +19,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0005", "TFN is not valid")]
         InvalidTFN,
 
-        [ExceptionDetails("AP-VAL-0006", "Phone number is mandatory")]
+        [ExceptionDetails("AP-VAL-0006", "Phone number cannot be null")]
         NullPhoneNumber,
 
         [ExceptionDetails("AP-VAL-0007", "Invalid apprentice phone number")]

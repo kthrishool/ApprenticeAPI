@@ -138,8 +138,8 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
                 foreach (Phone phone in profile.Phones)
                 {
-                    if (phone == null || phone.PhoneNumber.IsNullOrEmpty()) continue;                    
-
+                    if (phone == null) continue;
+                    
                     phoneValidator.ValidatePhonewithType(exceptionBuilder, phone);
                     if (preferredPhoneSet && Convert.ToBoolean(phone.PreferredPhoneFlag))
                     {

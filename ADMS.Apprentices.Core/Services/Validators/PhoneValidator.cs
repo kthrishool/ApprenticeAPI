@@ -18,13 +18,11 @@ namespace ADMS.Apprentices.Core.Services.Validators
         }
 
         public void ValidatePhonewithType(ValidationExceptionBuilder exceptionBuilder, Phone phone)
-        {
-          //  phone.PhoneTypeCode = PhoneType.LANDLINE.ToString();
-
+        {         
             phone.PhoneNumber = phone.PhoneNumber.Sanitise();
 
             if(phone.PhoneNumber.IsNullOrEmpty()) {
-                exceptionBuilder.AddException(ValidationExceptionType.InvalidPhoneNumber);
+                exceptionBuilder.AddException(ValidationExceptionType.NullPhoneNumber);
                 return;
             }
 
