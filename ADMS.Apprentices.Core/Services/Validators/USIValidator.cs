@@ -61,13 +61,12 @@ namespace ADMS.Apprentices.Core.Services.Validators
         public ValidationExceptionBuilder Validate(Profile profile)
         {
             var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
-            if (profile.USIs.Any())
+            if (profile.USIs.Any(x => x.ActiveFlag == true))
             {
-                if (profile.USIs.Single(x => x.ActiveFlag == true).USI.Sanitise() == null) 
+                if (profile.USIs.Last(x => x.ActiveFlag == true).USI.Sanitise() == null) 
                     exceptionBuilder.AddException(ValidationExceptionType.InvalidUSI);
-
-                // code to be implemented fro additional validation
-                if (!exceptionBuilder.HasExceptions() && !VerifyKey(profile.USIs.Single(x => x.ActiveFlag == true).USI.Sanitise()))
+                
+                if (!exceptionBuilder.HasExceptions() && !VerifyKey(profile.USIs.Last(x => x.ActiveFlag == true).USI.Sanitise()))
                     exceptionBuilder.AddException(ValidationExceptionType.InvalidUSI);
             }
             return exceptionBuilder;

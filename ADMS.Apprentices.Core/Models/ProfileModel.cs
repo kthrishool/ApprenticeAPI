@@ -107,7 +107,7 @@ namespace ADMS.Apprentices.Core.Models
             Qualifications = apprentice.Qualifications.Select(q => new ProfileQualificationModel(q)).ToList();
             if (apprentice.USIs.Any(c => c.ActiveFlag == true))
             {
-                USIVerificationResult = apprentice.USIs.Where(c => c.ActiveFlag == true).Select(c => new ProfileUSIModel(c)).SingleOrDefault();
+                USIVerificationResult = apprentice.USIs.Where(c => c.ActiveFlag == true).Select(c => new ProfileUSIModel(c)).LastOrDefault();
                 USI = USIVerificationResult.USI;
                 USIChangeReason = USIVerificationResult.USIChangeReason;
     }

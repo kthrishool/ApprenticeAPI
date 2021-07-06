@@ -126,7 +126,7 @@ namespace ADMS.Apprentices.Core.Services
 
         public void UpdateUSI(Profile profile, string usi, string usichangereason)
         {
-            var currentUSI = profile.USIs.SingleOrDefault(x => x.ActiveFlag == true);
+            var currentUSI = profile.USIs.LastOrDefault(x => x.ActiveFlag == true);
             if (currentUSI == null && !usi.IsNullOrEmpty())
             {
                 //add the new USI
@@ -141,7 +141,7 @@ namespace ADMS.Apprentices.Core.Services
                                
                 triggerUsiVerification = true;
             }
-            else if (currentUSI != null && usi.IsNullOrEmpty())
+            else if (currentUSI != null && usi.IsNullOrEmpty() && currentUSI.USI != usi)
             {
                 //set the activeFlag to false of current active USI               
                 currentUSI.ActiveFlag = false;

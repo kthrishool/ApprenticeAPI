@@ -14,6 +14,7 @@ namespace ADMS.Apprentices.Core.Models
         /// Valid, Invalid, or Deactivated
         /// </summary>
         public string USIStatus { get; set; }
+        public bool ActiveFlag { get; set; }
 
         public bool? FirstNameMatched { get; set; }
 
@@ -26,6 +27,7 @@ namespace ADMS.Apprentices.Core.Models
         {
             this.ApprenticeId = apprenticeUSI.ApprenticeId;
             this.USI = apprenticeUSI.USI;
+            this.ActiveFlag = apprenticeUSI.ActiveFlag;
             this.USIChangeReason = apprenticeUSI.USIChangeReason;
             this.USIStatus = apprenticeUSI.USIStatus;
             this.FirstNameMatched = apprenticeUSI.FirstNameMatchedFlag;

@@ -32,7 +32,7 @@ namespace ADMS.Apprentices.Core.Services
         public ApprenticeUSI Verify(Profile profile)
         {
             //get the active apprenticeUsi record.
-            ApprenticeUSI apprenticeUSI = profile.USIs.Where(x => x.ActiveFlag == true).SingleOrDefault();
+            ApprenticeUSI apprenticeUSI = profile.USIs.Where(x => x.ActiveFlag == true).LastOrDefault();
             if (apprenticeUSI == null) return null;                
 
             //The available end points for USI verification accepts lists of USI requests - so need to convert into a list even though we verify single USI
