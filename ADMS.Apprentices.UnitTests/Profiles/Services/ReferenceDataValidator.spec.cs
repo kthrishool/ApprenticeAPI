@@ -273,12 +273,12 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
 
         [TestMethod]
-        public void ThrowValidationExceptionWhenPhoneContactTypeAndNoPhone()
+        public void ThrowValidationExceptionWhenMobileContactTypeAndNoPhoneDetails()
         {
             newProfile = new Profile();
-            newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
-            newProfile.Phones.Clear();
-            ResetExceptionforExceptionValidation(ValidationExceptionType.PhonePreferredContactisInvalid, newProfile);
+            newProfile.PreferredContactType = PreferredContactType.MOBILE.ToString();
+            newProfile.Phones.Add(new Phone { PhoneNumber = null });
+            ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
         }
 
         [TestMethod]

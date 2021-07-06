@@ -45,7 +45,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
             switch (profile.PreferredContactType)
             {
                 case nameof(PreferredContactType.MOBILE) or nameof(PreferredContactType.SMS):
-                    if (profile.Phones.Any(c => c.PhoneNumber.StartsWith("04")) == false)
+                    if (profile.Phones.Any(c => !c.PhoneNumber.IsNullOrEmpty() && c.PhoneNumber.StartsWith("04")) == false)
                     {
                         exceptionBuilder.AddException(ValidationExceptionType.MobilePreferredContactIsInvalid);
                     }
