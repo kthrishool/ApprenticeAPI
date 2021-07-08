@@ -183,5 +183,6 @@
     <Build Include="Scripts\Security\Schemas.sql" />
     <Build Include="Storage\temp.sql" />
     <Build Include="Storage\AddressStoplist.sql" />
+    <Build Include="dbo\Stored Procedures\ApprenticeAdvancedSearch.sql" />
   </ItemGroup>
 </Project>
