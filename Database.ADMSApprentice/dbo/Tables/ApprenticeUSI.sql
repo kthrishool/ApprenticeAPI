@@ -16,6 +16,8 @@
     [Version]                ROWVERSION      NOT NULL,
     [_AuditEventId]          BIGINT          NOT NULL,
     CONSTRAINT [PK_ApprenticeUSI] PRIMARY KEY CLUSTERED ([ApprenticeUSIId] ASC),
+    CONSTRAINT [CHK_ApprenticeUSI_CreatedOn] CHECK ([CreatedOn]>='1753-01-01'),
+    CONSTRAINT [CHK_ApprenticeUSI_UpdatedOn] CHECK ([UpdatedOn]>='1753-01-01'),
     CONSTRAINT [FK_ApprenticeUSI_Apprentice] FOREIGN KEY ([ApprenticeId]) REFERENCES [dbo].[Apprentice] ([ApprenticeId])
 );
 
