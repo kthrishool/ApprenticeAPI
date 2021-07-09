@@ -35,10 +35,12 @@
     [Version]                         ROWVERSION      NOT NULL,
     [_AuditEventId]                   BIGINT          NOT NULL,
     CONSTRAINT [PK_Apprentice] PRIMARY KEY CLUSTERED ([ApprenticeId] ASC),
-    CONSTRAINT [CHK_Apprentice_BirthDate] CHECK ([BirthDate]>='1900-01-01' AND [BirthDate]<'2079-06-06'),
-    CONSTRAINT [CHK_Apprentice_DuplicateDate] CHECK ([DuplicateDate]>='1900-01-01' AND [DuplicateDate]<'2079-06-06'),
-    CONSTRAINT [CHK_Apprentice_InActiveDate] CHECK ([InActiveDate]>='1900-01-01' AND [InActiveDate]<'2079-06-06'),
-    CONSTRAINT [CHK_Apprentice_LatestChangeStatusDate] CHECK ([LatestChangeStatusDate]>='1900-01-01' AND [LatestChangeStatusDate]<'2079-06-06'),
+    CONSTRAINT [CHK_Apprentice_BirthDate] CHECK ([BirthDate]>='1900-01-01' AND [BirthDate]<='2079-06-06'),
+    CONSTRAINT [CHK_Apprentice_DuplicateDate] CHECK ([DuplicateDate]>='1900-01-01' AND [DuplicateDate]<='2079-06-06'),
+    CONSTRAINT [CHK_Apprentice_InActiveDate] CHECK ([InActiveDate]>='1900-01-01' AND [InActiveDate]<='2079-06-06'),
+    CONSTRAINT [CHK_Apprentice_LatestChangeStatusDate] CHECK ([LatestChangeStatusDate]>='1900-01-01' AND [LatestChangeStatusDate]<='2079-06-06'),
+    CONSTRAINT [CHK_Apprentice_CreatedOn] CHECK ([CreatedOn]>='1753-01-01'),
+    CONSTRAINT [CHK_Apprentice_UpdatedOn] CHECK ([UpdatedOn]>='1753-01-01'),
     CONSTRAINT [FK_Apprentice_Apprentice] FOREIGN KEY ([NewApprenticeId]) REFERENCES [dbo].[Apprentice] ([ApprenticeId])
 );
 
