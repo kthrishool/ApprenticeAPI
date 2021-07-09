@@ -63,7 +63,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task DoesNothingIfCountryofBirthIsValid()
+        public void DoesNothingIfCountryofBirthIsValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
@@ -73,7 +73,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
             newProfile = new Profile();
             newProfile.CountryOfBirthCode = "1101";
-            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
         }
 
 
@@ -108,7 +108,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task DoNothingIfLanguageCodeIsValid()
+        public void DoNothingIfLanguageCodeIsValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1201", Description = "test",});
@@ -121,11 +121,65 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
             newProfile = new Profile();
             newProfile.LanguageCode = "1201";
-            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
         }
 
         [TestMethod]
-        public async Task DoesNothingIfLanguageIsValid()
+        public void DoesNothingIfIndegenousStatusIsValid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "1101", Description = "test", });
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidIndegenousStatusCode);
+
+            newProfile = new Profile();
+            newProfile.IndigenousStatusCode = "1101";
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());              
+        }
+
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfIndegenousStatusIsInvalid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidIndegenousStatusCode);
+
+            newProfile = new Profile();
+            newProfile.IndigenousStatusCode = "dasdas";
+
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
+                .Should().Throw<ValidationException>().Where(e => e == validationException);
+        }
+
+        [TestMethod]
+        public void DoesNothingIfCitizenshipCodeIsValid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "1101", Description = "test", });
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidCitizenshipCode);
+
+            newProfile = new Profile();
+            newProfile.CitizenshipCode = "1101";
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
+        }
+
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfCitizenshipCodeIsInvalid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidCitizenshipCode);
+
+            newProfile = new Profile();
+            newProfile.CitizenshipCode = "dasdas";
+
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
+                .Should().Throw<ValidationException>().Where(e => e == validationException);
+        }
+
+        [TestMethod]
+        public void DoesNothingIfLanguageIsValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1200", Description = "test",});
@@ -135,16 +189,16 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
             newProfile = new Profile();
             newProfile.CountryOfBirthCode = "1200";
-            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
         }
 
         [TestMethod]
-        public async Task DoesNothingIfPreferredCodeTypeIsValid()
+        public void DoesNothingIfPreferredCodeTypeIsValid()
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = ProfileConstants.PreferredContactType.ToString();
             newProfile.Phones.Add(new Phone() {PhoneNumber = "0411111111"});
-            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
         }
 
         [TestMethod]
@@ -152,7 +206,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = ProfileConstants.PreferredContactType.ToString();
-
 
             ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
         }
@@ -178,25 +231,25 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task DoNothingWhenPhoneContactTypeIsValidAsync()
+        public void DoNothingWhenPhoneContactTypeIsValidAsync()
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
             newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
-            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
         }
 
         [TestMethod]
-        public async Task DoNothingWhenEmailContactTypeIsValid()
+        public void DoNothingWhenEmailContactTypeIsValid()
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.EMAIL.ToString();
             newProfile.EmailAddress = ProfileConstants.Emailaddress;
-            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
         }
 
         [TestMethod]
-        public async Task DoNothingWhenMailContactTypeIsValid()
+        public void DoNothingWhenMailContactTypeIsValid()
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.MAIL.ToString();
@@ -207,7 +260,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 Locality = ProfileConstants.ResidentialAddress.Locality,
                 StateCode = ProfileConstants.ResidentialAddress.StateCode
             });
-            (await ClassUnderTest.ValidateAsync(newProfile)).ThrowAnyExceptions();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
         }
 
         [TestMethod]
@@ -229,7 +282,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
             newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
 
-
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(this.newProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
@@ -241,7 +293,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             newProfile.PreferredContactType = PreferredContactType.EMAIL.ToString();
 
             newProfile.EmailAddress = ProfileConstants.Emailaddress;
-
 
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(this.newProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
@@ -264,7 +315,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             };
             newProfile.Addresses.Add(localAddress);
 
-
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(this.newProfile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
@@ -286,7 +336,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.SMS.ToString();
-
             newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
 
             ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
@@ -297,7 +346,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.SMS.ToString();
-
             newProfile.Phones.Clear();
 
             ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
@@ -308,9 +356,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.EMAIL.ToString();
-
             newProfile.EmailAddress = null;
-
 
             ResetExceptionforExceptionValidation(ValidationExceptionType.EmailPreferredContactisInvalid, newProfile);
         }
@@ -320,7 +366,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.MAIL.ToString();
-
             newProfile.Addresses.Clear();
 
             ResetExceptionforExceptionValidation(ValidationExceptionType.MailPreferredContactisInvalid, newProfile);

@@ -13,7 +13,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0003", "ApprenticeId is not valid")]
         InvalidApprenticeId,
 
-        [ExceptionDetails("AP-VAL-0004", "TFN already recorded for this apprentice.")]
+        [ExceptionDetails("AP-VAL-0004", "TFN already recorded for this apprentice")]
         TFNAlreadyExists,
 
         [ExceptionDetails("AP-VAL-0005", "TFN is not valid")]
@@ -67,11 +67,11 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0020", "Invalid highest school level code")]
         InvalidHighestSchoolLevelCode,
 
-        [ExceptionDetails("AP-VAL-0021", "Invalid month code")]
-        InvalidMonthCode,
+        [ExceptionDetails("AP-VAL-0021", "Invalid indigenous status code")]
+        InvalidIndegenousStatusCode,
 
-        [ExceptionDetails("AP-VAL-0022", "Invalid left school year")]
-        InvalidLeftSchoolYear,
+        [ExceptionDetails("AP-VAL-0022", "Invalid citizenship code")]
+        InvalidCitizenshipCode,
 
         [ExceptionDetails("AP-VAL-0023", "Missing mobile phone details for preferred contact")]
         MobilePreferredContactIsInvalid,
@@ -155,6 +155,6 @@ namespace ADMS.Apprentices.Core.Exceptions
         InvalidApprenticeshipQualification,
 
         [ExceptionDetails("AP-VAL-0051", "ApprenticeshipId does not belong to the apprentice")]
-        InvalidApprenticeshipIDForQualification,
+        InvalidApprenticeshipIDForQualification
     }
 }

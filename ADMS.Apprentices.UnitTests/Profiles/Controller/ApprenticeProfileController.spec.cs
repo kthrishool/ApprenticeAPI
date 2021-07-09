@@ -166,16 +166,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(0);
         }
-
-        [TestMethod]
-        public void ShouldReturnValidationErrorIfATSINotValid()
-        {
-            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, "InvalidCode");
-            var lstErrors = ValidateModel(message);
-            lstErrors.Should().HaveCount(1);
-            lstErrors[0].ErrorMessage.Should().StartWith("Invalid Indigenous status code");
-        }
-
+       
         [TestMethod]
         public void ShouldReturnValidationErrorIfDisabiliyyStatusCodeNotValid()
         {
@@ -183,15 +174,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(1);
             lstErrors[0].ErrorMessage.Should().StartWith("Invalid Self assessed disability code");
-        }
-
-        [TestMethod]
-        public void ShouldReturnValidationErrorIfCitizenshipCodeValid()
-        {
-            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, null, null, "InvalidCode");
-            var lstErrors = ValidateModel(message);
-            lstErrors.Should().HaveCount(1);
-            lstErrors[0].ErrorMessage.Should().StartWith("Invalid Citizenship code");
         }
 
         public IList<ValidationResult> ValidateModel(object model)
@@ -226,7 +208,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 ProfileConstants.Birthdate, ProfileConstants.Emailaddressmax256 + ProfileConstants.RandomString(100), ProfileConstants.Profiletype);
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(1);
-            lstErrors[0].ErrorMessage.Should().StartWith("Email Address Exceeds 256 Characters");
+            lstErrors[0].ErrorMessage.Should().StartWith("Email address cannot have more than 256 characters");
         }
 
         [TestMethod]
@@ -256,7 +238,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, null, null, null, "MQ");
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(1);
-            lstErrors[0].ErrorMessage.Should().StartWith("Gender Code is Invalid");
+            lstErrors[0].ErrorMessage.Should().StartWith("Gender Code is invalid");
         }
 
         #endregion

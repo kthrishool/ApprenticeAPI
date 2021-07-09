@@ -8,11 +8,12 @@ namespace ADMS.Apprentices.Core.HttpClients.ReferenceDataApi
 {
     public static class CodeTypes
     {
-        public const string country = "CNTY";
-        public const string language = "LANG";
-        public const string schoolLevel = "SLVL";
-        public const string month = "MNTH";
-        public const string qualificationLevel = "QLFL";
+        public const string Country = "CNTY";
+        public const string Language = "LANG";
+        public const string SchoolLevel = "SLVL";        
+        public const string QualificationLevel = "QLFL";
         public const string ANZSCOCode = "ANZS";
+        public const string IndigenousStatusCode = "INDS";
+        public const string CitizenshipCode = "CITZ";
     }
 }

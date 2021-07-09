@@ -47,8 +47,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
             validationException = new ValidationException(null, (ValidationError) null);
 
-            ChangeException(ValidationExceptionType.InvalidApprenticeAge);
-            ChangeException(ValidationExceptionType.InvalidLeftSchoolYear);
+            ChangeException(ValidationExceptionType.InvalidApprenticeAge);            
 
             Container.GetMock<IExceptionFactory>()
                 .Setup(ef => ef.CreateValidationException(It.IsAny<ValidationExceptionType>()))
