@@ -155,6 +155,12 @@ namespace ADMS.Apprentices.Core.Exceptions
         InvalidApprenticeshipQualification,
 
         [ExceptionDetails("AP-VAL-0051", "ApprenticeshipId does not belong to the apprentice")]
-        InvalidApprenticeshipIDForQualification
+        InvalidApprenticeshipIDForQualification,
+
+        [ExceptionDetails("AP-VAL-0052", "Nothing to search. Please add your search criteria")]
+        InvalidSearch,
+
+        [ExceptionDetails("AP-VAL-0053", "Cannot search by state if searching only by address")]
+        InvalidAddressSearch,
     }
 }

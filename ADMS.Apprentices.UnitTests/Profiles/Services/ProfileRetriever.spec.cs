@@ -103,6 +103,39 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .Should().Throw<ValidationException>();
         }
 
+        [TestMethod]
+        public void ThrowErrorWhenNoSearchParamsGiven()
+        {
+            message = new ProfileSearchMessage();
+
+            validationException = new ValidationException(null, (ValidationError)null);
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidSearch))
+                .Returns(validationException);
+
+            ClassUnderTest.Invoking(c => c.Search(message))
+                .Should().Throw<ValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowErrorWhenSearchByStateAndNoOtherParamsGiven()
+        {
+            message = new ProfileSearchMessage()
+            {
+                Address = "act"
+            };
+
+            validationException = new ValidationException(null, (ValidationError)null);
+            Container
+                .GetMock<IExceptionFactory>()
+                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidAddressSearch))
+                .Returns(validationException);
+
+            ClassUnderTest.Invoking(c => c.Search(message))
+                .Should().Throw<ValidationException>();
+        }
+
     }
     #endregion
 }

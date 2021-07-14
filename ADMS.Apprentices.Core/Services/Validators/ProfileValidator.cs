@@ -59,7 +59,6 @@ namespace ADMS.Apprentices.Core.Services.Validators
                     exceptionBuilder.AddException(ValidationExceptionType.InvalidLeftSchoolDetails);
             }            
 
-
             // Phone validation
             exceptionBuilder.AddExceptions(PhoneValidation(profile));
 
