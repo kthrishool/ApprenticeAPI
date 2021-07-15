@@ -48,15 +48,26 @@ CREATE TABLE #DeploymentTask
 )
 AS
 (
-SELECT	NULL	--NewVersionNumber
-		,NULL	--Environment		
-		,NULL	--DeploymentSequence		
-		,NULL	--DeploymentTaskSequence	
-		,NULL	--TaskName	
-		,NULL	--TargetDatabaseName	
-		,NULL	--[Disabled]
-		,NULL	--[AbortOnFailure]
-		,NULL	--TaskSQL	
+SELECT	'1.0'	--NewVersionNumber
+		,'ALL'	--Environment		
+		,'POSTDEPLOYMENT_START'	--DeploymentSequence		
+		,1	--DeploymentTaskSequence	
+		,'StopWords'	--TaskName	
+		,'ADMSApprentice'	--TargetDatabaseName	
+		,0	--[Disabled]
+		,0	--[AbortOnFailure]
+		,'IF NOT EXISTS (SELECT TOP 1 1 FROM sys.fulltext_stoplists sl inner join sys.fulltext_stopwords sw on sl.stoplist_id = sw.stoplist_id where sl.name = ''AddressStoplist'' AND stopword = ''avenue'')
+	ALTER FULLTEXT STOPLIST [AddressStoplist] ADD N''avenue'' LANGUAGE 1033;
+IF NOT EXISTS (SELECT TOP 1 1 FROM sys.fulltext_stoplists sl inner join sys.fulltext_stopwords sw on sl.stoplist_id = sw.stoplist_id where sl.name = ''AddressStoplist'' AND stopword = ''drive'')
+	ALTER FULLTEXT STOPLIST [AddressStoplist] ADD N''drive'' LANGUAGE 1033;
+IF NOT EXISTS (SELECT TOP 1 1 FROM sys.fulltext_stoplists sl inner join sys.fulltext_stopwords sw on sl.stoplist_id = sw.stoplist_id where sl.name = ''AddressStoplist'' AND stopword = ''rd'')
+	ALTER FULLTEXT STOPLIST [AddressStoplist] ADD N''rd'' LANGUAGE 1033;
+IF NOT EXISTS (SELECT TOP 1 1 FROM sys.fulltext_stoplists sl inner join sys.fulltext_stopwords sw on sl.stoplist_id = sw.stoplist_id where sl.name = ''AddressStoplist'' AND stopword = ''road'')
+	ALTER FULLTEXT STOPLIST [AddressStoplist] ADD N''road'' LANGUAGE 1033;
+IF NOT EXISTS (SELECT TOP 1 1 FROM sys.fulltext_stoplists sl inner join sys.fulltext_stopwords sw on sl.stoplist_id = sw.stoplist_id where sl.name = ''AddressStoplist'' AND stopword = ''st'')
+	ALTER FULLTEXT STOPLIST [AddressStoplist] ADD N''st'' LANGUAGE 1033;
+IF NOT EXISTS (SELECT TOP 1 1 FROM sys.fulltext_stoplists sl inner join sys.fulltext_stopwords sw on sl.stoplist_id = sw.stoplist_id where sl.name = ''AddressStoplist'' AND stopword = ''street'')
+	ALTER FULLTEXT STOPLIST [AddressStoplist] ADD N''street'' LANGUAGE 1033;'	--TaskSQL	
 )
 ,new_values AS
 (
