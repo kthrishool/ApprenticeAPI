@@ -136,3 +136,55 @@ stages:
         windowsAuthentication: false
         webApplicationName: '$(admsApplicationName)'      
         listSites: true
+
+  - stage: DeployDatabase_Staging
+    dependsOn: BuildDatabase
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/staging-deploy'))
+    jobs:
+    - template: /Jobs/Release/database.yml@db-templates
+      parameters:
+        dacpacFileSpec: Database.ADMSApprentice.dacpac
+        environmentName : ADMSApprentice Database Staging
+        databaseName: ADMSApprentice
+        artifactName: 'database-drop-folder'
+        targetEnvironment: 'Staging'
+
+  - stage: Staging
+    dependsOn: DeployDatabase_Staging
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/staging-deploy'))
+    variables:
+        - group: ServiceAccounts
+        - group: TestSettings
+        - name: System.Debug
+          value: true
+        - name: "OurDatabaseSettings.MigrateDatabaseOnStartup"
+          value: false
+        - name: "OurDatabaseSettings.SeedSampleData"
+          value: false
+        - name: "OurDatabaseSettings.DatabaseConnectionString"
+          value: '$(AdmsApprenticeConnectionString)'
+        - name: "OurHttpClientSettings.ReferenceDataEndpointBaseUrl"
+          value: '$(ReferenceDataEndpointBaseUrl)'
+        - name: port
+          value: "80"
+        - name: hostname
+          value: "admsapistaging.pprod.skillsnp.dis.gov.au"
+        - name: admsApplicationName
+          value: "apprenticeapi"
+    jobs:
+    - template: Jobs/Release/iiswebapplication.yml@templates
+      parameters:
+        environmentName: Backend_Staging
+        parallelLimit: 100%
+        xmlTransformation: false
+        xmlVarSubstitution: true
+        parentWebsiteName: '$(admsWebsiteName)'
+        installDir: $(admsInstallDir)
+        takeAppOffline: true
+        hostName: ${{ variables.hostName }}
+        webAppPoolUsername: "$(ApprenticeAPI_ENETDEV)"
+        webAppPoolPassword: "$(ApprenticeAPIPassword_ENETDEV)"
+        anonymousAuthentication: true
+        windowsAuthentication: false
+        webApplicationName: '$(admsApplicationName)'      
+        listSites: true
