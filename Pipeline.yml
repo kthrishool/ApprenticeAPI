@@ -137,20 +137,20 @@ stages:
         webApplicationName: '$(admsApplicationName)'      
         listSites: true
 
-  - stage: DeployDatabase_Staging
-    dependsOn: BuildDatabase
-    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/staging-deploy'))
-    jobs:
-    - template: /Jobs/Release/database.yml@db-templates
-      parameters:
-        dacpacFileSpec: Database.ADMSApprentice.dacpac
-        environmentName : ADMSApprentice Database Staging
-        databaseName: ADMSApprentice
-        artifactName: 'database-drop-folder'
-        targetEnvironment: 'Staging'
+  # - stage: DeployDatabase_Staging
+  #   dependsOn: BuildDatabase
+  #   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/staging-deploy'))
+  #   jobs:
+  #   - template: /Jobs/Release/database.yml@db-templates
+  #     parameters:
+  #       dacpacFileSpec: Database.ADMSApprentice.dacpac
+  #       environmentName : ADMSApprentice Database Staging
+  #       databaseName: ADMSApprentice
+  #       artifactName: 'database-drop-folder'
+  #       targetEnvironment: 'Staging'
 
   - stage: Staging
-    dependsOn: DeployDatabase_Staging
+    dependsOn: BuildDatabase
     condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/staging-deploy'))
     variables:
         - group: ServiceAccounts
