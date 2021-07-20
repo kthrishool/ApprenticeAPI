@@ -182,8 +182,8 @@ stages:
         installDir: $(admsInstallDir)
         takeAppOffline: true
         hostName: ${{ variables.hostName }}
-        webAppPoolUsername: "$(ApprenticeAPI_ENETDEV)"
-        webAppPoolPassword: "$(ApprenticeAPIPassword_ENETDEV)"
+        webAppPoolUsername: "$(ApprenticeAPI_GMSASTG)"
+        # webAppPoolPassword: "$(ApprenticeAPIPassword_ENETDEV)"
         anonymousAuthentication: true
         windowsAuthentication: false
         webApplicationName: '$(admsApplicationName)'      
