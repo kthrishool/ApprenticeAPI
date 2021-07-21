@@ -45,9 +45,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.Qualifications.Add(qualification);
             registration = new Registration();
             
-            Container.GetMock<IExceptionFactory>()
-                .Setup(s => s.CreateNotFoundException("Apprentice Qualification ", It.IsAny<string>()))
-                .Returns(new NotFoundException(null, "test", "test"));
             Container.GetMock<IRepository>()
                 .Setup(s => s.GetAsync<Profile>(It.IsAny<int>(), true))
                 .ReturnsAsync(profile);
@@ -56,10 +53,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .ReturnsAsync(registration);
             Container.GetMock<IQualificationValidator>()
                 .Setup(s => s.ValidateAsync(It.IsAny<Qualification>(), It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .ReturnsAsync(new ValidationExceptionBuilder());
             Container.GetMock<IQualificationValidator>()
                 .Setup(s => s.ValidateAgainstApprenticeshipQualification(qualification, registration, It.IsAny<Profile>()))
-                .Returns(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .Returns(new ValidationExceptionBuilder());
         }
 
         protected override void When()
@@ -87,7 +84,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public void WhenQualificationIdIsDifferent_ThenAnExceptionShouldOccur()
         {
             ClassUnderTest.Invoking(c => c.Update(10, qualificationId+1, message))
-                .Should().Throw<NotFoundException>();
+                .Should().Throw<AdmsNotFoundException>();
         }
     }
     #endregion

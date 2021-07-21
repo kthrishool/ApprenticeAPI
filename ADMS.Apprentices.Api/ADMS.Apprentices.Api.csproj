@@ -18,34 +18,31 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="app.Debug.config" />
-    <Content Remove="app.Release.config" />
+    <Compile Remove="HttpClients\JwtPassThroughMessageHandler.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="app.Debug.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>app.config</DependentUpon>
-    </None>
-    <None Include="app.Release.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>app.config</DependentUpon>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="ADMS.Services.Infrastructure.Contract" Version="1.1.0" />
-    <PackageReference Include="ADMS.Services.Infrastructure.WebApi" Version="2.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
+    <PackageReference Include="Adms.Shared" Version="4.0.0" />
+  
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.3" >
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.2.26">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.4" />
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
+
   </ItemGroup>
 
   <ItemGroup>
@@ -53,12 +50,21 @@
     <ProjectReference Include="..\ADMS.Apprentices.Database\ADMS.Apprentices.Database.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="app.config">
-      <TransformOnBuild>true</TransformOnBuild>
-    </Content>
-  </ItemGroup>
-
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
+	<ItemGroup>
+		<AssemblyAttribute Include="Au.Gov.Infrastructure.Abstractions.AssemblyBuildTimestampAttribute">
+			<_Parameter1>$([System.DateTime]::Now.ToString('yyyyMMdd')).$([System.DateTime]::Now.ToString('HHmmssfff'))</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+	<ItemGroup>
+		<AssemblyAttribute Include="Au.Gov.Infrastructure.Abstractions.AssemblyBuildModeAttribute">
+			<_Parameter1>$(Configuration)|$(TargetFramework)|$(Platform)</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+	<ItemGroup>
+		<AssemblyAttribute Include="Au.Gov.Infrastructure.Abstractions.AssemblyBuildBranchAttribute">
+			<_Parameter1>$(BUILD_DEFINITIONNAME)|$(BUILD_SOURCEBRANCH)|$(BUILD_SOURCEVERSION)|$(BUILD_BUILDNUMBER)</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 
 </Project>

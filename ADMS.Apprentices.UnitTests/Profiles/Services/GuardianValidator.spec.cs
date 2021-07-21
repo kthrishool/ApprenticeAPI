@@ -34,17 +34,13 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
             validationException = new ValidationException(null, (ValidationError) null);
             Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.AddressRecordNotFoundForGuardian))
-                .Returns(validationException);
-            Container
                .GetMock<IRepository>()
                .Setup(r => r.GetAsync<Profile>(profile.Id, true))
                .Returns(Task.FromResult(profile));
             Container
                 .GetMock<IAddressValidator>()
                 .Setup(av => av.ValidateAsync(It.IsAny<IAddressAttributes>()))
-                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
         protected override void When()
@@ -81,31 +77,27 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {            
             guardian.StreetAddress1 = "14 mort ";
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(guardian)).ThrowAnyExceptions())
-            .Should().Throw<ValidationException>();
+            .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
         public void DoNothingIfEmailIsValid()
         {
             guardian.EmailAddress = ProfileConstants.Emailaddress;
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(guardian)).ThrowAnyExceptions()).Should().NotThrow<ValidationException>();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(guardian)).ThrowAnyExceptions()).Should().NotThrow<AdmsValidationException>();
         }
 
         [TestMethod]
         public void DONothingIfAddressIsEmpty()
         {
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(guardian)).ThrowAnyExceptions()).Should().NotThrow<ValidationException>();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(guardian)).ThrowAnyExceptions()).Should().NotThrow<AdmsValidationException>();
         }
 
         [TestMethod]
         public void ThrowExceptionWhenEmailIdInvalid()
         {
-
-            Container.GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidEmailAddress))
-                .Returns(validationException);
             guardian.EmailAddress = "test";
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(guardian)).ThrowAnyExceptions()).Should().Throw<ValidationException>();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(guardian)).ThrowAnyExceptions()).Should().Throw<AdmsValidationException>();
         }
     }
 }

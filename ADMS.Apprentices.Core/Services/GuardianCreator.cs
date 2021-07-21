@@ -13,15 +13,12 @@ namespace ADMS.Apprentices.Core.Services
     {
         private readonly IGuardianValidator guardianValidator;
         private readonly IRepository repository;
-        private readonly IExceptionFactory exceptionFactory;
 
         public GuardianCreator(
             IRepository repository,
-            IExceptionFactory exceptionFactory,
             IGuardianValidator profileValidator)
         {
             this.repository = repository;
-            this.exceptionFactory = exceptionFactory;
             this.guardianValidator = profileValidator;
         }
 
@@ -58,7 +55,7 @@ namespace ADMS.Apprentices.Core.Services
         {
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
             if (profile.Guardian != null)
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.GuardianExists);
+                throw AdmsValidationException.Create(ValidationExceptionType.GuardianExists);
         }
     }
 }

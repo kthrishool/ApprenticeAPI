@@ -15,12 +15,10 @@ namespace ADMS.Apprentices.Core.Services.Validators
 {
     public class QualificationValidator : IQualificationValidator
     {
-        private readonly IExceptionFactory exceptionFactory;
         private readonly IReferenceDataValidator referenceDataValidator;
 
-        public QualificationValidator(IExceptionFactory exceptionFactory, IReferenceDataValidator referenceDataValidator)     
+        public QualificationValidator(IReferenceDataValidator referenceDataValidator)     
         {            
-            this.exceptionFactory = exceptionFactory;
             this.referenceDataValidator = referenceDataValidator;
         }
 
@@ -38,7 +36,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
         
         public async Task<ValidationExceptionBuilder> ValidateAsync(Qualification qualification, Profile profile)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             //check if mandatory fields presents
             
             if (qualification.QualificationCode.IsNullOrEmpty()) {
@@ -79,7 +77,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         public ValidationExceptionBuilder CheckForDuplicates(List<Qualification> qualifications)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             //check for duplicates based on Qcode
             if (qualifications.GroupBy(x => x.QualificationCode.ToUpper()).Any(g => g.Count() > 1))
                 exceptionBuilder.AddException(ValidationExceptionType.DuplicateQualification);
@@ -88,7 +86,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         public ValidationExceptionBuilder ValidateAgainstApprenticeshipQualification(Qualification qualification, Registration registration,Profile profile)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             if(registration == null) {
                 exceptionBuilder.AddException(ValidationExceptionType.QualificationApprenticeshipDoesNotExist);        
                 return exceptionBuilder;

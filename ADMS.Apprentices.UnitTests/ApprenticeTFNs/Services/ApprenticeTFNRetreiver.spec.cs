@@ -121,10 +121,9 @@ namespace ADMS.Apprentices.UnitTests.ApprenticeTFNs.Services
         {
             var mockDbSet = SingleApprenticeTFN();
             var ctx = new Mock<IRepository>();
-            var ctx3 = new Mock<IExceptionFactory>();
 
             ctx.Setup(c => c.Retrieve<ApprenticeTFN>()).Returns(mockDbSet.Object);
-            IApprenticeTFNRetreiver service = new ApprenticeTFNRetreiver (ctx.Object,ctx2.Object, ctx3.Object);
+            IApprenticeTFNRetreiver service = new ApprenticeTFNRetreiver (ctx.Object,ctx2.Object);
 
 
             tfnDetail = service.Get(apprenticeId);
@@ -166,12 +165,11 @@ namespace ADMS.Apprentices.UnitTests.ApprenticeTFNs.Services
         {
             var mockDbSet = SingleApprenticeTFN();
             var ctx = new Mock<IRepository>();
-            var ctx3 = new Mock<IExceptionFactory>();
 
             ctx.Setup(c => c.Retrieve<ApprenticeTFN>()).Returns(mockDbSet.Object);
-            IApprenticeTFNRetreiver service = new ApprenticeTFNRetreiver(ctx.Object, ctx2.Object, ctx3.Object);
+            IApprenticeTFNRetreiver service = new ApprenticeTFNRetreiver(ctx.Object, ctx2.Object);
 
-            var result = Assert.ThrowsException<NullReferenceException>(() => service.Get(apprenticeId - 1));
+            var result = Assert.ThrowsException<AdmsNotFoundException>(() => service.Get(apprenticeId - 1));
         }
 
 

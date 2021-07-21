@@ -1,45 +1,41 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Messages;
 using ADMS.Apprentices.Core.Models;
 using ADMS.Apprentices.Core.Services;
-using ADMS.Services.Infrastructure.WebApi;
-using ADMS.Services.Infrastructure.WebApi.Documentation;
 using Adms.Shared;
-using Adms.Shared.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ADMS.Apprentices.Api.Configuration;
 using Adms.Shared.Filters;
-
 namespace ADMS.Apprentices.Api.Controllers
 {
     /// <summary>
     /// Apprentice guardian endpoints of a given apprentice.
     /// </summary>
-    [ApiVersion(Version = "1", Latest = "1")]
     [Route("api/v1/apprentices/{apprenticeId}/guardian")]
     [Route("api/apprentices/{apprenticeId}/guardian")]
-    [Public]
+    [ApiController]
+    //[ApiDescription(Summary = "Apprentice guardian endpoints of a given apprentice", Description = "")]
     [Produces("application/json")]
     [Consumes("application/json")]
-    public class ApprenticeGuardianController : AdmsController
+    public class ApprenticeGuardianController : ControllerBase
     {
-        private readonly IRepository repository;        
+        private readonly IRepository repository;
         private readonly IGuardianCreator guardianCreator;
         private readonly IGuardianRetreiver guardianRetreiver;
         private readonly IGuardianUpdater guardianUpdater;
 
         /// <summary>Constructor</summary>
         public ApprenticeGuardianController(
-            IHttpContextAccessor contextAccessor,
-            IRepository repository,            
+            IRepository repository,
             IGuardianCreator guardianCreator,
             IGuardianRetreiver guardianRetreiver,
             IGuardianUpdater guardianUpdater
-        ) : base(contextAccessor)
+        ) 
         {
-            this.repository = repository;            
+            this.repository = repository;
             this.guardianCreator = guardianCreator;
             this.guardianRetreiver = guardianRetreiver;
             this.guardianUpdater = guardianUpdater;
@@ -48,7 +44,8 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <summary>
         /// Gets guardian information of a given apprentice id.
         /// </summary>
-        /// <param name="apprenticeId">Id of the apprentice</param>        
+        /// <param name="apprenticeId">Id of the apprentice</param>
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
         [HttpGet]
         public async Task<ActionResult<ProfileGuardianModel>> Get(int apprenticeId)
         {
@@ -61,10 +58,11 @@ namespace ADMS.Apprentices.Api.Controllers
         /// </summary>
         /// <param name="apprenticeId">apprenticeId</param>
         /// <param name="message">Details of the guardian to be created</param>
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPost]
         public async Task<ActionResult<ProfileGuardianModel>> Create(int apprenticeId, [FromBody] ProfileGuardianMessage message)
         {
-            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);            
+            Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
             Guardian guardian = await guardianCreator.CreateAsync(apprenticeId, message);
             profile.Guardian = guardian;
             await repository.SaveAsync();
@@ -74,8 +72,9 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <summary>
         /// Updates an existing parent/guardian.
         /// </summary>
-        /// <param name="apprenticeId">ID of the apprentice</param>        
+        /// <param name="apprenticeId">ID of the apprentice</param>
         /// <param name="message">Details of the information to be updated</param>
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPut]
         public async Task<ActionResult<ProfileGuardianModel>> Update(int apprenticeId, [FromBody] ProfileGuardianMessage message)
         {

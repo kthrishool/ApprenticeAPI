@@ -17,16 +17,14 @@ namespace ADMS.Apprentices.Core.Services
     {
         private readonly IRepository repository;
         private readonly IApprenticeRepository apprenticeRepository;
-        private readonly IExceptionFactory exceptionFactory;
 
         public ProfileRetreiver(
             IRepository repository,
-            IApprenticeRepository apprenticeRepository,
-            IExceptionFactory exceptionFactory)
+            IApprenticeRepository apprenticeRepository
+            )
         {
             this.repository = repository;
             this.apprenticeRepository = apprenticeRepository;
-            this.exceptionFactory = exceptionFactory;
         }
 
         /// <summary>
@@ -51,16 +49,16 @@ namespace ADMS.Apprentices.Core.Services
             bool noSearchParams = message.ApprenticeID == null && message.Name.IsNullOrEmpty() && message.BirthDate == null && message.USI.IsNullOrEmpty();
 
             if ( message.Phonenumber?.Length < 8 &&  message.Address.IsNullOrEmpty() && message.EmailAddress.IsNullOrEmpty() && noSearchParams)
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidPhonenumberSearch);
+                throw AdmsValidationException.Create(ValidationExceptionType.InvalidPhonenumberSearch);
 
             if (message.EmailAddress?.Length < 4 && message.Address.IsNullOrEmpty() && message.Phonenumber.IsNullOrEmpty() && noSearchParams)
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidEmailSearch);
+                throw AdmsValidationException.Create(ValidationExceptionType.InvalidEmailSearch);
 
             if (message.Phonenumber.IsNullOrEmpty() && message.Address.IsNullOrEmpty() && message.EmailAddress.IsNullOrEmpty() && noSearchParams)
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidSearch);
+                throw AdmsValidationException.Create(ValidationExceptionType.InvalidSearch);
 
             if (!message.Address.IsNullOrEmpty() && Enum.IsDefined(typeof(StateCode), message.Address.ToUpper()) && message.Phonenumber.IsNullOrEmpty() && message.EmailAddress.IsNullOrEmpty() && noSearchParams)
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidAddressSearch);
+                throw AdmsValidationException.Create(ValidationExceptionType.InvalidAddressSearch);
 
             return apprenticeRepository.GetProfilesAsync(message).Result;
         }

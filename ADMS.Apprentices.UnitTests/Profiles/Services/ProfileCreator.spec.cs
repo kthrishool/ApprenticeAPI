@@ -49,7 +49,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             };
             Container.GetMock<IProfileValidator>()
                 .Setup(s => s.ValidateAsync(It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
         protected override async void When()

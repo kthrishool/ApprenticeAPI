@@ -9,7 +9,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 {
     public class ValidationExceptionBuilder : ExceptionBuilder<ValidationExceptionType>
     {
-        public ValidationExceptionBuilder(IExceptionFactory exceptionFactory) : base(exceptionFactory)
+        public ValidationExceptionBuilder() : base()
         {
 
         }
@@ -18,11 +18,9 @@ namespace ADMS.Apprentices.Core.Services.Validators
     public class ExceptionBuilder<TExceptionType>
         where TExceptionType : Enum
     {
-        private readonly IExceptionFactory exceptionFactory;
         private readonly List<TExceptionType> exceptions;
-        public ExceptionBuilder(IExceptionFactory exceptionFactory)
+        public ExceptionBuilder()
         {
-            this.exceptionFactory = exceptionFactory;
             this.exceptions = new List<TExceptionType>();
         }
         
@@ -53,7 +51,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
         public void ThrowAnyExceptions()
         {
             if(exceptions.Any()){
-                throw exceptionFactory.CreateValidationException<TExceptionType>(exceptions.Distinct().ToArray());
+                throw AdmsValidationException.Create<TExceptionType>(exceptions.Distinct().ToArray());
             }
         }
     }

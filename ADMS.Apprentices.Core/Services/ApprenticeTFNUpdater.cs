@@ -14,20 +14,17 @@ namespace ADMS.Apprentices.Core.Services
     {
         private readonly IRepository repository;
         private readonly ICryptography cryptography;
-        private readonly IExceptionFactory exceptionFactory;
         private readonly IContextRetriever contextRetriever;
 
         public ApprenticeTFNUpdater(
             IRepository repository,
             ICryptography cryptography, 
-            IContextRetriever contextRetriever,
-            IExceptionFactory exceptionFactory
+            IContextRetriever contextRetriever
             )
         {
             this.repository = repository;
             this.cryptography = cryptography;
             this.contextRetriever = contextRetriever;
-            this.exceptionFactory = exceptionFactory;
         }
 
         public async Task<ApprenticeTFN> SetRevalidate(int apprenticeId)
@@ -67,7 +64,7 @@ namespace ADMS.Apprentices.Core.Services
 
             if (tfnEntity == null)
             {
-                throw exceptionFactory.CreateNotFoundException("TaxFileNumber", apprenticeId.ToString());
+                throw AdmsNotFoundException.Create("TaxFileNumber", apprenticeId.ToString());
             }
 
             return tfnEntity;

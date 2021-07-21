@@ -5,9 +5,11 @@ using Adms.Shared;
 using Adms.Shared.Helpers;
 using Adms.Shared.Paging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using ADMS.Apprentices.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Au.Gov.Infrastructure.Authorisation;
 
 namespace ADMS.Apprentices.Api.Configuration
 {

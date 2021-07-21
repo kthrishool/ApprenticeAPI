@@ -25,8 +25,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     {
         private Qualification qualification;       
         private Profile profile;
-        private ValidationException validationException;
-        //private ValidationException duplicateQualification;
         
         private ValidationExceptionBuilder exceptionBuilder;
 
@@ -44,18 +42,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             };
             profile.Qualifications.Add(qualification);
             profile.BirthDate = ProfileConstants.Birthdate;
-            validationException = new ValidationException(null, (ValidationError)null);
-
-            var exceptionFactory = Container.GetMock<IExceptionFactory>().Object;
 
             Container.GetMock<IReferenceDataValidator>()
                 .Setup(r => r.ValidateAsync(It.IsAny<Qualification>()))
-                .ReturnsAsync(() => new ValidationExceptionBuilder(exceptionFactory));
-
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(It.IsAny<ValidationExceptionType[]>()))
-                .Returns(validationException);
+                .ReturnsAsync(() => new ValidationExceptionBuilder());
         }
 
 
@@ -90,7 +80,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.Qualifications.Add(qualification);
 
             ClassUnderTest.Invoking(c => c.CheckForDuplicates(profile.Qualifications.ToList()).ThrowAnyExceptions())
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -100,7 +90,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.Qualifications.Add(qualification);
 
             ClassUnderTest.Invoking(c => c.CheckForDuplicates(profile.Qualifications.ToList()).ThrowAnyExceptions())
-                .Should().NotThrow<ValidationException>();
+                .Should().NotThrow<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -110,7 +100,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.QualificationCode = null;
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
-               .Should().Throw<ValidationException>().Where(e => e == validationException);
+               .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -121,7 +111,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.EndDate = new DateTime(2020, 1, 1);
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
-              .Should().Throw<ValidationException>().Where(e => e == validationException);
+              .Should().Throw<AdmsValidationException>();
         }
 
 
@@ -132,7 +122,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.StartDate = DateTime.Now.AddDays(+1);
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
-              .Should().Throw<ValidationException>().Where(e => e == validationException);
+              .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -142,7 +132,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.EndDate = DateTime.Now.AddDays(+1);
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
-              .Should().Throw<ValidationException>().Where(e => e == validationException);
+              .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -153,7 +143,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.EndDate = DateTime.Now.AddDays(+1);
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
-              .Should().Throw<ValidationException>().Where(e => e == validationException);
+              .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -163,7 +153,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.StartDate = ProfileConstants.Birthdate.AddYears(11);            
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
-              .Should().Throw<ValidationException>().Where(e => e == validationException);
+              .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -174,7 +164,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(11);            
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
-              .Should().Throw<ValidationException>().Where(e => e == validationException);
+              .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -187,7 +177,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.Qualifications.Add(qualification);
             var b = ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)));
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
-               .Should().Throw<ValidationException>().Where(e => e == validationException);
+               .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -221,7 +211,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.EndDate = null;
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
-              .Should().Throw<ValidationException>().Where(e => e == validationException);
+              .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -232,7 +222,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.StartDate = null;
             profile.Qualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
-               .Should().Throw<ValidationException>().Where(e => e == validationException);
+               .Should().Throw<AdmsValidationException>();
         }
     }
     #endregion
@@ -274,22 +264,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 ClientId = ProfileConstants.Id
             };
 
-            var exceptionFactory = Container.GetMock<IExceptionFactory>().Object;
-
-            base.Given();
-            Container.GetMock<IExceptionFactory>()
-                .Setup(ef => ef.CreateValidationException(It.IsAny<ValidationExceptionType[]>()))
-                .Returns(validationException)
-                ;
-            
             Container.GetMock<IReferenceDataValidator>()
                 .Setup(r => r.ValidateAsync(It.IsAny<Qualification>()))
-                .ReturnsAsync(() => new ValidationExceptionBuilder(exceptionFactory));
-
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(It.IsAny<ValidationExceptionType[]>()))
-                .Returns(validationException);
+                .ReturnsAsync(() => new ValidationExceptionBuilder());
         }
         
         private ValidationExceptionBuilder callApprenticeshipQualification(Qualification qualification, Registration registration, Profile profile)

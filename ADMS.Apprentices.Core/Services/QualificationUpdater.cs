@@ -21,15 +21,13 @@ namespace ADMS.Apprentices.Core.Services
         private readonly IQualificationValidator qualificationValidator;
         private readonly IRepository repository;
         private readonly ITYIMSRepository tyimsRepository;
-        private readonly IExceptionFactory exceptionFactory;       
 
         public QualificationUpdater(IRepository repository, ITYIMSRepository tyimsRepository,
-            IExceptionFactory exceptionFactory, IQualificationValidator qualificationValidator)
+            IQualificationValidator qualificationValidator)
         {
             this.repository = repository;
             this.tyimsRepository = tyimsRepository;
             this.qualificationValidator = qualificationValidator;
-            this.exceptionFactory = exceptionFactory;            
         }
 
         public async Task<Qualification> Update(int apprenticeId, int qualificationId, ProfileQualificationMessage message)
@@ -51,7 +49,7 @@ namespace ADMS.Apprentices.Core.Services
 
             Qualification qualification = profile.Qualifications.SingleOrDefault(x => x.Id == qualificationId);
             if (qualification == null)
-                throw exceptionFactory.CreateNotFoundException("Apprentice Qualification ", qualificationId.ToString());
+                throw AdmsNotFoundException.Create("Apprentice Qualification ", qualificationId.ToString());
 
             qualification.QualificationCode = message.QualificationCode.Sanitise();
             qualification.QualificationDescription = message.QualificationDescription.Sanitise();

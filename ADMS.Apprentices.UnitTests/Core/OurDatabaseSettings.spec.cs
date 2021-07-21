@@ -16,6 +16,7 @@ using Moq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
+using Adms.Shared;
 
 namespace ADMS.Apprentices.UnitTests.Core
 {
@@ -100,6 +101,8 @@ namespace ADMS.Apprentices.UnitTests.Core
             OurTestingSettings ourTestingSettings = new();
             OurEnvironmentSettings ourEnvironmentSettings = new();
             OurDatabaseSettings ourDatabaseSettings = new();
+            AuthorisationSettings AuthorisationSettings = new();
+            ClaimTypeSettings claimTypeSettings = new();
 
             ourEnvironmentSettings.SortableListRowLimit = 4;
             ourEnvironmentSettings.WebRootUrl = "WebRootUrl";
@@ -109,7 +112,9 @@ namespace ADMS.Apprentices.UnitTests.Core
             sharedSettings = new SharedSettings(
                 Options.Create(ourTestingSettings),
                 Options.Create(ourEnvironmentSettings),
-                Options.Create(ourDatabaseSettings)
+                Options.Create(ourDatabaseSettings),
+                Options.Create(AuthorisationSettings),
+                Options.Create(claimTypeSettings)
                 );
 
             sharedSettings.SortableListRowLimit.Should().Be(4);

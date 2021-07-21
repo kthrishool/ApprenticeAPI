@@ -1,4 +1,5 @@
-﻿using ADMS.Apprentices.Core;
+﻿using Adms.Shared;
+using ADMS.Apprentices.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,6 +22,8 @@ namespace ADMS.Apprentices.Api.Configuration
             services.Configure<OurTestingSettings>(configuration.GetSection(nameof(OurTestingSettings)));
             services.Configure<OurUsiSettings>(configuration.GetSection(nameof(OurUsiSettings)));
             services.Configure<OurHttpClientSettings>(configuration.GetSection(nameof(OurHttpClientSettings)));
+            services.Configure<AuthorisationSettings>(configuration.GetSection(nameof(AuthorisationSettings)));
+            services.Configure<ClaimTypeSettings>(configuration.GetSection(nameof(ClaimTypeSettings)));
         }
     }
 }

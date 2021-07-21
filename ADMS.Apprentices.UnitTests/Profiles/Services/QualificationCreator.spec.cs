@@ -30,7 +30,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         private int apprenticeId;
         private Profile profile;
         private Registration registration;
-        private ValidationException validationException;
         private int apprenticeshipId;
 
         protected override void Given()
@@ -55,23 +54,18 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 TrainingContractId = 100,
             };
             
-            validationException = new ValidationException(null, (ValidationError)null);
-            
             Container.GetMock<ITYIMSRepository>()
                 .Setup(s => s.GetRegistrationAsync(apprenticeshipId))
                 .ReturnsAsync(registration);
-            Container.GetMock<IExceptionFactory>()
-                .Setup(s => s.CreateValidationException(It.IsAny<ValidationExceptionType[]>()))
-                .Returns(validationException);
             Container.GetMock<IRepository>()
                 .Setup(s => s.GetAsync<Profile>(apprenticeId, true))
                 .ReturnsAsync(profile);
             Container.GetMock<IQualificationValidator>()
                 .Setup(s => s.ValidateAsync(It.IsAny<Qualification>(), It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .ReturnsAsync(new ValidationExceptionBuilder());
             Container.GetMock<IQualificationValidator>()
                 .Setup(s => s.ValidateAgainstApprenticeshipQualification(It.IsAny<Qualification>(), registration,It.IsAny<Profile>()))
-                .Returns(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .Returns(new ValidationExceptionBuilder());
 
         }
 
@@ -115,17 +109,16 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void WhenApprenticeshipIdIsPopulatedAndIsNotValid_ThenTheRegistrationShouldBeRetrieved()
         {
-            var exceptionFactory = Container.GetMock<IExceptionFactory>().Object;
             message.ApprenticeshipId = apprenticeshipId;
 
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             exceptionBuilder.AddException(ValidationExceptionType.QualificationApprenticeshipIsNotComplete);
             Container.GetMock<IQualificationValidator>()
                 .Setup(s => s.ValidateAgainstApprenticeshipQualification(It.IsAny<Qualification>(), registration , It.IsAny<Profile>()))
                 .Returns(exceptionBuilder);
 
             ClassUnderTest.Invoking(c => c.CreateAsync(apprenticeId, message))
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
         
         [TestMethod]

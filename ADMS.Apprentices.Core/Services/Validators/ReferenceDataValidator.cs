@@ -15,17 +15,14 @@ namespace ADMS.Apprentices.Core.Services.Validators
     public class ReferenceDataValidator : IReferenceDataValidator
     {
         private readonly IRepository repository;
-        private readonly IExceptionFactory exceptionFactory;
         private readonly IReferenceDataClient referenceDataClient;
 
         public ReferenceDataValidator(
             IRepository repository,
-            IExceptionFactory exceptionFactory,
             IReferenceDataClient referenceDataClient
         )
         {
             this.repository = repository;
-            this.exceptionFactory = exceptionFactory;
             this.referenceDataClient = referenceDataClient;
         }
 
@@ -77,7 +74,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         public async Task<ValidationExceptionBuilder> ValidateAsync(Profile profile)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             var tasks = new List<Task>();
 
             if (!string.IsNullOrEmpty(profile.CountryOfBirthCode))
@@ -110,7 +107,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         public async Task<ValidationExceptionBuilder> ValidateAsync(Qualification qualification)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             var tasks = new List<Task>();
             if (!qualification.QualificationLevel.IsNullOrEmpty())
             {

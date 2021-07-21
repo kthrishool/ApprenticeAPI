@@ -68,17 +68,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     {
         int apprenticeId;
         Profile profile;
-        Guardian guardian;
-        NotFoundException exception;
 
         protected override void Given()
         {
             apprenticeId = 1;
-            guardian = new Guardian
-            {
-                Id = 1,
-                ApprenticeId = apprenticeId,
-            };
             profile = new Profile
             {
                 Id = apprenticeId,
@@ -86,14 +79,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 BirthDate = ProfileConstants.Birthdate,
                 Guardian = null
             };
-            exception = new NotFoundException(null, "Apprentice guardian", $"ApprenticeId { profile.Id }");
             Container
                 .GetMock<IRepository>()
                 .Setup(r => r.GetAsync<Profile>(apprenticeId, true))
                 .Returns(Task.FromResult(profile));
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateNotFoundException("Apprentice guardian", $"ApprenticeId {profile.Id}")).Returns(exception);
         }
 
         [TestMethod]
@@ -101,7 +90,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             ClassUnderTest
                  .Invoking(async c => await c.GetAsync(apprenticeId))
-                 .Should().Throw<NotFoundException>();
+                 .Should().Throw<AdmsNotFoundException>();
         }
     }
     #endregion

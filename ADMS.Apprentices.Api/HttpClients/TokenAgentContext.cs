@@ -1,9 +1,4 @@
-﻿using ADMS.Infrastructure.Adfs.OAuth2.ClientCredentials;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Adms.Shared.ClientCredentials;
 
 namespace ADMS.Apprentices.Api.HttpClients
 {

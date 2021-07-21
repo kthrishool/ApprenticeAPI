@@ -11,17 +11,14 @@ namespace ADMS.Apprentices.Core.Services
     {
         private readonly IRepository repository;
         private readonly ICryptography cryptography;
-        private readonly IExceptionFactory exceptionFactory;
 
         public ApprenticeTFNRetreiver(
             IRepository repository,
-            ICryptography cryptography, 
-            IExceptionFactory exceptionFactory
+            ICryptography cryptography 
             )
         {
             this.repository = repository;
             this.cryptography = cryptography;
-            this.exceptionFactory = exceptionFactory;
         }
 
         public ApprenticeTFNModel Get(int id)
@@ -32,7 +29,7 @@ namespace ADMS.Apprentices.Core.Services
 
             if (tfnEntity == null)
             {
-                throw exceptionFactory.CreateNotFoundException("TaxFileNumber", $"ApprenticeId {id}");
+                throw AdmsNotFoundException.Create("TaxFileNumber", $"ApprenticeId {id}");
             }
 
             var model = new ApprenticeTFNModel(tfnEntity);

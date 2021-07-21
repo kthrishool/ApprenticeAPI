@@ -21,7 +21,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     public class WhenValidatingReferenceDataValidator : GivenWhenThen<ReferenceDataValidator>
     {
         private Profile newProfile;
-        private ValidationException validationException;
         private Qualification qualification;
 
         protected override void Given()
@@ -30,18 +29,12 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-            validationException = new ValidationException(null, (ValidationError) null);
         }
 
         private void ResetExceptionforExceptionValidation(ValidationExceptionType exception, Profile newProfile)
         {
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(exception))
-                .Returns(validationException);
-
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(this.newProfile)).ThrowAnyExceptions())
-                .Should().Throw<ValidationException>().Where(e => e == validationException);
+                .Should().Throw<AdmsValidationException>();
         }
 
         private void MockReferenceData(string MethodName, IList<ListCodeResponseV1> returnvalue, ValidationExceptionType exception)
@@ -53,11 +46,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                         .GetMock<IReferenceDataClient>()
                         .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                         .ReturnsAsync(returnvalue);
-
-                    Container
-                        .GetMock<IExceptionFactory>()
-                        .Setup(r => r.CreateValidationException(exception))
-                        .Returns(validationException);
                     break;
             }
         }
@@ -89,7 +77,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
 
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
-                .Should().Throw<ValidationException>().Where(e => e == validationException);
+                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -104,7 +92,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
 
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
-                .Should().Throw<ValidationException>().Where(e => e == validationException);
+                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -148,7 +136,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             newProfile.IndigenousStatusCode = "dasdas";
 
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
-                .Should().Throw<ValidationException>().Where(e => e == validationException);
+                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -175,7 +163,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             newProfile.CitizenshipCode = "dasdas";
 
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
-                .Should().Throw<ValidationException>().Where(e => e == validationException);
+                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -406,7 +394,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             newProfile.HighestSchoolLevelCode = "invalidCode";
 
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
-                .Should().Throw<ValidationException>().Where(e => e == validationException);
+                .Should().Throw<AdmsValidationException>();
         }
 
 
@@ -433,15 +421,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidQualificationLevel))
-                .Returns(validationException);
             qualification = new Qualification();
             qualification.QualificationLevel = "Invalid";
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions())
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -452,17 +435,11 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidQualificationANZSCO))
-                .Returns(validationException);
-
             qualification = new Qualification();
             qualification.QualificationANZSCOCode = "Invalid";
 
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions())
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
 
         #endregion

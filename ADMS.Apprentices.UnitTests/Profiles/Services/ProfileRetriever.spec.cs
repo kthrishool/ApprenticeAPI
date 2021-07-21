@@ -45,7 +45,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     {
         ICollection<ProfileSearchResultModel> searchResults;
         private ProfileSearchMessage message;
-        private ValidationException validationException;
 
         protected override void Given()
         {
@@ -75,14 +74,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 Phonenumber = "1234567"
             };
 
-            validationException = new ValidationException(null, (ValidationError)null);
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidPhonenumberSearch))
-                .Returns(validationException);            
-
             ClassUnderTest.Invoking(c => c.Search(message))
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -93,14 +86,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 EmailAddress = "abc"
             };
 
-            validationException = new ValidationException(null, (ValidationError)null);            
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidEmailSearch))
-                .Returns(validationException);
-
             ClassUnderTest.Invoking(c => c.Search(message))
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -108,14 +95,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             message = new ProfileSearchMessage();
 
-            validationException = new ValidationException(null, (ValidationError)null);
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidSearch))
-                .Returns(validationException);
-
             ClassUnderTest.Invoking(c => c.Search(message))
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -126,14 +107,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 Address = "act"
             };
 
-            validationException = new ValidationException(null, (ValidationError)null);
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidAddressSearch))
-                .Returns(validationException);
-
             ClassUnderTest.Invoking(c => c.Search(message))
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
 
     }

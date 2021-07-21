@@ -31,12 +31,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 PreferredPhoneFlag = true
             };
             validationException = new ValidationException(null, (ValidationError) null);
-            exceptionBuilder = new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object);
-
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidPhoneNumber))
-                .Returns(validationException);
+            exceptionBuilder = new ValidationExceptionBuilder();
         }
 
         protected override void When()
@@ -165,12 +160,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 PreferredPhoneFlag = true
             };
             validationException = new ValidationException(null, (ValidationError) null);
-            exceptionBuilder = new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object);
-
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidPhoneNumber))
-                .Returns(validationException);
+            exceptionBuilder = new ValidationExceptionBuilder();
         }
 
         protected override void When()

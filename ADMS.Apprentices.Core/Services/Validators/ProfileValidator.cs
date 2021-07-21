@@ -13,19 +13,17 @@ namespace ADMS.Apprentices.Core.Services.Validators
 {
     public class ProfileValidator : IProfileValidator
     {
-        private readonly IExceptionFactory exceptionFactory;
         private readonly IAddressValidator addressValidator;
         private readonly IReferenceDataValidator referenceDataValidator;
         private readonly IUSIValidator usiValidator;
         private readonly IPhoneValidator phoneValidator;
 
-        public ProfileValidator(IExceptionFactory exceptionFactory,
+        public ProfileValidator(
             IAddressValidator addressValidator,
             IReferenceDataValidator referenceDataValidator,
             IUSIValidator usiValidator,
             IPhoneValidator phoneValidator)
         {
-            this.exceptionFactory = exceptionFactory;
             this.addressValidator = addressValidator;
             this.referenceDataValidator = referenceDataValidator;
             this.usiValidator = usiValidator;
@@ -34,7 +32,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         public async Task<ValidationExceptionBuilder> ValidateAsync(Profile profile)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             var tasks = new List<Task<ValidationExceptionBuilder>>();
             if (profile.EmailAddress == null && profile.Phones.Count == 0)
                 exceptionBuilder.AddException(ValidationExceptionType.MandatoryContact);
@@ -80,7 +78,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
         
         protected async Task<ValidationExceptionBuilder> ValidateAddressesAsync(Profile profile)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             var tasks = new List<Task<ValidationExceptionBuilder>>();
             // Address validation
             if (profile.Addresses != null)
@@ -130,7 +128,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         private ValidationExceptionBuilder PhoneValidation(Profile profile)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             if (profile.Phones != null)
             {               
                 var preferredPhoneSet = false;

@@ -17,7 +17,6 @@ namespace ADMS.Apprentices.Core.Services
         private readonly IRepository repository;
         private readonly IRepository isolatedRepository;
         private readonly ICryptography cryptography;
-        private readonly IExceptionFactory exceptionFactory;
         private readonly IContextRetriever contextRetriever;
         private readonly IServiceBusEventHelper serviceBusEventHelper;
 
@@ -26,14 +25,12 @@ namespace ADMS.Apprentices.Core.Services
             IRepository repository,
             ICryptography cryptography, 
             IContextRetriever contextRetriever,
-            IExceptionFactory exceptionFactory,
             IRepository isolatedRepository,
             IServiceBusEventHelper serviceBusEventHelper)
         {
             this.repository = repository;
             this.cryptography = cryptography;
             this.contextRetriever = contextRetriever;
-            this.exceptionFactory = exceptionFactory;
             this.isolatedRepository = isolatedRepository;
             this.serviceBusEventHelper = serviceBusEventHelper;
         }
@@ -42,19 +39,19 @@ namespace ADMS.Apprentices.Core.Services
         {
             if (message.ApprenticeId <= 0)
             {
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidApprenticeId);
+                throw AdmsValidationException.Create(ValidationExceptionType.InvalidApprenticeId);
             }
 
             if (message.TaxFileNumber <= 0)
             {
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.InvalidTFN);
+                throw AdmsValidationException.Create(ValidationExceptionType.InvalidTFN);
             }
 
             var apprenticeProfile = repository.Get<Profile>(message.ApprenticeId);
 
             if (apprenticeProfile == null)
             {
-                throw exceptionFactory.CreateNotFoundException("Apprentice Profile", message.ApprenticeId.ToString());
+                throw AdmsNotFoundException.Create("Apprentice Profile", message.ApprenticeId.ToString());
             }
 
             
@@ -69,7 +66,7 @@ namespace ADMS.Apprentices.Core.Services
                 isolatedRepository.Insert(serviceBusEventHelper.GetServiceBusEvent(new { tfnEntity.ApprenticeId }, "TFNRecordingFailed"));
                 isolatedRepository.Save();
 
-                throw exceptionFactory.CreateValidationException(ValidationExceptionType.TFNAlreadyExists);
+                throw AdmsValidationException.Create(ValidationExceptionType.TFNAlreadyExists);
             }
 
             var apprenticeTFN = new ApprenticeTFN
