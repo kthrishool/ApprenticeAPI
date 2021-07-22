@@ -67,6 +67,24 @@ stages:
           value: "admsapi.edc.hosts.devnetwork"
         - name: admsApplicationName
           value: "apprenticeapi"
+        - name: "Api.Url"
+          value: '$(AdmsTelemetryBaseUrl)'
+        - name: "Configuration.Environment"
+          value: '$(ConfigurationEnvironment)'
+        - name: "Configuration.AllowAudiences.0"
+          value: '$(AdmsBffAdfsResource)'
+        - name: "Background.AdfsDomainName"
+          value: '$(BackgroundIdentityAdfsDomainName)'
+        - name: "Background.ClientId"
+          value: '$(BackgroundIdentityClientId)'
+        - name: "Background.Resource"
+          value: '$(BackgroundIdentityResource)'
+        - name: "Background.AdfsResource"
+          value: 'BackgroundIdentityAdfsResource'
+        - name: "Background.ClientSecret"
+          value: '$(BackgroundIdentityClientSecret)'
+        - name: "Background.TokenEndpoint"
+          value: '$(BackgroundIdentityTokenEndpoint)'
     jobs:
     - template: Jobs/Release/iiswebapplication.yml@templates
       parameters:
@@ -119,6 +137,24 @@ stages:
           value: "admsapi.edc.hosts.testnetwork"
         - name: admsApplicationName
           value: "apprenticeapi"
+        - name: "Api.Url"
+          value: '$(AdmsTelemetryBaseUrl)'
+        - name: "Configuration.Environment"
+          value: '$(ConfigurationEnvironment)'
+        - name: "Configuration.AllowAudiences"
+          value: '$(ConfigurationAllowAudiences)'
+        - name: "Background.AdfsDomainName"
+          value: '$(BackgroundIdentityAdfsDomainName)'
+        - name: "Background.ClientId"
+          value: '$(BackgroundIdentityClientId)'
+        - name: "Background.Resource"
+          value: '$(BackgroundIdentityResource)'
+        - name: "Background.AdfsResource"
+          value: 'BackgroundIdentityAdfsResource'
+        - name: "Background.ClientSecret"
+          value: '$(BackgroundIdentityClientSecret)'
+        - name: "Background.TokenEndpoint"
+          value: '$(BackgroundIdentityTokenEndpoint)'
     jobs:
     - template: Jobs/Release/iiswebapplication.yml@templates
       parameters:
@@ -171,6 +207,13 @@ stages:
           value: "admsapistaging.pprod.skillsnp.dis.gov.au"
         - name: admsApplicationName
           value: "apprenticeapi"
+        - name: "Api.Url"
+          value: '$(AdmsTelemetryBaseUrl)'
+        - name: "Configuration.Environment"
+          value: '$(ConfigurationEnvironment)'
+        - name: "Configuration.AllowAudiences"
+          value: '$(ConfigurationAllowAudiences)'
+
     jobs:
     - template: Jobs/Release/iiswebapplication.yml@templates
       parameters:
