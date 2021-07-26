@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Messages;
 using ADMS.Apprentices.Core.Models;
@@ -55,11 +56,11 @@ namespace ADMS.Apprentices.Api.Controllers
         [HttpGet]
         [SupportsPaging(null)]
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
-        public async Task<ActionResult<PagedList<ProfileListModel>>> List([FromQuery] PagingInfo paging)
+        public async Task<ActionResult<PagedList<ProfileListModel>>> List([FromQuery] PagingInfo paging )
         {
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("id", true);
-            PagedList<Profile> profiles = await pagingHelper.ToPagedListAsync(profileRetreiver.RetreiveList(), paging);
+            PagedList<Profile> profiles = await pagingHelper.ToPagedListAsync(repository.Retrieve<Profile>().Where(x => x.ActiveFlag == true), paging);
             IEnumerable<ProfileListModel> models = profiles.Results.Map(a => new ProfileListModel(a));
             return Ok(new PagedList<ProfileListModel>(profiles, models));
         }
