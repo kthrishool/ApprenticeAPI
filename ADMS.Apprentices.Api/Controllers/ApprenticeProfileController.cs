@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ADMS.Apprentices.Api.Configuration;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Messages;
 using ADMS.Apprentices.Core.Models;
 using ADMS.Apprentices.Core.Services;
+using ADMS.Apprentices.Core.Services.Validators;
 using Adms.Shared;
 using Adms.Shared.Extensions;
 using Adms.Shared.Filters;
 using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ADMS.Apprentices.Api.HttpClients;
-using ADMS.Apprentices.Api.Configuration;
 
 namespace ADMS.Apprentices.Api.Controllers
 {
@@ -27,25 +26,31 @@ namespace ADMS.Apprentices.Api.Controllers
     public class ApprenticeProfileController : ControllerBase
     {
         private readonly IRepository repository;
+        private readonly IApprenticeRepository apprenticeRepository;
         private readonly IPagingHelper pagingHelper;
         private readonly IProfileCreator profileCreator;
         private readonly IProfileUpdater profileUpdater;
         private readonly IProfileRetreiver profileRetreiver;
+        private readonly ISearchCriteriaValidator searchCriteriaValidator;
 
         /// <summary>Constructor</summary>
         public ApprenticeProfileController(
             IRepository repository,
+            IApprenticeRepository apprenticeRepository,
             IPagingHelper pagingHelper,
             IProfileCreator profileCreator,
             IProfileUpdater profileUpdater,
-            IProfileRetreiver profileRetreiver
+            IProfileRetreiver profileRetreiver,
+            ISearchCriteriaValidator searchCriteriaValidator
         )
         {
             this.repository = repository;
+            this.apprenticeRepository = apprenticeRepository;
             this.pagingHelper = pagingHelper;
             this.profileCreator = profileCreator;
             this.profileUpdater = profileUpdater;
             this.profileRetreiver = profileRetreiver;
+            this.searchCriteriaValidator = searchCriteriaValidator;
         }
 
         /// <summary>
@@ -79,6 +84,20 @@ namespace ADMS.Apprentices.Api.Controllers
             paging.SetDefaultSorting("ScoreValue", true);
             PagedInMemoryList<ProfileSearchResultModel> profiles = pagingHelper.ToPagedInMemoryList(profileRetreiver.Search(message), paging);
             return Ok(profiles);
+        }
+
+        /// <summary>
+        /// Gets apprentice profiles that match the supplied apprentice identity information.
+        /// Used by the training contract to search for existing apprentice profiles that might
+        /// match the apprentice identity information entered against the training contract
+        /// </summary>
+        /// <param name="message">Apprentice identity information</param>
+        [HttpGet("identity-matches")]
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
+        public async Task<ActionResult<ApprenticeIdentitySearchResultModel[]>> SearchByIdentity([FromQuery] ApprenticeIdentitySearchCriteriaMessage message)
+        {
+            searchCriteriaValidator.Validate(message);
+            return Ok(await apprenticeRepository.GetMatchesByIdentityAsync(message));
         }
 
         /// <summary>

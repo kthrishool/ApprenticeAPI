@@ -151,7 +151,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0049", "Date commenced and Date completed cannot be after today's date")]
         InvalidDate,
 
-        [ExceptionDetails("AP-VAL-0050", "Apprenticeship qualification should have a start date and end date")]        
+        [ExceptionDetails("AP-VAL-0050", "Apprenticeship qualification should have a start date and end date")]
         InvalidApprenticeshipQualification,
 
         [ExceptionDetails("AP-VAL-0051", "ApprenticeshipId does not belong to the apprentice")]
@@ -162,5 +162,14 @@ namespace ADMS.Apprentices.Core.Exceptions
 
         [ExceptionDetails("AP-VAL-0053", "Cannot search by state if searching only by address")]
         InvalidAddressSearch,
+
+        [ExceptionDetails("AP-VAL-0054", "Search criteria must be supplied when searching for apprentices by identity information")]
+        MissingApprenticeIdentitySearchCriteria,
+
+        [ExceptionDetails("AP-VAL-0055", "Insufficient apprentice identity information to perform search. You must provide at least date of birth, USI, phone number or email address.")]
+        InsufficientApprenticeIdentitySearchCriteria,
+
+        [ExceptionDetails("AP-VAL-0056", "Insufficient apprentice identity information to perform search. When searching by date of birth you must also provide surname, USI, phone number or email address.")]
+        BirthDateMustBeCombinedWithOtherApprenticeIdentitySearchCriteria,
     }
 }
