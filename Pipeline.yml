@@ -9,6 +9,7 @@ resources:
     - repository: templates
       type: git
       name: ADMS/pipeline-templates
+      ref: chore/get-latest-pipeline
 
     - repository: db-templates
       type: git
@@ -29,7 +30,7 @@ stages:
     jobs:
       - template: /Jobs/Build/sqlproj.yml@templates
         parameters:
-          artifact: 'database-drop-folder'
+          artifactName: 'database-drop-folder'
           buildFileSpec: '**/*ADMSApprentice.sqlproj'
           msbuildAdditionalArguments: '-noWarn:SQL71562,SQL71502,SQL71558'
 
@@ -72,7 +73,7 @@ stages:
         - name: "Configuration.Environment"
           value: '$(ConfigurationEnvironment)'
         - name: "Configuration.AllowAudiences.0"
-          value: '$(AdmsBffAdfsResource)'
+          value: '$(ConfigurationAllowAudiences)'
         - name: "Background.AdfsDomainName"
           value: '$(BackgroundIdentityAdfsDomainName)'
         - name: "Background.ClientId"
@@ -141,7 +142,7 @@ stages:
           value: '$(AdmsTelemetryBaseUrl)'
         - name: "Configuration.Environment"
           value: '$(ConfigurationEnvironment)'
-        - name: "Configuration.AllowAudiences"
+        - name: "Configuration.AllowAudiences.0"
           value: '$(ConfigurationAllowAudiences)'
         - name: "Background.AdfsDomainName"
           value: '$(BackgroundIdentityAdfsDomainName)'
@@ -201,6 +202,8 @@ stages:
           value: '$(AdmsApprenticeConnectionString)'
         - name: "OurHttpClientSettings.ReferenceDataEndpointBaseUrl"
           value: '$(ReferenceDataEndpointBaseUrl)'
+        - name: "OurUSISettings.USIVerifyDisabled" #Disable the USI verification in staging
+          value: true
         - name: port
           value: "80"
         - name: hostname
@@ -211,8 +214,20 @@ stages:
           value: '$(AdmsTelemetryBaseUrl)'
         - name: "Configuration.Environment"
           value: '$(ConfigurationEnvironment)'
-        - name: "Configuration.AllowAudiences"
-          value: '$(ConfigurationAllowAudiences)'
+        - name: "Configuration.AllowAudiences.0"
+          value: '$(ConfigurationAllowAudiences)'       
+        - name: "Background.AdfsDomainName"
+          value: '$(BackgroundIdentityAdfsDomainName)'
+        - name: "Background.ClientId"
+          value: '$(BackgroundIdentityClientId)'
+        - name: "Background.Resource"
+          value: '$(BackgroundIdentityResource)'
+        - name: "Background.AdfsResource"
+          value: 'BackgroundIdentityAdfsResource'
+        - name: "Background.ClientSecret"
+          value: '$(BackgroundIdentityClientSecret)'
+        - name: "Background.TokenEndpoint"
+          value: '$(BackgroundIdentityTokenEndpoint)'
 
     jobs:
     - template: Jobs/Release/iiswebapplication.yml@templates
