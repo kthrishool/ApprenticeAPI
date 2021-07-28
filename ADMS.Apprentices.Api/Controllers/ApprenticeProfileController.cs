@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using ADMS.Apprentices.Api.Configuration;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Messages;
@@ -12,6 +13,8 @@ using Adms.Shared.Filters;
 using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace ADMS.Apprentices.Api.Controllers
 {
@@ -54,22 +57,21 @@ namespace ADMS.Apprentices.Api.Controllers
         }
 
         /// <summary>
-        /// List all apprentice profile and returns generic summary information for each apprentice.
+        /// List generic summary information of all apprentices or apprentices match the optional search parameters
         /// </summary>
         /// <param name="paging">Paging information</param>
+        /// <param name="message">search options</param>
         [HttpGet]
         [SupportsPaging(null)]
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
-        public async Task<ActionResult<PagedList<ProfileListModel>>> List([FromQuery] PagingInfo paging)
+        public async Task<ActionResult<PagedList<ProfileListModel>>> List([FromQuery] PagingInfo paging, [FromQuery] ProfileSearchMessage message)
         {
             paging ??= new PagingInfo();
-            paging.SetDefaultSorting("id", true);
-            PagedList<Profile> profiles = await pagingHelper.ToPagedListAsync(profileRetreiver.RetreiveList(), paging);
-            IEnumerable<ProfileListModel> models = profiles.Results.Map(a => new ProfileListModel(a));
-            return Ok(new PagedList<ProfileListModel>(profiles, models));
+            PagedList<ProfileListModel> pagedList = await profileRetreiver.RetreiveList(paging, message);
+            return Ok(pagedList);
         }
 
-
+        
         /// <summary>
         /// Get all apprentice profile based on the provided search params.
         /// </summary>
@@ -78,11 +80,12 @@ namespace ADMS.Apprentices.Api.Controllers
         [HttpPost("search")]
         [SupportsPaging(null)]
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
-        public ActionResult<PagedList<ProfileSearchResultModel>> Search([FromBody] ProfileSearchMessage message, [FromQuery] PagingInfo paging)
+        [Obsolete] //search is now combined witht list all end point.
+        public async Task<ActionResult<PagedList<ProfileSearchResultModel>>> Search([FromBody] ProfileSearchMessage message, [FromQuery] PagingInfo paging)
         {
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("ScoreValue", true);
-            PagedInMemoryList<ProfileSearchResultModel> profiles = pagingHelper.ToPagedInMemoryList(profileRetreiver.Search(message), paging);
+            PagedInMemoryList<ProfileSearchResultModel> profiles = pagingHelper.ToPagedInMemoryList(await profileRetreiver.Search(message), paging);
             return Ok(profiles);
         }
 

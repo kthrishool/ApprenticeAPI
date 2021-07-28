@@ -10,6 +10,7 @@ using ADMS.Apprentices.Core.Exceptions;
 using System.Diagnostics.CodeAnalysis;
 using Adms.Shared.Extensions;
 using System;
+using Adms.Shared.Paging;
 
 namespace ADMS.Apprentices.Core.Services
 {
@@ -17,26 +18,44 @@ namespace ADMS.Apprentices.Core.Services
     {
         private readonly IRepository repository;
         private readonly IApprenticeRepository apprenticeRepository;
+        private readonly IPagingHelper pagingHelper;
 
         public ProfileRetreiver(
             IRepository repository,
-            IApprenticeRepository apprenticeRepository
+            IApprenticeRepository apprenticeRepository,
+            IPagingHelper pagingHelper
             )
         {
             this.repository = repository;
             this.apprenticeRepository = apprenticeRepository;
+            this.pagingHelper = pagingHelper;
         }
 
         /// <summary>
         /// Returns as list of apprentices       
-        /// </summary>
-        public IQueryable<Profile> RetreiveList() 
+        /// </summary>        
+        public async Task<PagedList<ProfileListModel>> RetreiveList(PagingInfo paging, ProfileSearchMessage message) 
         {
-            IQueryable<Profile> profiles = null;
+            PagedList<ProfileListModel> pagedList;
+            IEnumerable<ProfileListModel> models;            
 
-            profiles = repository.Retrieve<Profile>().Where(x => x.ActiveFlag == true).AsQueryable().Take(500);
+            if (message.ApprenticeID == null && message.BirthDate == null && message.Name.IsNullOrEmpty() && message.EmailAddress.IsNullOrEmpty() &&
+                message.Phonenumber.IsNullOrEmpty() && message.USI.IsNullOrEmpty() && message.Address.IsNullOrEmpty())
+            {
+                paging.SetDefaultSorting("id", true);
+                PagedList<Profile> profiles = await pagingHelper.ToPagedListAsync(repository.Retrieve<Profile>().Where(x => x.ActiveFlag == true), paging);
+                models = profiles.Results.Map(a => new ProfileListModel(a));
+                pagedList = new PagedList<ProfileListModel>(profiles, models);
+            }
+            else
+            {
+                paging.SetDefaultSorting("ScoreValue", true);
+                PagedInMemoryList<ProfileSearchResultModel> profiles = pagingHelper.ToPagedInMemoryList(await Search(message), paging);
+                models = profiles.Results.Map(a => new ProfileListModel(a));
+                pagedList = new PagedList<ProfileListModel>(profiles, models);
+            }
 
-            return profiles;
+            return pagedList;
         }
 
         /// <summary>        
@@ -44,7 +63,7 @@ namespace ADMS.Apprentices.Core.Services
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public ICollection<ProfileSearchResultModel> Search(ProfileSearchMessage message)
+        public async Task<ICollection<ProfileSearchResultModel>> Search(ProfileSearchMessage message)
         {
             bool noSearchParams = message.ApprenticeID == null && message.Name.IsNullOrEmpty() && message.BirthDate == null && message.USI.IsNullOrEmpty();
 
@@ -60,7 +79,7 @@ namespace ADMS.Apprentices.Core.Services
             if (!message.Address.IsNullOrEmpty() && Enum.IsDefined(typeof(StateCode), message.Address.ToUpper()) && message.Phonenumber.IsNullOrEmpty() && message.EmailAddress.IsNullOrEmpty() && noSearchParams)
                 throw AdmsValidationException.Create(ValidationExceptionType.InvalidAddressSearch);
 
-            return apprenticeRepository.GetProfilesAsync(message).Result;
+            return await apprenticeRepository.GetProfilesAsync(message);
         }
     }
 }

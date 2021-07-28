@@ -5,13 +5,14 @@ using ADMS.Apprentices.Core.Models;
 using ADMS.Apprentices.Core.Messages;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Adms.Shared.Paging;
 
 namespace ADMS.Apprentices.Core.Services
 {
     [RegisterWithIocContainer]
     public interface IProfileRetreiver
     {
-        IQueryable<Profile> RetreiveList();
-        ICollection<ProfileSearchResultModel> Search(ProfileSearchMessage message);        
+        Task<PagedList<ProfileListModel>> RetreiveList(PagingInfo paging, ProfileSearchMessage message);
+        Task<ICollection<ProfileSearchResultModel>> Search(ProfileSearchMessage message);        
     }
 }
