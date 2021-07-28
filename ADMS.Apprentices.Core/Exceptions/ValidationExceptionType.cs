@@ -163,13 +163,13 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0053", "Cannot search by state if searching only by address")]
         InvalidAddressSearch,
 
-        [ExceptionDetails("AP-VAL-0054", "Search criteria must be supplied when searching for apprentices by identity information")]
-        MissingApprenticeIdentitySearchCriteria,
-
-        [ExceptionDetails("AP-VAL-0055", "Insufficient apprentice identity information to perform search. You must provide at least date of birth, USI, phone number or email address.")]
+        [ExceptionDetails("AP-VAL-0054", "Insufficient apprentice identity information to perform a search. You must provide at least date of birth and first name or surname, USI, phone number or email address.")]
         InsufficientApprenticeIdentitySearchCriteria,
 
-        [ExceptionDetails("AP-VAL-0056", "Insufficient apprentice identity information to perform search. When searching by date of birth you must also provide surname, USI, phone number or email address.")]
-        BirthDateMustBeCombinedWithOtherApprenticeIdentitySearchCriteria,
+        [ExceptionDetails("AP-VAL-0055", "Insufficient apprentice identity information to perform a search. When searching by date of birth you must also provide surname and / or first name.")]
+        BirthDateMustBeCombinedWithFirstNameOrSurname,
+
+        [ExceptionDetails("AP-VAL-0055", "Insufficient apprentice identity information to perform a search. When searching by surname or first name you must also provide date of birth.")]
+        FirstNameOrSurnameMustBeCombinedWithBirthDate,
     }
 }

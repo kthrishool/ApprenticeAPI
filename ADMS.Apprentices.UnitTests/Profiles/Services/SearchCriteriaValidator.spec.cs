@@ -17,6 +17,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         private const string usi = "123456789A";
         private const string phoneNumber = "123123123";
         private const string emailAddress = "joe@home.com";
+        private const string firstName = "Joe";
+        private const string surname = "Bloggs";
         private ApprenticeIdentitySearchCriteriaMessage fullyPopulatedMessage;
         private readonly DateTime dob = new(1985, 12, 3);
 
@@ -27,8 +29,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 PhoneNumber = phoneNumber,
                 BirthDate = dob,
                 EmailAddress = emailAddress,
-                FirstName = "Joe",
-                Surname = "Bloggs",
+                FirstName = firstName,
+                Surname = surname,
                 USI = usi
             };
         }
@@ -38,7 +40,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             ClassUnderTest.Invoking(c => c.Validate(null))
                 .Should().Throw<AdmsValidationException>()
-                .Where(e => e.IsForValidationRule(ValidationExceptionType.MissingApprenticeIdentitySearchCriteria));
+                .Where(e => e.IsForValidationRule(ValidationExceptionType.InsufficientApprenticeIdentitySearchCriteria));
         }
 
         [TestMethod]
@@ -46,7 +48,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             ClassUnderTest.Invoking(c => c.Validate(new ApprenticeIdentitySearchCriteriaMessage()))
                 .Should().Throw<AdmsValidationException>()
-                .Where(e => e.IsForValidationRule(ValidationExceptionType.MissingApprenticeIdentitySearchCriteria));
+                .Where(e => e.IsForValidationRule(ValidationExceptionType.InsufficientApprenticeIdentitySearchCriteria));
         }
 
         [TestMethod]
@@ -74,11 +76,11 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public void DoesNotAllowNames()
+        public void DoesNotAllowNamesOnly()
         {
-            ClassUnderTest.Invoking(c => c.Validate(new ApprenticeIdentitySearchCriteriaMessage {Surname = "Bloggs", FirstName = "Joe"}))
+            ClassUnderTest.Invoking(c => c.Validate(new ApprenticeIdentitySearchCriteriaMessage {Surname = surname, FirstName = firstName}))
                 .Should().Throw<AdmsValidationException>()
-                .Where(e => e.IsForValidationRule(ValidationExceptionType.InsufficientApprenticeIdentitySearchCriteria));
+                .Where(e => e.IsForValidationRule(ValidationExceptionType.FirstNameOrSurnameMustBeCombinedWithBirthDate));
         }
 
         [TestMethod]
@@ -86,39 +88,49 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             ClassUnderTest.Invoking(c => c.Validate(new ApprenticeIdentitySearchCriteriaMessage {BirthDate = dob}))
                 .Should().Throw<AdmsValidationException>()
-                .Where(e => e.IsForValidationRule(ValidationExceptionType.BirthDateMustBeCombinedWithOtherApprenticeIdentitySearchCriteria));
+                .Where(e => e.IsForValidationRule(ValidationExceptionType.BirthDateMustBeCombinedWithFirstNameOrSurname));
         }
 
         [TestMethod]
-        public void DoesNotAllowBirthDateAndFirstNameOnly()
+        public void AllowsBirthDateAndFirstName()
         {
-            ClassUnderTest.Invoking(c => c.Validate(new ApprenticeIdentitySearchCriteriaMessage {BirthDate = dob, FirstName = "Joe"}))
-                .Should().Throw<AdmsValidationException>()
-                .Where(e => e.IsForValidationRule(ValidationExceptionType.BirthDateMustBeCombinedWithOtherApprenticeIdentitySearchCriteria));
+            ClassUnderTest.Validate(new ApprenticeIdentitySearchCriteriaMessage {BirthDate = dob, FirstName = firstName});
         }
 
         [TestMethod]
         public void AllowsSurnameAndBirthDate()
         {
-            ClassUnderTest.Validate(new ApprenticeIdentitySearchCriteriaMessage {Surname = "Bloggs", BirthDate = dob});
+            ClassUnderTest.Validate(new ApprenticeIdentitySearchCriteriaMessage {Surname = surname, BirthDate = dob});
         }
 
         [TestMethod]
-        public void AllowsBirthDateAndUSI()
+        public void DoesNotAllowBirthDateUnlessThereIsAFirstNameOrASurname()
         {
-            ClassUnderTest.Validate(new ApprenticeIdentitySearchCriteriaMessage {USI = usi, BirthDate = dob});
+            ClassUnderTest.Invoking(c => c.Validate(new ApprenticeIdentitySearchCriteriaMessage {USI = usi, BirthDate = dob}))
+                .Should().Throw<AdmsValidationException>()
+                .Where(e => e.IsForValidationRule(ValidationExceptionType.BirthDateMustBeCombinedWithFirstNameOrSurname));
+            ClassUnderTest.Invoking(c => c.Validate(new ApprenticeIdentitySearchCriteriaMessage {PhoneNumber = phoneNumber, BirthDate = dob}))
+                .Should().Throw<AdmsValidationException>()
+                .Where(e => e.IsForValidationRule(ValidationExceptionType.BirthDateMustBeCombinedWithFirstNameOrSurname));
+            ClassUnderTest.Invoking(c => c.Validate(new ApprenticeIdentitySearchCriteriaMessage {EmailAddress = emailAddress, BirthDate = dob}))
+                .Should().Throw<AdmsValidationException>()
+                .Where(e => e.IsForValidationRule(ValidationExceptionType.BirthDateMustBeCombinedWithFirstNameOrSurname));
         }
 
         [TestMethod]
-        public void AllowsBirthDateAndPhoneNumber()
+        public void DoesNotAllowFirstNameWithoutBirthDate()
         {
-            ClassUnderTest.Validate(new ApprenticeIdentitySearchCriteriaMessage {PhoneNumber = phoneNumber, BirthDate = dob});
+            ClassUnderTest.Invoking(c => c.Validate(new ApprenticeIdentitySearchCriteriaMessage {USI = usi, FirstName = firstName}))
+                .Should().Throw<AdmsValidationException>()
+                .Where(e => e.IsForValidationRule(ValidationExceptionType.FirstNameOrSurnameMustBeCombinedWithBirthDate));
         }
 
         [TestMethod]
-        public void AllowsBirthDateAndEmailAddress()
+        public void DoesNotAllowSurnameWithoutBirthDate()
         {
-            ClassUnderTest.Validate(new ApprenticeIdentitySearchCriteriaMessage {EmailAddress = emailAddress, BirthDate = dob});
+            ClassUnderTest.Invoking(c => c.Validate(new ApprenticeIdentitySearchCriteriaMessage {USI = usi, Surname = surname}))
+                .Should().Throw<AdmsValidationException>()
+                .Where(e => e.IsForValidationRule(ValidationExceptionType.FirstNameOrSurnameMustBeCombinedWithBirthDate));
         }
     }
 

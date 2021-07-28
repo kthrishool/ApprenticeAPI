@@ -16,12 +16,12 @@ namespace ADMS.Apprentices.Core.Services.Validators
                 !message.PhoneNumber.IsNullOrWhitespace() ||
                 !message.EmailAddress.IsNullOrWhitespace();
             bool hasAName = !message.FirstName.IsNullOrWhitespace() || !message.Surname.IsNullOrWhitespace();
-            if (!hasAPrimaryField && !hasAName && !hasDob)
-                throw AdmsValidationException.Create(ValidationExceptionType.MissingApprenticeIdentitySearchCriteria);
+            if (hasDob && !hasAName)
+                throw AdmsValidationException.Create(ValidationExceptionType.BirthDateMustBeCombinedWithFirstNameOrSurname);
+            if (hasAName && !hasDob)
+                throw AdmsValidationException.Create(ValidationExceptionType.FirstNameOrSurnameMustBeCombinedWithBirthDate);
             if (!hasAPrimaryField && !hasDob)
                 throw AdmsValidationException.Create(ValidationExceptionType.InsufficientApprenticeIdentitySearchCriteria);
-            if (hasDob && !hasAPrimaryField && message.Surname.IsNullOrWhitespace())
-                throw AdmsValidationException.Create(ValidationExceptionType.BirthDateMustBeCombinedWithOtherApprenticeIdentitySearchCriteria);
         }
     }
 }
