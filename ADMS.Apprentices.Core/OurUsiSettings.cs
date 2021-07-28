@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ADMS.Apprentices.Core
+﻿namespace ADMS.Apprentices.Core
 {
     public class OurUsiSettings
     {
@@ -13,5 +8,6 @@ namespace ADMS.Apprentices.Core
         public string OrganisationId { get; set; }
         public string AdfsDomainName { get; set; }
         public bool USIVerifyDisabled { get; set; }
+        public string HttpProxyUrl { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using ADMS.Apprentices.Core.Models;
 using ADMS.Apprentices.Core.Services;
 using ADMS.Apprentices.Database.Mappings;
 using Adms.Shared.Database;
+using Adms.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -37,12 +38,12 @@ namespace ADMS.Apprentices.Database
         public async Task<ApprenticeIdentitySearchResultModel[]> GetMatchesByIdentityAsync(ApprenticeIdentitySearchCriteriaMessage message)
         {
             FormattableString query = $@"ApprenticeBasicSearch 
-                @FirstName={message.FirstName}, 
-                @Surname={message.Surname}, 
+                @FirstName={message.FirstName.ToNullIfEmpty()}, 
+                @Surname={message.Surname.ToNullIfEmpty()}, 
                 @BirthDate={message.BirthDate}, 
-                @USI={message.USI}, 
-                @EmailAddress={message.EmailAddress}, 
-                @PhoneNumber={message.PhoneNumber}";
+                @USI={message.USI.ToNullIfEmpty()}, 
+                @EmailAddress={message.EmailAddress.ToNullIfEmpty()}, 
+                @PhoneNumber={message.PhoneNumber.ToNullIfEmpty()}";
             return await Set<ApprenticeIdentitySearchResultModel>().FromSqlInterpolated(query).ToArrayAsync();
         }
 

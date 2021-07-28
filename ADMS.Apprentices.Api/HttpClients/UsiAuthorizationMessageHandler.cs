@@ -36,6 +36,7 @@ namespace ADMS.Apprentices.Api.HttpClients
                 ClientId = ourUsiSettings.Value.ClientID,
                 Resource = ourUsiSettings.Value.Resource,
                 SigningCertficateThumbprint = ourUsiSettings.Value.SigningCertficateThumbprint,
+                HttpProxyUrl = ourUsiSettings.Value.HttpProxyUrl
             };
 
             // create a httpclient implementation using the above configuration context
