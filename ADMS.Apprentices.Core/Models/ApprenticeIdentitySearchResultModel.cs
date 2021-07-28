@@ -15,5 +15,11 @@ namespace ADMS.Apprentices.Core.Models
         public string OtherPhoneNumber { get; init; }
         public string ResidentialAddress { get; init; }
         public int ScoreValue { get; init; }
+        public bool USIMatch { get; init; }
+        public bool PhoneNumberMatch { get; init; }
+        public bool EmailMatch { get; init; }
+        public bool BirthDateMatch { get; init; }
+        public bool FirstNameMatch { get; init; }
+        public bool SurnameMatch { get; init; }
     }
 }
