@@ -36,12 +36,12 @@ namespace ADMS.Apprentices.Core.Services
 
         public async Task<Profile> Update(Profile profile, UpdateProfileMessage message)
         {
-            triggerUsiVerification = profile.Surname != message.Surname || profile.FirstName != message.FirstName || profile.BirthDate != message.BirthDate;
+            triggerUsiVerification = profile.Surname != message.Surname || profile.FirstName != message.FirstName || profile.BirthDate != message.BirthDate.Value;
             profile.Surname = message.Surname;
             profile.FirstName = message.FirstName;
             profile.OtherNames = message.OtherNames.Sanitise();
             profile.PreferredName = message.PreferredName.Sanitise();
-            profile.BirthDate = message.BirthDate;
+            profile.BirthDate = message.BirthDate.Value;
             profile.GenderCode = message.GenderCode.SanitiseUpper();
             profile.ProfileTypeCode = message.ProfileType.SanitiseUpper();
             profile.EmailAddress = message.EmailAddress.Sanitise();
@@ -81,7 +81,7 @@ namespace ADMS.Apprentices.Core.Services
             profile.VisaNumber = message.VisaNumber.Sanitise();
 
             //USI
-            UpdateUSI(profile, message.USI, message.USIChangeReason);
+            UpdateUSI(profile, message.USI.Sanitise(), message.USIChangeReason);
 
             var exceptionBuilder = await profileValidator.ValidateAsync(profile);
             exceptionBuilder.ThrowAnyExceptions();

@@ -100,7 +100,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             {
                 Surname = message.Surname,
                 FirstName = message.FirstName,
-                BirthDate = message.BirthDate,
+                BirthDate = message.BirthDate.Value,
                 EmailAddress = message.EmailAddress,
                 ProfileTypeCode = message.ProfileType,
             };

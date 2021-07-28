@@ -81,7 +81,7 @@ stages:
         - name: "Background.Resource"
           value: '$(BackgroundIdentityResource)'
         - name: "Background.AdfsResource"
-          value: 'BackgroundIdentityAdfsResource'
+          value: '$(AdmsBffAdfsResource)'
         - name: "Background.ClientSecret"
           value: '$(BackgroundIdentityClientSecret)'
         - name: "Background.TokenEndpoint"
@@ -151,7 +151,7 @@ stages:
         - name: "Background.Resource"
           value: '$(BackgroundIdentityResource)'
         - name: "Background.AdfsResource"
-          value: 'BackgroundIdentityAdfsResource'
+          value: '$(AdmsBffAdfsResource)'
         - name: "Background.ClientSecret"
           value: '$(BackgroundIdentityClientSecret)'
         - name: "Background.TokenEndpoint"
@@ -223,7 +223,7 @@ stages:
         - name: "Background.Resource"
           value: '$(BackgroundIdentityResource)'
         - name: "Background.AdfsResource"
-          value: 'BackgroundIdentityAdfsResource'
+          value: '$(AdmsBffAdfsResource)'
         - name: "Background.ClientSecret"
           value: '$(BackgroundIdentityClientSecret)'
         - name: "Background.TokenEndpoint"

@@ -6,6 +6,7 @@ using ADMS.Apprentices.Core.Helpers;
 using ADMS.Apprentices.Core.Messages;
 using ADMS.Apprentices.Core.Services.Validators;
 using Adms.Shared;
+using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentices.Core.Services
 {
@@ -32,7 +33,7 @@ namespace ADMS.Apprentices.Core.Services
                 FirstName = message.FirstName,
                 OtherNames = message.OtherNames.Sanitise(),
                 PreferredName = message.PreferredName.Sanitise(),
-                BirthDate = message.BirthDate,
+                BirthDate = message.BirthDate.Value,
                 EmailAddress = message.EmailAddress.Sanitise(),
                 IndigenousStatusCode = message.IndigenousStatusCode.Sanitise(),
                 SelfAssessedDisabilityCode = message.SelfAssessedDisabilityCode.SanitiseUpper(),
@@ -92,7 +93,7 @@ namespace ADMS.Apprentices.Core.Services
                     AddressTypeCode = AddressType.POST.ToString(),
                 });
             }
-            if (message.USI != null)
+            if (!message.USI.IsNullOrEmpty())
             {
                 profile.USIs.Add(new ApprenticeUSI 
                 { 
@@ -104,7 +105,7 @@ namespace ADMS.Apprentices.Core.Services
             var exceptionBuilder = await profileValidator.ValidateAsync(profile);
             exceptionBuilder.ThrowAnyExceptions();
             
-            if (message.USI != null) usiVerify.Verify(profile);
+            if (!message.USI.IsNullOrEmpty()) usiVerify.Verify(profile);
 
             repository.Insert(profile);
 

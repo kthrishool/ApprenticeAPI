@@ -63,7 +63,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             profile.FirstName.Should().Be(message.FirstName);
             profile.Surname.Should().Be(message.Surname);
-            profile.BirthDate.Should().Be(message.BirthDate);
+            profile.BirthDate.Should().Be(message.BirthDate.Value);
             profile.GenderCode.Should().Contain(message.GenderCode);
             profile.ProfileTypeCode.Should().Be(message.ProfileType);
         }

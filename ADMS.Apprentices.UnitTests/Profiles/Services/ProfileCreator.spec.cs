@@ -85,7 +85,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldSetTheBirthDate()
         {
-            profile.BirthDate.Should().Be(message.BirthDate);
+            profile.BirthDate.Should().Be(message.BirthDate.Value);
         }
 
         [TestMethod]
