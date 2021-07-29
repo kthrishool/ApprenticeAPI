@@ -70,7 +70,7 @@ namespace ADMS.Apprentices.Core.Services
             if ( message.Phonenumber?.Length < 8 &&  message.Address.IsNullOrEmpty() && message.EmailAddress.IsNullOrEmpty() && noSearchParams)
                 throw AdmsValidationException.Create(ValidationExceptionType.InvalidPhonenumberSearch);
 
-            if (message.EmailAddress?.Length < 4 && message.Address.IsNullOrEmpty() && message.Phonenumber.IsNullOrEmpty() && noSearchParams)
+            if (message.EmailAddress?.Length < 5 && message.Address.IsNullOrEmpty() && message.Phonenumber.IsNullOrEmpty() && noSearchParams)
                 throw AdmsValidationException.Create(ValidationExceptionType.InvalidEmailSearch);
 
             if (message.Phonenumber.IsNullOrEmpty() && message.Address.IsNullOrEmpty() && message.EmailAddress.IsNullOrEmpty() && noSearchParams)

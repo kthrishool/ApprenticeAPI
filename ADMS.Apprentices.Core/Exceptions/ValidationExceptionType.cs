@@ -121,7 +121,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0039", "Minimum 8 numbers if searching only by phonenumber")]
         InvalidPhonenumberSearch,
 
-        [ExceptionDetails("AP-VAL-0040", "Minimum 4 characters if searching only by email address")]
+        [ExceptionDetails("AP-VAL-0040", "Minimum 5 characters if searching only by email address")]
         InvalidEmailSearch,
 
         [ExceptionDetails("AP-VAL-0041", "A phone or email address must be provided")]
