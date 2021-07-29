@@ -14,7 +14,7 @@ namespace ADMS.Apprentices.Core.Models
         public string EmailAddress { get; }
         public string ProfileType { get; }
         public string USI { get; }        
-        public int ScoreValue { get; }
+        public int? ScoreValue { get; }
 
         public ProfileListModel(Profile apprentice)
         {
