@@ -86,10 +86,10 @@ stages:
           value: '$(BackgroundIdentityClientSecret)'
         - name: "Background.TokenEndpoint"
           value: '$(BackgroundIdentityTokenEndpoint)'
-       - name: "OurEnvironmentSettings.SwaggerPrefix"
-         value: '$(AdmsApprenticesSwaggerPrefix)'
-       - name: "OurEnvironmentSettings.SwaggerPath"
-         value: '$(AdmsApprenticesSwaggerPath)'
+        - name: "OurEnvironmentSettings.SwaggerPrefix"
+          value: '$(AdmsApprenticesSwaggerPrefix)'
+        - name: "OurEnvironmentSettings.SwaggerPath"
+          value: '$(AdmsApprenticesSwaggerPath)'
     jobs:
     - template: Jobs/Release/iiswebapplication.yml@templates
       parameters:
@@ -160,10 +160,10 @@ stages:
           value: '$(BackgroundIdentityClientSecret)'
         - name: "Background.TokenEndpoint"
           value: '$(BackgroundIdentityTokenEndpoint)'
-       - name: "OurEnvironmentSettings.SwaggerPrefix"
-         value: '$(AdmsApprenticesSwaggerPrefix)'
-       - name: "OurEnvironmentSettings.SwaggerPath"
-         value: '$(AdmsApprenticesSwaggerPath)'
+        - name: "OurEnvironmentSettings.SwaggerPrefix"
+          value: '$(AdmsApprenticesSwaggerPrefix)'
+        - name: "OurEnvironmentSettings.SwaggerPath"
+          value: '$(AdmsApprenticesSwaggerPath)'
     jobs:
     - template: Jobs/Release/iiswebapplication.yml@templates
       parameters:
@@ -236,10 +236,10 @@ stages:
           value: '$(BackgroundIdentityClientSecret)'
         - name: "Background.TokenEndpoint"
           value: '$(BackgroundIdentityTokenEndpoint)'
-       - name: "OurEnvironmentSettings.SwaggerPrefix"
-         value: '$(AdmsApprenticesSwaggerPrefix)'
-       - name: "OurEnvironmentSettings.SwaggerPath"
-         value: '$(AdmsApprenticesSwaggerPath)'
+        - name: "OurEnvironmentSettings.SwaggerPrefix"
+          value: '$(AdmsApprenticesSwaggerPrefix)'
+        - name: "OurEnvironmentSettings.SwaggerPath"
+          value: '$(AdmsApprenticesSwaggerPath)'
 
     jobs:
     - template: Jobs/Release/iiswebapplication.yml@templates
