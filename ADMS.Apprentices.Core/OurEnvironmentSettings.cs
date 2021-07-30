@@ -11,5 +11,7 @@ namespace ADMS.Apprentices.Core
         //public string DisclaimerUrl { get; set; }
         //public string CopyrightUrl { get; set; }
         //public string PrivacyUrl { get; set; }
+        public string SwaggerPath { get; set; }
+        public string SwaggerPrefix { get; set; }
     }
 }
