@@ -16,6 +16,9 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Adms.Shared.Extensions;
 using Au.Gov.Infrastructure.Authorisation;
+using Adms.Shared.Swagger;
+using Microsoft.Extensions.Options;
+using ADMS.Apprentices.Core;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable MemberCanBeProtected.Global
@@ -65,21 +68,7 @@ namespace ADMS.Apprentices.Api
             //}).AddXmlSerializerFormatters();
             services.AddInfrastructure(ModuleProvider, Configuration);
 
-            //swagger documentation
-            var path = AppDomain.CurrentDomain.BaseDirectory;
-            string xmlCommentFileName = "ADMS.Apprentices.Api.XML";
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "Apprentices API", Version = "v1"});
-                c.ResolveConflictingActions(ad => ad.First());
-                if (!string.IsNullOrEmpty(path) && !string.IsNullOrEmpty(xmlCommentFileName))
-                {
-                    if (File.Exists($"{path}/{xmlCommentFileName}"))
-                    {
-                        c.IncludeXmlComments($"{path}/{xmlCommentFileName}");
-                    }
-                }
-            });
+            SwaggerConfiguration.ConfigureServices(services, GetSwaggerSettings());
 
             SettingsConfiguration.Configure(services, Configuration);
             HttpClientConfiguration.Configure(services, Configuration);
@@ -93,24 +82,39 @@ namespace ADMS.Apprentices.Api
             IApplicationBuilder app,
             IHostApplicationLifetime lifetime,
             IWebHostEnvironment env,
-            ILoggerFactory loggerFactory,
-            IServiceProvider svp)
+            IOptions<OurEnvironmentSettings> ourEnvironmentSettings)
         {
             //app.UseRequestBuffering();
 
+            SwaggerConfiguration.Configure(app, GetSwaggerSettings(ourEnvironmentSettings));
             //swagger documentation
-            SwaggerOptions swaggerOptions = new SwaggerOptions();
-            swaggerOptions.RouteTemplate = "swagger/docs/{documentName}";
-            app.UseSwagger(c => c = swaggerOptions);
-            app.UseSwaggerUI(c =>
-            {
-                c.RoutePrefix = "swagger"; // serve the UI at root 
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 Docs");
-            });
-
             //app.UseDocumentation(env, loggerFactory, svp);
             //app.UseInfrastructure(env, loggerFactory, svp);
             app.UseInfrastructure(lifetime, env, ModuleProvider);
+        }
+        private static SwaggerSettings GetSwaggerSettings(IOptions<OurEnvironmentSettings> ourEnvironmentSettings = null)
+        {
+            return new()
+            {
+                Path = ourEnvironmentSettings?.Value.SwaggerPath,
+                Prefix = ourEnvironmentSettings?.Value.SwaggerPrefix,
+                ApiInfo = new[]
+                {
+                    new OpenApiInfo
+                    {
+                        Version = "default",
+                        Title = "ADMS Apprentices API",
+                        Description = "API documentation for the ADMS Apprentices API (current version)."
+                    },
+                    new OpenApiInfo
+                    {
+                        Version = "v1",
+                        Title = "ADMS Apprentices API",
+                        Description = "API documentation for the ADMS Apprentices API (version 1)."
+                    }
+                },
+                XmlDocumentationFilenames = new[] { "Adms.Apprentices.Api.xml" }
+            };
         }
     }
 }
