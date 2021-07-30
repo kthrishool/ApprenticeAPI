@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Messages;
@@ -9,7 +10,6 @@ using Adms.Shared;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Adms.Shared.Exceptions;
 using Moq;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
@@ -236,7 +236,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.Phones.Should().BeEmpty();
         }
 
-       
+
         [TestMethod]
         public async Task ShouldSetUSI()
         {

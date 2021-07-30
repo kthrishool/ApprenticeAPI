@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
@@ -137,8 +138,8 @@ namespace ADMS.Apprentices.Core.Services
             {
                 //set the activeFlag to false of current active USI and add the new USI                
                 currentUSI.ActiveFlag = false;
-                profile.USIs.Add(new ApprenticeUSI { USI = usi, ActiveFlag = true, USIChangeReason = usichangereason });
-                               
+                profile.USIs.Add(new ApprenticeUSI {USI = usi, ActiveFlag = true, USIChangeReason = usichangereason});
+
                 triggerUsiVerification = true;
             }
             else if (currentUSI != null && usi.IsNullOrEmpty() && currentUSI.USI != usi)

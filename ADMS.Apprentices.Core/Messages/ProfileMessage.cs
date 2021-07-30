@@ -83,6 +83,6 @@ namespace ADMS.Apprentices.Core.Messages
         public string VisaNumber { get; init; }
 
         [Display(Name = "Apprentice USI")]
-        public string USI { get; init; }      
+        public string USI { get; init; }
     }
 }

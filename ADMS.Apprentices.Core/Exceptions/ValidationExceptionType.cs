@@ -171,5 +171,11 @@ namespace ADMS.Apprentices.Core.Exceptions
 
         [ExceptionDetails("AP-VAL-0055", "Insufficient apprentice identity information to perform a search. When searching by surname or first name you must also provide date of birth.")]
         FirstNameOrSurnameMustBeCombinedWithBirthDate,
+
+        [ExceptionDetails("AP-VAL-0056", "Invalid country code in prior apprenticeship")]
+        InvalidPriorApprenticeshipCountryCode,
+
+        [ExceptionDetails("AP-VAL-0056", "Invalid Australian state code in prior apprenticeship")]
+        InvalidPriorApprenticeshipAustralianStateCode
     }
 }

@@ -1,15 +1,13 @@
 ﻿using System.Reflection;
 using ADMS.Apprentices.Core;
+using ADMS.Apprentices.Core.Services;
+using ADMS.Apprentices.Core.Services.Validators;
 using ADMS.Apprentices.Database;
 using Adms.Shared;
 using Adms.Shared.Helpers;
 using Adms.Shared.Paging;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using ADMS.Apprentices.Core.Services;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Au.Gov.Infrastructure.Authorisation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ADMS.Apprentices.Api.Configuration
 {
@@ -35,13 +33,14 @@ namespace ADMS.Apprentices.Api.Configuration
             IocRegistrationHelper.SetupAutoRegistrations(services, database);
             IocRegistrationHelper.SetupAutoRegistrations(services, web);
             IocRegistrationHelper.SetupAutoRegistrations(services, shared);
-           
+
             // interfaces which live in a different assembly to their implementation get registered manually here
             services.AddTransient<ISharedSettings, SharedSettings>();
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<ITYIMSRepository, TYIMSRepository>();
             services.AddScoped<IApprenticeRepository, Repository>();
-
+            /* NOTE: IQualificationValidator has two implementations, have to be registered manually here */
+            services.AddTransient<IQualificationValidator, QualificationValidator>();
             var usiSettings = new OurUsiSettings();
             configuration.GetSection(nameof(OurUsiSettings)).Bind(usiSettings);
             if (usiSettings.USIVerifyDisabled)

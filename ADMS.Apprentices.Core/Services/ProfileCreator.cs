@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Helpers;
@@ -39,7 +38,7 @@ namespace ADMS.Apprentices.Core.Services
                 SelfAssessedDisabilityCode = message.SelfAssessedDisabilityCode.SanitiseUpper(),
                 InterpretorRequiredFlag = message.InterpretorRequiredFlag,
                 CitizenshipCode = message.CitizenshipCode.SanitiseUpper(),
-                ProfileTypeCode = message.ProfileType.SanitiseUpper(),                
+                ProfileTypeCode = message.ProfileType.SanitiseUpper(),
                 CountryOfBirthCode = message.CountryOfBirthCode.SanitiseUpper(),
                 PreferredContactType = message.PreferredContactType.SanitiseUpper(),
                 LanguageCode = message.LanguageCode.SanitiseUpper(),
@@ -59,7 +58,7 @@ namespace ADMS.Apprentices.Core.Services
                     });
                 }
             }
-            
+
             if (message.GenderCode != null)
             {
                 profile.GenderCode = message.GenderCode.SanitiseUpper();
@@ -95,8 +94,8 @@ namespace ADMS.Apprentices.Core.Services
             }
             if (!message.USI.IsNullOrEmpty())
             {
-                profile.USIs.Add(new ApprenticeUSI 
-                { 
+                profile.USIs.Add(new ApprenticeUSI
+                {
                     USI = message.USI,
                     ActiveFlag = true
                 });

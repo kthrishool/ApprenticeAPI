@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
-using System.Linq;
 using ADMS.Apprentices.Api.Configuration;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Messages;
@@ -8,13 +7,10 @@ using ADMS.Apprentices.Core.Models;
 using ADMS.Apprentices.Core.Services;
 using ADMS.Apprentices.Core.Services.Validators;
 using Adms.Shared;
-using Adms.Shared.Extensions;
 using Adms.Shared.Filters;
 using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System;
 
 namespace ADMS.Apprentices.Api.Controllers
 {
@@ -71,7 +67,7 @@ namespace ADMS.Apprentices.Api.Controllers
             return Ok(pagedList);
         }
 
-        
+
         /// <summary>
         /// Get all apprentice profile based on the provided search params.
         /// </summary>

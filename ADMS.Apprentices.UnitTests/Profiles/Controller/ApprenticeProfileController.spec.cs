@@ -166,7 +166,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(0);
         }
-       
+
         [TestMethod]
         public void ShouldReturnValidationErrorIfDisabiliyyStatusCodeNotValid()
         {
