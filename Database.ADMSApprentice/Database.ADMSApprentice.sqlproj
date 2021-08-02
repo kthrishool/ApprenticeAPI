@@ -91,6 +91,7 @@
     <Folder Include="Scripts\Data\SeedData\SeedDataFiles" />
     <Folder Include="ChangeControl" />
     <Folder Include="ChangeControl\Tables" />
+    <Folder Include="Infrastructure\Views\" />
   </ItemGroup>
   <ItemGroup>
     <SqlCmdVariable Include="CSVPath">
@@ -184,5 +185,9 @@
     <Build Include="Storage\temp.sql" />
     <Build Include="Storage\AddressStoplist.sql" />
     <Build Include="dbo\Stored Procedures\ApprenticeAdvancedSearch.sql" />
+    <Build Include="Infrastructure\Views\ServiceBusEventActive.sql" />
+    <Build Include="Batch\Stored Procedures\InfrastructureServiceRequestMessagePurge.sql" />
+    <Build Include="Batch\Stored Procedures\InfrastructureServiceBusInsertIntoArchive.sql" />
+    <Build Include="Batch\Stored Procedures\InfrastructureServiceBusEventArchivePurge.sql" />
   </ItemGroup>
 </Project>
