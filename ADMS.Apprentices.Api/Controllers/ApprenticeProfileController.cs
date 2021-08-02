@@ -29,7 +29,7 @@ namespace ADMS.Apprentices.Api.Controllers
         private readonly IPagingHelper pagingHelper;
         private readonly IProfileCreator profileCreator;
         private readonly IProfileUpdater profileUpdater;
-        private readonly IProfileRetreiver profileRetreiver;
+        private readonly IProfileRetriever profileRetriever;
         private readonly ISearchCriteriaValidator searchCriteriaValidator;
 
         /// <summary>Constructor</summary>
@@ -39,7 +39,7 @@ namespace ADMS.Apprentices.Api.Controllers
             IPagingHelper pagingHelper,
             IProfileCreator profileCreator,
             IProfileUpdater profileUpdater,
-            IProfileRetreiver profileRetreiver,
+            IProfileRetriever profileRetriever,
             ISearchCriteriaValidator searchCriteriaValidator
         )
         {
@@ -48,7 +48,7 @@ namespace ADMS.Apprentices.Api.Controllers
             this.pagingHelper = pagingHelper;
             this.profileCreator = profileCreator;
             this.profileUpdater = profileUpdater;
-            this.profileRetreiver = profileRetreiver;
+            this.profileRetriever = profileRetriever;
             this.searchCriteriaValidator = searchCriteriaValidator;
         }
 
@@ -63,7 +63,7 @@ namespace ADMS.Apprentices.Api.Controllers
         public async Task<ActionResult<PagedList<ProfileListModel>>> List([FromQuery] PagingInfo paging, [FromQuery] ProfileSearchMessage message)
         {
             paging ??= new PagingInfo();
-            PagedList<ProfileListModel> pagedList = await profileRetreiver.RetreiveList(paging, message);
+            PagedList<ProfileListModel> pagedList = await profileRetriever.RetreiveList(paging, message);
             return Ok(pagedList);
         }
 
@@ -81,7 +81,7 @@ namespace ADMS.Apprentices.Api.Controllers
         {
             paging ??= new PagingInfo();
             paging.SetDefaultSorting("ScoreValue", true);
-            PagedInMemoryList<ProfileSearchResultModel> profiles = pagingHelper.ToPagedInMemoryList(await profileRetreiver.Search(message), paging);
+            PagedInMemoryList<ProfileSearchResultModel> profiles = pagingHelper.ToPagedInMemoryList(await profileRetriever.Search(message), paging);
             return Ok(profiles);
         }
 

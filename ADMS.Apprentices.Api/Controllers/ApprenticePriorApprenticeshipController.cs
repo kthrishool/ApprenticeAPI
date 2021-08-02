@@ -42,7 +42,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <summary>
         /// List all prior apprenticeships for an apprentice.
         /// </summary>
-        /// <param name="apprenticeId">ID of the apprentice</param>
+        /// <param name="apprenticeId">Id of the apprentice</param>
         /// TODO DB design needs to be completed for this end point to work.
         /// EndPoint will be decorated with the role below when DB design is complete
         /// Linked to task 126782
@@ -61,7 +61,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// </summary>
         /// <param name="apprenticeId">Id of the apprentice</param>
         /// <param name="id">Id of the apprenticeship</param>
-        /// TODO DB design needs to be completed for this end point to work.
+        /// TODO: DB design needs to be completed for this end point to work.
         /// EndPoint will be decorated with the role below when DB design is complete
         /// Linked to task 126782
         //[Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
@@ -77,9 +77,9 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <summary>
         /// Adds a new prior apprenticeship for an apprentice
         /// </summary>
-        /// <param name="apprenticeId">apprenticeId</param>
+        /// <param name="apprenticeId">Id of the apprentice</param>
         /// <param name="message">Details of the apprenticeship to be created</param>
-        /// TODO DB design needs to be completed for this end point to work.
+        /// TODO: DB design needs to be completed for this end point to work.
         /// EndPoint will be decorated with the role below when DB design is complete
         /// Linked to task 126782
         //[Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
@@ -95,10 +95,10 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <summary>
         /// Updates an existing prior apprenticeship.
         /// </summary>
-        /// <param name="apprenticeId">ID of the apprentice</param>
-        /// <param name="id">ID of the prior apprenticeship to be updated</param>
+        /// <param name="apprenticeId">Id of the apprentice</param>
+        /// <param name="id">Id of the prior apprenticeship to be updated</param>
         /// <param name="message">Details of the information to be updated</param>
-        /// TODO DB design needs to be completed for this end point to work.
+        /// TODO: DB design needs to be completed for this end point to work.
         /// EndPoint will be decorated with the role below when DB design is complete
         /// Linked to task 126782
         // [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
@@ -116,9 +116,9 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <summary>
         /// Removes a qualification from an apprentice profile
         /// </summary>
-        /// <param name="apprenticeId">ID of the apprentice</param>
-        /// <param name="id">ID of the apprenticeship to be removed</param>
-        /// TODO DB design needs to be completed for this end point to work.
+        /// <param name="apprenticeId">Id of the apprentice</param>
+        /// <param name="id">Id of the apprenticeship to be removed</param>
+        /// TODO: DB design needs to be completed for this end point to work.
         /// EndPoint will be decorated with the role below when DB design is complete
         /// Linked to task 126782
         // [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]

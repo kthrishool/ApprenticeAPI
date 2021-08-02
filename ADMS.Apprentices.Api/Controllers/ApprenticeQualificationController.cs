@@ -18,7 +18,6 @@ namespace ADMS.Apprentices.Api.Controllers
     /// Apprentice qualification endpoints of a given apprentice.
     /// </summary>
     [ApiController]
-    //[ApiDescription(Summary = "Apprentice qualification endpoints of a given apprentice", Description = "")]
     [Route("api/v1/apprentices/{apprenticeId}/qualifications")]
     [Route("api/apprentices/{apprenticeId}/qualifications")]
     [Produces("application/json")]
@@ -44,7 +43,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <summary>
         /// List all qualifications for an apprentice.
         /// </summary>
-        /// <param name="apprenticeId">ID of the apprentice</param>
+        /// <param name="apprenticeId">Id of the apprentice</param>
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
         [HttpGet]
         public async Task<ActionResult<ProfileQualificationModel[]>> List(int apprenticeId)
@@ -85,8 +84,8 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <summary>
         /// Updates an existing qualification claim application.
         /// </summary>
-        /// <param name="apprenticeId">ID of the apprentice</param>
-        /// <param name="id">ID of the qualification to be updated</param>
+        /// <param name="apprenticeId">Id of the apprentice</param>
+        /// <param name="id">Id of the qualification to be updated</param>
         /// <param name="message">Details of the information to be updated</param>
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPut("{id}")]
@@ -100,8 +99,8 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <summary>
         /// Removes a qualification from an apprentice profile
         /// </summary>
-        /// <param name="apprenticeId">ID of the apprentice</param>
-        /// <param name="id">ID of the qualification to be removed</param>
+        /// <param name="apprenticeId">Id of the apprentice</param>
+        /// <param name="id">Id of the qualification to be removed</param>
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Remove(int apprenticeId, int id)

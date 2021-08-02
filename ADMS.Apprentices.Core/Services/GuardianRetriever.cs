@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace ADMS.Apprentices.Core.Services
 {
-    public class GuardianRetreiver : IGuardianRetreiver
+    public class GuardianRetriever : IGuardianRetriever
     {
         private readonly IRepository repository;        
 
-        public GuardianRetreiver (IRepository repository)
+        public GuardianRetriever (IRepository repository)
         {
             this.repository = repository;            
         }

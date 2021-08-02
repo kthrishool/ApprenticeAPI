@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ADMS.Apprentices.Core.Services
 {
-    public class ApprenticeTFNRetreiver : IApprenticeTFNRetreiver
+    public class ApprenticeTFNRetreiver : IApprenticeTFNRetriever
     {
         private readonly IRepository repository;
         private readonly ICryptography cryptography;

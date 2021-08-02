@@ -28,7 +28,6 @@ namespace ADMS.Apprentices.Api.Controllers.Tfn
 
         /// <summary>Constructor</summary>
         public TFNStatsController(
-            IHttpContextAccessor contextAccessor,
             IPagingHelper pagingHelper,
             ITFNStatsRetriever tfnStatsRetriever,
             ICallerContext callerContext)
@@ -41,7 +40,7 @@ namespace ADMS.Apprentices.Api.Controllers.Tfn
         /// <summary>
         /// Get all stats related to TFN records.
         /// </summary>
-        /// <param name="paging">paging metadata.</param>
+        /// <param name="paging">Paging metadata.</param>
         /// <param name="criteria">Search criteria</param>
         [HttpGet]
         [SupportsPaging(typeof(TFNStatsCriteria))]

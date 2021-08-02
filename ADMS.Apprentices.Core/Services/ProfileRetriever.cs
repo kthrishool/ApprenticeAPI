@@ -14,7 +14,7 @@ using Adms.Shared.Paging;
 
 namespace ADMS.Apprentices.Core.Services
 {
-    public class ProfileRetreiver : IProfileRetreiver
+    public class ProfileRetreiver : IProfileRetriever
     {
         private readonly IRepository repository;
         private readonly IApprenticeRepository apprenticeRepository;

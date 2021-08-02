@@ -17,27 +17,26 @@ namespace ADMS.Apprentices.Api.Controllers
     [Route("api/v1/apprentices/{apprenticeId}/guardian")]
     [Route("api/apprentices/{apprenticeId}/guardian")]
     [ApiController]
-    //[ApiDescription(Summary = "Apprentice guardian endpoints of a given apprentice", Description = "")]
     [Produces("application/json")]
     [Consumes("application/json")]
     public class ApprenticeGuardianController : ControllerBase
     {
         private readonly IRepository repository;
         private readonly IGuardianCreator guardianCreator;
-        private readonly IGuardianRetreiver guardianRetreiver;
+        private readonly IGuardianRetriever guardianRetriever;
         private readonly IGuardianUpdater guardianUpdater;
 
         /// <summary>Constructor</summary>
         public ApprenticeGuardianController(
             IRepository repository,
             IGuardianCreator guardianCreator,
-            IGuardianRetreiver guardianRetreiver,
+            IGuardianRetriever guardianRetriever,
             IGuardianUpdater guardianUpdater
         ) 
         {
             this.repository = repository;
             this.guardianCreator = guardianCreator;
-            this.guardianRetreiver = guardianRetreiver;
+            this.guardianRetriever = guardianRetriever;
             this.guardianUpdater = guardianUpdater;
         }
 
@@ -49,14 +48,14 @@ namespace ADMS.Apprentices.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<ProfileGuardianModel>> Get(int apprenticeId)
         {
-            Guardian guardian = await guardianRetreiver.GetAsync(apprenticeId);
+            Guardian guardian = await guardianRetriever.GetAsync(apprenticeId);
             return Ok(new ProfileGuardianModel(guardian));
         }
 
         /// <summary>
         /// Adds a guardian for an apprentice
         /// </summary>
-        /// <param name="apprenticeId">apprenticeId</param>
+        /// <param name="apprenticeId">Id of the apprentice</param>
         /// <param name="message">Details of the guardian to be created</param>
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPost]
@@ -72,13 +71,13 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <summary>
         /// Updates an existing parent/guardian.
         /// </summary>
-        /// <param name="apprenticeId">ID of the apprentice</param>
+        /// <param name="apprenticeId">Id of the apprentice</param>
         /// <param name="message">Details of the information to be updated</param>
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPut]
         public async Task<ActionResult<ProfileGuardianModel>> Update(int apprenticeId, [FromBody] ProfileGuardianMessage message)
         {
-            Guardian guardian = await guardianRetreiver.GetAsync(apprenticeId);
+            Guardian guardian = await guardianRetriever.GetAsync(apprenticeId);
             await guardianUpdater.Update(guardian, message);
             await repository.SaveAsync();
             return Ok(new ProfileGuardianModel(guardian));

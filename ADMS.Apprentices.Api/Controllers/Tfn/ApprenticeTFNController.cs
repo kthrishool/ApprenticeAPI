@@ -23,21 +23,20 @@ namespace ADMS.Apprentices.Api.Controllers.Tfn
     {
         private readonly IRepository repository;
         private readonly IApprenticeTFNCreator apprenticeTFNCreator;
-        private readonly IApprenticeTFNRetreiver tfnDetailRetreiver;
+        private readonly IApprenticeTFNRetriever tfnDetailRetriever;
         private readonly IApprenticeTFNUpdater apprenticeTFNUpdater;
 
         /// <summary>Constructor</summary>
         public ApprenticeTFNController(
-            IHttpContextAccessor contextAccessor,
             IRepository repository,
             IApprenticeTFNCreator apprenticeTFNCreator,
-            IApprenticeTFNRetreiver tfnDetailRetreiver,
+            IApprenticeTFNRetriever tfnDetailRetriever,
             IApprenticeTFNUpdater apprenticeTFNUpdater
         )
         {
             this.repository = repository;
             this.apprenticeTFNCreator = apprenticeTFNCreator;
-            this.tfnDetailRetreiver = tfnDetailRetreiver;
+            this.tfnDetailRetriever = tfnDetailRetriever;
             this.apprenticeTFNUpdater = apprenticeTFNUpdater;
         }
 
@@ -50,7 +49,7 @@ namespace ADMS.Apprentices.Api.Controllers.Tfn
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_TSL_Management)]
         public ActionResult<ApprenticeTFNV1> Get(int apprenticeId)
         {
-            var m = tfnDetailRetreiver.Get(apprenticeId);
+            var m = tfnDetailRetriever.Get(apprenticeId);
 
             return Ok(m);
         }

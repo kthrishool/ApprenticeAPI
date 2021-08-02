@@ -20,7 +20,6 @@ namespace ADMS.Apprentices.Api.Controllers
     [Route("api/v1/apprentices/errors")]
     [Route("api/apprentices/errors")]
     [ApiController]
-    //[ApiDescription(Summary = "List all the error messages available", Description = "")]
     [Produces("application/json")]
     [Consumes("application/json")]
     public class ApprenticeErrorsController : ControllerBase
@@ -42,7 +41,7 @@ namespace ADMS.Apprentices.Api.Controllers
                 .Select(ed => (ed.ValidationRuleId, ed.Message)).ToArray();
         }
 
-        /// <summary>List available error message </summary>
+        /// <summary>List available error messages.</summary>
         [HttpGet]
         [Authorize(Policy = AuthorisationConfiguration.AUTH_ITAdmin)]
         public string[] List()
@@ -50,7 +49,7 @@ namespace ADMS.Apprentices.Api.Controllers
             return errorsDictionary.Keys.ToArray();
         }
 
-        /// <summary>Get the details of errors for the specified errorType</summary>
+        /// <summary>Get the details of errors for the specified errorType.</summary>
         [HttpGet("{errorType}")]
         [Authorize(Policy = AuthorisationConfiguration.AUTH_ITAdmin)]
         public (string, string)[] Get(string errorType)

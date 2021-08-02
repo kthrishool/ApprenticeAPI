@@ -123,7 +123,7 @@ namespace ADMS.Apprentices.UnitTests.ApprenticeTFNs.Services
             var ctx = new Mock<IRepository>();
 
             ctx.Setup(c => c.Retrieve<ApprenticeTFN>()).Returns(mockDbSet.Object);
-            IApprenticeTFNRetreiver service = new ApprenticeTFNRetreiver (ctx.Object,ctx2.Object);
+            IApprenticeTFNRetriever service = new ApprenticeTFNRetreiver (ctx.Object,ctx2.Object);
 
 
             tfnDetail = service.Get(apprenticeId);
@@ -167,7 +167,7 @@ namespace ADMS.Apprentices.UnitTests.ApprenticeTFNs.Services
             var ctx = new Mock<IRepository>();
 
             ctx.Setup(c => c.Retrieve<ApprenticeTFN>()).Returns(mockDbSet.Object);
-            IApprenticeTFNRetreiver service = new ApprenticeTFNRetreiver(ctx.Object, ctx2.Object);
+            IApprenticeTFNRetriever service = new ApprenticeTFNRetreiver(ctx.Object, ctx2.Object);
 
             var result = Assert.ThrowsException<AdmsNotFoundException>(() => service.Get(apprenticeId - 1));
         }

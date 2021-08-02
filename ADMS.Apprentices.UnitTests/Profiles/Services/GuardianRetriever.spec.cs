@@ -22,7 +22,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     #region WhenRetrievingAGuardian
 
     [TestClass]
-    public class WhenRetrievingGuardian : GivenWhenThen<GuardianRetreiver>
+    public class WhenRetrievingGuardian : GivenWhenThen<GuardianRetriever>
     {
         int apprenticeId;
         Profile profile;
@@ -64,7 +64,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     #region WhenGuardianIsNull
 
     [TestClass]
-    public class WhenGuardianIsNull : GivenWhenThen<GuardianRetreiver>
+    public class WhenGuardianIsNull : GivenWhenThen<GuardianRetriever>
     {
         int apprenticeId;
         Profile profile;

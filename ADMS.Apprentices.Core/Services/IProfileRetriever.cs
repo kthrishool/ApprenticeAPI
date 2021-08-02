@@ -10,7 +10,7 @@ using Adms.Shared.Paging;
 namespace ADMS.Apprentices.Core.Services
 {
     [RegisterWithIocContainer]
-    public interface IProfileRetreiver
+    public interface IProfileRetriever
     {
         Task<PagedList<ProfileListModel>> RetreiveList(PagingInfo paging, ProfileSearchMessage message);
         Task<ICollection<ProfileSearchResultModel>> Search(ProfileSearchMessage message);        
