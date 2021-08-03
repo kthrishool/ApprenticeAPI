@@ -3,7 +3,7 @@
     [ApprenticeId]       INT             NOT NULL,
     [PhoneTypeCode]      VARCHAR (10)    NOT NULL,
     [PhoneNumber]        VARCHAR (15)    NOT NULL,
-    [PreferredPhoneFlag] BIT             NOT NULL,
+    [PreferredPhoneFlag] BIT             NULL,
     [CreatedBy]          NVARCHAR (1024) NOT NULL,
     [CreatedOn]          DATETIME2 (7)   NOT NULL,
     [UpdatedBy]          NVARCHAR (1024) NOT NULL,
@@ -19,3 +19,6 @@ GO
 CREATE NONCLUSTERED INDEX [IX_ApprenticePhone_ApprenticeId]
     ON [dbo].[ApprenticePhone]([ApprenticeId] ASC) WITH (FILLFACTOR = 90);
 
+GO
+CREATE NONCLUSTERED INDEX [IX_ApprenticePhone_PhoneNumber]
+    ON [dbo].[ApprenticePhone]([PhoneNumber] ASC) WITH (FILLFACTOR = 90);

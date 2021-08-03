@@ -105,6 +105,8 @@ UNION	SELECT		'DEV,TEST'			,N'Enetdev\Service_TySAnon_d'			,N'_LegacyRole'
 UNION	SELECT		'DEV,TEST'			,N'Enetdev\Service_TYSBatch_d'			,N'_LegacyRole'
 UNION	SELECT		'DEV,TEST'			,N'enetdev\Service_TYSMts_D'			,N'_LegacyRole'
 UNION	SELECT		'DEV,TEST'			,N'ENETDEV\service_syslog_sql_d'		,N'_SensitiveLoggingReader'
+UNION	SELECT		'DEV,TEST'			,N'ENETDEV\Service_ADMS_DW_D'			,N'db_datareader'
+UNION	SELECT		'DEV,TEST'			,N'ENETDEV\Service_ADMS_DW_D'			,N'CDCRole'
 
 UNION	SELECT		'PREPROD'			,N'ENETPPROD\Service_APIApprent_P'		,N'_ApprenticeRole'
 UNION	SELECT		'PREPROD'			,N'ENETPPROD\serviceautosys_P'			,N'_BatchRole'

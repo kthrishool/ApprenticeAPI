@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[ApprenticeUSI] (
     [ApprenticeUSIId]        INT             IDENTITY (1, 1) NOT NULL,
     [ApprenticeId]           INT             NOT NULL,
-    [USI]                    VARCHAR (10)    NULL,
+    [USI]                    VARCHAR (10)    NOT NULL,
     [ActiveFlag]             BIT             NOT NULL,
     [USIChangeReason]        VARCHAR (300)   NULL,
     [USIVerifyFlag]          BIT             NULL,
@@ -25,4 +25,7 @@
 GO
 CREATE NONCLUSTERED INDEX [IX_ApprenticeUSI_ApprenticeId]
     ON [dbo].[ApprenticeUSI]([ApprenticeId] ASC) WITH (FILLFACTOR = 90);
+GO
+CREATE NONCLUSTERED INDEX [IX_ApprenticeUSI_USI]
+    ON [dbo].[ApprenticeUSI]([USI] ASC) WITH (FILLFACTOR = 90);
 
