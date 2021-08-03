@@ -19,3 +19,6 @@ GO
 CREATE NONCLUSTERED INDEX [IX_ApprenticePhone_ApprenticeId]
     ON [dbo].[ApprenticePhone]([ApprenticeId] ASC) WITH (FILLFACTOR = 90);
 
+GO
+CREATE NONCLUSTERED INDEX [IX_ApprenticePhone_PhoneNumber]
+    ON [dbo].[ApprenticePhone]([PhoneNumber] ASC) WITH (FILLFACTOR = 90);
