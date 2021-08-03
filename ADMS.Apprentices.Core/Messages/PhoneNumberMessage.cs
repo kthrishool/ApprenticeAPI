@@ -11,6 +11,6 @@ namespace ADMS.Apprentices.Core.Messages
         public string PhoneTypeCode { get; set; }
 
         [Display(Name = "Preferred Phone Number")]
-        public Boolean PreferredPhoneFlag { get; set; }
+        public Boolean? PreferredPhoneFlag { get; set; }
     }
 }

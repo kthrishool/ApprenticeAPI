@@ -20,11 +20,11 @@ namespace ADMS.Apprentices.Database.Mappings
             entity.Property(e => e.USI)
                 .HasColumnName("USI")
                 .IsUnicode()
+                .IsRequired()
                 .HasMaxLength(10);
             entity.Property(e => e.ActiveFlag)
                 .HasColumnName("ActiveFlag")
                 .IsRequired();
-
             entity.Property(e => e.USIChangeReason)
                 .HasColumnName("USIChangeReason")
                 .HasMaxLength(300);

@@ -27,8 +27,7 @@ namespace ADMS.Apprentices.Database.Mappings
                 .HasMaxLength(15)
                 .IsRequired();
             entity.Property(e => e.PreferredPhoneFlag)
-                .HasColumnName("PreferredPhoneFlag")
-                .IsRequired();
+                .HasColumnName("PreferredPhoneFlag");                
 
             entity.Property(x => x.Version)
                 .HasColumnName("Version")

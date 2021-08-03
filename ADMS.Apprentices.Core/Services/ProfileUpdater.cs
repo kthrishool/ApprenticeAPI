@@ -26,13 +26,13 @@ namespace ADMS.Apprentices.Core.Services
 
         public void UpdateDeceasedFlag(Profile profile, bool deceased)
         {
-            profile.DeceasedFlag = deceased;
+            profile.DeceasedFlag = deceased;            
             //Need to think about ending any TCs that are active and therefore any TSL instalments pending. 
         }
 
         public void Update(Profile profile, AdminUpdateMessage message)
         {
-            profile.DeceasedFlag = message.DeceasedFlag; //or call UpdateDeceasedFlag function??  
+            profile.DeceasedFlag = message.DeceasedFlag; //or call UpdateDeceasedFlag function??             
         }
 
         public async Task<Profile> Update(Profile profile, UpdateProfileMessage message)
