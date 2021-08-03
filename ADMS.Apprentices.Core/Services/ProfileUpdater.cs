@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
@@ -36,12 +37,12 @@ namespace ADMS.Apprentices.Core.Services
 
         public async Task<Profile> Update(Profile profile, UpdateProfileMessage message)
         {
-            triggerUsiVerification = profile.Surname != message.Surname || profile.FirstName != message.FirstName || profile.BirthDate != message.BirthDate;
+            triggerUsiVerification = profile.Surname != message.Surname || profile.FirstName != message.FirstName || profile.BirthDate != message.BirthDate.Value;
             profile.Surname = message.Surname;
             profile.FirstName = message.FirstName;
             profile.OtherNames = message.OtherNames.Sanitise();
             profile.PreferredName = message.PreferredName.Sanitise();
-            profile.BirthDate = message.BirthDate;
+            profile.BirthDate = message.BirthDate.Value;
             profile.GenderCode = message.GenderCode.SanitiseUpper();
             profile.ProfileTypeCode = message.ProfileType.SanitiseUpper();
             profile.EmailAddress = message.EmailAddress.Sanitise();
@@ -81,7 +82,7 @@ namespace ADMS.Apprentices.Core.Services
             profile.VisaNumber = message.VisaNumber.Sanitise();
 
             //USI
-            UpdateUSI(profile, message.USI, message.USIChangeReason);
+            UpdateUSI(profile, message.USI.Sanitise(), message.USIChangeReason);
 
             var exceptionBuilder = await profileValidator.ValidateAsync(profile);
             exceptionBuilder.ThrowAnyExceptions();
@@ -137,8 +138,8 @@ namespace ADMS.Apprentices.Core.Services
             {
                 //set the activeFlag to false of current active USI and add the new USI                
                 currentUSI.ActiveFlag = false;
-                profile.USIs.Add(new ApprenticeUSI { USI = usi, ActiveFlag = true, USIChangeReason = usichangereason });
-                               
+                profile.USIs.Add(new ApprenticeUSI {USI = usi, ActiveFlag = true, USIChangeReason = usichangereason});
+
                 triggerUsiVerification = true;
             }
             else if (currentUSI != null && usi.IsNullOrEmpty() && currentUSI.USI != usi)

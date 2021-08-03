@@ -121,7 +121,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0039", "Minimum 8 numbers if searching only by phonenumber")]
         InvalidPhonenumberSearch,
 
-        [ExceptionDetails("AP-VAL-0040", "Minimum 4 characters if searching only by email address")]
+        [ExceptionDetails("AP-VAL-0040", "Minimum 5 characters if searching only by email address")]
         InvalidEmailSearch,
 
         [ExceptionDetails("AP-VAL-0041", "A phone or email address must be provided")]
@@ -151,7 +151,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0049", "Date commenced and Date completed cannot be after today's date")]
         InvalidDate,
 
-        [ExceptionDetails("AP-VAL-0050", "Apprenticeship qualification should have a start date and end date")]        
+        [ExceptionDetails("AP-VAL-0050", "Apprenticeship qualification should have a start date and end date")]
         InvalidApprenticeshipQualification,
 
         [ExceptionDetails("AP-VAL-0051", "ApprenticeshipId does not belong to the apprentice")]
@@ -162,5 +162,20 @@ namespace ADMS.Apprentices.Core.Exceptions
 
         [ExceptionDetails("AP-VAL-0053", "Cannot search by state if searching only by address")]
         InvalidAddressSearch,
+
+        [ExceptionDetails("AP-VAL-0054", "Insufficient apprentice identity information to perform a search. You must provide at least date of birth and first name or surname, USI, phone number or email address.")]
+        InsufficientApprenticeIdentitySearchCriteria,
+
+        [ExceptionDetails("AP-VAL-0055", "Insufficient apprentice identity information to perform a search. When searching by date of birth you must also provide surname and / or first name.")]
+        BirthDateMustBeCombinedWithFirstNameOrSurname,
+
+        [ExceptionDetails("AP-VAL-0055", "Insufficient apprentice identity information to perform a search. When searching by surname or first name you must also provide date of birth.")]
+        FirstNameOrSurnameMustBeCombinedWithBirthDate,
+
+        [ExceptionDetails("AP-VAL-0056", "Invalid country code in prior apprenticeship")]
+        InvalidPriorApprenticeshipCountryCode,
+
+        [ExceptionDetails("AP-VAL-0056", "Invalid Australian state code in prior apprenticeship")]
+        InvalidPriorApprenticeshipAustralianStateCode
     }
 }

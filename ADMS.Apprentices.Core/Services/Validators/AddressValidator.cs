@@ -15,21 +15,16 @@ namespace ADMS.Apprentices.Core.Services.Validators
     {
         private readonly IReferenceDataClient referenceDataClient;
         
-        private readonly IExceptionFactory exceptionFactory;
-
         public AddressValidator(
-            IExceptionFactory exceptionFactory,
             IReferenceDataClient referenceDataClient
         )
         {
             this.referenceDataClient = referenceDataClient;
-            this.exceptionFactory = exceptionFactory;
-
         }
 
         public async Task<ValidationExceptionBuilder> ValidateAsync(IAddressAttributes address)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             if (address == null) {
                 exceptionBuilder.AddException(ValidationExceptionType.AddressRecordNotFound);
                 return exceptionBuilder;
@@ -51,7 +46,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         private ValidationExceptionBuilder ValidateDefaultCodes(IAddressAttributes address)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             // If the single line address is empty we need to check if other details are valid.
             // if the postcode is there then validate it first
             if (string.IsNullOrWhiteSpace(address.Postcode) ||
@@ -84,7 +79,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         private async Task<ValidationExceptionBuilder> ValidateSingleLineAddressAsync(IAddressAttributes address)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             //Verify the address using iGas
             //If it is a valid single line address, iGas will return a record with geo location details         
 
@@ -117,7 +112,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         private async Task<ValidationExceptionBuilder> ValidatePartialAddressAsync(IAddressAttributes address)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             //Verify the partial address using iGas. Partial address = Locality + State + postcode
             //If it is a valid, populate geo location details
 

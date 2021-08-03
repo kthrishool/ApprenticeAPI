@@ -1,16 +1,15 @@
-﻿using ADMS.Apprentices.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using ADMS.Apprentices.Core;
+using ADMS.Apprentices.Core.Messages;
+using ADMS.Apprentices.Core.Models;
+using ADMS.Apprentices.Core.Services;
 using ADMS.Apprentices.Database.Mappings;
 using Adms.Shared.Database;
+using Adms.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using ADMS.Apprentices.Core.Services;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using ADMS.Apprentices.Core.Models;
-using ADMS.Apprentices.Core.Messages;
-using System.Linq;
-using System.Collections;
-using System;
 
 namespace ADMS.Apprentices.Database
 {
@@ -33,8 +32,19 @@ namespace ADMS.Apprentices.Database
                 @USI = {searchMessage.USI}, @PhoneNumber = {searchMessage.Phonenumber}, @AddressString = {searchMessage.Address}";
 
             return await Set<ProfileSearchResultModel>()
-                .FromSqlInterpolated(query).ToListAsync();         
-                   
+                .FromSqlInterpolated(query).ToListAsync();
+        }
+
+        public async Task<ApprenticeIdentitySearchResultModel[]> GetMatchesByIdentityAsync(ApprenticeIdentitySearchCriteriaMessage message)
+        {
+            FormattableString query = $@"ApprenticeBasicSearch 
+                @FirstName={message.FirstName.ToNullIfEmpty()}, 
+                @Surname={message.Surname.ToNullIfEmpty()}, 
+                @BirthDate={message.BirthDate}, 
+                @USI={message.USI.ToNullIfEmpty()}, 
+                @EmailAddress={message.EmailAddress.ToNullIfEmpty()}, 
+                @PhoneNumber={message.PhoneNumber.ToNullIfEmpty()}";
+            return await Set<ApprenticeIdentitySearchResultModel>().FromSqlInterpolated(query).ToArrayAsync();
         }
 
         protected override void ApplyMappings(ModelBuilder modelBuilder)
@@ -46,7 +56,9 @@ namespace ADMS.Apprentices.Database
             modelBuilder.ApplyConfiguration(new QualificationMapping());
             modelBuilder.ApplyConfiguration(new ApprenticeUSIMapping());
             modelBuilder.ApplyConfiguration(new GuardianMapping());
+            modelBuilder.ApplyConfiguration(new PriorApprenticeshipMapping());
             modelBuilder.Entity<ProfileSearchResultModel>().HasKey("ApprenticeId");
+            modelBuilder.Entity<ApprenticeIdentitySearchResultModel>().HasKey("ApprenticeId");
         }
     }
 }

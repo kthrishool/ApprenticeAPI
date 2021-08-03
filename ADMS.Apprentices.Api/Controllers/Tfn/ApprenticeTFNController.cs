@@ -1,45 +1,42 @@
-﻿using System.IO;
-using System.Text;
+﻿using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Messages.TFN;
 using ADMS.Apprentices.Core.Services;
-using ADMS.Services.Infrastructure.WebApi;
-using ADMS.Services.Infrastructure.WebApi.Documentation;
 using Adms.Shared;
+using Adms.Shared.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Adms.Shared.Filters;
+using ADMS.Apprentices.Api.Configuration;
 
 namespace ADMS.Apprentices.Api.Controllers.Tfn
 {
     /// <summary>
     /// Apprentice TFN endpoints.
     /// </summary>
-    [ApiVersion(Version = "1", Latest = "1")]
     [Route("api/v1/apprentices/{apprenticeId}/TFN")]
     [Route("api/apprentices/{apprenticeId}/TFN")]
-    [Public]
-    [Produces("application/json","text/xml")]
-    [Consumes("application/json","text/xml")]
-    public class ApprenticeTFNController : AdmsController
+    [ApiController]
+    //[ApiDescription(Summary = "Apprentice TFN endpoints", Description = "")]
+    [Produces("application/json", "text/xml")]
+    [Consumes("application/json", "text/xml")]
+    public class ApprenticeTFNController : ControllerBase
     {
         private readonly IRepository repository;
         private readonly IApprenticeTFNCreator apprenticeTFNCreator;
-        private readonly IApprenticeTFNRetreiver tfnDetailRetreiver;
+        private readonly IApprenticeTFNRetriever tfnDetailRetriever;
         private readonly IApprenticeTFNUpdater apprenticeTFNUpdater;
 
         /// <summary>Constructor</summary>
         public ApprenticeTFNController(
-            IHttpContextAccessor contextAccessor, 
             IRepository repository,
             IApprenticeTFNCreator apprenticeTFNCreator,
-            IApprenticeTFNRetreiver tfnDetailRetreiver,
+            IApprenticeTFNRetriever tfnDetailRetriever,
             IApprenticeTFNUpdater apprenticeTFNUpdater
-            ) : base(contextAccessor)
+        )
         {
             this.repository = repository;
             this.apprenticeTFNCreator = apprenticeTFNCreator;
-            this.tfnDetailRetreiver = tfnDetailRetreiver;
+            this.tfnDetailRetriever = tfnDetailRetriever;
             this.apprenticeTFNUpdater = apprenticeTFNUpdater;
         }
 
@@ -49,11 +46,12 @@ namespace ADMS.Apprentices.Api.Controllers.Tfn
         /// <param name="apprenticeId">Id of the Apprentice.</param>
         [HttpGet]
         [Produces("application/json", "application/xml")]
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_TSL_Management)]
         public ActionResult<ApprenticeTFNV1> Get(int apprenticeId)
         {
-            var m =  tfnDetailRetreiver.Get(apprenticeId);
+            var m = tfnDetailRetriever.Get(apprenticeId);
 
-            return  Ok(m);
+            return Ok(m);
         }
 
 
@@ -71,9 +69,9 @@ namespace ADMS.Apprentices.Api.Controllers.Tfn
         [Consumes("application/json", "application/xml", "text/xml")]
         [Produces("application/json", "application/xml")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_TSL_Management)]
         public async Task<ActionResult<ApprenticeTFNV1>> Post(int apprenticeId, [FromBody] ApprenticeTFNV1 message)
         {
-            
             message.ApprenticeId = apprenticeId;
             var model = await apprenticeTFNCreator.CreateAsync(message);
 
@@ -93,6 +91,7 @@ namespace ADMS.Apprentices.Api.Controllers.Tfn
         [Consumes("application/json", "application/xml", "text/xml")]
         [Produces("application/json", "application/xml")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_TSL_Management)]
         public async Task<ActionResult<ApprenticeTFNV1>> Patch(int apprenticeId, [FromBody] ApprenticeTFNV1 message)
         {
             message.ApprenticeId = apprenticeId;

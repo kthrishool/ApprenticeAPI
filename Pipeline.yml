@@ -9,6 +9,7 @@ resources:
     - repository: templates
       type: git
       name: ADMS/pipeline-templates
+      ref: chore/get-latest-pipeline
 
     - repository: db-templates
       type: git
@@ -29,7 +30,7 @@ stages:
     jobs:
       - template: /Jobs/Build/sqlproj.yml@templates
         parameters:
-          artifact: 'database-drop-folder'
+          artifactName: 'database-drop-folder'
           buildFileSpec: '**/*ADMSApprentice.sqlproj'
           msbuildAdditionalArguments: '-noWarn:SQL71562,SQL71502,SQL71558'
 
@@ -67,6 +68,28 @@ stages:
           value: "admsapi.edc.hosts.devnetwork"
         - name: admsApplicationName
           value: "apprenticeapi"
+        - name: "Api.Url"
+          value: '$(AdmsTelemetryBaseUrl)'
+        - name: "Configuration.Environment"
+          value: '$(ConfigurationEnvironment)'
+        - name: "Configuration.AllowAudiences.0"
+          value: '$(ConfigurationAllowAudiences)'
+        - name: "Background.AdfsDomainName"
+          value: '$(BackgroundIdentityAdfsDomainName)'
+        - name: "Background.ClientId"
+          value: '$(BackgroundIdentityClientId)'
+        - name: "Background.Resource"
+          value: '$(BackgroundIdentityResource)'
+        - name: "Background.AdfsResource"
+          value: '$(AdmsBffAdfsResource)'
+        - name: "Background.ClientSecret"
+          value: '$(BackgroundIdentityClientSecret)'
+        - name: "Background.TokenEndpoint"
+          value: '$(BackgroundIdentityTokenEndpoint)'
+        - name: "OurEnvironmentSettings.SwaggerPrefix"
+          value: '$(AdmsApprenticesSwaggerPrefix)'
+        - name: "OurEnvironmentSettings.SwaggerPath"
+          value: '$(AdmsApprenticesSwaggerPath)'
     jobs:
     - template: Jobs/Release/iiswebapplication.yml@templates
       parameters:
@@ -119,6 +142,28 @@ stages:
           value: "admsapi.edc.hosts.testnetwork"
         - name: admsApplicationName
           value: "apprenticeapi"
+        - name: "Api.Url"
+          value: '$(AdmsTelemetryBaseUrl)'
+        - name: "Configuration.Environment"
+          value: '$(ConfigurationEnvironment)'
+        - name: "Configuration.AllowAudiences.0"
+          value: '$(ConfigurationAllowAudiences)'
+        - name: "Background.AdfsDomainName"
+          value: '$(BackgroundIdentityAdfsDomainName)'
+        - name: "Background.ClientId"
+          value: '$(BackgroundIdentityClientId)'
+        - name: "Background.Resource"
+          value: '$(BackgroundIdentityResource)'
+        - name: "Background.AdfsResource"
+          value: '$(AdmsBffAdfsResource)'
+        - name: "Background.ClientSecret"
+          value: '$(BackgroundIdentityClientSecret)'
+        - name: "Background.TokenEndpoint"
+          value: '$(BackgroundIdentityTokenEndpoint)'
+        - name: "OurEnvironmentSettings.SwaggerPrefix"
+          value: '$(AdmsApprenticesSwaggerPrefix)'
+        - name: "OurEnvironmentSettings.SwaggerPath"
+          value: '$(AdmsApprenticesSwaggerPath)'
     jobs:
     - template: Jobs/Release/iiswebapplication.yml@templates
       parameters:
@@ -132,6 +177,83 @@ stages:
         hostName: ${{ variables.hostName }}
         webAppPoolUsername: "$(ApprenticeAPI_ENETDEV)"
         webAppPoolPassword: "$(ApprenticeAPIPassword_ENETDEV)"
+        anonymousAuthentication: true
+        windowsAuthentication: false
+        webApplicationName: '$(admsApplicationName)'      
+        listSites: true
+
+  # - stage: DeployDatabase_Staging
+  #   dependsOn: BuildDatabase
+  #   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/staging-deploy'))
+  #   jobs:
+  #   - template: /Jobs/Release/database.yml@db-templates
+  #     parameters:
+  #       dacpacFileSpec: Database.ADMSApprentice.dacpac
+  #       environmentName : ADMSApprentice Database Staging
+  #       databaseName: ADMSApprentice
+  #       artifactName: 'database-drop-folder'
+  #       targetEnvironment: 'Staging'
+
+  - stage: Staging
+    dependsOn: BuildDatabase
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/staging-deploy'))
+    variables:
+        - group: ServiceAccounts
+        - group: StagingSettings
+        - name: System.Debug
+          value: true
+        - name: "OurDatabaseSettings.MigrateDatabaseOnStartup"
+          value: false
+        - name: "OurDatabaseSettings.SeedSampleData"
+          value: false
+        - name: "OurDatabaseSettings.DatabaseConnectionString"
+          value: '$(AdmsApprenticeConnectionString)'
+        - name: "OurHttpClientSettings.ReferenceDataEndpointBaseUrl"
+          value: '$(ReferenceDataEndpointBaseUrl)'
+        - name: "OurUSISettings.USIVerifyDisabled" #Disable the USI verification in staging
+          value: true
+        - name: port
+          value: "80"
+        - name: hostname
+          value: "admsapistaging.pprod.skillsnp.dis.gov.au"
+        - name: admsApplicationName
+          value: "apprenticeapi"
+        - name: "Api.Url"
+          value: '$(AdmsTelemetryBaseUrl)'
+        - name: "Configuration.Environment"
+          value: '$(ConfigurationEnvironment)'
+        - name: "Configuration.AllowAudiences.0"
+          value: '$(ConfigurationAllowAudiences)'       
+        - name: "Background.AdfsDomainName"
+          value: '$(BackgroundIdentityAdfsDomainName)'
+        - name: "Background.ClientId"
+          value: '$(BackgroundIdentityClientId)'
+        - name: "Background.Resource"
+          value: '$(BackgroundIdentityResource)'
+        - name: "Background.AdfsResource"
+          value: '$(AdmsBffAdfsResource)'
+        - name: "Background.ClientSecret"
+          value: '$(BackgroundIdentityClientSecret)'
+        - name: "Background.TokenEndpoint"
+          value: '$(BackgroundIdentityTokenEndpoint)'
+        - name: "OurEnvironmentSettings.SwaggerPrefix"
+          value: '$(AdmsApprenticesSwaggerPrefix)'
+        - name: "OurEnvironmentSettings.SwaggerPath"
+          value: '$(AdmsApprenticesSwaggerPath)'
+
+    jobs:
+    - template: Jobs/Release/iiswebapplication.yml@templates
+      parameters:
+        environmentName: Backend_Staging
+        parallelLimit: 100%
+        xmlTransformation: false
+        xmlVarSubstitution: true
+        parentWebsiteName: '$(admsWebsiteName)'
+        installDir: $(admsInstallDir)
+        takeAppOffline: true
+        hostName: ${{ variables.hostName }}
+        webAppPoolUsername: "$(ApprenticeAPI_GMSASTG)"
+        # webAppPoolPassword: "$(ApprenticeAPIPassword_ENETDEV)"
         anonymousAuthentication: true
         windowsAuthentication: false
         webApplicationName: '$(admsApplicationName)'      

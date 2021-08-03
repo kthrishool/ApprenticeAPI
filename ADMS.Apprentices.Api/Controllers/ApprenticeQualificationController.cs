@@ -4,51 +4,47 @@ using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Messages;
 using ADMS.Apprentices.Core.Models;
 using ADMS.Apprentices.Core.Services;
-using ADMS.Services.Infrastructure.WebApi;
-using ADMS.Services.Infrastructure.WebApi.Documentation;
 using Adms.Shared;
 using Adms.Shared.Extensions;
 using Adms.Shared.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ADMS.Apprentices.Api.Configuration;
 
 namespace ADMS.Apprentices.Api.Controllers
 {
     /// <summary>
     /// Apprentice qualification endpoints of a given apprentice.
     /// </summary>
-    [ApiVersion(Version = "1", Latest = "1")]
+    [ApiController]
     [Route("api/v1/apprentices/{apprenticeId}/qualifications")]
     [Route("api/apprentices/{apprenticeId}/qualifications")]
-    [Public]
     [Produces("application/json")]
     [Consumes("application/json")]
-    public class ApprenticeQualificationController : AdmsController
+    public class ApprenticeQualificationController : ControllerBase
     {
         private readonly IRepository repository;
         private readonly IQualificationCreator qualificationCreator;
         private readonly IQualificationUpdater qualificationUpdater;
-        private readonly ICollectionHelper collectionHelper;
 
         /// <summary>Constructor</summary>
         public ApprenticeQualificationController(
-            IHttpContextAccessor contextAccessor,
             IRepository repository,
             IQualificationCreator qualificationCreator,
-            IQualificationUpdater qualificationUpdater,
-            ICollectionHelper collectionHelper
-        ) : base(contextAccessor)
+            IQualificationUpdater qualificationUpdater
+        )
         {
             this.repository = repository;
             this.qualificationCreator = qualificationCreator;
             this.qualificationUpdater = qualificationUpdater;
-            this.collectionHelper = collectionHelper;
         }
 
         /// <summary>
         /// List all qualifications for an apprentice.
         /// </summary>
-        /// <param name="apprenticeId">ID of the apprentice</param>
+        /// <param name="apprenticeId">Id of the apprentice</param>
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
         [HttpGet]
         public async Task<ActionResult<ProfileQualificationModel[]>> List(int apprenticeId)
         {
@@ -62,11 +58,12 @@ namespace ADMS.Apprentices.Api.Controllers
         /// </summary>
         /// <param name="apprenticeId">Id of the apprentice</param>
         /// <param name="id">Id of the qualification</param>
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfileQualificationModel>> Get(int apprenticeId, int id)
         {
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
-            Qualification qualification = collectionHelper.Get(profile.Qualifications, q => q.Id, id);
+            Qualification qualification = profile.Qualifications.Get(q => q.Id, id);
             return Ok(new ProfileQualificationModel(qualification));
         }
 
@@ -75,6 +72,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// </summary>
         /// <param name="apprenticeId">apprenticeId</param>
         /// <param name="message">Details of the qualification to be created</param>
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPost]
         public async Task<ActionResult<ProfileQualificationModel>> Create(int apprenticeId, [FromBody] ProfileQualificationMessage message)
         {
@@ -82,13 +80,14 @@ namespace ADMS.Apprentices.Api.Controllers
             await repository.SaveAsync();
             return Created($"/{qualification.Id}", new ProfileQualificationModel(qualification));
         }
-
+        
         /// <summary>
         /// Updates an existing qualification claim application.
         /// </summary>
-        /// <param name="apprenticeId">ID of the apprentice</param>
-        /// <param name="id">ID of the qualification to be updated</param>
+        /// <param name="apprenticeId">Id of the apprentice</param>
+        /// <param name="id">Id of the qualification to be updated</param>
         /// <param name="message">Details of the information to be updated</param>
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPut("{id}")]
         public async Task<ActionResult<ProfileQualificationModel>> Update(int apprenticeId, int id, [FromBody] ProfileQualificationMessage message)
         {
@@ -100,13 +99,14 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <summary>
         /// Removes a qualification from an apprentice profile
         /// </summary>
-        /// <param name="apprenticeId">ID of the apprentice</param>
-        /// <param name="id">ID of the qualification to be removed</param>
+        /// <param name="apprenticeId">Id of the apprentice</param>
+        /// <param name="id">Id of the qualification to be removed</param>
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Remove(int apprenticeId, int id)
         {
             Profile profile = await repository.GetAsync<Profile>(apprenticeId);
-            Qualification qualification = collectionHelper.Get(profile.Qualifications, q => q.Id, id);
+            Qualification qualification = profile.Qualifications.Get(q => q.Id, id);
             profile.Qualifications.Remove(qualification);
             await repository.SaveAsync();
             return new NoContentResult();

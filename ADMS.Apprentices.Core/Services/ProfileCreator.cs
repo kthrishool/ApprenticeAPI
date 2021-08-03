@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Helpers;
 using ADMS.Apprentices.Core.Messages;
 using ADMS.Apprentices.Core.Services.Validators;
 using Adms.Shared;
+using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentices.Core.Services
 {
@@ -32,13 +32,13 @@ namespace ADMS.Apprentices.Core.Services
                 FirstName = message.FirstName,
                 OtherNames = message.OtherNames.Sanitise(),
                 PreferredName = message.PreferredName.Sanitise(),
-                BirthDate = message.BirthDate,
+                BirthDate = message.BirthDate.Value,
                 EmailAddress = message.EmailAddress.Sanitise(),
                 IndigenousStatusCode = message.IndigenousStatusCode.Sanitise(),
                 SelfAssessedDisabilityCode = message.SelfAssessedDisabilityCode.SanitiseUpper(),
                 InterpretorRequiredFlag = message.InterpretorRequiredFlag,
                 CitizenshipCode = message.CitizenshipCode.SanitiseUpper(),
-                ProfileTypeCode = message.ProfileType.SanitiseUpper(),                
+                ProfileTypeCode = message.ProfileType.SanitiseUpper(),
                 CountryOfBirthCode = message.CountryOfBirthCode.SanitiseUpper(),
                 PreferredContactType = message.PreferredContactType.SanitiseUpper(),
                 LanguageCode = message.LanguageCode.SanitiseUpper(),
@@ -58,7 +58,7 @@ namespace ADMS.Apprentices.Core.Services
                     });
                 }
             }
-            
+
             if (message.GenderCode != null)
             {
                 profile.GenderCode = message.GenderCode.SanitiseUpper();
@@ -92,10 +92,10 @@ namespace ADMS.Apprentices.Core.Services
                     AddressTypeCode = AddressType.POST.ToString(),
                 });
             }
-            if (message.USI != null)
+            if (!message.USI.IsNullOrEmpty())
             {
-                profile.USIs.Add(new ApprenticeUSI 
-                { 
+                profile.USIs.Add(new ApprenticeUSI
+                {
                     USI = message.USI,
                     ActiveFlag = true
                 });
@@ -104,7 +104,7 @@ namespace ADMS.Apprentices.Core.Services
             var exceptionBuilder = await profileValidator.ValidateAsync(profile);
             exceptionBuilder.ThrowAnyExceptions();
             
-            if (message.USI != null) usiVerify.Verify(profile);
+            if (!message.USI.IsNullOrEmpty()) usiVerify.Verify(profile);
 
             repository.Insert(profile);
 

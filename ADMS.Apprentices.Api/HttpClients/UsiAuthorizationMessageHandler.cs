@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using ADMS.Infrastructure.Adfs.OAuth2.ClientCredentials;
 using ADMS.Apprentices.Core;
+using Adms.Shared.ClientCredentials;
 using Microsoft.Extensions.Options;
 
 namespace ADMS.Apprentices.Api.HttpClients
@@ -23,6 +20,7 @@ namespace ADMS.Apprentices.Api.HttpClients
         {
             this.ourUsiSettings = ourUsiSettings;
         }
+
         /// <summary>
         /// SendAsync
         /// </summary>
@@ -38,6 +36,7 @@ namespace ADMS.Apprentices.Api.HttpClients
                 ClientId = ourUsiSettings.Value.ClientID,
                 Resource = ourUsiSettings.Value.Resource,
                 SigningCertficateThumbprint = ourUsiSettings.Value.SigningCertficateThumbprint,
+                HttpProxyUrl = ourUsiSettings.Value.HttpProxyUrl
             };
 
             // create a httpclient implementation using the above configuration context
@@ -47,9 +46,9 @@ namespace ADMS.Apprentices.Api.HttpClients
             Token token = tokenAgent.GetToken();
             string accessToken = token.AccessToken;
 
-            HttpRequestHeaders headers = request.Headers; 
+            HttpRequestHeaders headers = request.Headers;
             AuthenticationHeaderValue authHeader = headers.Authorization;
-            headers.Authorization = new AuthenticationHeaderValue(authHeader.Scheme, accessToken.ToString());           
+            headers.Authorization = new AuthenticationHeaderValue(authHeader.Scheme, accessToken.ToString());
             headers.Add("usi.gov.au-orgcode", ourUsiSettings.Value.OrganisationId);
 
             return await base.SendAsync(request, cancelToken);

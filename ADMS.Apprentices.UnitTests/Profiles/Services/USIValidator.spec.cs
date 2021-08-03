@@ -31,11 +31,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             };
             profile.USIs.Add(apprenticeUSI);
             validationException = new ValidationException(null, (ValidationError) null);
-
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidUSI))
-                .Returns(validationException);
         }
 
         [TestMethod]
@@ -62,13 +57,13 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             ClassUnderTest
                 .Invoking(c => c.Validate(profile).ThrowAnyExceptions())
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
 
         private void RunPositiveUSITest(Profile profile)
         {
             ClassUnderTest.Invoking(c => c.Validate(profile).ThrowAnyExceptions())
-                .Should().NotThrow<ValidationException>();
+                .Should().NotThrow<AdmsValidationException>();
         }
 
         private void ThrowExceptionForUsiTest(Profile profile)

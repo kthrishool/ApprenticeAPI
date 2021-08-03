@@ -10,6 +10,9 @@
     [CustomHeaders] NVARCHAR (1024)  NULL,
     [ChainId]       NVARCHAR (50)    NULL,
     [ParentChainId] NVARCHAR (50)    NULL,
+    [PublishAfter]  DATETIME         NULL,
     CONSTRAINT [PK_ServiceBusEventArchive] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 

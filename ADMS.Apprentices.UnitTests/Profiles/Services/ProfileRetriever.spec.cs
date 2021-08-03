@@ -15,25 +15,104 @@ using ADMS.Services.Infrastructure.Core.Exceptions;
 using ADMS.Services.Infrastructure.Core.Validation;
 using Adms.Shared.Exceptions;
 using ADMS.Apprentices.Core.Exceptions;
+using Adms.Shared.Paging;
+using Moq;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
 {
-    #region WhenRetrievingProfiles
+    #region WhenRetrievingProfilesWithSearchOptions
 
     [TestClass]
-    public class WhenRetrievingProfiles : GivenWhenThen<ProfileRetreiver>
+    public class WhenRetrievingProfilesWithSearchOptions : GivenWhenThen<ProfileRetreiver>
     {
-        IQueryable<Profile> profiles;
+        PagedList<ProfileListModel> profiles;
+        private ProfileSearchMessage message;
+        private PagingInfo paging;        
+        private ICollection<ProfileSearchResultModel> searchResults = new List<ProfileSearchResultModel>();        
 
-        protected override void When()
+        protected override void Given()
+        {            
+            message = new ProfileSearchMessage
+            {
+                Name = ProfileConstants.Surname,
+                BirthDate = ProfileConstants.Birthdate
+            };
+            searchResults.Add(new ProfileSearchResultModel(
+                123, ProfileConstants.Profiletype, ProfileConstants.Firstname,
+                ProfileConstants.Surname, ProfileConstants.Secondname,
+                ProfileConstants.Birthdate, ProfileConstants.Emailaddress,
+                ProfileConstants.USI, null, null, null, 20));
+
+            paging = new PagingInfo
+            {
+                Page = 1,
+
+            };
+            
+            Container.GetMock<IApprenticeRepository>()
+                .Setup(r => r.GetProfilesAsync(It.IsAny<ProfileSearchMessage>()))
+                .ReturnsAsync(() => searchResults);
+
+            Container.GetMock<IPagingHelper>()
+                .Setup(x => x.ToPagedInMemoryList(searchResults, It.IsAny<PagingInfo>()))
+                .Returns(new PagedInMemoryList<ProfileSearchResultModel>(paging, searchResults));
+        }
+
+        protected override async void When()
         {
-            profiles = ClassUnderTest.RetreiveList();
+            profiles = await ClassUnderTest.RetreiveList(paging, message);
         }
 
         [TestMethod]
         public void ShouldReturnProfiles()
         {
             profiles.Should().NotBeNull();
+            profiles.TotalItems.Should().Be(1);
+        }
+    }
+    #endregion
+
+    #region WhenRetrievingProfilesWithNoSearchOptions
+
+    [TestClass]
+    public class WhenRetrievingProfilesWithNoSearchOptions : GivenWhenThen<ProfileRetreiver>
+    {
+        PagedList<ProfileListModel> profiles;
+        private ProfileSearchMessage message;
+        private PagingInfo paging;
+        private Profile profile;        
+
+        protected override void Given()
+        {
+            profile = new Profile { Id = 1, ActiveFlag = true };
+            message = new ProfileSearchMessage();
+            
+            var results = new EnumerableQuery<Profile>(new List<Profile> { profile });
+            paging = new PagingInfo
+            {
+                Page = 1,
+
+            };
+            Container
+                .GetMock<IRepository>()
+                .Setup(x => x.Retrieve<Profile>())
+                .Returns(results);
+
+            Container.GetMock<IPagingHelper>()
+                .Setup(x => x.ToPagedListAsync(results, It.IsAny<PagingInfo>()))
+                .ReturnsAsync(new PagedList<Profile>(paging, results.Count(), false, results));            
+        }
+
+        protected override async void When()
+        {
+            profiles = await ClassUnderTest.RetreiveList(paging, message);
+        }
+
+        [TestMethod]
+        public void ShouldReturnProfiles()
+        {
+            profiles.Should().NotBeNull();
+            profiles.TotalItems.Should().Be(1);
         }
     }
     #endregion
@@ -45,7 +124,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     {
         ICollection<ProfileSearchResultModel> searchResults;
         private ProfileSearchMessage message;
-        private ValidationException validationException;
 
         protected override void Given()
         {
@@ -56,9 +134,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             };
         }
 
-        protected override void When()
+        protected override async void When()
         {
-            searchResults = ClassUnderTest.Search(message);
+            searchResults = await ClassUnderTest.Search(message);
         }
 
         [TestMethod]
@@ -75,14 +153,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 Phonenumber = "1234567"
             };
 
-            validationException = new ValidationException(null, (ValidationError)null);
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidPhonenumberSearch))
-                .Returns(validationException);            
-
             ClassUnderTest.Invoking(c => c.Search(message))
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -93,14 +165,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 EmailAddress = "abc"
             };
 
-            validationException = new ValidationException(null, (ValidationError)null);            
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidEmailSearch))
-                .Returns(validationException);
-
             ClassUnderTest.Invoking(c => c.Search(message))
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -108,14 +174,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             message = new ProfileSearchMessage();
 
-            validationException = new ValidationException(null, (ValidationError)null);
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidSearch))
-                .Returns(validationException);
-
             ClassUnderTest.Invoking(c => c.Search(message))
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -126,14 +186,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 Address = "act"
             };
 
-            validationException = new ValidationException(null, (ValidationError)null);
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidAddressSearch))
-                .Returns(validationException);
-
             ClassUnderTest.Invoking(c => c.Search(message))
-                .Should().Throw<ValidationException>();
+                .Should().Throw<AdmsValidationException>();
         }
 
     }

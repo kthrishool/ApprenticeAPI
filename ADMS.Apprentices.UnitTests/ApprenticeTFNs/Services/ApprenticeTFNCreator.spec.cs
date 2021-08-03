@@ -131,19 +131,10 @@ namespace ADMS.Apprentices.UnitTests.ApprenticeTFNs.Services
         [TestMethod]
         public void ShouldThrowNotFoundError()
         {
-            ValidationException validationException;
-            validationException = new ValidationException(null, (ValidationError)null);
-
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidApprenticeId))
-                .Returns(validationException);
-
-
             message.ApprenticeId = -1;
             ClassUnderTest
                 .Invoking(async c => await c.CreateAsync(message))
-                .Should().Throw<ValidationException>().Where(e => e == validationException);
+                .Should().Throw<AdmsValidationException>();
 
         }
 
@@ -153,17 +144,12 @@ namespace ADMS.Apprentices.UnitTests.ApprenticeTFNs.Services
             ValidationException validationException;
             validationException = new ValidationException(null, (ValidationError)null);
 
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.InvalidTFN))
-                .Returns(validationException);
-
 
             message.ApprenticeId = 1;
             message.TaxFileNumber = -1;
             ClassUnderTest
                 .Invoking(async c => await c.CreateAsync(message))
-                .Should().Throw<ValidationException>().Where(e => e == validationException);
+                .Should().Throw<AdmsValidationException>();
 
         }
 
@@ -173,33 +159,18 @@ namespace ADMS.Apprentices.UnitTests.ApprenticeTFNs.Services
             message.ApprenticeId = 11;
             message.TaxFileNumber = 11;
 
-            NotFoundException validationException;
-            validationException = new NotFoundException(null, "Apprentice Profile", "11");
-
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateNotFoundException("Apprentice Profile", "11"))
-                .Returns(validationException);
-
             ClassUnderTest
                 .Invoking(async c => await c.CreateAsync(message))
-                .Should().Throw<NotFoundException>().Where(e => e == validationException);
+                .Should().Throw<AdmsNotFoundException>();
 
         }
 
         [TestMethod]
         public void ShouldThrowTfnRecordFoundError()
         {
-            ValidationException validationException;
-            validationException = new ValidationException(null, (ValidationError)null);
             var mockDbSet = SingleApprenticeTFN();
             message.ApprenticeId = apprenticeId;
             message.TaxFileNumber = 1;
-
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.TFNAlreadyExists))
-                .Returns(validationException);
 
             Container
                 .GetMock<IRepository>()
@@ -213,7 +184,7 @@ namespace ADMS.Apprentices.UnitTests.ApprenticeTFNs.Services
 
             ClassUnderTest
                 .Invoking(async c => await c.CreateAsync(message))
-                .Should().Throw<ValidationException>().Where(e => e == validationException);
+                .Should().Throw<AdmsValidationException>();
 
         }
 

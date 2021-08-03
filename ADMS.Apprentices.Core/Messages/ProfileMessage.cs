@@ -25,7 +25,7 @@ namespace ADMS.Apprentices.Core.Messages
         public string PreferredName { get; init; }
 
         [Required(ErrorMessage = "Birth date is required")]
-        public DateTime BirthDate { get; init; }
+        public DateTime? BirthDate { get; init; }
 
         [Display(Name = "Email address")]
         [MaxLength(256, ErrorMessage = "Email address cannot have more than 256 characters")]
@@ -83,6 +83,6 @@ namespace ADMS.Apprentices.Core.Messages
         public string VisaNumber { get; init; }
 
         [Display(Name = "Apprentice USI")]
-        public string USI { get; init; }      
+        public string USI { get; init; }
     }
 }

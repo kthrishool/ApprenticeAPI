@@ -71,7 +71,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
                 Task<ValidationExceptionBuilder> completedTask = await Task.WhenAny(tasks);
                 if(completedTask.Exception != null)
                 {
-                    throw completedTask.Exception;
+                    throw completedTask.Exception.InnerException;
                 }
                 if(exceptionBuilder == null) {
                     exceptionBuilder = completedTask.Result;

@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using ADMS.Apprentices.Core.HttpClients.ReferenceDataApi;
+using System.Net;
+using System.Net.Http;
 using ADMS.Apprentices.Core;
+using ADMS.Apprentices.Core.HttpClients.ReferenceDataApi;
+using ADMS.Apprentices.Core.HttpClients.USI;
+using Au.Gov.Infrastructure.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
-using ADMS.Apprentices.Core.HttpClients.USI;
-using System.Net.Http;
-using System.Net;
-using ADMS.Apprentices.Core.Services;
 
 namespace ADMS.Apprentices.Api.HttpClients
 {
@@ -22,7 +21,7 @@ namespace ADMS.Apprentices.Api.HttpClients
         /// </summary>
         public static void Configure(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<JwtPassThroughMessageHandler>();
+            services.AddTransient<ApiClientDelegatingHandler>();
             services.AddTransient<UsiAuthorizationMessageHandler>();
 
             var settings = new OurHttpClientSettings();
@@ -31,16 +30,16 @@ namespace ADMS.Apprentices.Api.HttpClients
             services
                 .AddHttpClient("referenceData", c => { c.BaseAddress = new Uri(settings.ReferenceDataEndpointBaseUrl); })
                 .AddTypedClient(RestService.For<IReferenceDataClient>)
-                .AddHttpMessageHandler<JwtPassThroughMessageHandler>();
+                .AddHttpMessageHandler<ApiClientDelegatingHandler>();
 
-            services                
-                .AddHttpClient("usi", c => { c.BaseAddress = new Uri(settings.UsiEndpointBaseUrl); })                
+            services
+                .AddHttpClient("usi", c => { c.BaseAddress = new Uri(settings.UsiEndpointBaseUrl); })
                 .AddTypedClient(RestService.For<IUSIClient>)
                 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler()
                 {
                     UseProxy = true,
                     AllowAutoRedirect = false,
-                    Proxy = new WebProxy(settings.ProxyUrl, true) { UseDefaultCredentials = true },                    
+                    Proxy = new WebProxy(settings.ProxyUrl, true) {UseDefaultCredentials = true},
                 })
                 .AddHttpMessageHandler<UsiAuthorizationMessageHandler>();
         }

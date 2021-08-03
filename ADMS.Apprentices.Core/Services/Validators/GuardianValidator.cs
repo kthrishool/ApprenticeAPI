@@ -9,24 +9,21 @@ namespace ADMS.Apprentices.Core.Services.Validators
 {
     public class GuardianValidator : IGuardianValidator
     {
-        private readonly IExceptionFactory exceptionFactory;
         private readonly IAddressValidator addressValidator;
         private readonly IPhoneValidator phoneValidator;
 
         public GuardianValidator(
-            IExceptionFactory exceptionFactory,
             IAddressValidator addressValidator,
             IPhoneValidator phoneValidator
         )
         {
-            this.exceptionFactory = exceptionFactory;
             this.addressValidator = addressValidator;
             this.phoneValidator = phoneValidator;
         }
 
         public async Task<ValidationExceptionBuilder> ValidateAsync(Guardian guardian)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             PhoneValidation(exceptionBuilder, guardian);
             EmailValidation(exceptionBuilder, guardian);
             await AddressValidation(exceptionBuilder, guardian);

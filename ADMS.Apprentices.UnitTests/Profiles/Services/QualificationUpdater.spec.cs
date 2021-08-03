@@ -1,18 +1,16 @@
-﻿using System.Linq;
+﻿using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Messages;
 using ADMS.Apprentices.Core.Services;
+using ADMS.Apprentices.Core.Services.Validators;
+using ADMS.Apprentices.Core.TYIMS.Entities;
 using ADMS.Apprentices.UnitTests.Constants;
 using Adms.Shared;
+using Adms.Shared.Exceptions;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ADMS.Apprentices.Core.Services.Validators;
 using Moq;
-using Adms.Shared.Exceptions;
-using ADMS.Apprentices.Core.TYIMS.Entities;
-using System.Threading.Tasks;
-using ADMS.Services.Infrastructure.Core.Exceptions;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
 {
@@ -24,46 +22,47 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         private Qualification qualification;
         private ProfileQualificationMessage message;
         private int qualificationId;
-        private int apprenticeshipId;
+
         private Profile profile;
         private Registration registration;
 
         protected override void Given()
         {
             qualificationId = 20;
-            apprenticeshipId = 40;
-            qualification = new Qualification() {
+            qualification = new Qualification()
+            {
                 Id = qualificationId,
                 QualificationCode = "something",
-             };
-            var q = ProfileConstants.QualificationMessage;            
+            };
+            var q = ProfileConstants.QualificationMessage;
             message = new ProfileQualificationMessage()
-                            {QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
-                                StartDate = q.StartDate, EndDate = q.EndDate, ApprenticeshipId = apprenticeshipId };
+            {
+                QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
+                StartDate = q.StartDate, EndDate = q.EndDate
+            };
 
             profile = new Profile();
             profile.Qualifications.Add(qualification);
             registration = new Registration();
-            
-            Container.GetMock<IExceptionFactory>()
-                .Setup(s => s.CreateNotFoundException("Apprentice Qualification ", It.IsAny<string>()))
-                .Returns(new NotFoundException(null, "test", "test"));
+
             Container.GetMock<IRepository>()
                 .Setup(s => s.GetAsync<Profile>(It.IsAny<int>(), true))
                 .ReturnsAsync(profile);
-            Container.GetMock<ITYIMSRepository>()
-                .Setup(s => s.GetRegistrationAsync(apprenticeshipId))
-                .ReturnsAsync(registration);
+            ChangeRegistrationDetails(ProfileConstants.Id);
             Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidateAsync(It.IsAny<Qualification>(), It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
-            Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidateAgainstApprenticeshipQualification(qualification, registration, It.IsAny<Profile>()))
-                .Returns(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .Setup(s => s.ValidateAsync(It.IsAny<IQualificationAttributes>(), It.IsAny<Profile>()))
+                .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
         protected override void When()
         {
+        }
+
+        private void ChangeRegistrationDetails(int id)
+        {
+            Container.GetMock<ITYIMSRepository>()
+                .Setup(s => s.GetCompletedRegistrationsByApprenticeIdAsync(id))
+                .ReturnsAsync(registration);
         }
 
         [TestMethod]
@@ -86,9 +85,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void WhenQualificationIdIsDifferent_ThenAnExceptionShouldOccur()
         {
-            ClassUnderTest.Invoking(c => c.Update(10, qualificationId+1, message))
-                .Should().Throw<NotFoundException>();
+            ClassUnderTest.Invoking(c => c.Update(10, qualificationId + 1, message))
+                .Should().Throw<AdmsNotFoundException>();
         }
     }
+
     #endregion
 }

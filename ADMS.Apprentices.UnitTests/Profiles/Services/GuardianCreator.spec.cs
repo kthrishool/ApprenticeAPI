@@ -44,7 +44,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
             Container.GetMock<IGuardianValidator>()
                 .Setup(s => s.ValidateAsync(It.IsAny<Guardian>()))
-                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .ReturnsAsync(new ValidationExceptionBuilder());
 
             validationException = new ValidationException(null, (ValidationError)null);
             Container
@@ -62,7 +62,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public void DONothingWhenGuardianIsValid()
         {
             ClassUnderTest.Invoking(async c => await c.CreateAsync(profile.Id, guardianMessage))
-                .Should().NotThrow<ValidationException>();
+                .Should().NotThrow<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -84,11 +84,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             profile.Guardian = guardian;
 
-            Container.GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateValidationException(ValidationExceptionType.GuardianExists))
-                .Returns(validationException);
-
-            ClassUnderTest.Invoking(async c => await c.CreateAsync(profile.Id, guardianMessage)).Should().Throw<ValidationException>();
+            ClassUnderTest.Invoking(async c => await c.CreateAsync(profile.Id, guardianMessage)).Should().Throw<AdmsValidationException>();
         }
     }
 

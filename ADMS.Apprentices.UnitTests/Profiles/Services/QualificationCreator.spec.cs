@@ -1,22 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Messages;
 using ADMS.Apprentices.Core.Services;
 using ADMS.Apprentices.Core.Services.Validators;
+using ADMS.Apprentices.Core.TYIMS.Entities;
 using ADMS.Apprentices.UnitTests.Constants;
 using Adms.Shared;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Threading.Tasks;
-using Adms.Shared.Exceptions;
 using Moq;
-using System.Collections.Generic;
-using ADMS.Apprentices.Core.TYIMS.Entities;
-using ADMS.Apprentices.Core.Exceptions;
-using ADMS.Services.Infrastructure.Core.Exceptions;
-using ADMS.Services.Infrastructure.Core.Validation;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
 {
@@ -30,7 +24,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         private int apprenticeId;
         private Profile profile;
         private Registration registration;
-        private ValidationException validationException;
         private int apprenticeshipId;
 
         protected override void Given()
@@ -40,10 +33,12 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             apprenticeshipId = 11;
             profile.Id = apprenticeId;
             profile.Qualifications.Clear();
-            var q = ProfileConstants.QualificationMessage;            
+            var q = ProfileConstants.QualificationMessage;
             message = new ProfileQualificationMessage()
-                            {QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
-                                StartDate = q.StartDate, EndDate = q.EndDate, ApprenticeshipId = apprenticeshipId };
+            {
+                QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
+                StartDate = q.StartDate, EndDate = q.EndDate
+            };
 
             registration = new Registration()
             {
@@ -54,25 +49,16 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 QualificationCode = "QCode",
                 TrainingContractId = 100,
             };
-            
-            validationException = new ValidationException(null, (ValidationError)null);
-            
+
             Container.GetMock<ITYIMSRepository>()
-                .Setup(s => s.GetRegistrationAsync(apprenticeshipId))
+                .Setup(s => s.GetCompletedRegistrationsByApprenticeIdAsync(apprenticeId))
                 .ReturnsAsync(registration);
-            Container.GetMock<IExceptionFactory>()
-                .Setup(s => s.CreateValidationException(It.IsAny<ValidationExceptionType[]>()))
-                .Returns(validationException);
             Container.GetMock<IRepository>()
                 .Setup(s => s.GetAsync<Profile>(apprenticeId, true))
                 .ReturnsAsync(profile);
             Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidateAsync(It.IsAny<Qualification>(), It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
-            Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidateAgainstApprenticeshipQualification(It.IsAny<Qualification>(), registration,It.IsAny<Profile>()))
-                .Returns(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
-
+                .Setup(s => s.ValidateAsync(It.IsAny<IQualificationAttributes>(), It.IsAny<Profile>()))
+                .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
         protected override void When()
@@ -107,36 +93,18 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void WhenApprenticeshipIdIsPopulated_ThenTheRegistrationShouldBeRetrieved()
         {
-            message.ApprenticeshipId = apprenticeshipId;
             ClassUnderTest.Invoking(c => c.CreateAsync(apprenticeId, message)).Invoke();
             Container.GetMock<ITYIMSRepository>().Verify();
         }
 
-        [TestMethod]
-        public void WhenApprenticeshipIdIsPopulatedAndIsNotValid_ThenTheRegistrationShouldBeRetrieved()
-        {
-            var exceptionFactory = Container.GetMock<IExceptionFactory>().Object;
-            message.ApprenticeshipId = apprenticeshipId;
 
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
-            exceptionBuilder.AddException(ValidationExceptionType.QualificationApprenticeshipIsNotComplete);
-            Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidateAgainstApprenticeshipQualification(It.IsAny<Qualification>(), registration , It.IsAny<Profile>()))
-                .Returns(exceptionBuilder);
-
-            ClassUnderTest.Invoking(c => c.CreateAsync(apprenticeId, message))
-                .Should().Throw<ValidationException>();
-        }
-        
-        [TestMethod]
-        public void WhenAnExceptionIsThrown_ThenItIsPassedOn()
+        private void ChangeRegistrationDetails(int id)
         {
             Container.GetMock<ITYIMSRepository>()
-                .Setup(s => s.GetRegistrationAsync(apprenticeshipId))
+                .Setup(s => s.GetCompletedRegistrationsByApprenticeIdAsync(id))
                 .ThrowsAsync(new ArgumentOutOfRangeException());
-            ClassUnderTest.Invoking(async c => await c.CreateAsync(apprenticeId, message))
-                .Should().Throw<ArgumentOutOfRangeException>();
         }
     }
+
     #endregion
 }

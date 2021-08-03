@@ -2,7 +2,8 @@
 
 Object:         [Infrastructure].[GetNotPublishedInProgressServiceBusEvents]
 
-Description:    Gets top 1000 service bus events ordered by Id where events are Not Published or In Progress
+Description:    Gets top 1000 service bus events ordered by Id where events are Not Published 
+				or In Progress and PublishAfter is NULL or in the past.
 
 
 Usage:          EXEC [Infrastructure].[GetNotPublishedInProgressServiceBusEvents]
@@ -21,10 +22,10 @@ Last modification:  $Modtime:  $
 Last check in:      $Date:     $
 
 Modification History:
-USERID     Date            Description
-======     ==========      ====================================================
-JD3044        09/06/2020           Added index hint to use filtered index
-
+USERID		Date            Description
+======		==========      ====================================================
+JD3044		09/06/2020      Added index hint to use filtered index
+SP3336		30/07/2021		Add PublishAfter column check
 ********************************************************************************************/
 
 CREATE PROCEDURE [Infrastructure].[GetNotPublishedInProgressServiceBusEvents]
@@ -45,7 +46,9 @@ SELECT TOP (1000)
                 [ParentChainId] AS [ParentChainId] 
 FROM
                 [Infrastructure].[ServiceBusEvent] WITH (INDEX = [FUIX_ServiceBusEvent_IdFiltered_status_filteredStatus])
-WHERE           [Status] = 0 OR [Status] = 1
+WHERE           
+				([Status] = 0 OR [Status] = 1) 
+				AND (PublishAfter IS NULL OR PublishAfter <= GETDATE())
 
 ORDER BY
                 [Id] ASC

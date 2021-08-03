@@ -8,15 +8,13 @@ using System.Threading.Tasks;
 
 namespace ADMS.Apprentices.Core.Services
 {
-    public class GuardianRetreiver : IGuardianRetreiver
+    public class GuardianRetriever : IGuardianRetriever
     {
         private readonly IRepository repository;        
-        private readonly IExceptionFactory exceptionFactory;
 
-        public GuardianRetreiver (IRepository repository, IExceptionFactory exceptionFactory)        
+        public GuardianRetriever (IRepository repository)
         {
             this.repository = repository;            
-            this.exceptionFactory = exceptionFactory;
         }
 
         public async Task<Guardian> GetAsync(int apprenticeId)
@@ -25,7 +23,7 @@ namespace ADMS.Apprentices.Core.Services
             Guardian guardian = profile.Guardian;
             if (guardian == null)
             {
-                throw exceptionFactory.CreateNotFoundException("Apprentice guardian", $"ApprenticeId {profile.Id}");
+                throw AdmsNotFoundException.Create("Apprentice guardian", $"ApprenticeId {profile.Id}");
             }
             return guardian;
         }

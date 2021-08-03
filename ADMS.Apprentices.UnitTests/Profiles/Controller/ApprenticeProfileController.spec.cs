@@ -100,7 +100,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             {
                 Surname = message.Surname,
                 FirstName = message.FirstName,
-                BirthDate = message.BirthDate,
+                BirthDate = message.BirthDate.Value,
                 EmailAddress = message.EmailAddress,
                 ProfileTypeCode = message.ProfileType,
             };
@@ -166,7 +166,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(0);
         }
-       
+
         [TestMethod]
         public void ShouldReturnValidationErrorIfDisabiliyyStatusCodeNotValid()
         {

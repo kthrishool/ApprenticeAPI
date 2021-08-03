@@ -11,7 +11,6 @@ using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Adms.Shared.Exceptions;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
 {
@@ -50,7 +49,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             };
             Container.GetMock<IProfileValidator>()
                 .Setup(s => s.ValidateAsync(It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
         protected override async void When()
@@ -63,7 +62,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             profile.FirstName.Should().Be(message.FirstName);
             profile.Surname.Should().Be(message.Surname);
-            profile.BirthDate.Should().Be(message.BirthDate);
+            profile.BirthDate.Should().Be(message.BirthDate.Value);
             profile.GenderCode.Should().Contain(message.GenderCode);
             profile.ProfileTypeCode.Should().Be(message.ProfileType);
         }
@@ -318,7 +317,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         protected override void Given()
         {
             profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
-            profile.USIs.Add(new ApprenticeUSI { USI = "currentUSI", ActiveFlag = true });
+            profile.USIs.Add(new ApprenticeUSI {USI = "currentUSI", ActiveFlag = true});
             message = new UpdateProfileMessage
             {
                 Surname = ProfileConstants.Surname,
@@ -330,7 +329,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             };
             Container.GetMock<IProfileValidator>()
                 .Setup(s => s.ValidateAsync(It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
         protected override async void When()
@@ -363,9 +362,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public async Task ShouldAddNewUSIWithChangeReason()
         {
             //given
-            profile = new Profile { Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode };
+            profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
             profile.USIs.Clear();
-            profile.USIs.Add(new ApprenticeUSI { USI = "currentUSI", ActiveFlag = true, USIVerifyFlag = true });
+            profile.USIs.Add(new ApprenticeUSI {USI = "currentUSI", ActiveFlag = true, USIVerifyFlag = true});
 
             //when
             profile = await ClassUnderTest.Update(profile, message);
@@ -381,7 +380,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             //given
             profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname, GenderCode = ProfileConstants.GenderCode};
             profile.USIs.Clear();
-            profile.USIs.Add(new ApprenticeUSI { USI = "currentUSI", ActiveFlag = true });
+            profile.USIs.Add(new ApprenticeUSI {USI = "currentUSI", ActiveFlag = true});
             message = new UpdateProfileMessage
             {
                 Surname = ProfileConstants.Surname,

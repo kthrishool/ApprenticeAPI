@@ -6,7 +6,7 @@ using ADMS.Apprentices.Core.Models;
 namespace ADMS.Apprentices.Core.Services
 {
 	[RegisterWithIocContainer]
-	public interface IGuardianRetreiver
+	public interface IGuardianRetriever
 	{
 		Task<Guardian> GetAsync(int apprenticeId);
 	}

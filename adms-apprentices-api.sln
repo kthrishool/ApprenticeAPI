@@ -26,6 +26,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database.ADMSApprentice", "
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database.TYIMS", "Database.TYIMS\Database.TYIMS.sqlproj", "{7154A70A-4F09-46AC-9878-27C2D837B4B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADMS.Apprentices.IntegrationTests", "ADMS.Apprentices.IntegrationTests\ADMS.Apprentices.IntegrationTests.csproj", "{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -210,6 +212,30 @@ Global
 		{7154A70A-4F09-46AC-9878-27C2D837B4B7}.Uat|x86.ActiveCfg = Release|Any CPU
 		{7154A70A-4F09-46AC-9878-27C2D837B4B7}.Uat|x86.Build.0 = Release|Any CPU
 		{7154A70A-4F09-46AC-9878-27C2D837B4B7}.Uat|x86.Deploy.0 = Release|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Debug|x86.Build.0 = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Dev|Any CPU.Build.0 = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Dev|x86.ActiveCfg = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Dev|x86.Build.0 = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.PreProd|Any CPU.ActiveCfg = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.PreProd|Any CPU.Build.0 = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.PreProd|x86.ActiveCfg = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.PreProd|x86.Build.0 = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Prod|Any CPU.ActiveCfg = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Prod|Any CPU.Build.0 = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Prod|x86.ActiveCfg = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Prod|x86.Build.0 = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Release|x86.ActiveCfg = Release|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Release|x86.Build.0 = Release|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Uat|Any CPU.ActiveCfg = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Uat|Any CPU.Build.0 = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Uat|x86.ActiveCfg = Debug|Any CPU
+		{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}.Uat|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

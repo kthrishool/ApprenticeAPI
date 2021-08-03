@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
-using ADMS.Apprentices.Core.Entities;
-using Adms.Shared.Attributes;
 using System.Threading.Tasks;
-using ADMS.Apprentices.Core.TYIMS.Entities;
+using ADMS.Apprentices.Core.Entities;
 
 namespace ADMS.Apprentices.Core.Services.Validators
 {
-    [RegisterWithIocContainer]
+    /* NOTE: Do not use [RegisterWithIocContainer] as this interface has two implementations */
     public interface IQualificationValidator
     {
         //Task<ValidationExceptionBuilder> ValidateAsync(List<Qualification> qualifications);
-        Task<ValidationExceptionBuilder> ValidateAsync(Qualification qualification, Profile profile);
+        Task<ValidationExceptionBuilder> ValidateAsync(IQualificationAttributes qualification, Profile profile);
+
         ValidationExceptionBuilder CheckForDuplicates(List<Qualification> qualifications);
-        ValidationExceptionBuilder ValidateAgainstApprenticeshipQualification(Qualification qualification, Registration registration,Profile profile);
+        //  ValidationExceptionBuilder ValidateAgainstApprenticeshipQualification(Qualification qualification, Registration registration,Profile profile);
     }
 }

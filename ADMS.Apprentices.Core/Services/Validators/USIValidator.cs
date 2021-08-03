@@ -9,12 +9,10 @@ namespace ADMS.Apprentices.Core.Services.Validators
 {
     public class USIValidator : IUSIValidator
     {
-        private readonly IExceptionFactory exceptionFactory;
 
 
-        public USIValidator(IExceptionFactory exceptionFactory)
+        public USIValidator()
         {
-            this.exceptionFactory = exceptionFactory;
         }
 
         static readonly char[] validChars =
@@ -60,7 +58,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         public ValidationExceptionBuilder Validate(Profile profile)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder(exceptionFactory);
+            var exceptionBuilder = new ValidationExceptionBuilder();
             if (profile.USIs.Any(x => x.ActiveFlag == true))
             {
                 if (profile.USIs.Last(x => x.ActiveFlag == true).USI.Sanitise() == null) 

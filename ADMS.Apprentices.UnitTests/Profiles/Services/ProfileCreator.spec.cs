@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Messages;
@@ -9,7 +10,6 @@ using Adms.Shared;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Adms.Shared.Exceptions;
 using Moq;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
@@ -49,7 +49,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             };
             Container.GetMock<IProfileValidator>()
                 .Setup(s => s.ValidateAsync(It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidationExceptionBuilder(Container.GetMock<IExceptionFactory>().Object));
+                .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
         protected override async void When()
@@ -85,7 +85,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldSetTheBirthDate()
         {
-            profile.BirthDate.Should().Be(message.BirthDate);
+            profile.BirthDate.Should().Be(message.BirthDate.Value);
         }
 
         [TestMethod]
@@ -236,7 +236,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.Phones.Should().BeEmpty();
         }
 
-       
+
         [TestMethod]
         public async Task ShouldSetUSI()
         {

@@ -177,16 +177,11 @@ namespace ADMS.Apprentices.UnitTests.ApprenticeTFNs.Services
         [TestMethod]
         public void ShouldThrowNotFoundException()
         {
-            NotFoundException validationException = new(null, "TaxFileNumber", "99");
-
-            Container
-                .GetMock<IExceptionFactory>()
-                .Setup(r => r.CreateNotFoundException("TaxFileNumber", "99"))
-                .Returns(validationException);
+            // NotFoundException validationException = new(null, "TaxFileNumber", "99");
 
             ClassUnderTest
                 .Invoking(c => c.Get(99))
-                .Should().Throw<NotFoundException>().Where(e => e == validationException);
+                .Should().Throw<AdmsNotFoundException>();
 
         }
     }
