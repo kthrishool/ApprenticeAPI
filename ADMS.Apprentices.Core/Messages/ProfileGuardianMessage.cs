@@ -6,12 +6,12 @@ namespace ADMS.Apprentices.Core.Messages
     public class ProfileGuardianMessage
     {
         [Required(ErrorMessage = "Surname is required")]
-        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Surname must contain only letters, spaces, hyphens and apostrophies")]
+        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Surname must contain only letters, spaces, hyphens and apostrophes")]
         [MaxLength(50, ErrorMessage = "Surname exceeds 50 characters")]
         public string Surname { get; init; }
 
         [Required(ErrorMessage = "Firstname is required")]
-        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "First name must contain only letters, spaces, hyphens and apostrophies")]
+        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "First name must contain only letters, spaces, hyphens and apostrophes")]
         [MaxLength(50, ErrorMessage = "First name exceeds 50 characters")]
         public string FirstName { get; init; }
 

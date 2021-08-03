@@ -146,7 +146,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             message = CreateNewProfileMessage("Bob$", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(1);
-            lstErrors[0].ErrorMessage.Should().StartWith("Surname must contain only letters, spaces, hyphens and apostrophies");
+            lstErrors[0].ErrorMessage.Should().StartWith("Surname must contain only letters, spaces, hyphens and apostrophes");
         }
 
         [TestMethod]

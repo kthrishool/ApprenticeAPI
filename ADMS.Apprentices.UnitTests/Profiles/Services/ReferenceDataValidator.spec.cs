@@ -115,7 +115,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
 
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidIndegenousStatusCode);
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidIndigenousStatusCode);
 
             newProfile = new Profile();
             newProfile.IndigenousStatusCode = "1101";
@@ -127,7 +127,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public void ThrowsValidationExceptionIfIndegenousStatusIsInvalid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidIndegenousStatusCode);
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidIndigenousStatusCode);
 
             newProfile = new Profile();
             newProfile.IndigenousStatusCode = "dasdas";
@@ -254,7 +254,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             newProfile = new Profile();
             newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
 
-            ResetExceptionforExceptionValidation(ValidationExceptionType.PhonePreferredContactisInvalid, newProfile);
+            ResetExceptionforExceptionValidation(ValidationExceptionType.PhonePreferredContactIsInvalid, newProfile);
         }
 
         #region PreferredContactType
@@ -334,7 +334,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             newProfile = new Profile {PreferredContactType = PreferredContactType.EMAIL.ToString(), EmailAddress = null};
 
-            ResetExceptionforExceptionValidation(ValidationExceptionType.EmailPreferredContactisInvalid, newProfile);
+            ResetExceptionforExceptionValidation(ValidationExceptionType.EmailPreferredContactIsInvalid, newProfile);
         }
 
         [TestMethod]
@@ -343,7 +343,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             newProfile = new Profile {PreferredContactType = PreferredContactType.MAIL.ToString()};
             newProfile.Addresses.Clear();
 
-            ResetExceptionforExceptionValidation(ValidationExceptionType.MailPreferredContactisInvalid, newProfile);
+            ResetExceptionforExceptionValidation(ValidationExceptionType.MailPreferredContactIsInvalid, newProfile);
         }
 
         [TestMethod]
@@ -351,7 +351,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             newProfile = new Profile {PreferredContactType = PreferredContactType.MAIL.ToString()};
 
-            ResetExceptionforExceptionValidation(ValidationExceptionType.MailPreferredContactisInvalid, newProfile);
+            ResetExceptionforExceptionValidation(ValidationExceptionType.MailPreferredContactIsInvalid, newProfile);
         }
 
         [TestMethod]

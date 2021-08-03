@@ -7,20 +7,20 @@ namespace ADMS.Apprentices.Core.Messages
     public record ProfileMessage
     {
         [Required(ErrorMessage = "Surname is required")]
-        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Surname must contain only letters, spaces, hyphens and apostrophies")]
+        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Surname must contain only letters, spaces, hyphens and apostrophes")]
         [MaxLength(50, ErrorMessage = "Surname cannot have more than 50 characters")]
         public string Surname { get; init; }
 
         [Required(ErrorMessage = "First name is required")]
-        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "First name must contain only letters, spaces, hyphens and apostrophies")]
+        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "First name must contain only letters, spaces, hyphens and apostrophes")]
         [MaxLength(50, ErrorMessage = "First nme cannot have more than 50 characters")]
         public string FirstName { get; init; }
 
-        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Other names must contain only letters, spaces, hyphens and apostrophies")]
+        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Other names must contain only letters, spaces, hyphens and apostrophes")]
         [MaxLength(50, ErrorMessage = "Other names cannot have more than 50 characters")]
         public string OtherNames { get; init; }
 
-        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Preferred name must contain only letters, spaces, hyphens and apostrophies")]
+        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Preferred name must contain only letters, spaces, hyphens and apostrophes")]
         [MaxLength(50, ErrorMessage = "Preferred name cannot have more than 50 characters")]
         public string PreferredName { get; init; }
 

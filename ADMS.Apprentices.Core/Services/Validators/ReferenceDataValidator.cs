@@ -48,19 +48,19 @@ namespace ADMS.Apprentices.Core.Services.Validators
                 case nameof(PreferredContactType.PHONE):
                     if (profile.Phones.Any() == false)
                     {
-                        exceptionBuilder.AddException(ValidationExceptionType.PhonePreferredContactisInvalid);
+                        exceptionBuilder.AddException(ValidationExceptionType.PhonePreferredContactIsInvalid);
                     }
                     break;
                 case nameof(PreferredContactType.EMAIL):
                     if (string.IsNullOrEmpty(profile.EmailAddress))
                     {
-                        exceptionBuilder.AddException(ValidationExceptionType.EmailPreferredContactisInvalid);
+                        exceptionBuilder.AddException(ValidationExceptionType.EmailPreferredContactIsInvalid);
                     }
                     break;
                 case nameof(PreferredContactType.MAIL):
                     if (profile.Addresses.Any() == false)
                     {
-                        exceptionBuilder.AddException(ValidationExceptionType.MailPreferredContactisInvalid);
+                        exceptionBuilder.AddException(ValidationExceptionType.MailPreferredContactIsInvalid);
                     }
                     break;
                 default:
@@ -89,7 +89,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
             }
             if (!string.IsNullOrEmpty(profile.IndigenousStatusCode))
             {
-                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.IndigenousStatusCode, profile.IndigenousStatusCode, ValidationExceptionType.InvalidIndegenousStatusCode));
+                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.IndigenousStatusCode, profile.IndigenousStatusCode, ValidationExceptionType.InvalidIndigenousStatusCode));
             }
             if (!string.IsNullOrEmpty(profile.CitizenshipCode))
             {

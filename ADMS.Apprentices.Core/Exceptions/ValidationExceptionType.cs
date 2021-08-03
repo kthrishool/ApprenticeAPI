@@ -68,7 +68,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         InvalidHighestSchoolLevelCode,
 
         [ExceptionDetails("AP-VAL-0021", "Invalid indigenous status code")]
-        InvalidIndegenousStatusCode,
+        InvalidIndigenousStatusCode,
 
         [ExceptionDetails("AP-VAL-0022", "Invalid citizenship code")]
         InvalidCitizenshipCode,
@@ -77,13 +77,13 @@ namespace ADMS.Apprentices.Core.Exceptions
         MobilePreferredContactIsInvalid,
 
         [ExceptionDetails("AP-VAL-0024", "Missing email address for preferred contact")]
-        EmailPreferredContactisInvalid,
+        EmailPreferredContactIsInvalid,
 
         [ExceptionDetails("AP-VAL-0025", "Missing phone details for preferred contact")]
-        PhonePreferredContactisInvalid,
+        PhonePreferredContactIsInvalid,
 
         [ExceptionDetails("AP-VAL-0026", "Missing address details for preferred contact")]
-        MailPreferredContactisInvalid,
+        MailPreferredContactIsInvalid,
 
         [ExceptionDetails("AP-VAL-0027", "Invalid preferred contact type code")]
         InvalidPreferredContactCode,
