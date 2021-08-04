@@ -78,8 +78,6 @@ stages:
             value: '$(AdmsApprenticesSwaggerPrefix)'
           - name: "OurEnvironmentSettings.SwaggerPath"
             value: '$(AdmsApprenticesSwaggerPath)'
-          - name: "OurDatabaseSettings.DatabaseConnectionString"
-            value: '$(AdmsTrainingContractsConnectionString)'
           - ${{if eq(env, 'Staging')}}:
             - name: "OurUSISettings.USIVerifyDisabled" #Disable the USI verification in staging
               value: true
