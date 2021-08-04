@@ -7,7 +7,7 @@ trigger:
 parameters:
   - name: environments
     type: object
-    default: ['Dev', 'Test', 'LoadTest', 'Staging']
+    default: ['Dev', 'Test']
 
 resources:
   repositories:
@@ -46,7 +46,7 @@ stages:
     - ${{if ne(env, 'Staging')}}:
       - stage: DeployDatabase_${{ env }}
         dependsOn: BuildDatabase
-        condition: and(succeeded(), eq(variables['deploy${{ env }}'], 'true'))
+#        condition: and(succeeded(), eq(variables['deploy${{ env }}'], 'true'))
         jobs:
         - template: /Jobs/Release/database.yml@db-templates
           parameters:
@@ -61,7 +61,7 @@ stages:
         dependsOn: DeployDatabase_${{ env }}
       ${{if eq(env, 'Staging')}}:
         dependsOn: BuildDatabase
-      condition: and(succeeded(), eq(variables['deploy${{ env }}'], 'true'))
+#      condition: and(succeeded(), eq(variables['deploy${{ env }}'], 'true'))
       variables:
           - template: /Variables/Adms/${{ env }}_API_Variables.yml@templates
           - name: admsApplicationName
@@ -94,12 +94,10 @@ stages:
             installDir: $(admsInstallDir)
             takeAppOffline: true
             hostName: ${{ variables.hostName }}
-            ${{if ne(env, 'Staging')}}:
-              webAppPoolUsername: "$(webAppPoolUsername)"
-              webAppPoolPassword: "$(webAppPoolPassword)"
-            ${{if eq(env, 'Staging')}}:
-              webAppPoolUsername: "$(ApprenticeAPI_GMSASTG)"
+            webAppPoolUsername: "$(webAppPoolUsername)"
+            webAppPoolPassword: "$(webAppPoolPassword)"
             anonymousAuthentication: true
             windowsAuthentication: false
             webApplicationName: '$(admsApplicationName)'      
             listSites: true
+            freshInstall: true
