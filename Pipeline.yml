@@ -20,6 +20,9 @@ resources:
       type: git
       name: 'Database Management/PipelineTemplates'      
 
+variables:
+  - template: /Variables/Adms/Deploy_Flag_Variables.yml@templates
+  
 stages:
   - template: Pipelines/website.yml@templates
     parameters:
