@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
+using ADMS.Apprentices.Api.Configuration;
 using ADMS.Apprentices.Core.Messages.TFN;
 using ADMS.Apprentices.Core.Services;
 using Adms.Shared;
-using Adms.Shared.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ADMS.Apprentices.Api.Configuration;
 
 namespace ADMS.Apprentices.Api.Controllers.Tfn
 {
@@ -65,7 +64,7 @@ namespace ADMS.Apprentices.Api.Controllers.Tfn
         /// <param name="message">Details of the tfn to be created</param>
         /// <response code="201">Returns newly created tfn</response>
         [HttpPost]
-        [DuplicateRequestCheck("TFNCreate")]
+        // [DuplicateRequestCheck("TFNCreate")]
         [Consumes("application/json", "application/xml", "text/xml")]
         [Produces("application/json", "application/xml")]
         [ProducesResponseType(StatusCodes.Status201Created)]
