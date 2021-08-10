@@ -137,6 +137,34 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         }
 
         [TestMethod]
+        public void DoesNothingIfUSIExemptionReasonCodeIsValid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "NOUSI", Description = "test", });
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidNotProvidingUSIReasonCode);
+
+            newProfile = new Profile();
+            newProfile.NotProvidingUSIReasonCode = "NOUSI";
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
+        }
+
+
+        [TestMethod]
+        public void ThrowsValidationExceptionIfUSIExemptionReasonCodeIsInvalid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            //list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "NOUSI", Description = "test", });
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidNotProvidingUSIReasonCode);
+
+            newProfile = new Profile();
+            newProfile.NotProvidingUSIReasonCode = "dasdas";
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeTrue());
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
+                .Should().Throw<AdmsValidationException>();
+        }
+
+        [TestMethod]
         public void DoesNothingIfCitizenshipCodeIsValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();

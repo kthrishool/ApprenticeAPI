@@ -25,7 +25,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
         }
 
 
-        private async Task ValidateCode(ValidationExceptionBuilder exceptionBuilder, String CodeName, string codevalue, ValidationExceptionType exception)
+        private async Task ValidateCodeAsync(ValidationExceptionBuilder exceptionBuilder, String CodeName, string codevalue, ValidationExceptionType exception)
         {
             IList<ListCodeResponseV1> validCodes = await referenceDataClient.GetListCodes(CodeName, codevalue, true, true);
             if (!validCodes.Any())
@@ -77,23 +77,27 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
             if (!string.IsNullOrEmpty(profile.CountryOfBirthCode))
             {
-                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.Country, profile.CountryOfBirthCode, ValidationExceptionType.InvalidCountryCode));
+                tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.Country, profile.CountryOfBirthCode, ValidationExceptionType.InvalidCountryCode));
             }
             if (!string.IsNullOrEmpty(profile.LanguageCode))
             {
-                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.Language, profile.LanguageCode, ValidationExceptionType.InvalidLanguageCode));
+                tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.Language, profile.LanguageCode, ValidationExceptionType.InvalidLanguageCode));
             }
             if (!string.IsNullOrEmpty(profile.HighestSchoolLevelCode))
             {
-                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.SchoolLevel, profile.HighestSchoolLevelCode, ValidationExceptionType.InvalidHighestSchoolLevelCode));
+                tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.SchoolLevel, profile.HighestSchoolLevelCode, ValidationExceptionType.InvalidHighestSchoolLevelCode));
             }
             if (!string.IsNullOrEmpty(profile.IndigenousStatusCode))
             {
-                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.IndigenousStatusCode, profile.IndigenousStatusCode, ValidationExceptionType.InvalidIndigenousStatusCode));
+                tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.IndigenousStatusCode, profile.IndigenousStatusCode, ValidationExceptionType.InvalidIndigenousStatusCode));
             }
             if (!string.IsNullOrEmpty(profile.CitizenshipCode))
             {
-                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.CitizenshipCode, profile.CitizenshipCode, ValidationExceptionType.InvalidCitizenshipCode));
+                tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.CitizenshipCode, profile.CitizenshipCode, ValidationExceptionType.InvalidCitizenshipCode));
+            }
+            if (!string.IsNullOrEmpty(profile.NotProvidingUSIReasonCode))
+            {
+                tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.USIExemptionCode, profile.NotProvidingUSIReasonCode, ValidationExceptionType.InvalidNotProvidingUSIReasonCode));
             }
             if (!string.IsNullOrEmpty(profile.PreferredContactType))
             {
@@ -109,7 +113,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
             if (!priorApprenticeship.CountryCode.IsNullOrEmpty())
             {
-                await ValidateCode(exceptionBuilder, CodeTypes.Country, priorApprenticeship.CountryCode, ValidationExceptionType.InvalidPriorApprenticeshipCountryCode);
+                await ValidateCodeAsync(exceptionBuilder, CodeTypes.Country, priorApprenticeship.CountryCode, ValidationExceptionType.InvalidPriorApprenticeshipCountryCode);
                 if (priorApprenticeship.CountryCode == "1101")
                 {
                     if (priorApprenticeship.StateCode.IsNullOrEmpty())
@@ -131,11 +135,11 @@ namespace ADMS.Apprentices.Core.Services.Validators
             var tasks = new List<Task>();
             if (!qualification.QualificationLevel.IsNullOrEmpty())
             {
-                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.QualificationLevel, qualification.QualificationLevel, ValidationExceptionType.InvalidQualificationLevel));
+                tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.QualificationLevel, qualification.QualificationLevel, ValidationExceptionType.InvalidQualificationLevel));
             }
             if (!qualification.QualificationANZSCOCode.IsNullOrEmpty())
             {
-                tasks.Add(ValidateCode(exceptionBuilder, CodeTypes.ANZSCOCode, qualification.QualificationANZSCOCode, ValidationExceptionType.InvalidQualificationANZSCO));
+                tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.ANZSCOCode, qualification.QualificationANZSCOCode, ValidationExceptionType.InvalidQualificationANZSCO));
             }
             await tasks.WaitAndThrowAnyExceptionFound();
             return exceptionBuilder;

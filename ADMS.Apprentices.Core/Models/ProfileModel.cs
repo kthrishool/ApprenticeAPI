@@ -39,6 +39,7 @@ namespace ADMS.Apprentices.Core.Models
         public ProfileUSIModel USIVerificationResult { get; set; }
         public string USI { get; set; }
         public string USIChangeReason { get; set; }
+        public string NotProvidingUSIReasonCode { get; set; }
         public DateTime? CreatedOn { get; }
         public string CreatedBy { get; }
         public DateTime? UpdatedOn { get; }
@@ -111,6 +112,7 @@ namespace ADMS.Apprentices.Core.Models
                 USI = USIVerificationResult.USI;
                 USIChangeReason = USIVerificationResult.USIChangeReason;
             }
+            NotProvidingUSIReasonCode = apprentice.NotProvidingUSIReasonCode;
         }
     }
 }
