@@ -62,6 +62,8 @@ namespace ADMS.Apprentices.Database.Mappings
                 .HasColumnName("ActiveFlag");
             entity.Property(e => e.DeceasedFlag)
                 .HasColumnName("DeceasedFlag");
+            entity.Property(e => e.USIExemptionReasonCode)
+                .HasColumnName("USIExemptionReasonCode ");
             entity.Property(x => x.Version)
                 .HasColumnName("Version")
                 .IsRequired()

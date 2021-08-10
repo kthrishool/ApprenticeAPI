@@ -4,6 +4,7 @@ using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Exceptions;
 using ADMS.Apprentices.Core.Helpers;
 using Adms.Shared.Exceptions;
+using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentices.Core.Services.Validators
 {
@@ -58,14 +59,21 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         public ValidationExceptionBuilder Validate(Profile profile)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder();
+            var exceptionBuilder = new ValidationExceptionBuilder();            
             if (profile.USIs.Any(x => x.ActiveFlag == true))
             {
-                if (profile.USIs.Last(x => x.ActiveFlag == true).USI.Sanitise() == null) 
-                    exceptionBuilder.AddException(ValidationExceptionType.InvalidUSI);
+                var activeUSI = profile.USIs.Last(x => x.ActiveFlag == true).USI.Sanitise();
                 
-                if (!exceptionBuilder.HasExceptions() && !VerifyKey(profile.USIs.Last(x => x.ActiveFlag == true).USI.Sanitise()))
+                if (activeUSI == null) // cannot hit this one, as USI is not nullable now in DB
                     exceptionBuilder.AddException(ValidationExceptionType.InvalidUSI);
+
+                if (!exceptionBuilder.HasExceptions() && !VerifyKey(activeUSI))
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidUSI);
+            }
+            else
+            {
+                if (profile.USIExemptionReasonCode.IsNullOrEmpty())
+                    exceptionBuilder.AddException(ValidationExceptionType.MissingUSIExemptionReason);
             }
             return exceptionBuilder;
         }

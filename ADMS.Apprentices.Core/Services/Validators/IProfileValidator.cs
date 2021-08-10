@@ -8,7 +8,6 @@ namespace ADMS.Apprentices.Core.Services.Validators
     public interface IProfileValidator
     {
         Task<ValidationExceptionBuilder> ValidateAsync(Profile profile);
-
        
     }
 }

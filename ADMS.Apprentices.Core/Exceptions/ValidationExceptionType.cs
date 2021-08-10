@@ -106,7 +106,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0034", "Duplicate qualification identified")]
         DuplicateQualification,
 
-        [ExceptionDetails("AP-VAL-0035", "Invalid USI code ")]
+        [ExceptionDetails("AP-VAL-0035", "Invalid USI code")]
         InvalidUSI,
 
         [ExceptionDetails("AP-VAL-0036", "CRN exceeds 10 characters")]
@@ -175,7 +175,13 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0056", "Invalid country code in prior apprenticeship")]
         InvalidPriorApprenticeshipCountryCode,
 
-        [ExceptionDetails("AP-VAL-0056", "Invalid Australian state code in prior apprenticeship")]
-        InvalidPriorApprenticeshipAustralianStateCode
+        [ExceptionDetails("AP-VAL-0057", "Invalid Australian state code in prior apprenticeship")]
+        InvalidPriorApprenticeshipAustralianStateCode,
+
+        [ExceptionDetails("AP-VAL-0058", "A USI or the reason for not providing USI must be provided")]
+        MissingUSIExemptionReason,
+
+        [ExceptionDetails("AP-VAL-0059", "Invalid USI exemption reason code")]
+        InvalidUSIExemptionReasonCode,
     }
 }

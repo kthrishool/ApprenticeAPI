@@ -8,6 +8,7 @@ using Adms.Shared.Exceptions;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
 {
@@ -18,9 +19,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     {
         private Profile profile;
         private ApprenticeUSI apprenticeUSI;
-        private ValidationException validationException;
-
-
+       
         protected override void Given()
         {
             profile = new Profile();
@@ -30,14 +29,28 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 ActiveFlag = true
             };
             profile.USIs.Add(apprenticeUSI);
-            validationException = new ValidationException(null, (ValidationError) null);
+            
         }
 
         [TestMethod]
-        public void NoExceptionIfUSIIsNull()
+        public void ThrowsExceptionIfUSIIsNullAndNoExemptionReason()
+        {            
+            profile = new Profile();
+            ClassUnderTest.Invoking(c => ( c.Validate(profile)).HasExceptions().Should().BeTrue());
+            ClassUnderTest
+                .Invoking(c => c.Validate(profile).ThrowAnyExceptions())
+                .Should().Throw<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void NoExceptionIfUSIIsNullAndExemptionReasonProvided()
         {
             profile = new Profile();
-            ClassUnderTest.Validate(profile).ThrowAnyExceptions();
+            profile.USIExemptionReasonCode = "NOUSI";
+            ClassUnderTest.Invoking(c => (c.Validate(profile)).HasExceptions().Should().BeFalse());
+            ClassUnderTest
+                .Invoking(c => c.Validate(profile).ThrowAnyExceptions())
+                .Should().NotThrow<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -69,16 +82,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         private void ThrowExceptionForUsiTest(Profile profile)
         {
             RunNegativeUSIText(profile);
-        }
-
-        [TestMethod]
-        public void DoesNothingIfUSIIsNull()
-        {
-            RunPositiveUSITest(new Profile());
-        }
-
-        /// <summary>
-        /// </summary>
+        }       
+       
         [TestMethod]
         public void ThrowsValidationExceptionIfUSIIsNull()
         {
