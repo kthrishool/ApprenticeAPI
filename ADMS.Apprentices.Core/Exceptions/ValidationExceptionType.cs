@@ -181,7 +181,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0058", "A USI or the reason for not providing USI must be provided")]
         MissingUSIExemptionReason,
 
-        [ExceptionDetails("AP-VAL-0059", "Invalid USI exemption reason code")]
+        [ExceptionDetails("AP-VAL-0059", "Invalid reason code for not providing USI")]
         InvalidUSIExemptionReasonCode,
     }
 }
