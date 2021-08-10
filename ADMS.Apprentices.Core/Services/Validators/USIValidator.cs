@@ -72,7 +72,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
             }
             else
             {
-                if (profile.USIExemptionReasonCode.IsNullOrEmpty())
+                if (profile.NotPovidingUSIReasonCode.IsNullOrEmpty())
                     exceptionBuilder.AddException(ValidationExceptionType.MissingUSIExemptionReason);
             }
             return exceptionBuilder;

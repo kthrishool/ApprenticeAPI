@@ -142,10 +142,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "NOUSI", Description = "test", });
 
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidUSIExemptionReasonCode);
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidNotPovidingUSIReasonCode);
 
             newProfile = new Profile();
-            newProfile.USIExemptionReasonCode = "NOUSI";
+            newProfile.NotPovidingUSIReasonCode = "NOUSI";
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
         }
 
@@ -155,10 +155,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             //list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "NOUSI", Description = "test", });
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidUSIExemptionReasonCode);
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidNotPovidingUSIReasonCode);
 
             newProfile = new Profile();
-            newProfile.USIExemptionReasonCode = "dasdas";
+            newProfile.NotPovidingUSIReasonCode = "dasdas";
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeTrue());
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();

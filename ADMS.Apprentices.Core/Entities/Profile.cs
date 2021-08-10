@@ -27,7 +27,7 @@ namespace ADMS.Apprentices.Core.Entities
         public string LanguageCode { get; set; }
         public bool? InterpretorRequiredFlag { get; set; }
         public bool DeceasedFlag { get; set; }
-        public string USIExemptionReasonCode { get; set; }
+        public string NotPovidingUSIReasonCode { get; set; }
         public string CustomerReferenceNumber { get; set; }
         public bool ActiveFlag { get; set; }
         public DateTime? CreatedOn { get; set; }

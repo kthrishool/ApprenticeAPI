@@ -85,7 +85,7 @@ namespace ADMS.Apprentices.Core.Messages
         [Display(Name = "Apprentice USI")]
         public string USI { get; init; }
 
-        [MaxLength(10, ErrorMessage = "USI exemption reason code cannot have more than 10 characters")]
-        public string USIExemptionReasonCode { get; init; }
+        [MaxLength(10, ErrorMessage = "Reason code for not providing USI cannot have more than 10 characters")]
+        public string NotPovidingUSIReasonCode { get; init; }
     }
 }

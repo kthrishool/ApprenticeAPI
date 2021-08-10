@@ -46,7 +46,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public void NoExceptionIfUSIIsNullAndExemptionReasonProvided()
         {
             profile = new Profile();
-            profile.USIExemptionReasonCode = "NOUSI";
+            profile.NotPovidingUSIReasonCode = "NOUSI";
             ClassUnderTest.Invoking(c => (c.Validate(profile)).HasExceptions().Should().BeFalse());
             ClassUnderTest
                 .Invoking(c => c.Validate(profile).ThrowAnyExceptions())
