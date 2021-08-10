@@ -20,7 +20,7 @@
     [LanguageCode]                    VARCHAR (10)    NULL,
     [InterpretorRequiredFlag]         BIT             NULL,
     [CustomerReferenceNumber]         VARCHAR (10)    NULL,
-    [NotPovidingUSIReasonCode]        VARCHAR (10)    NULL,  
+    [NotProvidingUSIReasonCode]        VARCHAR (10)    NULL,  
     [NewApprenticeId]                 INT             NULL,
     [DuplicateDate]                   DATETIME2 (0)   NULL,
     [DuplicateApprovedBy]             NVARCHAR (1024) NULL,

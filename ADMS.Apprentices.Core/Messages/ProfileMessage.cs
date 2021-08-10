@@ -86,6 +86,6 @@ namespace ADMS.Apprentices.Core.Messages
         public string USI { get; init; }
 
         [MaxLength(10, ErrorMessage = "Reason code for not providing USI cannot have more than 10 characters")]
-        public string NotPovidingUSIReasonCode { get; init; }
+        public string NotProvidingUSIReasonCode { get; init; }
     }
 }

@@ -67,12 +67,15 @@ namespace ADMS.Apprentices.Core.Services.Validators
                 if (activeUSI == null) // cannot hit this one, as USI is not nullable now in DB
                     exceptionBuilder.AddException(ValidationExceptionType.InvalidUSI);
 
+                if (!activeUSI.IsNullOrEmpty() && !profile.NotProvidingUSIReasonCode.IsNullOrEmpty())
+                    exceptionBuilder.AddException(ValidationExceptionType.MissingUSIExemptionReason);
+
                 if (!exceptionBuilder.HasExceptions() && !VerifyKey(activeUSI))
                     exceptionBuilder.AddException(ValidationExceptionType.InvalidUSI);
             }
             else
             {
-                if (profile.NotPovidingUSIReasonCode.IsNullOrEmpty())
+                if (profile.NotProvidingUSIReasonCode.IsNullOrEmpty())
                     exceptionBuilder.AddException(ValidationExceptionType.MissingUSIExemptionReason);
             }
             return exceptionBuilder;

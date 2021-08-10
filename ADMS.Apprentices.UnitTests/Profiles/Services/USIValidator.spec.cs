@@ -43,10 +43,27 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         }
 
         [TestMethod]
+        public void ThrowsExceptionIfUSIAndExemptionReasonAreNotNull()
+        {
+            profile = new Profile();
+            profile.NotProvidingUSIReasonCode = "NOUSI";
+            apprenticeUSI = new ApprenticeUSI()
+            {
+                USI = "test",
+                ActiveFlag = true
+            };
+            profile.USIs.Add(apprenticeUSI);
+            ClassUnderTest.Invoking(c => (c.Validate(profile)).HasExceptions().Should().BeTrue());
+            ClassUnderTest
+                .Invoking(c => c.Validate(profile).ThrowAnyExceptions())
+                .Should().Throw<AdmsValidationException>();
+        }
+
+        [TestMethod]
         public void NoExceptionIfUSIIsNullAndExemptionReasonProvided()
         {
             profile = new Profile();
-            profile.NotPovidingUSIReasonCode = "NOUSI";
+            profile.NotProvidingUSIReasonCode = "NOUSI";
             ClassUnderTest.Invoking(c => (c.Validate(profile)).HasExceptions().Should().BeFalse());
             ClassUnderTest
                 .Invoking(c => c.Validate(profile).ThrowAnyExceptions())

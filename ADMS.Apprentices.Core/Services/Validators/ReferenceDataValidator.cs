@@ -95,9 +95,9 @@ namespace ADMS.Apprentices.Core.Services.Validators
             {
                 tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.CitizenshipCode, profile.CitizenshipCode, ValidationExceptionType.InvalidCitizenshipCode));
             }
-            if (!string.IsNullOrEmpty(profile.NotPovidingUSIReasonCode))
+            if (!string.IsNullOrEmpty(profile.NotProvidingUSIReasonCode))
             {
-                tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.USIExemptionCode, profile.NotPovidingUSIReasonCode, ValidationExceptionType.InvalidNotPovidingUSIReasonCode));
+                tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.USIExemptionCode, profile.NotProvidingUSIReasonCode, ValidationExceptionType.InvalidNotProvidingUSIReasonCode));
             }
             if (!string.IsNullOrEmpty(profile.PreferredContactType))
             {
