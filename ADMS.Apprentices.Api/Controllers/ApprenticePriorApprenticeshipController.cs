@@ -23,7 +23,6 @@ namespace ADMS.Apprentices.Api.Controllers
     public class ApprenticePriorApprenticeshipController : ControllerBase
     {
         private readonly IRepository repository;
-
         private readonly IPriorApprenticeshipCreator priorApprenticeshipCreator;
         private readonly IPriorApprenticeshipUpdater priorApprenticeshipUpdater;
 
@@ -43,8 +42,6 @@ namespace ADMS.Apprentices.Api.Controllers
         /// List all prior apprenticeships for an apprentice.
         /// </summary>
         /// <param name="apprenticeId">Id of the apprentice</param>
-        /// TODO DB design needs to be completed for this end point to work.
-        /// EndPoint will be decorated with the role below when DB design is complete
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
         [HttpGet]
         public async Task<ActionResult<ProfileQualificationModel[]>> List(int apprenticeId)
@@ -58,9 +55,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// Gets all information of a given prior apprenticeships id.
         /// </summary>
         /// <param name="apprenticeId">Id of the apprentice</param>
-        /// <param name="id">Id of the apprenticeship</param>
-        /// TODO: DB design needs to be completed for this end point to work.
-        /// EndPoint will be decorated with the role below when DB design is complete
+        /// <param name="id">Id of the prior apprenticeship</param>
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfilePriorApprenticeshipModel>> Get(int apprenticeId, int id)
@@ -74,9 +69,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// Adds a new prior apprenticeship for an apprentice
         /// </summary>
         /// <param name="apprenticeId">Id of the apprentice</param>
-        /// <param name="message">Details of the apprenticeship to be created</param>
-        /// TODO: DB design needs to be completed for this end point to work.
-        /// EndPoint will be decorated with the role below when DB design is complete
+        /// <param name="message">Details of the prior apprenticeship to be created</param>
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPost]
         public async Task<ActionResult<ProfilePriorApprenticeshipModel>> Create(int apprenticeId, [FromBody] ProfilePriorApprenticeshipMessage message)
@@ -92,13 +85,11 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <param name="apprenticeId">Id of the apprentice</param>
         /// <param name="id">Id of the prior apprenticeship to be updated</param>
         /// <param name="message">Details of the information to be updated</param>
-        /// TODO: DB design needs to be completed for this end point to work.
-        /// EndPoint will be decorated with the role below when DB design is complete
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPut("{id}")]
         public async Task<ActionResult<ProfilePriorApprenticeshipModel>> Update(int apprenticeId, int id, [FromBody] ProfilePriorApprenticeshipMessage message)
         {
-            // Need to throw an error if profile cannot be found as qualification validator doesn't support a profile with a null value.
+            // Need to throw an error if profile cannot be found as prior apprenticeship validator doesn't support a profile with a null value.
             var profile = await repository.GetAsync<Profile>(apprenticeId, true);
             var priorApprenticeship = await priorApprenticeshipUpdater.Update(apprenticeId, id, message, profile);
             await repository.SaveAsync();
@@ -109,9 +100,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// Removes a qualification from an apprentice profile
         /// </summary>
         /// <param name="apprenticeId">Id of the apprentice</param>
-        /// <param name="id">Id of the apprenticeship to be removed</param>
-        /// TODO: DB design needs to be completed for this end point to work.
-        /// EndPoint will be decorated with the role below when DB design is complete
+        /// <param name="id">Id of the prior apprenticeship to be removed</param>
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Remove(int apprenticeId, int id)
