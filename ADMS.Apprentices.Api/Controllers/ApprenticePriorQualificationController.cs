@@ -1,16 +1,14 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using ADMS.Apprentices.Api.Configuration;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Messages;
 using ADMS.Apprentices.Core.Models;
 using ADMS.Apprentices.Core.Services;
 using Adms.Shared;
 using Adms.Shared.Extensions;
-using Adms.Shared.Helpers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ADMS.Apprentices.Api.Configuration;
 
 namespace ADMS.Apprentices.Api.Controllers
 {
@@ -18,21 +16,21 @@ namespace ADMS.Apprentices.Api.Controllers
     /// Apprentice qualification endpoints of a given apprentice.
     /// </summary>
     [ApiController]
-    [Route("api/v1/apprentices/{apprenticeId}/qualifications")]
-    [Route("api/apprentices/{apprenticeId}/qualifications")]
+    [Route("api/v1/apprentices/{apprenticeId}/prior-qualifications")]
+    [Route("api/apprentices/{apprenticeId}/prior-qualifications")]
     [Produces("application/json")]
     [Consumes("application/json")]
-    public class ApprenticeQualificationController : ControllerBase
+    public class ApprenticePriorQualificationController : ControllerBase
     {
         private readonly IRepository repository;
-        private readonly IQualificationCreator qualificationCreator;
-        private readonly IQualificationUpdater qualificationUpdater;
+        private readonly IPriorQualificationCreator qualificationCreator;
+        private readonly IPriorQualificationUpdater qualificationUpdater;
 
         /// <summary>Constructor</summary>
-        public ApprenticeQualificationController(
+        public ApprenticePriorQualificationController(
             IRepository repository,
-            IQualificationCreator qualificationCreator,
-            IQualificationUpdater qualificationUpdater
+            IPriorQualificationCreator qualificationCreator,
+            IPriorQualificationUpdater qualificationUpdater
         )
         {
             this.repository = repository;
@@ -49,7 +47,7 @@ namespace ADMS.Apprentices.Api.Controllers
         public async Task<ActionResult<ProfileQualificationModel[]>> List(int apprenticeId)
         {
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
-            ProfileQualificationModel[] models = profile.Qualifications.Map(a => new ProfileQualificationModel(a)).ToArray();
+            ProfileQualificationModel[] models = profile.PriorQualifications.Map(a => new ProfileQualificationModel(a)).ToArray();
             return Ok(models);
         }
 
@@ -63,7 +61,7 @@ namespace ADMS.Apprentices.Api.Controllers
         public async Task<ActionResult<ProfileQualificationModel>> Get(int apprenticeId, int id)
         {
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
-            Qualification qualification = profile.Qualifications.Get(q => q.Id, id);
+            PriorQualification qualification = profile.PriorQualifications.Get(q => q.Id, id);
             return Ok(new ProfileQualificationModel(qualification));
         }
 
@@ -74,13 +72,13 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <param name="message">Details of the qualification to be created</param>
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPost]
-        public async Task<ActionResult<ProfileQualificationModel>> Create(int apprenticeId, [FromBody] ProfileQualificationMessage message)
+        public async Task<ActionResult<ProfileQualificationModel>> Create(int apprenticeId, [FromBody] ProfilePriorQualificationMessage message)
         {
-            Qualification qualification = await qualificationCreator.CreateAsync(apprenticeId, message);
+            PriorQualification qualification = await qualificationCreator.CreateAsync(apprenticeId, message);
             await repository.SaveAsync();
             return Created($"/{qualification.Id}", new ProfileQualificationModel(qualification));
         }
-        
+
         /// <summary>
         /// Updates an existing qualification claim application.
         /// </summary>
@@ -89,7 +87,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <param name="message">Details of the information to be updated</param>
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPut("{id}")]
-        public async Task<ActionResult<ProfileQualificationModel>> Update(int apprenticeId, int id, [FromBody] ProfileQualificationMessage message)
+        public async Task<ActionResult<ProfileQualificationModel>> Update(int apprenticeId, int id, [FromBody] ProfilePriorQualificationMessage message)
         {
             var qualification = await qualificationUpdater.Update(apprenticeId, id, message);
             await repository.SaveAsync();
@@ -106,8 +104,8 @@ namespace ADMS.Apprentices.Api.Controllers
         public async Task<ActionResult> Remove(int apprenticeId, int id)
         {
             Profile profile = await repository.GetAsync<Profile>(apprenticeId);
-            Qualification qualification = profile.Qualifications.Get(q => q.Id, id);
-            profile.Qualifications.Remove(qualification);
+            PriorQualification qualification = profile.PriorQualifications.Get(q => q.Id, id);
+            profile.PriorQualifications.Remove(qualification);
             await repository.SaveAsync();
             return new NoContentResult();
         }

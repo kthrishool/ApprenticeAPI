@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ADMS.Apprentices.Database.Mappings
 {
-    internal class QualificationMapping : IEntityTypeConfiguration<Qualification>
+    internal class PriorQualificationMapping : IEntityTypeConfiguration<PriorQualification>
     {
-        public void Configure(EntityTypeBuilder<Qualification> entity)
+        public void Configure(EntityTypeBuilder<PriorQualification> entity)
         {
-            entity.ToTable("ApprenticeQualification", "dbo");
+            entity.ToTable("PriorQualification", "dbo");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .HasColumnName("ApprenticeQualificationId")
+                .HasColumnName("PriorQualificationId")
                 .IsRequired()
                 .ValueGeneratedOnAdd();
             entity.Property(e => e.ApprenticeId)
-                .HasColumnName("ApprenticeId")                
+                .HasColumnName("ApprenticeId")
                 .IsRequired();
             entity.Property(e => e.QualificationCode)
                 .HasColumnName("QualificationCode")
@@ -33,7 +33,7 @@ namespace ADMS.Apprentices.Database.Mappings
             entity.Property(e => e.StartDate)
                 .HasColumnName("StartDate");
             entity.Property(e => e.EndDate)
-                .HasColumnName("EndDate");              
+                .HasColumnName("EndDate");
             entity.Property(x => x.Version)
                 .HasColumnName("Version")
                 .IsRequired()
@@ -42,7 +42,7 @@ namespace ADMS.Apprentices.Database.Mappings
                 .HasColumnName("_AuditEventId");
 
             entity.HasOne(e => e.Profile)
-                .WithMany(c => c.Qualifications)
+                .WithMany(c => c.PriorQualifications)
                 .HasForeignKey(e => e.ApprenticeId)
                 .OnDelete(DeleteBehavior.Cascade);
         }

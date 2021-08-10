@@ -45,9 +45,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <param name="apprenticeId">Id of the apprentice</param>
         /// TODO DB design needs to be completed for this end point to work.
         /// EndPoint will be decorated with the role below when DB design is complete
-        /// Linked to task 126782
-        // [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
-        [Authorize(Policy = AuthorisationConfiguration.AUTH_DENY_ALL)]
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
         [HttpGet]
         public async Task<ActionResult<ProfileQualificationModel[]>> List(int apprenticeId)
         {
@@ -63,9 +61,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <param name="id">Id of the apprenticeship</param>
         /// TODO: DB design needs to be completed for this end point to work.
         /// EndPoint will be decorated with the role below when DB design is complete
-        /// Linked to task 126782
-        //[Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
-        [Authorize(Policy = AuthorisationConfiguration.AUTH_DENY_ALL)]
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_View)]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfilePriorApprenticeshipModel>> Get(int apprenticeId, int id)
         {
@@ -81,9 +77,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <param name="message">Details of the apprenticeship to be created</param>
         /// TODO: DB design needs to be completed for this end point to work.
         /// EndPoint will be decorated with the role below when DB design is complete
-        /// Linked to task 126782
-        //[Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
-        [Authorize(Policy = AuthorisationConfiguration.AUTH_DENY_ALL)]
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPost]
         public async Task<ActionResult<ProfilePriorApprenticeshipModel>> Create(int apprenticeId, [FromBody] ProfilePriorApprenticeshipMessage message)
         {
@@ -100,9 +94,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <param name="message">Details of the information to be updated</param>
         /// TODO: DB design needs to be completed for this end point to work.
         /// EndPoint will be decorated with the role below when DB design is complete
-        /// Linked to task 126782
-        // [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
-        [Authorize(Policy = AuthorisationConfiguration.AUTH_DENY_ALL)]
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPut("{id}")]
         public async Task<ActionResult<ProfilePriorApprenticeshipModel>> Update(int apprenticeId, int id, [FromBody] ProfilePriorApprenticeshipMessage message)
         {
@@ -120,9 +112,7 @@ namespace ADMS.Apprentices.Api.Controllers
         /// <param name="id">Id of the apprenticeship to be removed</param>
         /// TODO: DB design needs to be completed for this end point to work.
         /// EndPoint will be decorated with the role below when DB design is complete
-        /// Linked to task 126782
-        // [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
-        [Authorize(Policy = AuthorisationConfiguration.AUTH_DENY_ALL)]
+        [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Remove(int apprenticeId, int id)
         {

@@ -4,7 +4,7 @@ using ADMS.Apprentices.Core.Entities;
 
 namespace ADMS.Apprentices.Core.Services.Validators
 {
-    public class PriorApprenticeshipValidator : QualificationValidator, IPriorApprenticeshipValidator
+    public class PriorApprenticeshipValidator : PriorQualificationValidator, IPriorApprenticeshipValidator
     {
         private readonly IReferenceDataValidator referenceDataValidator;
 

@@ -53,7 +53,7 @@ namespace ADMS.Apprentices.Database
             modelBuilder.ApplyConfiguration(new ApprenticeTFNMapping());
             modelBuilder.ApplyConfiguration(new PhoneMapping());
             modelBuilder.ApplyConfiguration(new AddressMapping());
-            modelBuilder.ApplyConfiguration(new QualificationMapping());
+            modelBuilder.ApplyConfiguration(new PriorQualificationMapping());
             modelBuilder.ApplyConfiguration(new ApprenticeUSIMapping());
             modelBuilder.ApplyConfiguration(new GuardianMapping());
             modelBuilder.ApplyConfiguration(new PriorApprenticeshipMapping());

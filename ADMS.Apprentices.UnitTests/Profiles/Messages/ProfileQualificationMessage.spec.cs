@@ -1,21 +1,21 @@
-﻿using ADMS.Apprentices.Core.Messages;
-using ADMS.Apprentices.Core.Messages.TFN;
+﻿using System;
+using ADMS.Apprentices.Core.Messages;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Messages
 {
     #region WhenCreatingProfileQualificationMessage
+
     [TestClass]
     public class WhenCreatingProfileQualificationMessage
-    { 
-        private ProfileQualificationMessage qualificationMessage;
+    {
+        private ProfilePriorQualificationMessage qualificationMessage;
 
         [TestMethod]
         public void NewQualificationMessage()
         {
-            qualificationMessage = new ProfileQualificationMessage
+            qualificationMessage = new ProfilePriorQualificationMessage
             {
                 QualificationCode = "QCODE",
                 QualificationDescription = "QDESCRIPTION",

@@ -17,10 +17,10 @@ namespace ADMS.Apprentices.Core.Models
         public string CreatedBy { get; }
         public DateTime? UpdatedOn { get; }
         public string UpdatedBy { get; }
-        
+
         public int? ApprenticeshipId { get; }
 
-        public ProfileQualificationModel(Qualification qualification)
+        public ProfileQualificationModel(PriorQualification qualification)
         {
             QualificationId = qualification.Id;
             QualificationCode = qualification.QualificationCode;

@@ -11,13 +11,13 @@ using Adms.Shared.Exceptions;
 namespace ADMS.Apprentices.Core.Services
 {
     [RegisterWithIocContainer]
-    public class QualificationUpdater : IQualificationUpdater
+    public class PriorQualificationUpdater : IPriorQualificationUpdater
     {
         private readonly IQualificationValidator qualificationValidator;
         private readonly IRepository repository;
         private readonly ITYIMSRepository tyimsRepository;
 
-        public QualificationUpdater(IRepository repository, ITYIMSRepository tyimsRepository,
+        public PriorQualificationUpdater(IRepository repository, ITYIMSRepository tyimsRepository,
             IQualificationValidator qualificationValidator)
         {
             this.repository = repository;
@@ -25,12 +25,12 @@ namespace ADMS.Apprentices.Core.Services
             this.qualificationValidator = qualificationValidator;
         }
 
-        public async Task<Qualification> Update(int apprenticeId, int qualificationId, ProfileQualificationMessage message)
+        public async Task<PriorQualification> Update(int apprenticeId, int qualificationId, ProfilePriorQualificationMessage message)
         {
             // Need to throw an error if profile cannot be found as qualification validator doesn't support a profile with a null value.
             var profile = await repository.GetAsync<Profile>(apprenticeId, true);
 
-            Qualification qualification = profile.Qualifications.SingleOrDefault(x => x.Id == qualificationId);
+            PriorQualification qualification = profile.PriorQualifications.SingleOrDefault(x => x.Id == qualificationId);
             if (qualification == null)
                 throw AdmsNotFoundException.Create("Apprentice Qualification ", qualificationId.ToString());
 

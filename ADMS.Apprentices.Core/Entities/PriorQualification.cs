@@ -6,7 +6,7 @@ namespace ADMS.Apprentices.Core.Entities
     /// <summary>
     /// A Qualification an apprentice has completed.
     /// </summary>
-    public class Qualification : IAuditableIdentifier, ITimestampEnabled, IQualificationAttributes
+    public class PriorQualification : IAuditableIdentifier, ITimestampEnabled, IQualificationAttributes
     {
         public int Id { get; set; }
         public int ApprenticeId { get; set; }

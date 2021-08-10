@@ -1,7 +1,7 @@
-﻿using Adms.Shared.Testing;
-using ADMS.Apprentices.Core.Entities;
+﻿using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Models;
 using ADMS.Apprentices.UnitTests.Constants;
+using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -11,9 +11,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
 
     [TestClass]
     public class WhenInstantiatingAProfileQualificationModel : GivenWhenThen
-    {        
+    {
         private ProfileQualificationModel qualificationModel;
-        private Qualification qualification;
+        private PriorQualification qualification;
 
         protected override void Given()
         {

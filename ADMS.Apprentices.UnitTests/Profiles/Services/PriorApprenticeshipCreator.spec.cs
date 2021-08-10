@@ -32,7 +32,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             {
                 Id = ProfileConstants.Id
             };
-            profile.Qualifications.Clear();
+            profile.PriorQualifications.Clear();
             var q = ProfileConstants.QualificationMessage;
             message = new ProfilePriorApprenticeshipMessage()
             {

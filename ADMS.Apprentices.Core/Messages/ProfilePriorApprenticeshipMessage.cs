@@ -1,15 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ADMS.Apprentices.Core.Messages
+﻿namespace ADMS.Apprentices.Core.Messages
 {
-    public record ProfilePriorApprenticeshipMessage : ProfileQualificationMessage
+    public record ProfilePriorApprenticeshipMessage : ProfilePriorQualificationMessage
     {
-
-    public string StateCode { get; set; }
-
-
-    public string CountryCode { get; set; }
+        public string StateCode { get; set; }
 
 
+        public string CountryCode { get; set; }
     }
 }

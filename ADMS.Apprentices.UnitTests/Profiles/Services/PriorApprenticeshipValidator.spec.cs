@@ -65,7 +65,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void NotThrowExceptionIfStartDateEndDateIsGreaterThanDateofBirthPlus12Years()
         {
-            profile.Qualifications.Clear();
+            profile.PriorQualifications.Clear();
             priorApprenticeship.StartDate = ProfileConstants.Birthdate.AddYears(13);
             priorApprenticeship.EndDate = ProfileConstants.Birthdate.AddYears(14);
             profile.PriorApprenticeships.Add(priorApprenticeship);

@@ -17,10 +17,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     #region WhenUpdatingAQualification
 
     [TestClass]
-    public class WhenUpdatingAQualification : GivenWhenThen<QualificationUpdater>
+    public class WhenUpdatingAQualification : GivenWhenThen<PriorQualificationUpdater>
     {
-        private Qualification qualification;
-        private ProfileQualificationMessage message;
+        private PriorQualification qualification;
+        private ProfilePriorQualificationMessage message;
         private int qualificationId;
 
         private Profile profile;
@@ -29,20 +29,20 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         protected override void Given()
         {
             qualificationId = 20;
-            qualification = new Qualification()
+            qualification = new PriorQualification()
             {
                 Id = qualificationId,
                 QualificationCode = "something",
             };
             var q = ProfileConstants.QualificationMessage;
-            message = new ProfileQualificationMessage()
+            message = new ProfilePriorQualificationMessage()
             {
                 QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
                 StartDate = q.StartDate, EndDate = q.EndDate
             };
 
             profile = new Profile();
-            profile.Qualifications.Add(qualification);
+            profile.PriorQualifications.Add(qualification);
             registration = new Registration();
 
             Container.GetMock<IRepository>()

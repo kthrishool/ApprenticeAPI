@@ -18,7 +18,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     public class WhenValidatingReferenceDataValidator : GivenWhenThen<ReferenceDataValidator>
     {
         private Profile newProfile;
-        private Qualification qualification;
+        private PriorQualification qualification;
 
         protected override void Given()
         {
@@ -406,7 +406,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            qualification = new Qualification();
+            qualification = new PriorQualification();
             qualification.QualificationLevel = "Invalid";
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
@@ -420,7 +420,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            qualification = new Qualification();
+            qualification = new PriorQualification();
             qualification.QualificationANZSCOCode = "Invalid";
 
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions())

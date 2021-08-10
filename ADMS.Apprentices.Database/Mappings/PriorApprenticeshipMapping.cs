@@ -8,22 +8,13 @@ namespace ADMS.Apprentices.Database.Mappings
     {
         public void Configure(EntityTypeBuilder<PriorApprenticeship> entity)
         {
-            /* comments will be removed when the corresponding tables are created
-             Current substituting with qualification table
-             */
-            entity.ToTable("ApprenticePriorApprenticeship", "dbo");
+            entity.ToTable("PriorApprenticeship", "dbo");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .HasColumnName("ApprenticePriorApprenticeshipId")
+                .HasColumnName("PriorApprenticeshipId")
                 .IsRequired()
                 .ValueGeneratedOnAdd();
 
-            //entity.ToTable("ApprenticeQualification", "dbo");
-            //entity.HasKey(e => e.Id);
-            //entity.Property(e => e.Id)
-            //    .HasColumnName("ApprenticeQualificationId")
-            //    .IsRequired()
-            //    .ValueGeneratedOnAdd();
             entity.Property(e => e.ApprenticeId)
                 .HasColumnName("ApprenticeId")
                 .IsRequired();
@@ -44,7 +35,6 @@ namespace ADMS.Apprentices.Database.Mappings
                 .HasColumnName("StartDate");
             entity.Property(e => e.EndDate)
                 .HasColumnName("EndDate");
-            /* commented so the code could be migarted to test until the Tables are created*/
             entity.Property(e => e.StateCode)
                 .HasColumnName("StateCode");
             entity.Property(e => e.CountryCode)
