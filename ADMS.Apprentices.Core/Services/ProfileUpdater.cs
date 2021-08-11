@@ -80,6 +80,7 @@ namespace ADMS.Apprentices.Core.Services
             profile.IndigenousStatusCode = message.IndigenousStatusCode.Sanitise();
             profile.SelfAssessedDisabilityCode = message.SelfAssessedDisabilityCode.SanitiseUpper();
             profile.VisaNumber = message.VisaNumber.Sanitise();
+            profile.NotProvidingUSIReasonCode = message.NotProvidingUSIReasonCode.SanitiseUpper();
 
             //USI
             UpdateUSI(profile, message.USI.Sanitise(), message.USIChangeReason);

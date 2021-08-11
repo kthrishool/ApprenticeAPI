@@ -189,5 +189,6 @@
     <Build Include="Batch\Stored Procedures\InfrastructureServiceRequestMessagePurge.sql" />
     <Build Include="Batch\Stored Procedures\InfrastructureServiceBusInsertIntoArchive.sql" />
     <Build Include="Batch\Stored Procedures\InfrastructureServiceBusEventArchivePurge.sql" />
+    <Build Include="dbo\Stored Procedures\ApprenticeBasicSearch.sql" />
   </ItemGroup>
 </Project>

@@ -15,5 +15,6 @@ namespace ADMS.Apprentices.Core.HttpClients.ReferenceDataApi
         public const string ANZSCOCode = "ANZS";
         public const string IndigenousStatusCode = "INDS";
         public const string CitizenshipCode = "CITZ";
+        public const string USIExemptionCode = "USIE";
     }
 }
