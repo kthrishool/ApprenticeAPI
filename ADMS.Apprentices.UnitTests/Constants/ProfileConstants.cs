@@ -53,11 +53,11 @@ namespace ADMS.Apprentices.UnitTests.Constants
         public static bool DeceasedFlag = false;
         public static ProfileType ProfileTypeCode = ProfileType.APPR;
         public static PreferredContactType PreferredContactType = PreferredContactType.MOBILE;
-        public static Qualification Qualification => new Qualification() {QualificationCode = "QCode", QualificationDescription = "QDescription", QualificationLevel = "1101", QualificationANZSCOCode = "1101", StartDate = new DateTime(2000, 10, 1), EndDate = new DateTime(2002, 10, 1)};
-        public static PriorApprenticeship PriorApprenticeship => new PriorApprenticeship() {QualificationCode = "QCode", QualificationDescription = "QDescription", QualificationLevel = "1101", QualificationANZSCOCode = "1101", StartDate = new DateTime(2000, 10, 1), EndDate = new DateTime(2002, 10, 1)};
+        public static PriorQualification Qualification => new PriorQualification() {QualificationCode = "QCode", QualificationDescription = "QDescription", QualificationLevel = "1101", QualificationANZSCOCode = "1101", StartDate = new DateTime(2000, 10, 1), EndDate = new DateTime(2002, 10, 1)};
+        public static PriorApprenticeshipQualification PriorApprenticeship => new PriorApprenticeshipQualification() {QualificationCode = "QCode", QualificationDescription = "QDescription", QualificationLevel = "1101", QualificationANZSCOCode = "1101", StartDate = new DateTime(2000, 10, 1), EndDate = new DateTime(2002, 10, 1)};
         public static DateTime LeftSchoolDate = DateTime.Now.AddYears(-5);
 
-        public static ProfileQualificationMessage QualificationMessage => new ProfileQualificationMessage()
+        public static PriorQualificationMessage QualificationMessage => new PriorQualificationMessage()
             {QualificationCode = "QCode", QualificationDescription = "QDescription", StartDate = new DateTime(2010, 1, 1), EndDate = new DateTime(2020, 1, 1)};
 
         public static bool ActiveFlag = true;

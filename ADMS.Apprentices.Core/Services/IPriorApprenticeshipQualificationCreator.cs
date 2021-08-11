@@ -6,8 +6,8 @@ using Adms.Shared.Attributes;
 namespace ADMS.Apprentices.Core.Services
 {
     [RegisterWithIocContainer]
-    public interface IQualificationUpdater
+    public interface IPriorApprenticeshipQualificationCreator
     {
-        Task<Qualification> Update(int apprenticeId, int qualificationId, ProfileQualificationMessage message);
+        Task<PriorApprenticeshipQualification> CreateAsync(int apprenticeId, PriorApprenticeshipQualificationMessage message);
     }
 }

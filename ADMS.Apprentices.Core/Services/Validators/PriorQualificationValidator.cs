@@ -9,11 +9,11 @@ using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentices.Core.Services.Validators
 {
-    public class QualificationValidator : IQualificationValidator
+    public class PriorQualificationValidator : IQualificationValidator
     {
         private readonly IReferenceDataValidator referenceDataValidator;
 
-        public QualificationValidator(IReferenceDataValidator referenceDataValidator)
+        public PriorQualificationValidator(IReferenceDataValidator referenceDataValidator)
         {
             this.referenceDataValidator = referenceDataValidator;
         }
@@ -58,7 +58,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
             return exceptionBuilder;
         }
 
-        public ValidationExceptionBuilder CheckForDuplicates(List<Qualification> qualifications)
+        public ValidationExceptionBuilder CheckForDuplicates(List<PriorQualification> qualifications)
         {
             var exceptionBuilder = new ValidationExceptionBuilder();
             //check for duplicates based on Qcode

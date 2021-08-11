@@ -9,6 +9,6 @@ namespace ADMS.Apprentices.Core.Services.Validators
     {
         Task<ValidationExceptionBuilder> ValidateAsync(Profile profile);
         Task<ValidationExceptionBuilder> ValidateAsync(IQualificationAttributes qualification);
-        Task<ValidationExceptionBuilder> PriorApprenticeshipValidator(PriorApprenticeship priorApprenticeship);
+        Task<ValidationExceptionBuilder> PriorApprenticeshipValidator(PriorApprenticeshipQualification priorApprenticeship);
     }
 }

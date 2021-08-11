@@ -5,8 +5,8 @@ using Adms.Shared.Attributes;
 namespace ADMS.Apprentices.Core.Services.Validators
 {
     [RegisterWithIocContainer]
-    public interface IPriorApprenticeshipValidator
+    public interface IPriorApprenticeshipQualificationValidator
     {
-        Task<ValidationExceptionBuilder> ValidateAsync(PriorApprenticeship priorApprenticeship, Profile profile);
+        Task<ValidationExceptionBuilder> ValidateAsync(PriorApprenticeshipQualification priorApprenticeship, Profile profile);
     }
 }

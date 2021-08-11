@@ -107,7 +107,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
             return exceptionBuilder;
         }
 
-        public async Task<ValidationExceptionBuilder> PriorApprenticeshipValidator(PriorApprenticeship priorApprenticeship)
+        public async Task<ValidationExceptionBuilder> PriorApprenticeshipValidator(PriorApprenticeshipQualification priorApprenticeship)
         {
             var exceptionBuilder = new ValidationExceptionBuilder();
 

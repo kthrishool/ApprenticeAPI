@@ -7,13 +7,13 @@ using Adms.Shared;
 
 namespace ADMS.Apprentices.Core.Services
 {
-    public class QualificationCreator : IQualificationCreator
+    public class PriorQualificationCreator : IPriorQualificationCreator
     {
         private readonly IRepository repository;
         private readonly IQualificationValidator qualificationValidator;
         private readonly ITYIMSRepository tyimsRepository;
 
-        public QualificationCreator(IRepository repository,
+        public PriorQualificationCreator(IRepository repository,
             IQualificationValidator qualificationValidator,
             ITYIMSRepository tyimsRepository)
         {
@@ -22,9 +22,9 @@ namespace ADMS.Apprentices.Core.Services
             this.tyimsRepository = tyimsRepository;
         }
 
-        public async Task<Qualification> CreateAsync(int apprenticeId, ProfileQualificationMessage message)
+        public async Task<PriorQualification> CreateAsync(int apprenticeId, PriorQualificationMessage message)
         {
-            Qualification qualification = new Qualification
+            PriorQualification qualification = new PriorQualification
             {
                 QualificationCode = message.QualificationCode.Sanitise(),
                 QualificationDescription = message.QualificationDescription.Sanitise(),
@@ -35,12 +35,12 @@ namespace ADMS.Apprentices.Core.Services
             };
 
             var profile = await GetProfileAndCheckQualificationForApprenticeships(apprenticeId, qualification);
-            profile.Qualifications.Add(qualification);
+            profile.PriorQualifications.Add(qualification);
 
             return qualification;
         }
 
-        public async Task<Profile> GetProfileAndCheckQualificationForApprenticeships(int apprenticeId, Qualification qualification)
+        public async Task<Profile> GetProfileAndCheckQualificationForApprenticeships(int apprenticeId, PriorQualification qualification)
         {
             // Need to throw an error if profile cannot be found as qualification validator doesn't support a profile with a null value.
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);

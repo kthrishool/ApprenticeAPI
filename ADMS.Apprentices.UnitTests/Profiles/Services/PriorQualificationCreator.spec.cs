@@ -14,13 +14,13 @@ using Moq;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
 {
-    #region WhenCreatingAQualification
+    #region WhenCreatingAPriorQualification
 
     [TestClass]
-    public class WhenCreatingAQualification : GivenWhenThen<QualificationCreator>
+    public class WhenCreatingAPriorQualification : GivenWhenThen<PriorQualificationCreator>
     {
-        private Qualification qualification;
-        private ProfileQualificationMessage message;
+        private PriorQualification qualification;
+        private PriorQualificationMessage message;
         private int apprenticeId;
         private Profile profile;
         private Registration registration;
@@ -32,9 +32,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             apprenticeId = 1;
             apprenticeshipId = 11;
             profile.Id = apprenticeId;
-            profile.Qualifications.Clear();
+            profile.PriorQualifications.Clear();
             var q = ProfileConstants.QualificationMessage;
-            message = new ProfileQualificationMessage()
+            message = new PriorQualificationMessage()
             {
                 QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
                 StartDate = q.StartDate, EndDate = q.EndDate

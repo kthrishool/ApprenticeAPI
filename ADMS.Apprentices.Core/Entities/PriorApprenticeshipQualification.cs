@@ -3,7 +3,7 @@ using ADMS.Services.Infrastructure.Model.Interface;
 
 namespace ADMS.Apprentices.Core.Entities
 {
-    public class PriorApprenticeship : IAuditableIdentifier, ITimestampEnabled, IQualificationAttributes
+    public class PriorApprenticeshipQualification : IAuditableIdentifier, ITimestampEnabled, IQualificationAttributes
     {
         public int Id { get; set; }
         public int ApprenticeId { get; set; }

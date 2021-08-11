@@ -11,13 +11,13 @@ using Adms.Shared.Exceptions;
 namespace ADMS.Apprentices.Core.Services
 {
     [RegisterWithIocContainer]
-    public class QualificationUpdater : IQualificationUpdater
+    public class PriorQualificationUpdater : IPriorQualificationUpdater
     {
         private readonly IQualificationValidator qualificationValidator;
         private readonly IRepository repository;
         private readonly ITYIMSRepository tyimsRepository;
 
-        public QualificationUpdater(IRepository repository, ITYIMSRepository tyimsRepository,
+        public PriorQualificationUpdater(IRepository repository, ITYIMSRepository tyimsRepository,
             IQualificationValidator qualificationValidator)
         {
             this.repository = repository;
@@ -25,27 +25,27 @@ namespace ADMS.Apprentices.Core.Services
             this.qualificationValidator = qualificationValidator;
         }
 
-        public async Task<Qualification> Update(int apprenticeId, int qualificationId, ProfileQualificationMessage message)
+        public async Task<PriorQualification> Update(int apprenticeId, int qualificationId, PriorQualificationMessage message)
         {
             // Need to throw an error if profile cannot be found as qualification validator doesn't support a profile with a null value.
             var profile = await repository.GetAsync<Profile>(apprenticeId, true);
 
-            Qualification qualification = profile.Qualifications.SingleOrDefault(x => x.Id == qualificationId);
-            if (qualification == null)
+            PriorQualification priorQualification = profile.PriorQualifications.SingleOrDefault(x => x.Id == qualificationId);
+            if (priorQualification == null)
                 throw AdmsNotFoundException.Create("Apprentice Qualification ", qualificationId.ToString());
 
-            qualification.QualificationCode = message.QualificationCode.Sanitise();
-            qualification.QualificationDescription = message.QualificationDescription.Sanitise();
-            qualification.QualificationLevel = message.QualificationLevel.Sanitise();
-            qualification.QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise();
-            qualification.StartDate = message.StartDate;
-            qualification.EndDate = message.EndDate;
+            priorQualification.QualificationCode = message.QualificationCode.Sanitise();
+            priorQualification.QualificationDescription = message.QualificationDescription.Sanitise();
+            priorQualification.QualificationLevel = message.QualificationLevel.Sanitise();
+            priorQualification.QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise();
+            priorQualification.StartDate = message.StartDate;
+            priorQualification.EndDate = message.EndDate;
 
-            var exceptionBuilder = await qualificationValidator.ValidateAsync(qualification, profile);
+            var exceptionBuilder = await qualificationValidator.ValidateAsync(priorQualification, profile);
 
             exceptionBuilder.ThrowAnyExceptions();
 
-            return qualification;
+            return priorQualification;
         }
     }
 }

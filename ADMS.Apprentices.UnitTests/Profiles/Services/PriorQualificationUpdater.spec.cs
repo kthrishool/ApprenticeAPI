@@ -14,13 +14,13 @@ using Moq;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
 {
-    #region WhenUpdatingAQualification
+    #region WhenUpdatingAPriorQualification
 
     [TestClass]
-    public class WhenUpdatingAPriorApprenticeship : GivenWhenThen<PriorApprenticeshipUpdater>
+    public class WhenUpdatingAPriorQualification : GivenWhenThen<PriorQualificationUpdater>
     {
-        private PriorApprenticeship qualification;
-        private ProfilePriorApprenticeshipMessage message;
+        private PriorQualification qualification;
+        private PriorQualificationMessage message;
         private int qualificationId;
 
         private Profile profile;
@@ -29,28 +29,28 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         protected override void Given()
         {
             qualificationId = 20;
-            qualification = new PriorApprenticeship()
+            qualification = new PriorQualification()
             {
                 Id = qualificationId,
                 QualificationCode = "something",
             };
             var q = ProfileConstants.QualificationMessage;
-            message = new ProfilePriorApprenticeshipMessage()
+            message = new PriorQualificationMessage()
             {
                 QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
                 StartDate = q.StartDate, EndDate = q.EndDate
             };
 
             profile = new Profile();
-            profile.PriorApprenticeships.Add(qualification);
+            profile.PriorQualifications.Add(qualification);
             registration = new Registration();
 
             Container.GetMock<IRepository>()
                 .Setup(s => s.GetAsync<Profile>(It.IsAny<int>(), true))
                 .ReturnsAsync(profile);
             ChangeRegistrationDetails(ProfileConstants.Id);
-            Container.GetMock<IPriorApprenticeshipValidator>()
-                .Setup(s => s.ValidateAsync(It.IsAny<PriorApprenticeship>(), It.IsAny<Profile>()))
+            Container.GetMock<IQualificationValidator>()
+                .Setup(s => s.ValidateAsync(It.IsAny<IQualificationAttributes>(), It.IsAny<Profile>()))
                 .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
@@ -68,7 +68,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public async Task SetsQualificationDetails()
         {
-            qualification = await ClassUnderTest.Update(10, qualificationId, message, profile);
+            qualification = await ClassUnderTest.Update(10, qualificationId, message);
             qualification.QualificationCode.Should().Be(message.QualificationCode);
             qualification.QualificationDescription.Should().Be(message.QualificationDescription);
             qualification.QualificationANZSCOCode.Should().Be(message.QualificationANZSCOCode);
@@ -76,9 +76,16 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         }
 
         [TestMethod]
+        public async Task ShouldValidatesTheRequest()
+        {
+            qualification = await ClassUnderTest.Update(10, qualificationId, message);
+            Container.GetMock<IQualificationValidator>().Verify(r => r.ValidateAsync(qualification, profile));
+        }
+
+        [TestMethod]
         public void WhenQualificationIdIsDifferent_ThenAnExceptionShouldOccur()
         {
-            ClassUnderTest.Invoking(c => c.Update(10, qualificationId + 1, message, profile))
+            ClassUnderTest.Invoking(c => c.Update(10, qualificationId + 1, message))
                 .Should().Throw<AdmsNotFoundException>();
         }
     }

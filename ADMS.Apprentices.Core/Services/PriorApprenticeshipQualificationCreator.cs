@@ -7,23 +7,23 @@ using Adms.Shared;
 
 namespace ADMS.Apprentices.Core.Services
 {
-    public class PriorApprenticeshipCreator : IPriorApprenticeshipCreator
+    public class PriorApprenticeshipQualificationCreator : IPriorApprenticeshipQualificationCreator
     {
         private readonly IRepository repository;
 
-        private readonly IPriorApprenticeshipValidator priorApprenticeshipValidator;
+        private readonly IPriorApprenticeshipQualificationValidator priorApprenticeshipValidator;
 
-        public PriorApprenticeshipCreator(IRepository repository,
-            IPriorApprenticeshipValidator priorApprenticeshipValidator
+        public PriorApprenticeshipQualificationCreator(IRepository repository,
+            IPriorApprenticeshipQualificationValidator priorApprenticeshipValidator
         )
         {
             this.repository = repository;
             this.priorApprenticeshipValidator = priorApprenticeshipValidator;
         }
 
-        public async Task<PriorApprenticeship> CreateAsync(int apprenticeId, ProfilePriorApprenticeshipMessage message)
+        public async Task<PriorApprenticeshipQualification> CreateAsync(int apprenticeId, PriorApprenticeshipQualificationMessage message)
         {
-            PriorApprenticeship priorApprenticeship = new PriorApprenticeship
+            PriorApprenticeshipQualification priorApprenticeship = new PriorApprenticeshipQualification
             {
                 QualificationCode = message.QualificationCode.Sanitise(),
                 QualificationDescription = message.QualificationDescription.Sanitise(),
@@ -37,12 +37,12 @@ namespace ADMS.Apprentices.Core.Services
 
             var profile = await GetProfileAndCheckQualificationForApprenticeships(apprenticeId, priorApprenticeship);
 
-            profile.PriorApprenticeships.Add(priorApprenticeship);
+            profile.PriorApprenticeshipQualifications.Add(priorApprenticeship);
 
             return priorApprenticeship;
         }
 
-        public async Task<Profile> GetProfileAndCheckQualificationForApprenticeships(int apprenticeId, PriorApprenticeship priorApprenticeship)
+        public async Task<Profile> GetProfileAndCheckQualificationForApprenticeships(int apprenticeId, PriorApprenticeshipQualification priorApprenticeship)
         {
             // Need to throw an error if profile cannot be found as qualification validator doesn't support a profile with a null value.
             var profile = await repository.GetAsync<Profile>(apprenticeId, true);

@@ -1,19 +1,19 @@
-﻿using Adms.Shared.Testing;
-using ADMS.Apprentices.Core.Entities;
+﻿using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Models;
 using ADMS.Apprentices.UnitTests.Constants;
+using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Models
 {
-    #region WhenInstantiatingAProfileQualificationModel
+    #region WhenInstantiatingAPriorQualificationModel
 
     [TestClass]
-    public class WhenInstantiatingAProfileQualificationModel : GivenWhenThen
-    {        
-        private ProfileQualificationModel qualificationModel;
-        private Qualification qualification;
+    public class WhenInstantiatingAPriorQualificationModel : GivenWhenThen
+    {
+        private PriorQualificationModel qualificationModel;
+        private PriorQualification qualification;
 
         protected override void Given()
         {
@@ -22,7 +22,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
 
         protected override void When()
         {
-            qualificationModel = new ProfileQualificationModel(qualification);
+            qualificationModel = new PriorQualificationModel(qualification);
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
         {
             qualification.StartDate = null;
             qualification.EndDate = null;
-            qualificationModel = new ProfileQualificationModel(qualification);
+            qualificationModel = new PriorQualificationModel(qualification);
             qualificationModel.StartDate.Should().BeNull();
             qualificationModel.EndDate.Should().BeNull();
         }

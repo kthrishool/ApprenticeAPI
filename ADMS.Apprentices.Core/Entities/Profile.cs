@@ -43,9 +43,9 @@ namespace ADMS.Apprentices.Core.Entities
         public virtual ICollection<ApprenticeTFN> TFNs { get; }
 
         /// <summary>The Qualifications the apprentice has completed.</summary>
-        public virtual ICollection<Qualification> Qualifications { get; }
+        public virtual ICollection<PriorQualification> PriorQualifications { get; }
 
-        public virtual ICollection<PriorApprenticeship> PriorApprenticeships { get; }
+        public virtual ICollection<PriorApprenticeshipQualification> PriorApprenticeshipQualifications { get; }
         public virtual Guardian Guardian { get; set; }
         public virtual ICollection<ApprenticeUSI> USIs { get; }
 
@@ -56,9 +56,9 @@ namespace ADMS.Apprentices.Core.Entities
             Phones = new List<Phone>();
             Addresses = new List<Address>();
             TFNs = new List<ApprenticeTFN>();
-            Qualifications = new List<Qualification>();
+            PriorQualifications = new List<PriorQualification>();
             USIs = new List<ApprenticeUSI>();
-            PriorApprenticeships = new List<PriorApprenticeship>();
+            PriorApprenticeshipQualifications = new List<PriorApprenticeshipQualification>();
         }
     }
 }

@@ -7,13 +7,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Models
 {
-    #region WhenInstantiatingAProfileQualificationModel
+    #region WhenInstantiatingAPriorQualificationModel
 
     [TestClass]
-    public class WhenInstantiatingAProfilePriorApprenticeshipModel : GivenWhenThen
+    public class WhenInstantiatingAPriorPriorApprenticeshipModel : GivenWhenThen
     {
-        private ProfilePriorApprenticeshipModel priorApprenticeshipModel;
-        private PriorApprenticeship priorApprenticeship;
+        private PriorApprenticeshipQualificationModel priorApprenticeshipModel;
+        private PriorApprenticeshipQualification priorApprenticeship;
 
         protected override void Given()
         {
@@ -22,7 +22,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
 
         protected override void When()
         {
-            priorApprenticeshipModel = new ProfilePriorApprenticeshipModel(priorApprenticeship);
+            priorApprenticeshipModel = new PriorApprenticeshipQualificationModel(priorApprenticeship);
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
         {
             priorApprenticeship.StartDate = null;
             priorApprenticeship.EndDate = null;
-            priorApprenticeshipModel = new ProfilePriorApprenticeshipModel(priorApprenticeship);
+            priorApprenticeshipModel = new PriorApprenticeshipQualificationModel(priorApprenticeship);
             priorApprenticeshipModel.StartDate.Should().BeNull();
             priorApprenticeshipModel.EndDate.Should().BeNull();
         }

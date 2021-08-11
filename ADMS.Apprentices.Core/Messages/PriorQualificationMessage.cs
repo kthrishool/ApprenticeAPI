@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ADMS.Apprentices.Core.Messages
 {
-    public record ProfileQualificationMessage
+    public record PriorQualificationMessage
     {
         [Required(ErrorMessage = "Qualification code is required")]
         [MaxLength(10, ErrorMessage = "Qualification code cannot exceed 10 characters in length")]

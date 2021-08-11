@@ -14,13 +14,13 @@ using Moq;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
 {
-    #region WhenCreatingAQualification
+    #region WhenCreatingAPriorApprenticeshipQualification
 
     [TestClass]
-    public class WhenCreatingAPriorApprenticeship : GivenWhenThen<PriorApprenticeshipCreator>
+    public class WhenCreatingAPriorApprenticeshipQualification : GivenWhenThen<PriorApprenticeshipQualificationCreator>
     {
-        private PriorApprenticeship priorApprenticeship;
-        private ProfilePriorApprenticeshipMessage message;
+        private PriorApprenticeshipQualification priorApprenticeship;
+        private PriorApprenticeshipQualificationMessage message;
         private readonly int apprenticeId = ProfileConstants.Id;
         private Profile profile;
         private Registration registration;
@@ -32,9 +32,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             {
                 Id = ProfileConstants.Id
             };
-            profile.Qualifications.Clear();
+            profile.PriorQualifications.Clear();
             var q = ProfileConstants.QualificationMessage;
-            message = new ProfilePriorApprenticeshipMessage()
+            message = new PriorApprenticeshipQualificationMessage()
             {
                 QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
                 StartDate = q.StartDate, EndDate = q.EndDate
@@ -56,8 +56,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             Container.GetMock<IRepository>()
                 .Setup(s => s.GetAsync<Profile>(apprenticeId, true))
                 .ReturnsAsync(profile);
-            Container.GetMock<IPriorApprenticeshipValidator>()
-                .Setup(s => s.ValidateAsync(It.IsAny<PriorApprenticeship>(), It.IsAny<Profile>()))
+            Container.GetMock<IPriorApprenticeshipQualificationValidator>()
+                .Setup(s => s.ValidateAsync(It.IsAny<PriorApprenticeshipQualification>(), It.IsAny<Profile>()))
                 .ReturnsAsync(new ValidationExceptionBuilder());
         }
 

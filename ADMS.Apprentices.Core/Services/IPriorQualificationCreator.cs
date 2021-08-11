@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
-using Adms.Shared.Attributes;
 using ADMS.Apprentices.Core.Messages;
+using Adms.Shared.Attributes;
 
 namespace ADMS.Apprentices.Core.Services
 {
     [RegisterWithIocContainer]
-    public interface IPriorApprenticeshipCreator
+    public interface IPriorQualificationCreator
     {
-        Task<PriorApprenticeship> CreateAsync(int apprenticeId, ProfilePriorApprenticeshipMessage message);
+        Task<PriorQualification> CreateAsync(int apprenticeId, PriorQualificationMessage message);
     }
 }

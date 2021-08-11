@@ -34,7 +34,9 @@ namespace ADMS.Apprentices.Core.Models
         public string PreferredContactType { get; set; }
         public ProfileAddressModel ResidentialAddress { get; set; }
         public ProfileAddressModel PostalAddress { get; set; }
-        public List<ProfileQualificationModel> Qualifications { get; set; }
+        public List<PriorQualificationModel> PriorQualifications { get; set; }
+
+        public List<PriorApprenticeshipQualificationModel> PriorApprenticeshipQualifications { get; set; }
         public Boolean CRNViewFlag { get; set; }
         public ProfileUSIModel USIVerificationResult { get; set; }
         public string USI { get; set; }
@@ -105,7 +107,8 @@ namespace ADMS.Apprentices.Core.Models
                     }).SingleOrDefault();
             }
 
-            Qualifications = apprentice.Qualifications.Select(q => new ProfileQualificationModel(q)).ToList();
+            PriorQualifications = apprentice.PriorQualifications.Select(q => new PriorQualificationModel(q)).ToList();
+            PriorApprenticeshipQualifications = apprentice.PriorApprenticeshipQualifications.Select(q => new PriorApprenticeshipQualificationModel(q)).ToList();
             if (apprentice.USIs.Any(c => c.ActiveFlag == true))
             {
                 USIVerificationResult = apprentice.USIs.Where(c => c.ActiveFlag == true).Select(c => new ProfileUSIModel(c)).LastOrDefault();

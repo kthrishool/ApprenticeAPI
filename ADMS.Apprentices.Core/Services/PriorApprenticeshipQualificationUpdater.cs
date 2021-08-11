@@ -11,23 +11,23 @@ using Adms.Shared.Exceptions;
 namespace ADMS.Apprentices.Core.Services
 {
     [RegisterWithIocContainer]
-    public class PriorApprenticeshipUpdater : IPriorApprenticeshipUpdater
+    public class PriorApprenticeshipQualificationUpdater : IPriorApprenticeshipQualificationUpdater
     {
-        private readonly IPriorApprenticeshipValidator priorApprenticeshipValidator;
+        private readonly IPriorApprenticeshipQualificationValidator priorApprenticeshipValidator;
         private readonly IRepository repository;
         private readonly ITYIMSRepository tyimsRepository;
 
-        public PriorApprenticeshipUpdater(IRepository repository, ITYIMSRepository tyimsRepository,
-            IPriorApprenticeshipValidator priorApprenticeshipValidator)
+        public PriorApprenticeshipQualificationUpdater(IRepository repository, ITYIMSRepository tyimsRepository,
+            IPriorApprenticeshipQualificationValidator priorApprenticeshipValidator)
         {
             this.repository = repository;
             this.tyimsRepository = tyimsRepository;
             this.priorApprenticeshipValidator = priorApprenticeshipValidator;
         }
 
-        public async Task<PriorApprenticeship> Update(int apprenticeId, int qualificationId, ProfilePriorApprenticeshipMessage message, Profile profile)
+        public async Task<PriorApprenticeshipQualification> Update(int apprenticeId, int qualificationId, PriorApprenticeshipQualificationMessage message, Profile profile)
         {
-            PriorApprenticeship priorApprenticeship = profile.PriorApprenticeships.SingleOrDefault(x => x.Id == qualificationId);
+            PriorApprenticeshipQualification priorApprenticeship = profile.PriorApprenticeshipQualifications.SingleOrDefault(x => x.Id == qualificationId);
             if (priorApprenticeship == null)
                 throw AdmsNotFoundException.Create("Apprentice Qualification ", qualificationId.ToString());
 

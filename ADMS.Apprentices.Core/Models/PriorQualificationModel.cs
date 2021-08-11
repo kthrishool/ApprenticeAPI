@@ -3,7 +3,7 @@ using ADMS.Apprentices.Core.Entities;
 
 namespace ADMS.Apprentices.Core.Models
 {
-    public record ProfileQualificationModel
+    public record PriorQualificationModel
     {
         public int QualificationId { get; }
         public string QualificationCode { get; }
@@ -17,10 +17,10 @@ namespace ADMS.Apprentices.Core.Models
         public string CreatedBy { get; }
         public DateTime? UpdatedOn { get; }
         public string UpdatedBy { get; }
-        
+
         public int? ApprenticeshipId { get; }
 
-        public ProfileQualificationModel(Qualification qualification)
+        public PriorQualificationModel(PriorQualification qualification)
         {
             QualificationId = qualification.Id;
             QualificationCode = qualification.QualificationCode;

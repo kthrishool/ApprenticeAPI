@@ -48,7 +48,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             addresses.Add(RestAddress);
             addresses.Add(postal);
 
-            ICollection<Qualification> qualifications = new List<Qualification>();
+            ICollection<PriorQualification> qualifications = new List<PriorQualification>();
             qualifications.Add(ProfileConstants.Qualification);
 
             profile = new Profile
@@ -69,12 +69,12 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolDate = ProfileConstants.LeftSchoolDate,
                 DeceasedFlag = ProfileConstants.DeceasedFlag,
-                ActiveFlag = ProfileConstants.ActiveFlag,                
+                ActiveFlag = ProfileConstants.ActiveFlag,
                 CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
                 CreatedOn = ProfileConstants.Createdon,
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,
-                UpdatedBy = ProfileConstants.Updatedby,                
+                UpdatedBy = ProfileConstants.Updatedby,
                 LanguageCode = ProfileConstants.LanguageCode,
                 PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
                 VisaNumber = ProfileConstants.VisaNumber,
@@ -82,9 +82,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             };
             profile.Addresses.Add(postal);
             profile.Addresses.Add(RestAddress);
-            profile.Phones.Add(new Phone() { PhoneNumber = ProfileConstants.PhoneNumbers.FirstOrDefault().PhoneNumber, PreferredPhoneFlag = ProfileConstants.PhoneNumbers.FirstOrDefault().PreferredPhoneFlag });
-            profile.Qualifications.Add(ProfileConstants.Qualification);
-            profile.USIs.Add(new ApprenticeUSI() { USI = ProfileConstants.USI, ActiveFlag = true, USIStatus = "test" });
+            profile.Phones.Add(new Phone() {PhoneNumber = ProfileConstants.PhoneNumbers.FirstOrDefault().PhoneNumber, PreferredPhoneFlag = ProfileConstants.PhoneNumbers.FirstOrDefault().PreferredPhoneFlag});
+            profile.PriorQualifications.Add(ProfileConstants.Qualification);
+            profile.PriorApprenticeshipQualifications.Add(ProfileConstants.PriorApprenticeship);
+            profile.USIs.Add(new ApprenticeUSI() {USI = ProfileConstants.USI, ActiveFlag = true, USIStatus = "test"});
         }
 
         protected override void When()
@@ -133,6 +134,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             model.USIVerificationResult.USI.Should().Be(ProfileConstants.USI);
             model.USIVerificationResult.USIStatus.Should().Be("test");
             model.CRNViewFlag.Should().Be(ProfileConstants.CustomerReferenceNumber != null);
+            // model.PriorApprenticeshipQualifications.Should().Be(ProfileConstants.PriorApprenticeship);
         }
 
         [TestMethod]
