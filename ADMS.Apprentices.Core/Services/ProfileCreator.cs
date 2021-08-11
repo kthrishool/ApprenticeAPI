@@ -45,6 +45,7 @@ namespace ADMS.Apprentices.Core.Services
                 HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),
                 LeftSchoolDate = message.LeftSchoolDate,
                 VisaNumber = message.VisaNumber.Sanitise(),
+                NotProvidingUSIReasonCode = message.NotProvidingUSIReasonCode.SanitiseUpper()
             };
             if (message.PhoneNumbers != null)
             {

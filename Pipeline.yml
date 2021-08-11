@@ -101,3 +101,21 @@ stages:
             windowsAuthentication: false
             webApplicationName: '$(admsApplicationName)'      
             listSites: true
+
+    - stage: SmokeTest_${{ env }}
+      dependsOn: ${{ env }}
+      condition: and(succeeded(), eq(variables['deploy${{ env }}'], 'true'))
+      variables:
+          - template: /Variables/Adms/${{ env }}_API_Variables.yml@templates
+          - name: System.Debug
+            value: false
+      jobs:
+        - job: 
+          pool: common
+          steps:
+            - powershell: |
+                $uri = "https://${{variables.hostname}}/apprenticeapi/swagger/default/swagger.json"
+                echo "https://${{variables.hostname}}/apprenticeapi/swagger/index.html"
+                [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+                Invoke-RestMethod -Uri $uri -Method Get
+              displayName: Fetch Swagger
