@@ -47,17 +47,21 @@ namespace ADMS.Apprentices.Core.Services
                 VisaNumber = message.VisaNumber.Sanitise(),
                 NotProvidingUSIReasonCode = message.NotProvidingUSIReasonCode.SanitiseUpper()
             };
-            if (message.PhoneNumbers != null)
-            {
-                foreach (PhoneNumberMessage phone in message.PhoneNumbers)
+            if (!message.Phone1.IsNullOrEmpty())
+            {                
+                profile.Phones.Add(new Phone
                 {
-                    profile.Phones.Add(new Phone
-                    {
-                        PhoneNumber = phone.PhoneNumber,
-                        PhoneTypeCode = phone.PhoneTypeCode.SanitiseUpper(),
-                        PreferredPhoneFlag = phone.PreferredPhoneFlag
-                    });
-                }
+                    PhoneNumber = message.Phone1.Sanitise(),
+                    PhoneTypeCode = PhoneType.PHONE1.ToString()                    
+                });                
+            }
+            if (!message.Phone2.IsNullOrEmpty())
+            {
+                profile.Phones.Add(new Phone
+                {
+                    PhoneNumber = message.Phone2.Sanitise(),
+                    PhoneTypeCode = PhoneType.PHONE2.ToString()
+                });
             }
 
             if (message.GenderCode != null)

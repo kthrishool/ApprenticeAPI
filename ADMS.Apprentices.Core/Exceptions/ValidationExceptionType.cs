@@ -19,9 +19,11 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0005", "TFN is not valid")]
         InvalidTFN,
 
+        //*****NOT IN USE******/
         [ExceptionDetails("AP-VAL-0006", "Phone number cannot be null")]
         NullPhoneNumber,
 
+        //*****NOT IN USE******/
         [ExceptionDetails("AP-VAL-0007", "Invalid apprentice phone number")]
         InvalidPhoneNumber,
 
@@ -115,6 +117,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0037", "Invalid address details for guardian")]
         AddressRecordNotFoundForGuardian,
 
+        //*****NOT IN USE******/
         [ExceptionDetails("AP-VAL-0038", "Invalid guardian phone number")]
         InvalidGuardianNumber,
 

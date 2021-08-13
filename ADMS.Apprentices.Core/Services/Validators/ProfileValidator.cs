@@ -58,7 +58,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
             }            
 
             // Phone validation
-            exceptionBuilder.AddExceptions(PhoneValidation(profile));
+            //exceptionBuilder.AddExceptions(PhoneValidation(profile));
 
             tasks.Add(ValidateAddressesAsync(profile));
 
@@ -125,29 +125,29 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
 
         #region Phone validation
+        //**** NOT IN USE ***********
+        //private ValidationExceptionBuilder PhoneValidation(Profile profile)
+        //{
+        //    var exceptionBuilder = new ValidationExceptionBuilder();
+        //    if (profile.Phones != null)
+        //    {               
+        //        var preferredPhoneSet = false;
 
-        private ValidationExceptionBuilder PhoneValidation(Profile profile)
-        {
-            var exceptionBuilder = new ValidationExceptionBuilder();
-            if (profile.Phones != null)
-            {               
-                var preferredPhoneSet = false;
-
-                foreach (Phone phone in profile.Phones)
-                {
-                    if (phone == null) continue;
+        //        foreach (Phone phone in profile.Phones)
+        //        {
+        //            if (phone == null) continue;
                     
-                    phoneValidator.ValidatePhonewithType(exceptionBuilder, phone);
-                    if (preferredPhoneSet && Convert.ToBoolean(phone.PreferredPhoneFlag))
-                    {
-                        phone.PreferredPhoneFlag = false;
-                    }
-                    else if (Convert.ToBoolean(phone.PreferredPhoneFlag))
-                        preferredPhoneSet = Convert.ToBoolean(phone.PreferredPhoneFlag);                    
-                }
-            }
-            return exceptionBuilder;
-        }
+        //            phoneValidator.ValidatePhonewithType(exceptionBuilder, phone);
+        //            if (preferredPhoneSet && Convert.ToBoolean(phone.PreferredPhoneFlag))
+        //            {
+        //                phone.PreferredPhoneFlag = false;
+        //            }
+        //            else if (Convert.ToBoolean(phone.PreferredPhoneFlag))
+        //                preferredPhoneSet = Convert.ToBoolean(phone.PreferredPhoneFlag);                    
+        //        }
+        //    }
+        //    return exceptionBuilder;
+        //}
 
         #endregion
 

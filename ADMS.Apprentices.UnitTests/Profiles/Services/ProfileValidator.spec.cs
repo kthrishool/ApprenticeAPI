@@ -305,18 +305,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .Should().NotThrow();
         }
 
-        [TestMethod]
-        public async Task SetPreferredFlagOnlyOnOnePhone()
-        {
-            var phone1 = new Phone() {PhoneTypeCode = PhoneType.LANDLINE.ToString(), PhoneNumber = "0212345678", PreferredPhoneFlag = true};
-            var phone2 = new Phone() {PhoneTypeCode = PhoneType.MOBILE.ToString(), PhoneNumber = "0404000000", PreferredPhoneFlag = true};
-
-            validProfile.Phones.Add(phone1);
-            validProfile.Phones.Add(phone2);
-            (await ClassUnderTest.ValidateAsync(validProfile)).ThrowAnyExceptions();
-            validProfile.Phones.Where(x => x.PreferredPhoneFlag == true).Count().Should().Be(1);
-        }
-
         #endregion
 
         /// <summary>

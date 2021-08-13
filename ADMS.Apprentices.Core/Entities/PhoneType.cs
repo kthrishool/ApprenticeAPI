@@ -3,11 +3,11 @@
 namespace ADMS.Apprentices.Core.Entities
 {
     public enum PhoneType
-    {
-        [Description("Mobile")]
-        MOBILE,
-
-        [Description("LandLine")]
-        LANDLINE
+    {        
+        PHONE1,        
+        PHONE2,
+        //**NOT REMOVING SO THAT EXISTING MOBILE AND LANDLINE VALIDATIONS AND UNIT TESTINGS WILL NOT FAIL***** 
+        LANDLINE,
+        MOBILE
     }
 }

@@ -36,8 +36,13 @@ namespace ADMS.Apprentices.Core.Messages
         [Required(ErrorMessage = "Profile Type is required")]
         public string ProfileType { get; init; }
 
-        [Display(Name = "Phone number")]
-        public List<PhoneNumberMessage> PhoneNumbers { get; init; }
+        [MaxLength(15, ErrorMessage = "Phone1 cannot have more than 15 characters")]
+        [RegularExpression(@"^\s?\+?[0-9 ]+$", ErrorMessage = "Phone1 must contain only numbers, spaces or plus sign")]
+        public string Phone1 { get; init; }
+
+        [MaxLength(15, ErrorMessage = "Phone2 cannot have more than 15 characters")]
+        [RegularExpression(@"^\+?[0-9 ]+$", ErrorMessage = "Phone2 must contain only numbers, spaces or plus sign")]
+        public string Phone2 { get; init; }
 
         [Display(Name = "Residential Address")]
         public ProfileAddressMessage ResidentialAddress { get; init; }
