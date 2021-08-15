@@ -75,7 +75,8 @@ namespace ADMS.Apprentices.Core.Services.Validators
             }
             else
             {
-                if (profile.NotProvidingUSIReasonCode.IsNullOrEmpty())
+                //Profile type of APPR cannot be created without either providing USI or NotProvidingUSIReasonCode
+                if (profile.NotProvidingUSIReasonCode.IsNullOrEmpty() && profile.ProfileTypeCode == ProfileType.APPR.ToString())
                     exceptionBuilder.AddException(ValidationExceptionType.MissingUSIExemptionReason);
             }
             return exceptionBuilder;
