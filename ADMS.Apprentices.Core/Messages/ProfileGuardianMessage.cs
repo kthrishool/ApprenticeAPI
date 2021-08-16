@@ -21,17 +21,17 @@ namespace ADMS.Apprentices.Core.Messages
 
         [Display(Name = "Home phone number")]
         [MaxLength(15, ErrorMessage = "Home phone number cannot have more than 15 characters")]
-        [RegularExpression(@"^\s?\+?[0-9 ]+$", ErrorMessage = "Home phone number must contain only numbers, spaces or plus sign")]
+        [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Home phone number must contain only numbers, spaces or plus sign")]
         public string HomePhoneNumber { get; init; }
 
         [Display(Name = "Mobile phone number")]
         [MaxLength(15, ErrorMessage = "Mobile phone number cannot have more than 15 characters")]
-        [RegularExpression(@"^\s?\+?[0-9 ]+$", ErrorMessage = "Mobile phone number must contain only numbers, spaces or plus sign")]
+        [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Mobile phone number must contain only numbers, spaces or plus sign")]
         public string Mobile { get; init; }
 
         [Display(Name = "Work phone number")]
         [MaxLength(15, ErrorMessage = "Work phone number cannot have more than 15 characters")]
-        [RegularExpression(@"^\s?\+?[0-9 ]+$", ErrorMessage = "Work phone number must contain only numbers, spaces or plus sign")]
+        [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Work phone number must contain only numbers, spaces or plus sign")]
         public string WorkPhoneNumber { get; init; } 
 
         [Display(Name = "Guardian address")]

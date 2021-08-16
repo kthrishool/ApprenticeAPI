@@ -40,7 +40,7 @@ namespace ADMS.Apprentices.Core.Services
                 CitizenshipCode = message.CitizenshipCode.SanitiseUpper(),
                 ProfileTypeCode = message.ProfileType.SanitiseUpper(),
                 CountryOfBirthCode = message.CountryOfBirthCode.SanitiseUpper(),
-                PreferredContactType = message.PreferredContactType.SanitiseUpper(),
+                PreferredContactTypeCode = message.PreferredContactTypeCode.SanitiseUpper(),
                 LanguageCode = message.LanguageCode.SanitiseUpper(),
                 HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise(),
                 LeftSchoolDate = message.LeftSchoolDate,

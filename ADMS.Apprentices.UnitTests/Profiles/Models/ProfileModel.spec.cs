@@ -76,7 +76,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
                 UpdatedOn = ProfileConstants.Updatedon,
                 UpdatedBy = ProfileConstants.Updatedby,
                 LanguageCode = ProfileConstants.LanguageCode,
-                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
+                PreferredContactTypeCode = ProfileConstants.PreferredContactType.ToString(),
                 VisaNumber = ProfileConstants.VisaNumber,
                 CustomerReferenceNumber = ProfileConstants.CustomerReferenceNumber
             };
@@ -127,7 +127,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             model.PreferredName.Should().Be(ProfileConstants.PreferredName);
             model.SelfAssessedDisabilityCode.Should().Be(ProfileConstants.SelfAssessedDisabilityCode);
             model.LanguageCode.Should().Be(ProfileConstants.LanguageCode);
-            model.PreferredContactType.Should().Be(ProfileConstants.PreferredContactType.ToString());
+            model.PreferredContactTypeCode.Should().Be(ProfileConstants.PreferredContactType.ToString());
             model.HighestSchoolLevelCode.Should().Be(ProfileConstants.HighestSchoolLevelCode);
             model.LeftSchoolDate.Should().Be(ProfileConstants.LeftSchoolDate);
             model.VisaNumber.Should().Be(ProfileConstants.VisaNumber);

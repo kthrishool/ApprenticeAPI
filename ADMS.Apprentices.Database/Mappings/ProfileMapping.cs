@@ -54,7 +54,7 @@ namespace ADMS.Apprentices.Database.Mappings
                 .HasColumnName("LanguageCode");
             entity.Property(e => e.CountryOfBirthCode)
                 .HasColumnName("CountryOfBirthCode");
-            entity.Property(e => e.PreferredContactType)
+            entity.Property(e => e.PreferredContactTypeCode)
                 .HasColumnName("PreferredContactType");
             entity.Property(e => e.VisaNumber)
                 .HasColumnName("VisaNumber");

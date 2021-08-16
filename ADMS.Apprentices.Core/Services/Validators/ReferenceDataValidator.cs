@@ -34,42 +34,6 @@ namespace ADMS.Apprentices.Core.Services.Validators
             }
         }
 
-        private void ValidatePreferredContactType(ValidationExceptionBuilder exceptionBuilder, Profile profile)
-        {
-            // if preferredContactType is Mobile we need atleast one mobile phone.
-            switch (profile.PreferredContactType)
-            {
-                case nameof(PreferredContactType.MOBILE) or nameof(PreferredContactType.SMS):
-                    if (profile.Phones.Any(c => !c.PhoneNumber.IsNullOrEmpty() && c.PhoneNumber.StartsWith("04")) == false)
-                    {
-                        exceptionBuilder.AddException(ValidationExceptionType.MobilePreferredContactIsInvalid);
-                    }
-                    break;
-                case nameof(PreferredContactType.PHONE):
-                    if (profile.Phones.Any() == false)
-                    {
-                        exceptionBuilder.AddException(ValidationExceptionType.PhonePreferredContactIsInvalid);
-                    }
-                    break;
-                case nameof(PreferredContactType.EMAIL):
-                    if (string.IsNullOrEmpty(profile.EmailAddress))
-                    {
-                        exceptionBuilder.AddException(ValidationExceptionType.EmailPreferredContactIsInvalid);
-                    }
-                    break;
-                case nameof(PreferredContactType.MAIL):
-                    if (profile.Addresses.Any() == false)
-                    {
-                        exceptionBuilder.AddException(ValidationExceptionType.MailPreferredContactIsInvalid);
-                    }
-                    break;
-                default:
-                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPreferredContactCode);
-                    break;
-            }
-            // validate rules based on the type of contact
-        }
-
         public async Task<ValidationExceptionBuilder> ValidateAsync(Profile profile)
         {
             var exceptionBuilder = new ValidationExceptionBuilder();
@@ -98,11 +62,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
             if (!string.IsNullOrEmpty(profile.NotProvidingUSIReasonCode))
             {
                 tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.USIExemptionCode, profile.NotProvidingUSIReasonCode, ValidationExceptionType.InvalidNotProvidingUSIReasonCode));
-            }
-            if (!string.IsNullOrEmpty(profile.PreferredContactType))
-            {
-                ValidatePreferredContactType(exceptionBuilder, profile);
-            }
+            }           
             await tasks.WaitAndThrowAnyExceptionFound();
             return exceptionBuilder;
         }

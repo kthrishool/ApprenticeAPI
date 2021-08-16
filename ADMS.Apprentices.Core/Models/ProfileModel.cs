@@ -32,7 +32,7 @@ namespace ADMS.Apprentices.Core.Models
         public string VisaNumber { get; }
         public string Phone1 { get; }
         public string Phone2 { get; }
-        public string PreferredContactType { get; set; }
+        public string PreferredContactTypeCode { get; set; }
         public ProfileAddressModel ResidentialAddress { get; set; }
         public ProfileAddressModel PostalAddress { get; set; }
         public List<PriorQualificationModel> PriorQualifications { get; set; }
@@ -80,7 +80,7 @@ namespace ADMS.Apprentices.Core.Models
 
             if (!apprentice.DeceasedFlag)
             {
-                PreferredContactType = apprentice.PreferredContactType;
+                PreferredContactTypeCode = apprentice.PreferredContactTypeCode;
                 EmailAddress = apprentice.EmailAddress;
                 Phone1 = apprentice.Phones.SingleOrDefault(x => x.PhoneTypeCode == PhoneType.PHONE1.ToString())?.PhoneNumber;
                 Phone2 = apprentice.Phones.SingleOrDefault(x => x.PhoneTypeCode == PhoneType.PHONE2.ToString())?.PhoneNumber;

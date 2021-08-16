@@ -23,7 +23,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     {
         private Profile validProfile;
         private Profile invalidProfile;
-
+        private Profile profile;
         protected override void Given()
         {
             validProfile = new Profile
@@ -32,8 +32,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
-                ProfileTypeCode = ProfileConstants.Profiletype,
-                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
+                ProfileTypeCode = ProfileConstants.Profiletype
             };
             invalidProfile = new Profile
             {
@@ -495,7 +494,124 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .Should().Throw<NotSupportedException>();
         }
         #endregion
-    }
 
+        #region PreferredContactType
+        [TestMethod]
+        public void DoesNothingIfPreferredCodeTypeIsValid()
+        {
+            profile = GetNewProfile();
+            profile.PreferredContactTypeCode = PreferredContactType.MOBILE.ToString();
+            profile.Phones.Add(new Phone() { PhoneNumber = "0411111111" });
+            ClassUnderTest
+                .Invoking(async c => (await c.ValidateAsync(profile)).ThrowAnyExceptions())
+                .Should().NotThrow<AdmsValidationException>();
+            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(profile)).HasExceptions().Should().BeFalse());
+        }
+
+        [TestMethod]
+        public void ThrowValidationExceptionWhenMobileContactTypeIsInvalid()
+        {
+            profile = GetNewProfile();
+            profile.PreferredContactTypeCode = PreferredContactType.MOBILE.ToString();
+            ClassUnderTest
+                .Invoking(async c => (await c.ValidateAsync(profile)).ThrowAnyExceptions())
+                .Should().Throw<AdmsValidationException>();
+        }        
+
+        [TestMethod]
+        public void ThrowValidationExceptionWhenContactTypeIsNotValidCode()
+        {
+            profile = GetNewProfile();
+            profile.PreferredContactTypeCode = "test";
+            ClassUnderTest
+                .Invoking(async c => (await c.ValidateAsync(profile)).ThrowAnyExceptions())
+                .Should().Throw<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void DoNothingWhenPhoneContactTypeIsValid()
+        {
+            profile = GetNewProfile();
+            profile.PreferredContactTypeCode = PreferredContactType.PHONE.ToString();
+            profile.Phones.Add(new Phone() { PhoneNumber = "0211111111" });
+            ClassUnderTest
+                .Invoking(async c => (await c.ValidateAsync(profile)).ThrowAnyExceptions())
+                .Should().NotThrow<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionWhenPhoneContactTypeIsNotValid()
+        {
+            profile = GetNewProfile();
+            profile.PreferredContactTypeCode = PreferredContactType.PHONE.ToString();
+            ClassUnderTest
+                .Invoking(async c => (await c.ValidateAsync(profile)).ThrowAnyExceptions())
+                .Should().Throw<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void DoNothingWhenEmailContactTypeIsValid()
+        {
+            profile = GetNewProfile();
+            profile.PreferredContactTypeCode = PreferredContactType.EMAIL.ToString();
+            profile.EmailAddress = ProfileConstants.Emailaddress;
+            ClassUnderTest
+                .Invoking(async c => (await c.ValidateAsync(profile)).ThrowAnyExceptions())
+                .Should().NotThrow<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionWhenEmailContactTypeIsInvalid()
+        {
+            profile = GetNewProfile();
+            profile.PreferredContactTypeCode = PreferredContactType.EMAIL.ToString();
+            profile.EmailAddress = null;
+            profile.Phones.Add(new Phone() { PhoneNumber = "0211111111" });
+            ClassUnderTest
+                .Invoking(async c => (await c.ValidateAsync(profile)).ThrowAnyExceptions())
+                .Should().Throw<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void DoNothingWhenMailContactTypeIsValid()
+        {
+            profile = GetNewProfile();
+            profile.PreferredContactTypeCode = PreferredContactType.MAIL.ToString();
+            profile.Addresses.Add(new Address()
+            {
+                StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
+                Postcode = ProfileConstants.ResidentialAddress.Postcode,
+                Locality = ProfileConstants.ResidentialAddress.Locality,
+                StateCode = ProfileConstants.ResidentialAddress.StateCode
+            });
+            ClassUnderTest
+                .Invoking(async c => (await c.ValidateAsync(profile)).ThrowAnyExceptions())
+                .Should().NotThrow<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionWhenMailContactTypeIsInvalid()
+        {
+            profile = GetNewProfile();
+            profile.PreferredContactTypeCode = PreferredContactType.MAIL.ToString();            
+            ClassUnderTest
+                .Invoking(async c => (await c.ValidateAsync(profile)).ThrowAnyExceptions())
+                .Should().Throw<AdmsValidationException>();
+        }
+        
+        #endregion
+        private Profile GetNewProfile()
+        {
+            return new Profile
+            {
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                EmailAddress = ProfileConstants.Emailaddress,
+                ProfileTypeCode = ProfileConstants.Profiletype
+            };
+        }
+    }
+   
     #endregion
 }

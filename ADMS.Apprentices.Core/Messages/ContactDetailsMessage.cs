@@ -19,8 +19,8 @@ namespace ADMS.Apprentices.Core.Messages
         [Display(Name = "Postal Address")]
         public ProfileAddressMessage PostalAddress { get; init; }
 
-        [Display(Name = "PreferredContactType")]
+        [Display(Name = "PreferredContactTypeCode")]
         [MaxLength(10, ErrorMessage = "Preferred Contact Exceeds 10 Characters")]
-        public string PreferredContactType { get; init; }
+        public string PreferredContactTypeCode { get; init; }
     }
 }

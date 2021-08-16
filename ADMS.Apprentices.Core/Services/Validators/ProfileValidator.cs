@@ -55,7 +55,12 @@ namespace ADMS.Apprentices.Core.Services.Validators
             {
                 if (Convert.ToDateTime(profile.LeftSchoolDate) < profile.BirthDate || Convert.ToDateTime(profile.LeftSchoolDate) > DateTime.Now)
                     exceptionBuilder.AddException(ValidationExceptionType.InvalidLeftSchoolDetails);
-            }            
+            }
+
+            if (!profile.PreferredContactTypeCode.IsNullOrEmpty())
+            {
+                ValidatePreferredContactType(exceptionBuilder, profile);
+            }
 
             // Phone validation
             //exceptionBuilder.AddExceptions(PhoneValidation(profile));
@@ -123,6 +128,41 @@ namespace ADMS.Apprentices.Core.Services.Validators
             return age >= 12;
         }
 
+        private void ValidatePreferredContactType(ValidationExceptionBuilder exceptionBuilder, Profile profile)
+        {            
+            switch (profile.PreferredContactTypeCode)
+            {
+                case nameof(PreferredContactType.MOBILE) or nameof(PreferredContactType.SMS):
+                    // if (profile.Phones.Any(c => !c.PhoneNumber.IsNullOrEmpty() && c.PhoneNumber.StartsWith("04")) == false)
+                    if (profile.Phones.Any() == false)
+                    {
+                        exceptionBuilder.AddException(ValidationExceptionType.MobilePreferredContactIsInvalid);
+                    }
+                    break;
+                case nameof(PreferredContactType.PHONE):
+                    if (profile.Phones.Any() == false)
+                    {
+                        exceptionBuilder.AddException(ValidationExceptionType.PhonePreferredContactIsInvalid);
+                    }
+                    break;
+                case nameof(PreferredContactType.EMAIL):
+                    if (string.IsNullOrEmpty(profile.EmailAddress))
+                    {
+                        exceptionBuilder.AddException(ValidationExceptionType.EmailPreferredContactIsInvalid);
+                    }
+                    break;
+                case nameof(PreferredContactType.MAIL):
+                    if (profile.Addresses.Any() == false)
+                    {
+                        exceptionBuilder.AddException(ValidationExceptionType.MailPreferredContactIsInvalid);
+                    }
+                    break;
+                default:
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPreferredContactCode);
+                    break;
+            }
+            // validate rules based on the type of contact
+        }
 
         #region Phone validation
         //**** NOT IN USE ***********
@@ -136,7 +176,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
         //        foreach (Phone phone in profile.Phones)
         //        {
         //            if (phone == null) continue;
-                    
+
         //            phoneValidator.ValidatePhonewithType(exceptionBuilder, phone);
         //            if (preferredPhoneSet && Convert.ToBoolean(phone.PreferredPhoneFlag))
         //            {

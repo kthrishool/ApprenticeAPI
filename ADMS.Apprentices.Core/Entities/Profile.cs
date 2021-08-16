@@ -15,7 +15,7 @@ namespace ADMS.Apprentices.Core.Entities
         public string GenderCode { get; set; }
         public DateTime BirthDate { get; set; }
         public string EmailAddress { get; set; }
-        public string PreferredContactType { get; set; }
+        public string PreferredContactTypeCode { get; set; }
         public string SelfAssessedDisabilityCode { get; set; }
         public string IndigenousStatusCode { get; set; }
         public string CitizenshipCode { get; set; }

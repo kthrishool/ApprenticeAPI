@@ -37,7 +37,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 Phone2 = ProfileConstants.Phone2,
                 ResidentialAddress = ProfileConstants.ResidentialAddress,
                 PostalAddress = ProfileConstants.PostalAddress,
-                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
+                PreferredContactTypeCode = ProfileConstants.PreferredContactType.ToString(),
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolDate = ProfileConstants.LeftSchoolDate,
                 IndigenousStatusCode = ProfileConstants.IndigenousStatusCode,
@@ -96,7 +96,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                     StreetAddress3 = c.StreetAddress3
                 })
                 .Should().Contain(message.PostalAddress);
-            profile.PreferredContactType.Should().Be(message.PreferredContactType);
+            profile.PreferredContactTypeCode.Should().Be(message.PreferredContactTypeCode);
         }
 
         [TestMethod]

@@ -67,7 +67,7 @@ namespace ADMS.Apprentices.Core.Services
                 //update the existing postal address if exist or add new address                
                 UpdateAddress(profile, message.PostalAddress, AddressType.POST.ToString());
             }
-            profile.PreferredContactType = message.PreferredContactType.SanitiseUpper();
+            profile.PreferredContactTypeCode = message.PreferredContactTypeCode.SanitiseUpper();
 
             //school details
             profile.HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise();

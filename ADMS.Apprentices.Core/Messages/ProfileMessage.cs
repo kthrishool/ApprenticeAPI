@@ -37,11 +37,11 @@ namespace ADMS.Apprentices.Core.Messages
         public string ProfileType { get; init; }
 
         [MaxLength(15, ErrorMessage = "Phone1 cannot have more than 15 characters")]
-        [RegularExpression(@"^\s?\+?[0-9 ]+$", ErrorMessage = "Phone1 must contain only numbers, spaces or plus sign")]
+        [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Phone1 must contain only numbers, spaces or plus sign")]
         public string Phone1 { get; init; }
 
         [MaxLength(15, ErrorMessage = "Phone2 cannot have more than 15 characters")]
-        [RegularExpression(@"^\+?[0-9 ]+$", ErrorMessage = "Phone2 must contain only numbers, spaces or plus sign")]
+        [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Phone2 must contain only numbers, spaces or plus sign")]
         public string Phone2 { get; init; }
 
         [Display(Name = "Residential Address")]
@@ -74,9 +74,9 @@ namespace ADMS.Apprentices.Core.Messages
         [MaxLength(10, ErrorMessage = "Language code cannot have more than 10 characters")]
         public string LanguageCode { get; init; }
 
-        [Display(Name = "PreferredContactType")]
-        [MaxLength(10, ErrorMessage = "Preferred contact type cannot have more than 10 characters")]
-        public string PreferredContactType { get; init; }
+        [Display(Name = "PreferredContactTypeCode")]
+        [MaxLength(10, ErrorMessage = "Preferred contact type code cannot have more than 10 characters")]
+        public string PreferredContactTypeCode { get; init; }
 
         [Display(Name = "HighestSchoolLevelCode")]
         [MaxLength(10, ErrorMessage = "Highest school level code cannot have more than 10 characters")]

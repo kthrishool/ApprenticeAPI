@@ -41,7 +41,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 GenderCode = ProfileConstants.GenderCode,
                 InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
                 LanguageCode = ProfileConstants.LanguageCode,
-                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
+                PreferredContactTypeCode = ProfileConstants.PreferredContactType.ToString(),
                 CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolDate = ProfileConstants.LeftSchoolDate,
@@ -199,7 +199,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldSetPreferredContactCode()
         {
-            profile.PreferredContactType.Should().Contain(ProfileConstants.PreferredContactType.ToString());
+            profile.PreferredContactTypeCode.Should().Contain(ProfileConstants.PreferredContactType.ToString());
         }
 
         [TestMethod]
