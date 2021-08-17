@@ -5,7 +5,7 @@ namespace ADMS.Apprentices.Core.Models
 {
     public record PriorApprenticeshipQualificationModel
     {
-        public int PriorApprenticeshipId { get; }
+        public int PriorApprenticeshipQualificationId { get; }
         public string QualificationCode { get; }
         public string QualificationDescription { get; }
         public string QualificationLevel { get; }
@@ -22,7 +22,7 @@ namespace ADMS.Apprentices.Core.Models
 
         public PriorApprenticeshipQualificationModel(PriorApprenticeshipQualification apprenticeship)
         {
-            PriorApprenticeshipId = apprenticeship.Id;
+            PriorApprenticeshipQualificationId = apprenticeship.Id;
             QualificationCode = apprenticeship.QualificationCode;
             QualificationDescription = apprenticeship.QualificationDescription;
             QualificationLevel = apprenticeship.QualificationLevel;
