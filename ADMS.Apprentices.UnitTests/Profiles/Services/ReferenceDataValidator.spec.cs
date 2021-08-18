@@ -134,7 +134,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public void DoesNothingIfUSIExemptionReasonCodeIsValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "NOUSI", Description = "test", });
+            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "NOUSI", Description = "test",});
 
             MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidNotProvidingUSIReasonCode);
 
@@ -239,7 +239,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
 
             qualification = ProfileConstants.Qualification;
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions()).Should().NotThrow();
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationsAsync(qualification)).ThrowAnyExceptions()).Should().NotThrow();
         }
 
         [TestMethod]
@@ -253,7 +253,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .ReturnsAsync(list1);
             qualification = new PriorQualification();
             qualification.QualificationLevel = "Invalid";
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationsAsync(qualification)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -268,7 +268,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification = new PriorQualification();
             qualification.QualificationANZSCOCode = "Invalid";
 
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationsAsync(qualification)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -287,7 +287,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             var priorApprenticeship = ProfileConstants.PriorApprenticeship;
 
 
-            ClassUnderTest.Invoking(async c => (await c.PriorApprenticeshipValidator(priorApprenticeship)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -303,7 +303,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             var priorApprenticeship = ProfileConstants.PriorApprenticeship;
             priorApprenticeship.CountryCode = "2222";
 
-            ClassUnderTest.Invoking(async c => (await c.PriorApprenticeshipValidator(priorApprenticeship)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -320,7 +320,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             var priorApprenticeship = ProfileConstants.PriorApprenticeship;
             priorApprenticeship.CountryCode = "1101";
 
-            ClassUnderTest.Invoking(async c => (await c.PriorApprenticeshipValidator(priorApprenticeship)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -337,7 +337,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             var priorApprenticeship = ProfileConstants.PriorApprenticeship;
             priorApprenticeship.CountryCode = "1101";
             priorApprenticeship.StateCode = "ACT";
-            ClassUnderTest.Invoking(async c => (await c.PriorApprenticeshipValidator(priorApprenticeship)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
                 .Should().NotThrow<AdmsValidationException>();
         }
 
@@ -354,7 +354,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             var priorApprenticeship = ProfileConstants.PriorApprenticeship;
             priorApprenticeship.CountryCode = "1101";
             priorApprenticeship.StateCode = "ACTa";
-            ClassUnderTest.Invoking(async c => (await c.PriorApprenticeshipValidator(priorApprenticeship)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 

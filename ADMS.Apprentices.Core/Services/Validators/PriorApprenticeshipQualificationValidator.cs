@@ -16,15 +16,8 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         public async Task<ValidationExceptionBuilder> ValidateAsync(PriorApprenticeshipQualification priorApprenticeship, Profile profile)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder();
-            var tasks = new List<Task>();
-
-            tasks.Add(base.ValidateAsync(priorApprenticeship, profile));
-            tasks.Add(referenceDataValidator.PriorApprenticeshipValidator(priorApprenticeship));
-
-            await tasks.WaitAndThrowAnyExceptionFound();
-
-
+            var exceptionBuilder = base.ValidatePriorAppreniticeshipQualification(priorApprenticeship, profile);
+            exceptionBuilder.AddExceptions(await referenceDataValidator.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship));
             return exceptionBuilder;
         }
     }

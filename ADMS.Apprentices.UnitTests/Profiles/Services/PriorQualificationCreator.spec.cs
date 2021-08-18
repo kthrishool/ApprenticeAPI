@@ -57,7 +57,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .Setup(s => s.GetAsync<Profile>(apprenticeId, true))
                 .ReturnsAsync(profile);
             Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidateAsync(It.IsAny<IQualificationAttributes>(), It.IsAny<Profile>()))
+                .Setup(s => s.ValidatePriorQualificationAsync(It.IsAny<IQualificationAttributes>(), It.IsAny<Profile>()))
                 .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
@@ -77,7 +77,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public async Task ShouldValidatesTheQualificationRequest()
         {
             qualification = await ClassUnderTest.CreateAsync(apprenticeId, message);
-            Container.GetMock<IQualificationValidator>().Verify(r => r.ValidateAsync(qualification, profile));
+            Container.GetMock<IQualificationValidator>().Verify(r => r.ValidatePriorQualificationAsync(qualification, profile));
         }
 
         [TestMethod]

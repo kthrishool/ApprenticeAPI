@@ -40,14 +40,14 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.BirthDate = ProfileConstants.Birthdate;
 
             Container.GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidateAsync(It.IsAny<IQualificationAttributes>()))
+                .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<IQualificationAttributes>()))
                 .ReturnsAsync(() => new ValidationExceptionBuilder());
         }
 
 
         protected override async void When()
         {
-            exceptionBuilder = await ClassUnderTest.ValidateAsync(qualification, profile);
+            exceptionBuilder = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
         }
 
 
@@ -57,7 +57,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.PriorQualifications.Clear();
             qualification.StartDate = null;
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).HasExceptions().Should().BeFalse());
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).HasExceptions().Should().BeFalse());
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.PriorQualifications.Clear();
             qualification.EndDate = null;
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).HasExceptions().Should().BeFalse());
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).HasExceptions().Should().BeFalse());
         }
 
         [TestMethod]
@@ -76,7 +76,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.EndDate = null;
             qualification.StartDate = null;
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).HasExceptions().Should().BeFalse());
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).HasExceptions().Should().BeFalse());
         }
 
         [TestMethod]
@@ -106,7 +106,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.PriorQualifications.Clear();
             qualification.QualificationCode = null;
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -117,7 +117,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.StartDate = new DateTime(2020, 1, 2);
             qualification.EndDate = new DateTime(2020, 1, 1);
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -128,7 +128,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.PriorQualifications.Clear();
             qualification.StartDate = DateTime.Now.AddDays(+1);
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -138,7 +138,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.PriorQualifications.Clear();
             qualification.EndDate = DateTime.Now.AddDays(+1);
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -149,7 +149,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.StartDate = DateTime.Now.AddDays(+1);
             qualification.EndDate = DateTime.Now.AddDays(+1);
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -159,7 +159,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.PriorQualifications.Clear();
             qualification.StartDate = ProfileConstants.Birthdate.AddYears(11);
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -170,7 +170,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.StartDate = null;
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(11);
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -182,8 +182,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(11);
 
             profile.PriorQualifications.Add(qualification);
-            var b = ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)));
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
+            var b = ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)));
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -195,7 +195,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(14);
             profile.PriorQualifications.Add(qualification);
 
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
 
@@ -206,7 +206,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(14);
             profile.PriorQualifications.Add(qualification);
 
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
     }
@@ -253,7 +253,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             };
 
             Container.GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidateAsync(It.IsAny<IQualificationAttributes>()))
+                .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<IQualificationAttributes>()))
                 .ReturnsAsync(() => new ValidationExceptionBuilder());
         }
     }

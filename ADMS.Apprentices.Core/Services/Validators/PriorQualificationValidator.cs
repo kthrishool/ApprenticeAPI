@@ -19,19 +19,15 @@ namespace ADMS.Apprentices.Core.Services.Validators
         }
 
 
-        public async Task<ValidationExceptionBuilder> ValidateAsync([NotNull] IQualificationAttributes qualification, [NotNull] Profile profile)
+        private void Validate(ValidationExceptionBuilder exceptionBuilder, [NotNull] IQualificationAttributes qualification, [NotNull] Profile profile)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder();
+            // var exceptionBuilder = new ValidationExceptionBuilder();
             //check if mandatory fields presents
 
             if (qualification.QualificationCode.IsNullOrEmpty())
             {
                 exceptionBuilder.AddException(ValidationExceptionType.MissingQualificationCode);
             }
-
-            //check if StartDate < endDate if startDate and EndDate not null
-            if ((qualification.StartDate != null && qualification.EndDate != null) && (qualification.StartDate.Value.Date > qualification.EndDate.Value.Date))
-                exceptionBuilder.AddException(ValidationExceptionType.DateMismatch);
 
             //check if start date can not be less than apprentice DOB +12 years
             if (qualification.StartDate != null)
@@ -49,14 +45,29 @@ namespace ADMS.Apprentices.Core.Services.Validators
             //check if start date and end date can not be greater than today's date.
             if (qualification.StartDate != null && qualification.EndDate != null)
             {
+                if (qualification.StartDate.Value.Date >= qualification.EndDate.Value.Date)
+                    exceptionBuilder.AddException(ValidationExceptionType.DateMismatch);
                 if (qualification.StartDate.Value.Date > DateTime.Today || qualification.EndDate.Value.Date > DateTime.Today)
                     exceptionBuilder.AddException(ValidationExceptionType.InvalidDate);
             }
+        }
 
-            exceptionBuilder.AddExceptions(await referenceDataValidator.ValidateAsync(qualification));
-
+        public async Task<ValidationExceptionBuilder> ValidatePriorQualificationAsync(IQualificationAttributes qualification, [NotNull] Profile profile)
+        {
+            var exceptionBuilder = new ValidationExceptionBuilder();
+            Validate(exceptionBuilder, qualification, profile);
+            exceptionBuilder.AddExceptions(await referenceDataValidator.ValidatePriorQualificationsAsync(qualification));
             return exceptionBuilder;
         }
+
+
+        public ValidationExceptionBuilder ValidatePriorAppreniticeshipQualification(IQualificationAttributes qualification, [NotNull] Profile profile)
+        {
+            var exceptionBuilder = new ValidationExceptionBuilder();
+            Validate(exceptionBuilder, qualification, profile);
+            return exceptionBuilder;
+        }
+
 
         public ValidationExceptionBuilder CheckForDuplicates(List<PriorQualification> qualifications)
         {

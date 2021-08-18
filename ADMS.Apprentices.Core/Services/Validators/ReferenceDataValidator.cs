@@ -62,12 +62,12 @@ namespace ADMS.Apprentices.Core.Services.Validators
             if (!string.IsNullOrEmpty(profile.NotProvidingUSIReasonCode))
             {
                 tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.USIExemptionCode, profile.NotProvidingUSIReasonCode, ValidationExceptionType.InvalidNotProvidingUSIReasonCode));
-            }           
+            }
             await tasks.WaitAndThrowAnyExceptionFound();
             return exceptionBuilder;
         }
 
-        public async Task<ValidationExceptionBuilder> PriorApprenticeshipValidator(PriorApprenticeshipQualification priorApprenticeship)
+        public async Task<ValidationExceptionBuilder> ValidatePriorApprenticeshipQualificationsAsync(PriorApprenticeshipQualification priorApprenticeship)
         {
             var exceptionBuilder = new ValidationExceptionBuilder();
 
@@ -85,11 +85,10 @@ namespace ADMS.Apprentices.Core.Services.Validators
             else
                 exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipCountryCode);
 
-            exceptionBuilder.ThrowAnyExceptions();
             return exceptionBuilder;
         }
 
-        public async Task<ValidationExceptionBuilder> ValidateAsync(IQualificationAttributes qualification)
+        public async Task<ValidationExceptionBuilder> ValidatePriorQualificationsAsync(IQualificationAttributes qualification)
         {
             var exceptionBuilder = new ValidationExceptionBuilder();
             var tasks = new List<Task>();
