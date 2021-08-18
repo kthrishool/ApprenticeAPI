@@ -145,7 +145,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0046", "The apprenticeship referenced by the qualification is not yet complete")]
         QualificationApprenticeshipIsNotComplete,
 
-        [ExceptionDetails("AP-VAL-0047", "Date completed cannot be before Date commenced")]
+        [ExceptionDetails("AP-VAL-0047", "Date completed should be after Date commenced")]
         DateMismatch,
 
         [ExceptionDetails("AP-VAL-0048", "Date commenced and Date completed cannot be before apprentice DOB +12 years")]
