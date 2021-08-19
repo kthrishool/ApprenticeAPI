@@ -8,10 +8,10 @@ namespace ADMS.Apprentices.Database.Mappings
     {
         public void Configure(EntityTypeBuilder<PriorApprenticeshipQualification> entity)
         {
-            entity.ToTable("PriorApprenticeship", "dbo");
+            entity.ToTable("PriorApprenticeshipQualification", "dbo");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .HasColumnName("PriorApprenticeshipId")
+                .HasColumnName("PriorApprenticeshipQualificationId")
                 .IsRequired()
                 .ValueGeneratedOnAdd();
 
