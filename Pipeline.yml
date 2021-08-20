@@ -7,14 +7,14 @@ trigger:
 parameters:
   - name: environments
     type: object
-    default: ['Dev', 'Test', 'LoadTest', 'Staging']
+    default: ['Dev', 'Test', 'LoadTest', 'Staging', 'Test1']
 
 resources:
   repositories:
     - repository: templates
       type: git
       name: ADMS/pipeline-templates
-      ref: chore/get-latest-pipeline
+      ref: users/jd3044
 
     - repository: db-templates
       type: git
@@ -56,66 +56,67 @@ stages:
             artifactName: 'database-drop-folder'
             targetEnvironment: '${{ env }}'
 
-    - stage: ${{ env }}
-      ${{if ne(env, 'Staging')}}:
-        dependsOn: DeployDatabase_${{ env }}
-      ${{if eq(env, 'Staging')}}:
-        dependsOn: BuildDatabase
-      condition: and(succeeded(), eq(variables['deploy${{ env }}'], 'true'))
-      variables:
-          - template: /Variables/Adms/${{ env }}_API_Variables.yml@templates
-          - name: admsApplicationName
-            value: "apprenticeapi"
-          - name: webAppPoolUsername
-            value: "$(ApprenticeAPI_ENETDEV)"
-          - name: webAppPoolPassword
-            value: "$(ApprenticeAPIPassword_ENETDEV)"
-          - name: "OurDatabaseSettings.DatabaseConnectionString"
-            value: '$(AdmsApprenticeConnectionString)'
-          - name: "OurHttpClientSettings.ReferenceDataEndpointBaseUrl"
-            value: '$(ReferenceDataEndpointBaseUrl)'
-          - name: "OurEnvironmentSettings.SwaggerPrefix"
-            value: '$(AdmsApprenticesSwaggerPrefix)'
-          - name: "OurEnvironmentSettings.SwaggerPath"
-            value: '$(AdmsApprenticesSwaggerPath)'
-          - ${{if eq(env, 'Staging')}}:
-            - name: "OurUSISettings.USIVerifyDisabled" #Disable the USI verification in staging
-              value: true
-      jobs:
-        - template: Jobs/Release/iiswebapplication.yml@templates
-          parameters:
-            environmentName: Backend_${{ env }}
-            parallelLimit: 100%
-            xmlTransformation: false
-            xmlVarSubstitution: true
-            parentWebsiteName: '$(admsWebsiteName)'
-            installDir: $(admsInstallDir)
-            takeAppOffline: true
-            hostName: ${{ variables.hostName }}
-            ${{if ne(env, 'Staging')}}:
-              webAppPoolUsername: "$(webAppPoolUsername)"
-              webAppPoolPassword: "$(webAppPoolPassword)"
-            ${{if eq(env, 'Staging')}}:
-              webAppPoolUsername: "$(ApprenticeAPI_GMSASTG)"
-            anonymousAuthentication: true
-            windowsAuthentication: false
-            webApplicationName: '$(admsApplicationName)'      
-            listSites: true
-
-    - stage: SmokeTest_${{ env }}
-      dependsOn: ${{ env }}
-      condition: and(succeeded(), eq(variables['deploy${{ env }}'], 'true'))
-      variables:
-          - template: /Variables/Adms/${{ env }}_API_Variables.yml@templates
-          - name: System.Debug
-            value: false
-      jobs:
-        - job: 
-          pool: common
-          steps:
-            - powershell: |
-                $uri = "https://${{variables.hostname}}/apprenticeapi/swagger/default/swagger.json"
-                echo "https://${{variables.hostname}}/apprenticeapi/swagger/index.html"
-                [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-                Invoke-RestMethod -Uri $uri -Method Get
-              displayName: Fetch Swagger
+    - ${{if ne(env, 'Test1')}}:
+      - stage: ${{ env }}
+        ${{if ne(env, 'Staging')}}:
+          dependsOn: DeployDatabase_${{ env }}
+        ${{if eq(env, 'Staging')}}:
+          dependsOn: BuildDatabase
+        condition: and(succeeded(), eq(variables['deploy${{ env }}'], 'true'))
+        variables:
+            - template: /Variables/Adms/${{ env }}_API_Variables.yml@templates
+            - name: admsApplicationName
+              value: "apprenticeapi"
+            - name: webAppPoolUsername
+              value: "$(ApprenticeAPI_ENETDEV)"
+            - name: webAppPoolPassword
+              value: "$(ApprenticeAPIPassword_ENETDEV)"
+            - name: "OurDatabaseSettings.DatabaseConnectionString"
+              value: '$(AdmsApprenticeConnectionString)'
+            - name: "OurHttpClientSettings.ReferenceDataEndpointBaseUrl"
+              value: '$(ReferenceDataEndpointBaseUrl)'
+            - name: "OurEnvironmentSettings.SwaggerPrefix"
+              value: '$(AdmsApprenticesSwaggerPrefix)'
+            - name: "OurEnvironmentSettings.SwaggerPath"
+              value: '$(AdmsApprenticesSwaggerPath)'
+            - ${{if eq(env, 'Staging')}}:
+              - name: "OurUSISettings.USIVerifyDisabled" #Disable the USI verification in staging
+                value: true
+        jobs:
+          - template: Jobs/Release/iiswebapplication.yml@templates
+            parameters:
+              environmentName: Backend_${{ env }}
+              parallelLimit: 100%
+              xmlTransformation: false
+              xmlVarSubstitution: true
+              parentWebsiteName: '$(admsWebsiteName)'
+              installDir: $(admsInstallDir)
+              takeAppOffline: true
+              hostName: ${{ variables.hostName }}
+              ${{if ne(env, 'Staging')}}:
+                webAppPoolUsername: "$(webAppPoolUsername)"
+                webAppPoolPassword: "$(webAppPoolPassword)"
+              ${{if eq(env, 'Staging')}}:
+                webAppPoolUsername: "$(ApprenticeAPI_GMSASTG)"
+              anonymousAuthentication: true
+              windowsAuthentication: false
+              webApplicationName: '$(admsApplicationName)'      
+              listSites: true
+        
+    -   stage: SmokeTest_${{ env }}
+        dependsOn: ${{ env }}
+        condition: and(succeeded(), eq(variables['deploy${{ env }}'], 'true'))
+        variables:
+            - template: /Variables/Adms/${{ env }}_API_Variables.yml@templates
+            - name: System.Debug
+              value: false
+        jobs:
+          - job: 
+            pool: common
+            steps:
+              - powershell: |
+                  $uri = "https://${{variables.hostname}}/apprenticeapi/swagger/default/swagger.json"
+                  echo "https://${{variables.hostname}}/apprenticeapi/swagger/index.html"
+                  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+                  Invoke-RestMethod -Uri $uri -Method Get
+                displayName: Fetch Swagger
