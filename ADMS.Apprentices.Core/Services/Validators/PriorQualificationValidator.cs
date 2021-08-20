@@ -21,9 +21,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         private void Validate(ValidationExceptionBuilder exceptionBuilder, [NotNull] IQualificationAttributes qualification, [NotNull] Profile profile)
         {
-            // var exceptionBuilder = new ValidationExceptionBuilder();
             //check if mandatory fields presents
-
             if (qualification.QualificationCode.IsNullOrEmpty())
             {
                 exceptionBuilder.AddException(ValidationExceptionType.MissingQualificationCode);
@@ -57,14 +55,6 @@ namespace ADMS.Apprentices.Core.Services.Validators
             var exceptionBuilder = new ValidationExceptionBuilder();
             Validate(exceptionBuilder, qualification, profile);
             exceptionBuilder.AddExceptions(await referenceDataValidator.ValidatePriorQualificationsAsync(qualification));
-            return exceptionBuilder;
-        }
-
-
-        public ValidationExceptionBuilder ValidatePriorAppreniticeshipQualification(IQualificationAttributes qualification, [NotNull] Profile profile)
-        {
-            var exceptionBuilder = new ValidationExceptionBuilder();
-            Validate(exceptionBuilder, qualification, profile);
             return exceptionBuilder;
         }
 

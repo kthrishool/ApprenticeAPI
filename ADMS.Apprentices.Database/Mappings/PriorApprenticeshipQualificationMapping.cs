@@ -14,42 +14,61 @@ namespace ADMS.Apprentices.Database.Mappings
                 .HasColumnName("PriorApprenticeshipQualificationId")
                 .IsRequired()
                 .ValueGeneratedOnAdd();
-
             entity.Property(e => e.ApprenticeId)
                 .HasColumnName("ApprenticeId")
                 .IsRequired();
+            entity.HasOne(e => e.Profile)
+                .WithMany(c => c.PriorApprenticeshipQualifications)
+                .HasForeignKey(e => e.ApprenticeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.Property(e => e.EmployerName)
+                .HasColumnName("EmployerName")
+                .IsRequired()
+                .IsUnicode(false)
+                .HasMaxLength(200);
             entity.Property(e => e.QualificationCode)
                 .HasColumnName("QualificationCode")
                 .HasMaxLength(10)
                 .IsRequired();
             entity.Property(e => e.QualificationDescription)
                 .HasColumnName("QualificationDescription")
-                .HasMaxLength(200);
+                .HasMaxLength(200)
+                .IsRequired();
             entity.Property(e => e.QualificationLevel)
                 .HasColumnName("QualificationLevel")
-                .HasMaxLength(10);
+                .HasMaxLength(10)
+                .IsRequired();
             entity.Property(e => e.QualificationANZSCOCode)
                 .HasColumnName("QualificationANZSCOCode")
-                .HasMaxLength(10);
+                .HasMaxLength(10)
+                .IsRequired();
             entity.Property(e => e.StartDate)
-                .HasColumnName("StartDate");
-            entity.Property(e => e.EndDate)
-                .HasColumnName("EndDate");
-            entity.Property(e => e.StateCode)
-                .HasColumnName("StateCode");
+                .HasColumnType("DATE")
+                .HasColumnName("StartDate")
+                .IsRequired();
             entity.Property(e => e.CountryCode)
-                .HasColumnName("CountryCode");
+                .HasColumnName("CountryCode")
+                .IsRequired()
+                .IsUnicode(false)
+                .HasMaxLength(10);
+            entity.Property(e => e.StateCode)
+                .HasColumnName("StateCode")
+                .IsRequired(false)
+                .IsUnicode(false)
+                .HasMaxLength(10);
+            entity.Property(e => e.ApprenticeshipReference)
+                .HasColumnName("ApprenticeshipReference")
+                .IsRequired(false)
+                .IsUnicode(false)
+                .HasMaxLength(30);
+
             entity.Property(x => x.Version)
                 .HasColumnName("Version")
                 .IsRequired()
                 .IsRowVersion();
             entity.Property(e => e.AuditEventId)
                 .HasColumnName("_AuditEventId");
-
-            entity.HasOne(e => e.Profile)
-                .WithMany(c => c.PriorApprenticeshipQualifications)
-                .HasForeignKey(e => e.ApprenticeId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

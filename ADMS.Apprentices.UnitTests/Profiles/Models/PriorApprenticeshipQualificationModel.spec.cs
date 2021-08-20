@@ -12,23 +12,23 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
     [TestClass]
     public class WhenInstantiatingAPriorPriorApprenticeshipModel : GivenWhenThen
     {
-        private PriorApprenticeshipQualificationModel priorApprenticeshipModel;
+        private PriorApprenticeshipQualificationModel model;
         private PriorApprenticeshipQualification priorApprenticeship;
 
         protected override void Given()
         {
-            priorApprenticeship = ProfileConstants.PriorApprenticeship;
+            priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
         }
 
         protected override void When()
         {
-            priorApprenticeshipModel = new PriorApprenticeshipQualificationModel(priorApprenticeship);
+            model = new PriorApprenticeshipQualificationModel(priorApprenticeship);
         }
 
         [TestMethod]
         public void ReturnsAModel()
         {
-            priorApprenticeshipModel.Should().NotBeNull();
+            model.Should().NotBeNull();
         }
 
         /// <summary>
@@ -37,22 +37,13 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
         [TestMethod]
         public void SetsPropertiesOnModel()
         {
-            priorApprenticeshipModel.QualificationCode.Should().Be(ProfileConstants.Qualification.QualificationCode);
-            priorApprenticeshipModel.QualificationDescription.Should().Be(ProfileConstants.Qualification.QualificationDescription);
-            priorApprenticeshipModel.QualificationLevel.Should().Be(ProfileConstants.Qualification.QualificationLevel);
-            priorApprenticeshipModel.QualificationANZSCOCode.Should().Be(ProfileConstants.Qualification.QualificationANZSCOCode);
-            priorApprenticeshipModel.StartDate.Should().Be(ProfileConstants.Qualification.StartDate);
-            priorApprenticeshipModel.EndDate.Should().Be(ProfileConstants.Qualification.EndDate);
-        }
-
-        [TestMethod]
-        public void StartAndEndDateIsNull()
-        {
-            priorApprenticeship.StartDate = null;
-            priorApprenticeship.EndDate = null;
-            priorApprenticeshipModel = new PriorApprenticeshipQualificationModel(priorApprenticeship);
-            priorApprenticeshipModel.StartDate.Should().BeNull();
-            priorApprenticeshipModel.EndDate.Should().BeNull();
+            model.EmployerName.Should().Be(ProfileConstants.PriorApprenticeshipQualification.EmployerName);
+            model.QualificationCode.Should().Be(ProfileConstants.PriorApprenticeshipQualification.QualificationCode);
+            model.QualificationDescription.Should().Be(ProfileConstants.PriorApprenticeshipQualification.QualificationDescription);
+            model.QualificationLevel.Should().Be(ProfileConstants.PriorApprenticeshipQualification.QualificationLevel);
+            model.QualificationANZSCOCode.Should().Be(ProfileConstants.PriorApprenticeshipQualification.QualificationANZSCOCode);
+            model.StartDate.Should().Be(ProfileConstants.PriorApprenticeshipQualification.StartDate);
+            model.ApprenticeshipReference.Should().Be(ProfileConstants.PriorApprenticeshipQualification.ApprenticeshipReference);
         }
     }
 

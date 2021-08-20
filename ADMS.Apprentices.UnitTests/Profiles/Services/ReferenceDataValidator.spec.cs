@@ -284,7 +284,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeship;
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
 
 
             ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
@@ -300,7 +300,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeship;
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
             priorApprenticeship.CountryCode = "2222";
 
             ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
@@ -317,7 +317,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeship;
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
             priorApprenticeship.CountryCode = "1101";
 
             ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
@@ -334,7 +334,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeship;
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
             priorApprenticeship.CountryCode = "1101";
             priorApprenticeship.StateCode = "ACT";
             ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
@@ -351,7 +351,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeship;
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
             priorApprenticeship.CountryCode = "1101";
             priorApprenticeship.StateCode = "ACTa";
             ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())

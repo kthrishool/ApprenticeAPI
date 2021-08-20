@@ -37,7 +37,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             message = new PriorApprenticeshipQualificationMessage()
             {
                 QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
-                StartDate = q.StartDate, EndDate = q.EndDate
+                StartDate = q.StartDate
             };
 
             registration = new Registration()

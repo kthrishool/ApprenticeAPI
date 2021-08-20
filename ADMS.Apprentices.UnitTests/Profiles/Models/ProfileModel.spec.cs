@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Models;
 using ADMS.Apprentices.UnitTests.Constants;
@@ -85,7 +84,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             profile.Phones.Add(new Phone() {PhoneNumber = ProfileConstants.Phone1, PhoneTypeCode = PhoneType.PHONE1.ToString()});
             profile.Phones.Add(new Phone() {PhoneNumber = ProfileConstants.Phone2, PhoneTypeCode = PhoneType.PHONE2.ToString()});
             profile.PriorQualifications.Add(ProfileConstants.Qualification);
-            profile.PriorApprenticeshipQualifications.Add(ProfileConstants.PriorApprenticeship);
+            profile.PriorApprenticeshipQualifications.Add(ProfileConstants.PriorApprenticeshipQualification);
             profile.USIs.Add(new ApprenticeUSI() {USI = ProfileConstants.USI, ActiveFlag = true, USIStatus = "test"});
         }
 
@@ -123,7 +122,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             model.CountryOfBirthCode.Should().Be(ProfileConstants.CountryOfBirthCode);
             model.GenderCode.Should().Be(ProfileConstants.GenderCode);
             model.IndigenousStatusCode.Should().Be(ProfileConstants.IndigenousStatusCode);
-            model.InterpretorRequiredFlag.Should().Be(ProfileConstants.InterpretorRequiredFlag);            
+            model.InterpretorRequiredFlag.Should().Be(ProfileConstants.InterpretorRequiredFlag);
             model.PreferredName.Should().Be(ProfileConstants.PreferredName);
             model.SelfAssessedDisabilityCode.Should().Be(ProfileConstants.SelfAssessedDisabilityCode);
             model.LanguageCode.Should().Be(ProfileConstants.LanguageCode);

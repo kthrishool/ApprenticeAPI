@@ -4,7 +4,6 @@ using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Helpers;
 using ADMS.Apprentices.Core.Messages;
 using ADMS.Apprentices.Core.Services.Validators;
-using Adms.Shared;
 using Adms.Shared.Attributes;
 using Adms.Shared.Exceptions;
 
@@ -14,14 +13,9 @@ namespace ADMS.Apprentices.Core.Services
     public class PriorApprenticeshipQualificationUpdater : IPriorApprenticeshipQualificationUpdater
     {
         private readonly IPriorApprenticeshipQualificationValidator priorApprenticeshipValidator;
-        private readonly IRepository repository;
-        private readonly ITYIMSRepository tyimsRepository;
 
-        public PriorApprenticeshipQualificationUpdater(IRepository repository, ITYIMSRepository tyimsRepository,
-            IPriorApprenticeshipQualificationValidator priorApprenticeshipValidator)
+        public PriorApprenticeshipQualificationUpdater(IPriorApprenticeshipQualificationValidator priorApprenticeshipValidator)
         {
-            this.repository = repository;
-            this.tyimsRepository = tyimsRepository;
             this.priorApprenticeshipValidator = priorApprenticeshipValidator;
         }
 
@@ -31,14 +25,15 @@ namespace ADMS.Apprentices.Core.Services
             if (priorApprenticeship == null)
                 throw AdmsNotFoundException.Create("Apprentice Qualification ", qualificationId.ToString());
 
+            priorApprenticeship.EmployerName = message.EmployerName.Sanitise();
             priorApprenticeship.QualificationCode = message.QualificationCode.Sanitise();
             priorApprenticeship.QualificationDescription = message.QualificationDescription.Sanitise();
             priorApprenticeship.QualificationLevel = message.QualificationLevel.Sanitise();
             priorApprenticeship.QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise();
             priorApprenticeship.StartDate = message.StartDate;
-            priorApprenticeship.EndDate = message.EndDate;
             priorApprenticeship.CountryCode = message.CountryCode;
             priorApprenticeship.StateCode = message.StateCode;
+            priorApprenticeship.ApprenticeshipReference = message.ApprenticeshipReference;
 
             var exceptionBuilder = await priorApprenticeshipValidator.ValidateAsync(priorApprenticeship, profile);
 

@@ -5,36 +5,37 @@ namespace ADMS.Apprentices.Core.Models
 {
     public record PriorApprenticeshipQualificationModel
     {
-        public int PriorApprenticeshipQualificationId { get; }
+        public int Id { get; }
+        public string EmployerName { get; }
         public string QualificationCode { get; }
         public string QualificationDescription { get; }
         public string QualificationLevel { get; }
         public string QualificationANZSCOCode { get; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTime? StartDate { get; }
+        public string ApprenticeshipReference { get; }
 
         public DateTime? CreatedOn { get; }
         public string CreatedBy { get; }
         public DateTime? UpdatedOn { get; }
         public string UpdatedBy { get; }
-
         public byte[] Version { get; }
 
-        public PriorApprenticeshipQualificationModel(PriorApprenticeshipQualification apprenticeship)
+        public PriorApprenticeshipQualificationModel(PriorApprenticeshipQualification priorApprenticeship)
         {
-            PriorApprenticeshipQualificationId = apprenticeship.Id;
-            QualificationCode = apprenticeship.QualificationCode;
-            QualificationDescription = apprenticeship.QualificationDescription;
-            QualificationLevel = apprenticeship.QualificationLevel;
-            QualificationANZSCOCode = apprenticeship.QualificationANZSCOCode;
-            StartDate = apprenticeship.StartDate;
-            EndDate = apprenticeship.EndDate;
+            Id = priorApprenticeship.Id;
+            EmployerName = priorApprenticeship.EmployerName;
+            QualificationCode = priorApprenticeship.QualificationCode;
+            QualificationDescription = priorApprenticeship.QualificationDescription;
+            QualificationLevel = priorApprenticeship.QualificationLevel;
+            QualificationANZSCOCode = priorApprenticeship.QualificationANZSCOCode;
+            StartDate = priorApprenticeship.StartDate;
+            ApprenticeshipReference = priorApprenticeship.ApprenticeshipReference;
 
-            CreatedOn = apprenticeship.CreatedOn;
-            CreatedBy = apprenticeship.CreatedBy;
-            UpdatedOn = apprenticeship.UpdatedOn;
-            UpdatedBy = apprenticeship.UpdatedBy;
-            Version = apprenticeship.Version;
+            CreatedOn = priorApprenticeship.CreatedOn;
+            CreatedBy = priorApprenticeship.CreatedBy;
+            UpdatedOn = priorApprenticeship.UpdatedOn;
+            UpdatedBy = priorApprenticeship.UpdatedBy;
+            Version = priorApprenticeship.Version;
         }
     }
 }

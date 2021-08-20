@@ -23,8 +23,9 @@ namespace ADMS.Apprentices.Core.Services
 
         public async Task<PriorApprenticeshipQualification> CreateAsync(int apprenticeId, PriorApprenticeshipQualificationMessage message)
         {
-            PriorApprenticeshipQualification priorApprenticeship = new PriorApprenticeshipQualification
+            PriorApprenticeshipQualification priorApprenticeship = new()
             {
+                EmployerName = message.EmployerName.Sanitise(),
                 QualificationCode = message.QualificationCode.Sanitise(),
                 QualificationDescription = message.QualificationDescription.Sanitise(),
                 QualificationLevel = message.QualificationLevel.Sanitise(),
@@ -32,7 +33,7 @@ namespace ADMS.Apprentices.Core.Services
                 StateCode = message.StateCode,
                 CountryCode = message.CountryCode,
                 StartDate = message.StartDate,
-                EndDate = message.EndDate
+                ApprenticeshipReference = message.ApprenticeshipReference
             };
 
             var profile = await GetProfileAndCheckQualificationForApprenticeships(apprenticeId, priorApprenticeship);

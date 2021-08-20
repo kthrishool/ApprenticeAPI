@@ -71,20 +71,14 @@ namespace ADMS.Apprentices.Core.Services.Validators
         {
             var exceptionBuilder = new ValidationExceptionBuilder();
 
-            if (!priorApprenticeship.CountryCode.IsNullOrEmpty())
+            await ValidateCodeAsync(exceptionBuilder, CodeTypes.Country, priorApprenticeship.CountryCode, ValidationExceptionType.InvalidPriorApprenticeshipCountryCode);
+            if (priorApprenticeship.CountryCode == "1101")
             {
-                await ValidateCodeAsync(exceptionBuilder, CodeTypes.Country, priorApprenticeship.CountryCode, ValidationExceptionType.InvalidPriorApprenticeshipCountryCode);
-                if (priorApprenticeship.CountryCode == "1101")
-                {
-                    if (priorApprenticeship.StateCode.IsNullOrEmpty())
-                        exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipAustralianStateCode);
-                    else if (!Enum.IsDefined(typeof(StateCode), priorApprenticeship.StateCode.ToUpper()))
-                        exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipAustralianStateCode);
-                }
+                if (priorApprenticeship.StateCode.IsNullOrEmpty())
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipAustralianStateCode);
+                else if (!Enum.IsDefined(typeof(StateCode), priorApprenticeship.StateCode.ToUpper()))
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipAustralianStateCode);
             }
-            else
-                exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipCountryCode);
-
             return exceptionBuilder;
         }
 
