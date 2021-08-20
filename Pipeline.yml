@@ -103,7 +103,7 @@ stages:
               webApplicationName: '$(admsApplicationName)'      
               listSites: true
         
-    -   stage: SmokeTest_${{ env }}
+      -   stage: SmokeTest_${{ env }}
         dependsOn: ${{ env }}
         condition: and(succeeded(), eq(variables['deploy${{ env }}'], 'true'))
         variables:
