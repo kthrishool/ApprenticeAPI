@@ -10,17 +10,17 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0002", "Invalid apprentice profile type")]
         InvalidApprenticeprofileType,
 
-        [ExceptionDetails("AP-VAL-0003", "ApprenticeId is not valid")]
+        [ExceptionDetails("AP-VAL-0003", "Invalid Apprentice Id")]
         InvalidApprenticeId,
 
         [ExceptionDetails("AP-VAL-0004", "TFN already recorded for this apprentice")]
         TFNAlreadyExists,
 
-        [ExceptionDetails("AP-VAL-0005", "TFN is not valid")]
+        [ExceptionDetails("AP-VAL-0005", "Invalid TFN")]
         InvalidTFN,
 
         //*****NOT IN USE******/
-        [ExceptionDetails("AP-VAL-0006", "Phone number cannot be null")]
+        [ExceptionDetails("AP-VAL-0006", "Phone number is required")]
         NullPhoneNumber,
 
         //*****NOT IN USE******/
@@ -51,13 +51,13 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0014", "Suburb name exceeds 40 characters")]
         SuburbExceedsMaxLength,
 
-        [ExceptionDetails("AP-VAL-0015", "Street address line cannot be null")]
+        [ExceptionDetails("AP-VAL-0015", "Street address line 1 is required")]
         StreetAddressLine1CannotBeNull,
 
         [ExceptionDetails("AP-VAL-0016", "Unexpected error while processing your request")]
         ServerError,
 
-        [ExceptionDetails("AP-VAL-0017", "Invalid country code")]
+        [ExceptionDetails("AP-VAL-0017", "Invalid country of birth code")]
         InvalidCountryCode,
 
         [ExceptionDetails("AP-VAL-0018", "Postcode selected is invalid for the state selected")]
@@ -90,7 +90,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0027", "Invalid preferred contact type code")]
         InvalidPreferredContactCode,
 
-        [ExceptionDetails("AP-VAL-0028", "Missing qualification code")]
+        [ExceptionDetails("AP-VAL-0028", "Qualification code is required")]
         MissingQualificationCode,
 
         [ExceptionDetails("AP-VAL-0030", "Invalid qualification level")]
@@ -145,16 +145,16 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0046", "The apprenticeship referenced by the qualification is not yet complete")]
         QualificationApprenticeshipIsNotComplete,
 
-        [ExceptionDetails("AP-VAL-0047", "Date completed should be after Date commenced")]
+        [ExceptionDetails("AP-VAL-0047", "End date cannot be before start date")]
         DateMismatch,
 
         [ExceptionDetails("AP-VAL-0048", "Date commenced and Date completed cannot be before apprentice DOB +12 years")]
         DOBDateMismatch,
 
-        [ExceptionDetails("AP-VAL-0049", "Date commenced and Date completed cannot be after today's date")]
+        [ExceptionDetails("AP-VAL-0049", "Start and end date cannot be later than current date")]
         InvalidDate,
 
-        [ExceptionDetails("AP-VAL-0050", "Apprenticeship qualification should have a start date and end date")]
+        [ExceptionDetails("AP-VAL-0050", "Apprenticeship qualification start and end dates are required")]
         InvalidApprenticeshipQualification,
 
         [ExceptionDetails("AP-VAL-0051", "ApprenticeshipId does not belong to the apprentice")]

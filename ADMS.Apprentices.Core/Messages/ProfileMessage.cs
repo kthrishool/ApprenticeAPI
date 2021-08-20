@@ -23,8 +23,8 @@ namespace ADMS.Apprentices.Core.Messages
         [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Preferred name must contain only letters, spaces, hyphens and apostrophes")]
         [MaxLength(50, ErrorMessage = "Preferred name cannot have more than 50 characters")]
         public string PreferredName { get; init; }
-
-        [Required(ErrorMessage = "Birth date is required")]
+        
+        [Required(ErrorMessage = "Birth date is required")]        
         public DateTime? BirthDate { get; init; }
 
         [Display(Name = "Email address")]
@@ -53,14 +53,14 @@ namespace ADMS.Apprentices.Core.Messages
         [MaxLength(10, ErrorMessage = "Indigenous status code cannot have more than 10 characters")]
         public string IndigenousStatusCode { get; init; }
 
-        [RegularExpression("[@NYny]", ErrorMessage = "Invalid Self assessed disability code. Valid values are @ - Not stated, N - No, Y - Yes")]
+        [RegularExpression("[@NYny]", ErrorMessage = "Invalid self assessed disability code")]
         public string SelfAssessedDisabilityCode { get; init; }
 
         [MaxLength(10, ErrorMessage = "Citizenship code cannot have more than 10 characters")]
         public string CitizenshipCode { get; init; }
 
         [Display(Name = "Gender")]
-        [RegularExpression("[MFXmfx]", ErrorMessage = "Gender Code is invalid")]
+        [RegularExpression("[MFXmfx]", ErrorMessage = "Invalid gender code")]
         public String GenderCode { get; init; }
 
         [Display(Name = "InterpretorRequired")]

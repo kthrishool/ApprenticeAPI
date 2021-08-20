@@ -169,7 +169,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, "@", "InvalidCode");
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(1);
-            lstErrors[0].ErrorMessage.Should().StartWith("Invalid Self assessed disability code");
+            lstErrors[0].ErrorMessage.Should().StartWith("Invalid self assessed disability code");
         }
 
         public IList<ValidationResult> ValidateModel(object model)
@@ -234,7 +234,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, null, null, "mq");
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(1);
-            lstErrors[0].ErrorMessage.Should().StartWith("Gender Code is invalid");
+            lstErrors[0].ErrorMessage.Should().StartWith("Invalid gender code");
         }
 
         #endregion
