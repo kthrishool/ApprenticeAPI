@@ -33,7 +33,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.BirthDate = ProfileConstants.Birthdate;
 
             Container.GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<IQualificationAttributes>()))
+                .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<PriorQualification>()))
                 .ReturnsAsync(() => new ValidationExceptionBuilder());
             Container.GetMock<IReferenceDataValidator>()
                 .Setup(s => s.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship))

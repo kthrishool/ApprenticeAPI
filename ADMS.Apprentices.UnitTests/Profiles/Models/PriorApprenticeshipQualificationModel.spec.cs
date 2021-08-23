@@ -42,6 +42,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             model.QualificationDescription.Should().Be(ProfileConstants.PriorApprenticeshipQualification.QualificationDescription);
             model.QualificationLevel.Should().Be(ProfileConstants.PriorApprenticeshipQualification.QualificationLevel);
             model.QualificationANZSCOCode.Should().Be(ProfileConstants.PriorApprenticeshipQualification.QualificationANZSCOCode);
+            model.NotOnTrainingGovAu.Should().Be(ProfileConstants.PriorApprenticeshipQualification.NotOnTrainingGovAu);
             model.StartDate.Should().Be(ProfileConstants.PriorApprenticeshipQualification.StartDate);
             model.ApprenticeshipReference.Should().Be(ProfileConstants.PriorApprenticeshipQualification.ApprenticeshipReference);
         }

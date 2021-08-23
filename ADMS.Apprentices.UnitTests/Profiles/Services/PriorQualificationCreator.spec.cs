@@ -12,6 +12,8 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
+// ReSharper disable PossibleInvalidOperationException
+
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
 {
     #region WhenCreatingAPriorQualification
@@ -34,13 +36,16 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.Id = apprenticeId;
             profile.PriorQualifications.Clear();
             var q = ProfileConstants.QualificationMessage;
-            message = new PriorQualificationMessage()
+            message = new PriorQualificationMessage
             {
-                QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
-                StartDate = q.StartDate, EndDate = q.EndDate
+                QualificationCode = q.QualificationCode,
+                QualificationDescription = q.QualificationDescription,
+                NotOnTrainingGovAu = true,
+                StartDate = q.StartDate,
+                EndDate = q.EndDate
             };
 
-            registration = new Registration()
+            registration = new Registration
             {
                 CurrentEndReasonCode = "CMPS",
                 StartDate = new DateTime(2010, 1, 1),
@@ -57,12 +62,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .Setup(s => s.GetAsync<Profile>(apprenticeId, true))
                 .ReturnsAsync(profile);
             Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidatePriorQualificationAsync(It.IsAny<IQualificationAttributes>(), It.IsAny<Profile>()))
+                .Setup(s => s.ValidatePriorQualificationAsync(It.IsAny<PriorQualification>(), It.IsAny<Profile>()))
                 .ReturnsAsync(new ValidationExceptionBuilder());
-        }
-
-        protected override void When()
-        {
         }
 
         [TestMethod]
@@ -71,7 +72,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification = await ClassUnderTest.CreateAsync(apprenticeId, message);
             qualification.Should().NotBeNull();
         }
-
 
         [TestMethod]
         public async Task ShouldValidatesTheQualificationRequest()
@@ -88,6 +88,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.QualificationDescription.Should().Be(message.QualificationDescription);
             qualification.QualificationANZSCOCode.Should().Be(message.QualificationANZSCOCode);
             qualification.QualificationLevel.Should().Be(message.QualificationLevel);
+            qualification.NotOnTrainingGovAu.Should().Be(message.NotOnTrainingGovAu.Value);
         }
 
         [TestMethod]

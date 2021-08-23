@@ -90,9 +90,6 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0027", "Invalid preferred contact type code")]
         InvalidPreferredContactCode,
 
-        [ExceptionDetails("AP-VAL-0028", "Qualification code is required")]
-        MissingQualificationCode,
-
         [ExceptionDetails("AP-VAL-0030", "Invalid qualification level")]
         InvalidQualificationLevel,
 

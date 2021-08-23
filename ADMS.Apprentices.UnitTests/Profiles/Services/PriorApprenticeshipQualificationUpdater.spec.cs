@@ -29,16 +29,18 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         protected override void Given()
         {
             qualificationId = 20;
-            qualification = new PriorApprenticeshipQualification()
+            qualification = new PriorApprenticeshipQualification
             {
                 Id = qualificationId,
                 QualificationCode = "something",
             };
             var q = ProfileConstants.QualificationMessage;
-            message = new PriorApprenticeshipQualificationMessage()
+            message = new PriorApprenticeshipQualificationMessage
             {
-                QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
-                StartDate = q.StartDate
+                QualificationCode = q.QualificationCode,
+                QualificationDescription = q.QualificationDescription,
+                StartDate = q.StartDate,
+                NotOnTrainingGovAu = true
             };
 
             profile = new Profile();
@@ -52,10 +54,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             Container.GetMock<IPriorApprenticeshipQualificationValidator>()
                 .Setup(s => s.ValidateAsync(It.IsAny<PriorApprenticeshipQualification>(), It.IsAny<Profile>()))
                 .ReturnsAsync(new ValidationExceptionBuilder());
-        }
-
-        protected override void When()
-        {
         }
 
         private void ChangeRegistrationDetails(int id)
@@ -73,6 +71,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.QualificationDescription.Should().Be(message.QualificationDescription);
             qualification.QualificationANZSCOCode.Should().Be(message.QualificationANZSCOCode);
             qualification.QualificationLevel.Should().Be(message.QualificationLevel);
+            qualification.NotOnTrainingGovAu.Should().BeTrue();
         }
 
         [TestMethod]

@@ -12,6 +12,8 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
+// ReSharper disable PossibleInvalidOperationException
+
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
 {
     #region WhenUpdatingAPriorQualification
@@ -29,16 +31,19 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         protected override void Given()
         {
             qualificationId = 20;
-            qualification = new PriorQualification()
+            qualification = new PriorQualification
             {
                 Id = qualificationId,
                 QualificationCode = "something",
             };
             var q = ProfileConstants.QualificationMessage;
-            message = new PriorQualificationMessage()
+            message = new PriorQualificationMessage
             {
-                QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
-                StartDate = q.StartDate, EndDate = q.EndDate
+                QualificationCode = q.QualificationCode,
+                QualificationDescription = q.QualificationDescription,
+                StartDate = q.StartDate,
+                EndDate = q.EndDate,
+                NotOnTrainingGovAu = true
             };
 
             profile = new Profile();
@@ -50,12 +55,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .ReturnsAsync(profile);
             ChangeRegistrationDetails(ProfileConstants.Id);
             Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidatePriorQualificationAsync(It.IsAny<IQualificationAttributes>(), It.IsAny<Profile>()))
+                .Setup(s => s.ValidatePriorQualificationAsync(It.IsAny<PriorQualification>(), It.IsAny<Profile>()))
                 .ReturnsAsync(new ValidationExceptionBuilder());
-        }
-
-        protected override void When()
-        {
         }
 
         private void ChangeRegistrationDetails(int id)
@@ -73,6 +74,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.QualificationDescription.Should().Be(message.QualificationDescription);
             qualification.QualificationANZSCOCode.Should().Be(message.QualificationANZSCOCode);
             qualification.QualificationLevel.Should().Be(message.QualificationLevel);
+            qualification.NotOnTrainingGovAu.Should().Be(message.NotOnTrainingGovAu.Value);
         }
 
         [TestMethod]

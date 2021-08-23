@@ -8,6 +8,6 @@ namespace ADMS.Apprentices.Core.Services.Validators
     public interface IQualificationValidator
     {
         ValidationExceptionBuilder CheckForDuplicates(List<PriorQualification> qualifications);
-        Task<ValidationExceptionBuilder> ValidatePriorQualificationAsync(IQualificationAttributes qualification, Profile profile);
+        Task<ValidationExceptionBuilder> ValidatePriorQualificationAsync(PriorQualification qualification, Profile profile);
     }
 }

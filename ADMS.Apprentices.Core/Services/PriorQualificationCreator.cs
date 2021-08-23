@@ -5,21 +5,19 @@ using ADMS.Apprentices.Core.Messages;
 using ADMS.Apprentices.Core.Services.Validators;
 using Adms.Shared;
 
+// ReSharper disable PossibleInvalidOperationException
+
 namespace ADMS.Apprentices.Core.Services
 {
     public class PriorQualificationCreator : IPriorQualificationCreator
     {
         private readonly IRepository repository;
         private readonly IQualificationValidator qualificationValidator;
-        private readonly ITYIMSRepository tyimsRepository;
 
-        public PriorQualificationCreator(IRepository repository,
-            IQualificationValidator qualificationValidator,
-            ITYIMSRepository tyimsRepository)
+        public PriorQualificationCreator(IRepository repository, IQualificationValidator qualificationValidator)
         {
             this.repository = repository;
             this.qualificationValidator = qualificationValidator;
-            this.tyimsRepository = tyimsRepository;
         }
 
         public async Task<PriorQualification> CreateAsync(int apprenticeId, PriorQualificationMessage message)
@@ -30,6 +28,7 @@ namespace ADMS.Apprentices.Core.Services
                 QualificationDescription = message.QualificationDescription.Sanitise(),
                 QualificationLevel = message.QualificationLevel.Sanitise(),
                 QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise(),
+                NotOnTrainingGovAu = message.NotOnTrainingGovAu.Value,
                 StartDate = message.StartDate,
                 EndDate = message.EndDate
             };

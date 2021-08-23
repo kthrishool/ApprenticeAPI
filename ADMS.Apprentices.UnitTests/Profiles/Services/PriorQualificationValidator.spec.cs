@@ -40,7 +40,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.BirthDate = ProfileConstants.Birthdate;
 
             Container.GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<IQualificationAttributes>()))
+                .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<PriorQualification>()))
                 .ReturnsAsync(() => new ValidationExceptionBuilder());
         }
 
@@ -98,16 +98,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
             ClassUnderTest.Invoking(c => c.CheckForDuplicates(profile.PriorQualifications.ToList()).ThrowAnyExceptions())
                 .Should().NotThrow<AdmsValidationException>();
-        }
-
-        [TestMethod]
-        public void ThrowsValidationExceptionIfQCodeIsNull()
-        {
-            profile.PriorQualifications.Clear();
-            qualification.QualificationCode = null;
-            profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
@@ -253,7 +243,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             };
 
             Container.GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<IQualificationAttributes>()))
+                .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<PriorQualification>()))
                 .ReturnsAsync(() => new ValidationExceptionBuilder());
         }
     }

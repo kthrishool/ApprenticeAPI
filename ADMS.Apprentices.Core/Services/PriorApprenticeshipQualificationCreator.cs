@@ -5,6 +5,8 @@ using ADMS.Apprentices.Core.Messages;
 using ADMS.Apprentices.Core.Services.Validators;
 using Adms.Shared;
 
+// ReSharper disable PossibleInvalidOperationException
+
 namespace ADMS.Apprentices.Core.Services
 {
     public class PriorApprenticeshipQualificationCreator : IPriorApprenticeshipQualificationCreator
@@ -30,6 +32,7 @@ namespace ADMS.Apprentices.Core.Services
                 QualificationDescription = message.QualificationDescription.Sanitise(),
                 QualificationLevel = message.QualificationLevel.Sanitise(),
                 QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise(),
+                NotOnTrainingGovAu = message.NotOnTrainingGovAu.Value,
                 StateCode = message.StateCode,
                 CountryCode = message.CountryCode,
                 StartDate = message.StartDate,

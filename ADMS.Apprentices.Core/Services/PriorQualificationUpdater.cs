@@ -8,6 +8,8 @@ using Adms.Shared;
 using Adms.Shared.Attributes;
 using Adms.Shared.Exceptions;
 
+// ReSharper disable PossibleInvalidOperationException
+
 namespace ADMS.Apprentices.Core.Services
 {
     [RegisterWithIocContainer]
@@ -15,13 +17,10 @@ namespace ADMS.Apprentices.Core.Services
     {
         private readonly IQualificationValidator qualificationValidator;
         private readonly IRepository repository;
-        private readonly ITYIMSRepository tyimsRepository;
 
-        public PriorQualificationUpdater(IRepository repository, ITYIMSRepository tyimsRepository,
-            IQualificationValidator qualificationValidator)
+        public PriorQualificationUpdater(IRepository repository, IQualificationValidator qualificationValidator)
         {
             this.repository = repository;
-            this.tyimsRepository = tyimsRepository;
             this.qualificationValidator = qualificationValidator;
         }
 
@@ -38,6 +37,7 @@ namespace ADMS.Apprentices.Core.Services
             priorQualification.QualificationDescription = message.QualificationDescription.Sanitise();
             priorQualification.QualificationLevel = message.QualificationLevel.Sanitise();
             priorQualification.QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise();
+            priorQualification.NotOnTrainingGovAu = message.NotOnTrainingGovAu.Value;
             priorQualification.StartDate = message.StartDate;
             priorQualification.EndDate = message.EndDate;
 

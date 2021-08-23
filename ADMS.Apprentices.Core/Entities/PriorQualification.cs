@@ -6,7 +6,7 @@ namespace ADMS.Apprentices.Core.Entities
     /// <summary>
     /// A Qualification an apprentice has completed.
     /// </summary>
-    public class PriorQualification : IAuditableIdentifier, ITimestampEnabled, IQualificationAttributes
+    public class PriorQualification : IAuditableIdentifier, ITimestampEnabled
     {
         public int Id { get; set; }
         public int ApprenticeId { get; set; }
@@ -17,8 +17,10 @@ namespace ADMS.Apprentices.Core.Entities
         public string QualificationDescription { get; set; }
         public string QualificationLevel { get; set; }
         public string QualificationANZSCOCode { get; set; }
+        public bool NotOnTrainingGovAu { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }

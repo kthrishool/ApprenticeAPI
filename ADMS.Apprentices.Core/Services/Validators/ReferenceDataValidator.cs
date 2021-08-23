@@ -5,22 +5,16 @@ using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Exceptions;
 using ADMS.Apprentices.Core.HttpClients.ReferenceDataApi;
-using Adms.Shared;
 using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentices.Core.Services.Validators
 {
     public class ReferenceDataValidator : IReferenceDataValidator
     {
-        private readonly IRepository repository;
         private readonly IReferenceDataClient referenceDataClient;
 
-        public ReferenceDataValidator(
-            IRepository repository,
-            IReferenceDataClient referenceDataClient
-        )
+        public ReferenceDataValidator(IReferenceDataClient referenceDataClient)
         {
-            this.repository = repository;
             this.referenceDataClient = referenceDataClient;
         }
 
@@ -82,7 +76,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
             return exceptionBuilder;
         }
 
-        public async Task<ValidationExceptionBuilder> ValidatePriorQualificationsAsync(IQualificationAttributes qualification)
+        public async Task<ValidationExceptionBuilder> ValidatePriorQualificationsAsync(PriorQualification qualification)
         {
             var exceptionBuilder = new ValidationExceptionBuilder();
             var tasks = new List<Task>();

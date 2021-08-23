@@ -26,6 +26,9 @@ namespace ADMS.Apprentices.Core.Messages
         public string QualificationANZSCOCode { get; init; }
 
         [Required]
+        public bool? NotOnTrainingGovAu { get; init; }
+
+        [Required]
         public DateTime? StartDate { get; init; }
 
         public string StateCode { get; init; }

@@ -5,13 +5,14 @@ namespace ADMS.Apprentices.Core.Models
 {
     public record PriorQualificationModel
     {
-        public int QualificationId { get; }
+        public int Id { get; }
         public string QualificationCode { get; }
         public string QualificationDescription { get; }
         public string QualificationLevel { get; }
         public string QualificationANZSCOCode { get; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public bool NotOnTrainingGovAu { get; }
+        public DateTime? StartDate { get; }
+        public DateTime? EndDate { get; }
 
         public DateTime? CreatedOn { get; }
         public string CreatedBy { get; }
@@ -22,11 +23,12 @@ namespace ADMS.Apprentices.Core.Models
 
         public PriorQualificationModel(PriorQualification qualification)
         {
-            QualificationId = qualification.Id;
+            Id = qualification.Id;
             QualificationCode = qualification.QualificationCode;
             QualificationDescription = qualification.QualificationDescription;
             QualificationLevel = qualification.QualificationLevel;
             QualificationANZSCOCode = qualification.QualificationANZSCOCode;
+            NotOnTrainingGovAu = qualification.NotOnTrainingGovAu;
             StartDate = qualification.StartDate;
             EndDate = qualification.EndDate;
             ApprenticeshipId = qualification.ApprenticeshipId;

@@ -55,8 +55,8 @@ namespace ADMS.Apprentices.UnitTests.Constants
         public static bool DeceasedFlag = false;
         public static ProfileType ProfileTypeCode = ProfileType.APPR;
         public static PreferredContactType PreferredContactType = PreferredContactType.MOBILE;
-        public static PriorQualification Qualification => new() {QualificationCode = "QCode", QualificationDescription = "QDescription", QualificationLevel = "1101", QualificationANZSCOCode = "1101", StartDate = new DateTime(2000, 10, 1), EndDate = new DateTime(2002, 10, 1)};
-        public static PriorApprenticeshipQualification PriorApprenticeshipQualification => new() {EmployerName = "employer-name", QualificationCode = "QCode", QualificationDescription = "QDescription", QualificationLevel = "1101", QualificationANZSCOCode = "1101", StartDate = new DateTime(2000, 10, 1), ApprenticeshipReference = "apprenticeship-reference"};
+        public static PriorQualification Qualification => new() {QualificationCode = "QCode", QualificationDescription = "QDescription", QualificationLevel = "1101", QualificationANZSCOCode = "1101", NotOnTrainingGovAu = true, StartDate = new DateTime(2000, 10, 1), EndDate = new DateTime(2002, 10, 1)};
+        public static PriorApprenticeshipQualification PriorApprenticeshipQualification => new() {EmployerName = "employer-name", QualificationCode = "QCode", QualificationDescription = "QDescription", QualificationLevel = "1101", QualificationANZSCOCode = "1101", NotOnTrainingGovAu = true, StartDate = new DateTime(2000, 10, 1), ApprenticeshipReference = "apprenticeship-reference"};
         public static DateTime LeftSchoolDate = DateTime.Now.AddYears(-5);
 
         public static PriorQualificationMessage QualificationMessage => new()

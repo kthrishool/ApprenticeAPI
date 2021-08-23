@@ -34,13 +34,15 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             };
             profile.PriorQualifications.Clear();
             var q = ProfileConstants.QualificationMessage;
-            message = new PriorApprenticeshipQualificationMessage()
+            message = new PriorApprenticeshipQualificationMessage
             {
-                QualificationCode = q.QualificationCode, QualificationDescription = q.QualificationDescription,
+                QualificationCode = q.QualificationCode,
+                QualificationDescription = q.QualificationDescription,
+                NotOnTrainingGovAu = true,
                 StartDate = q.StartDate
             };
 
-            registration = new Registration()
+            registration = new Registration
             {
                 CurrentEndReasonCode = "CMPS",
                 StartDate = new DateTime(2010, 1, 1),
@@ -81,6 +83,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             priorApprenticeship.QualificationDescription.Should().Be(message.QualificationDescription);
             priorApprenticeship.QualificationANZSCOCode.Should().Be(message.QualificationANZSCOCode);
             priorApprenticeship.QualificationLevel.Should().Be(message.QualificationLevel);
+            priorApprenticeship.NotOnTrainingGovAu.Should().BeTrue();
         }
 
         [TestMethod]
