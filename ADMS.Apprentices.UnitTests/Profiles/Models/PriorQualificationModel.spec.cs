@@ -41,7 +41,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             qualificationModel.QualificationDescription.Should().Be(ProfileConstants.Qualification.QualificationDescription);
             qualificationModel.QualificationLevel.Should().Be(ProfileConstants.Qualification.QualificationLevel);
             qualificationModel.QualificationANZSCOCode.Should().Be(ProfileConstants.Qualification.QualificationANZSCOCode);
-            qualificationModel.NotOnTrainingGovAu.Should().Be(ProfileConstants.Qualification.NotOnTrainingGovAu);
+            qualificationModel.QualificationManualReasonCode.Should().Be(ProfileConstants.Qualification.QualificationManualReasonCode);
             qualificationModel.StartDate.Should().Be(ProfileConstants.Qualification.StartDate);
             qualificationModel.EndDate.Should().Be(ProfileConstants.Qualification.EndDate);
         }

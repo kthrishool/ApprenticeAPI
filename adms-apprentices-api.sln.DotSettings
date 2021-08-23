@@ -445,6 +445,22 @@ public void $Expectation$()&#xD;
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EEB2B3361908F04F8D61B76DB3E0E849/Text/@EntryValue">Container&#xD;
     .GetMock&lt;$interface$&gt;()&#xD;
     .Verify(r =&gt; r.$method$, Times.Never);</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F11006542215574AB5C0FE392E19AA75/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F11006542215574AB5C0FE392E19AA75/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F11006542215574AB5C0FE392E19AA75/Description/@EntryValue">Test method (async)</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F11006542215574AB5C0FE392E19AA75/Field/=Expectation/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F11006542215574AB5C0FE392E19AA75/Field/=Expectation/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F11006542215574AB5C0FE392E19AA75/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F11006542215574AB5C0FE392E19AA75/Scope/=CF7C2F2066E462418ABD91975B64021C/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F11006542215574AB5C0FE392E19AA75/Scope/=CF7C2F2066E462418ABD91975B64021C/CustomProperties/=mask/@EntryIndexedValue">*.spec.cs</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F11006542215574AB5C0FE392E19AA75/Scope/=CF7C2F2066E462418ABD91975B64021C/Type/@EntryValue">InFileWithMask</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F11006542215574AB5C0FE392E19AA75/Shortcut/@EntryValue">tma</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F11006542215574AB5C0FE392E19AA75/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F11006542215574AB5C0FE392E19AA75/Text/@EntryValue">[TestMethod]&#xD;
+public async Task $Expectation$()&#xD;
+{&#xD;
+    $END$&#xD;
+}</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Adms/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=EFTSL/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=enrolments/@EntryIndexedValue">True</s:Boolean>

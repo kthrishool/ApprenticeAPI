@@ -40,7 +40,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             {
                 QualificationCode = q.QualificationCode,
                 QualificationDescription = q.QualificationDescription,
-                NotOnTrainingGovAu = true,
+                QualificationManualReasonCode = PriorQualification.ManuallyEnteredCode,
                 StartDate = q.StartDate,
                 EndDate = q.EndDate
             };
@@ -88,7 +88,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.QualificationDescription.Should().Be(message.QualificationDescription);
             qualification.QualificationANZSCOCode.Should().Be(message.QualificationANZSCOCode);
             qualification.QualificationLevel.Should().Be(message.QualificationLevel);
-            qualification.NotOnTrainingGovAu.Should().Be(message.NotOnTrainingGovAu.Value);
+            qualification.QualificationManualReasonCode.Should().Be(message.QualificationManualReasonCode);
         }
 
         [TestMethod]

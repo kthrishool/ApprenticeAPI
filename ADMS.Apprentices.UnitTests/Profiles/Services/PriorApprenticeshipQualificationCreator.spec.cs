@@ -38,7 +38,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             {
                 QualificationCode = q.QualificationCode,
                 QualificationDescription = q.QualificationDescription,
-                NotOnTrainingGovAu = true,
+                QualificationManualReasonCode = PriorApprenticeshipQualification.ManuallyEnteredCode,
                 StartDate = q.StartDate
             };
 
@@ -63,10 +63,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
-        protected override void When()
-        {
-        }
-
         [TestMethod]
         public async Task ShouldReturnQualification()
         {
@@ -83,7 +79,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             priorApprenticeship.QualificationDescription.Should().Be(message.QualificationDescription);
             priorApprenticeship.QualificationANZSCOCode.Should().Be(message.QualificationANZSCOCode);
             priorApprenticeship.QualificationLevel.Should().Be(message.QualificationLevel);
-            priorApprenticeship.NotOnTrainingGovAu.Should().BeTrue();
+            priorApprenticeship.QualificationManualReasonCode.Should().Be(message.QualificationManualReasonCode);
         }
 
         [TestMethod]

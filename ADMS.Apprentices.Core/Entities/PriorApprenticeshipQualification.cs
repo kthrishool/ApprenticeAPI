@@ -14,7 +14,7 @@ namespace ADMS.Apprentices.Core.Entities
         public string QualificationDescription { get; set; }
         public string QualificationLevel { get; set; }
         public string QualificationANZSCOCode { get; set; }
-        public bool NotOnTrainingGovAu { get; set; }
+        public string QualificationManualReasonCode { get; set; }
         public DateTime? StartDate { get; set; }
         public string StateCode { get; set; }
         public string CountryCode { get; set; }
@@ -26,5 +26,7 @@ namespace ADMS.Apprentices.Core.Entities
         public string UpdatedBy { get; set; }
         public byte[] Version { get; set; }
         public long AuditEventId { get; set; }
+
+        public const string ManuallyEnteredCode = "MANUAL";
     }
 }

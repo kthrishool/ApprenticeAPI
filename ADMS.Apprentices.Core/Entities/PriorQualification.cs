@@ -17,7 +17,7 @@ namespace ADMS.Apprentices.Core.Entities
         public string QualificationDescription { get; set; }
         public string QualificationLevel { get; set; }
         public string QualificationANZSCOCode { get; set; }
-        public bool NotOnTrainingGovAu { get; set; }
+        public string QualificationManualReasonCode { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
@@ -29,5 +29,7 @@ namespace ADMS.Apprentices.Core.Entities
         public long AuditEventId { get; set; }
 
         public virtual Profile Profile { get; set; }
+
+        public const string ManuallyEnteredCode = "MANUAL";
     }
 }

@@ -56,6 +56,22 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         }
 
         [TestMethod]
+        public async Task IsValidIfManuallyEntered()
+        {
+            valid.QualificationManualReasonCode = PriorApprenticeshipQualification.ManuallyEnteredCode;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(valid, apprentice);
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task IsNotValidIfManualReasonCodeIsSomethingElse()
+        {
+            valid.QualificationManualReasonCode = "BLAH";
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(valid, apprentice);
+            exceptionBuilder.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidQualificationManualReasonCode);
+        }
+
+        [TestMethod]
         public async Task IsNotValidIfApprenticeWouldHaveBeenUnder12AtTheSpecifiedStartDate()
         {
             ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(invalidTooYoung, apprentice);

@@ -10,7 +10,7 @@ namespace ADMS.Apprentices.Core.Models
         public string QualificationDescription { get; }
         public string QualificationLevel { get; }
         public string QualificationANZSCOCode { get; }
-        public bool NotOnTrainingGovAu { get; }
+        public string QualificationManualReasonCode { get; }
         public DateTime? StartDate { get; }
         public DateTime? EndDate { get; }
 
@@ -28,7 +28,7 @@ namespace ADMS.Apprentices.Core.Models
             QualificationDescription = qualification.QualificationDescription;
             QualificationLevel = qualification.QualificationLevel;
             QualificationANZSCOCode = qualification.QualificationANZSCOCode;
-            NotOnTrainingGovAu = qualification.NotOnTrainingGovAu;
+            QualificationManualReasonCode = qualification.QualificationManualReasonCode;
             StartDate = qualification.StartDate;
             EndDate = qualification.EndDate;
             ApprenticeshipId = qualification.ApprenticeshipId;

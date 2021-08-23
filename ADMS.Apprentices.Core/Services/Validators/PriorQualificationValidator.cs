@@ -28,6 +28,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
                 if (qualification.StartDate.Value.Date < profile.BirthDate.AddYears(+12))
                     exceptionBuilder.AddException(ValidationExceptionType.DOBDateMismatch);
             }
+
             //end date can not be less than apprentice DOB +12 years
             if (qualification.EndDate != null)
             {
@@ -43,6 +44,13 @@ namespace ADMS.Apprentices.Core.Services.Validators
                 if (qualification.StartDate.Value.Date > DateTime.Today || qualification.EndDate.Value.Date > DateTime.Today)
                     exceptionBuilder.AddException(ValidationExceptionType.InvalidDate);
             }
+
+            // at this time we only accept a single qualification manual reason code
+            if (qualification.QualificationManualReasonCode != null && qualification.QualificationManualReasonCode != PriorQualification.ManuallyEnteredCode)
+            {
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidQualificationManualReasonCode);
+            }
+
             exceptionBuilder.AddExceptions(await referenceDataValidator.ValidatePriorQualificationsAsync(qualification));
             return exceptionBuilder;
         }

@@ -183,5 +183,8 @@ namespace ADMS.Apprentices.Core.Exceptions
 
         [ExceptionDetails("AP-VAL-0059", "Invalid reason code for not providing USI")]
         InvalidNotProvidingUSIReasonCode,
+
+        [ExceptionDetails("AP-VAL-0060", "QualificationManualReasonCode can only be null or MANUAL")]
+        InvalidQualificationManualReasonCode
     }
 }

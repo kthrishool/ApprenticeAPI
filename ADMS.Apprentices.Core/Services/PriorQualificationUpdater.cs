@@ -37,7 +37,7 @@ namespace ADMS.Apprentices.Core.Services
             priorQualification.QualificationDescription = message.QualificationDescription.Sanitise();
             priorQualification.QualificationLevel = message.QualificationLevel.Sanitise();
             priorQualification.QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise();
-            priorQualification.NotOnTrainingGovAu = message.NotOnTrainingGovAu.Value;
+            priorQualification.QualificationManualReasonCode = message.QualificationManualReasonCode.Sanitise();
             priorQualification.StartDate = message.StartDate;
             priorQualification.EndDate = message.EndDate;
 

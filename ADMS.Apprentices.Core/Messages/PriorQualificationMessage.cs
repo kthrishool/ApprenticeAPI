@@ -7,25 +7,25 @@ namespace ADMS.Apprentices.Core.Messages
     {
         [Required]
         [MaxLength(10, ErrorMessage = "Qualification code cannot exceed 10 characters in length")]
-        public string QualificationCode { get; set; }
+        public string QualificationCode { get; init; }
 
         [Required]
         [MaxLength(200, ErrorMessage = "Qualification description cannot exceed 200 characters in length")]
-        public string QualificationDescription { get; set; }
+        public string QualificationDescription { get; init; }
 
         [Required]
         [MaxLength(10, ErrorMessage = "Qualification level cannot exceed 10 characters in length")]
-        public string QualificationLevel { get; set; }
+        public string QualificationLevel { get; init; }
 
         [Required]
         [MaxLength(10, ErrorMessage = "ANZSCO code cannot exceed 10 characters in length")]
-        public string QualificationANZSCOCode { get; set; }
+        public string QualificationANZSCOCode { get; init; }
 
-        [Required]
-        public bool? NotOnTrainingGovAu { get; set; }
+        [Adms.Shared.Attributes.MaxLength(10, "Qualification manual reason code")]
+        public string QualificationManualReasonCode { get; init; }
 
-        public DateTime? StartDate { get; set; }
+        public DateTime? StartDate { get; init; }
 
-        public DateTime? EndDate { get; set; }
+        public DateTime? EndDate { get; init; }
     }
 }

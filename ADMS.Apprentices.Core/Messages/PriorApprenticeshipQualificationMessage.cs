@@ -25,8 +25,8 @@ namespace ADMS.Apprentices.Core.Messages
         [Adms.Shared.Attributes.MaxLength(10, "ANZSCO code")]
         public string QualificationANZSCOCode { get; init; }
 
-        [Required]
-        public bool? NotOnTrainingGovAu { get; init; }
+        [Adms.Shared.Attributes.MaxLength(10, "Qualification manual reason code")]
+        public string QualificationManualReasonCode { get; init; }
 
         [Required]
         public DateTime? StartDate { get; init; }

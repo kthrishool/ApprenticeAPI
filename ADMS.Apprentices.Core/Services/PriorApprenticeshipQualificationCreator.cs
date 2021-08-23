@@ -32,7 +32,7 @@ namespace ADMS.Apprentices.Core.Services
                 QualificationDescription = message.QualificationDescription.Sanitise(),
                 QualificationLevel = message.QualificationLevel.Sanitise(),
                 QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise(),
-                NotOnTrainingGovAu = message.NotOnTrainingGovAu.Value,
+                QualificationManualReasonCode = message.QualificationManualReasonCode.Sanitise(),
                 StateCode = message.StateCode,
                 CountryCode = message.CountryCode,
                 StartDate = message.StartDate,

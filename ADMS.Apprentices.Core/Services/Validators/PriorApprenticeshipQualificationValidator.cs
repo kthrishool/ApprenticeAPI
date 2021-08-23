@@ -28,6 +28,12 @@ namespace ADMS.Apprentices.Core.Services.Validators
             if (priorApprenticeship.StartDate.Value.Date > DateTime.Today)
                 exceptionBuilder.AddException(ValidationExceptionType.InvalidDate);
 
+            // at this time we only accept a single qualification manual reason code
+            if (priorApprenticeship.QualificationManualReasonCode != null && priorApprenticeship.QualificationManualReasonCode != PriorQualification.ManuallyEnteredCode)
+            {
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidQualificationManualReasonCode);
+            }
+
             exceptionBuilder.AddExceptions(await referenceDataValidator.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship));
             return exceptionBuilder;
         }

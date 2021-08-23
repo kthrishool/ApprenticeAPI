@@ -32,7 +32,7 @@ namespace ADMS.Apprentices.Core.Services
             priorApprenticeship.QualificationDescription = message.QualificationDescription.Sanitise();
             priorApprenticeship.QualificationLevel = message.QualificationLevel.Sanitise();
             priorApprenticeship.QualificationANZSCOCode = message.QualificationANZSCOCode.Sanitise();
-            priorApprenticeship.NotOnTrainingGovAu = message.NotOnTrainingGovAu.Value;
+            priorApprenticeship.QualificationManualReasonCode = message.QualificationManualReasonCode.Sanitise();
             priorApprenticeship.StartDate = message.StartDate;
             priorApprenticeship.CountryCode = message.CountryCode;
             priorApprenticeship.StateCode = message.StateCode;

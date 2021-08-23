@@ -43,9 +43,11 @@ namespace ADMS.Apprentices.Database.Mappings
                 .HasColumnName("QualificationANZSCOCode")
                 .HasMaxLength(10)
                 .IsRequired();
-            entity.Property(e => e.NotOnTrainingGovAu)
-                .HasColumnName("NotOnTrainingGovAuFlag")
-                .IsRequired();
+            entity.Property(e => e.QualificationManualReasonCode)
+                .HasColumnName("QualificationManualReasonCode")
+                .IsRequired(false)
+                .IsUnicode(false)
+                .HasMaxLength(10);
             entity.Property(e => e.StartDate)
                 .HasColumnType("DATE")
                 .HasColumnName("StartDate")

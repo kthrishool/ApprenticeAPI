@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
+using ADMS.Apprentices.Core.Exceptions;
 using ADMS.Apprentices.Core.Services.Validators;
 using ADMS.Apprentices.Core.TYIMS.Entities;
 using ADMS.Apprentices.UnitTests.Constants;
@@ -12,6 +14,8 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
+// ReSharper disable ReturnValueOfPureMethodIsNotUsed
+
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
 {
     #region WhenValidatingAPriorQualification
@@ -21,8 +25,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     {
         private PriorQualification qualification;
         private Profile profile;
-
-        private ValidationExceptionBuilder exceptionBuilder;
 
         protected override void Given()
         {
@@ -43,13 +45,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<PriorQualification>()))
                 .ReturnsAsync(() => new ValidationExceptionBuilder());
         }
-
-
-        protected override async void When()
-        {
-            exceptionBuilder = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
-        }
-
 
         [TestMethod]
         public void NoExceptionIfStartDateIsNull()
@@ -77,6 +72,23 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.StartDate = null;
             profile.PriorQualifications.Add(qualification);
             ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).HasExceptions().Should().BeFalse());
+        }
+
+        [TestMethod]
+        public async Task NoExceptionIfManuallyEntered()
+        {
+            qualification.QualificationManualReasonCode = PriorQualification.ManuallyEnteredCode;
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
+            eb.HasExceptions().Should().BeFalse();
+        }
+
+        [TestMethod]
+        public async Task ErrorsIfManualReasonCodeNotValid()
+        {
+            // we only accept a single "MANUAL" code; all other codes are for legacy migrated data only
+            qualification.QualificationManualReasonCode = "INVALID";
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
+            eb.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidQualificationManualReasonCode);
         }
 
         [TestMethod]

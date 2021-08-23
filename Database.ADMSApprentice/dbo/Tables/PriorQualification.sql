@@ -6,7 +6,7 @@
     [QualificationDescription]  VARCHAR (200)   NULL,
     [QualificationLevel]        VARCHAR (10)    NULL,
     [QualificationANZSCOCode]   VARCHAR (10)    NULL,
-    [NotOnTrainingGovAuFlag]    BIT             NOT NULL,
+    [QualificationManualReasonCode] VARCHAR(10) NULL,
     [StartDate]                 DATE            NULL,
     [EndDate]                   DATE            NULL,
     [CreatedBy]                 NVARCHAR (1024) NOT NULL,

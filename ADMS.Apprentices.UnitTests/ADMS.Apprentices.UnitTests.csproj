@@ -6,6 +6,10 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="ADMS.Services.Infrastructure.Testing" Version="2.1.0" />
     <PackageReference Include="ADMS.Services.Infrastructure.WebApi" Version="2.1.0" />
