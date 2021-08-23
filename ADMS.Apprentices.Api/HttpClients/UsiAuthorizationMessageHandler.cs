@@ -36,14 +36,15 @@ namespace ADMS.Apprentices.Api.HttpClients
                 ClientId = ourUsiSettings.Value.ClientID,
                 Resource = ourUsiSettings.Value.Resource,
                 SigningCertficateThumbprint = ourUsiSettings.Value.SigningCertficateThumbprint,
-                HttpProxyUrl = ourUsiSettings.Value.HttpProxyUrl
+                HttpProxyUrl = ourUsiSettings.Value.HttpProxyUrl,
+                UseHttpProxy = ourUsiSettings.Value.AdfsUseProxy
             };
 
             // create a httpclient implementation using the above configuration context
             ITokenAgent tokenAgent = TokenAgentFactory.Create(TokenAgents.HttpClient, context);
 
             // use the TokenAgent to get a token
-            Token token = tokenAgent.GetToken();
+            Token token = await tokenAgent.GetTokenAsync();
             string accessToken = token.AccessToken;
 
             HttpRequestHeaders headers = request.Headers;

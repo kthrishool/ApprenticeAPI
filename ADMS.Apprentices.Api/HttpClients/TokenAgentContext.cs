@@ -10,5 +10,6 @@ namespace ADMS.Apprentices.Api.HttpClients
         public string SigningCertficateThumbprint { get; set; }
         public string HttpProxyUrl { get; set; }
         public string OAuth2TokenEndPoint => $"https://{AdfsDomainName}/adfs/oauth2/token";
+        public bool UseHttpProxy { get; set; }
     }
 }
