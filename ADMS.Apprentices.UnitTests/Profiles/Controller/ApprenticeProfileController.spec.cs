@@ -37,7 +37,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             DateTime dob,
             String email = null,
             string profileType = null,
-            string[] phoneNumbers = null,
             string indigenousStatusCode = null,
             string selfAssessedDisabilityCode = null,
             string citizenshipCode = null,
@@ -53,7 +52,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 BirthDate = dob,
                 EmailAddress = email,
                 ProfileType = profileType,
-                PhoneNumbers = phoneNumbers?.Select(c => new PhoneNumberMessage() {PhoneNumber = c}).ToList(),
                 IndigenousStatusCode = indigenousStatusCode,
                 SelfAssessedDisabilityCode = selfAssessedDisabilityCode,
                 CitizenshipCode = citizenshipCode,
@@ -72,8 +70,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
-                ProfileType = ProfileConstants.Profiletype,
-                PhoneNumbers = ProfileConstants.PhoneNumbers.ToList(),
+                ProfileType = ProfileConstants.Profiletype,                
                 ResidentialAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = "14 Mort Street, Braddon,ACT -2601"},
                 PostalAddress = new ProfileAddressMessage() {Postcode = "2601", StateCode = "ACT", Locality = "BRADDON", StreetAddress1 = "14 Mort Street", StreetAddress2 = "14 Mort Street", SingleLineAddress = "14 Mort Street, Braddon,ACT -2601"},
                 GenderCode = "M",
@@ -91,8 +88,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
-                ProfileType = ProfileConstants.Profiletype,
-                PhoneNumbers = ProfileConstants.PhoneNumbers.ToList(),
+                ProfileType = ProfileConstants.Profiletype,                
                 ResidentialAddress = ProfileConstants.ResidentialAddress,
                 PostalAddress = ProfileConstants.PostalAddress
             };
@@ -170,10 +166,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldReturnValidationErrorIfDisabiliyyStatusCodeNotValid()
         {
-            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, "@", "InvalidCode");
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, "@", "InvalidCode");
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(1);
-            lstErrors[0].ErrorMessage.Should().StartWith("Invalid Self assessed disability code");
+            lstErrors[0].ErrorMessage.Should().StartWith("Invalid self assessed disability code");
         }
 
         public IList<ValidationResult> ValidateModel(object model)
@@ -235,10 +231,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ShowValidationExceptionWhenGenderIsInvalid()
         {
-            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, null, null, null, "MQ");
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, null, null, "mq");
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(1);
-            lstErrors[0].ErrorMessage.Should().StartWith("Gender Code is invalid");
+            lstErrors[0].ErrorMessage.Should().StartWith("Invalid gender code");
         }
 
         #endregion
@@ -431,8 +427,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             message = message = CreateNewProfileMessage("Bob", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null,
                 ProfileConstants.Profiletype,
-                null, null, null,
-                null, "X", null, "", "Test");
+                null, null, "X", null, "", "Test");
             var lstErrors = ValidateModel(message);
             lstErrors.Should().HaveCount(0);
         }

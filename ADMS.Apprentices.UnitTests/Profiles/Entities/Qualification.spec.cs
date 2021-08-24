@@ -1,10 +1,9 @@
-﻿using Adms.Shared.Testing;
+﻿using System;
 using ADMS.Apprentices.Core.Entities;
-using ADMS.Apprentices.Core.Models;
 using ADMS.Apprentices.UnitTests.Constants;
+using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Models
 {
@@ -12,11 +11,11 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
 
     [TestClass]
     public class WhenInstantiatingAQualification : GivenWhenThen
-    {              
-        private Qualification qualification;
+    {
+        private PriorQualification qualification;
         private Profile profile;
-        private DateTime dt = DateTime.Now;        
-        private byte[] b = new byte[] { 1 };
+        private DateTime dt = DateTime.Now;
+        private byte[] b = new byte[] {1};
 
         protected override void Given()
         {
@@ -29,9 +28,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             qualification.UpdatedBy = "1";
             qualification.Version = b;
             qualification.AuditEventId = 1;
-            profile = new Profile { Id = 1 };
+            profile = new Profile {Id = 1};
             qualification.Profile = profile;
         }
+
         /// <summary>
         /// Sets all the properties for the models.
         /// </summary>

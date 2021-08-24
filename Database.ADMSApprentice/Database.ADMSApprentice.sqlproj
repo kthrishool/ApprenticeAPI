@@ -100,7 +100,7 @@
     </SqlCmdVariable>
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\ApprenticeQualification.sql" />
+    <Build Include="dbo\Tables\PriorQualification.sql" />
     <Build Include="dbo\Tables\Guardian.sql" />
     <Build Include="Infrastructure\Tables\AuditEvent.sql" />
     <Build Include="Infrastructure\Tables\ServiceBusEvent.sql" />
@@ -189,6 +189,7 @@
     <Build Include="Batch\Stored Procedures\InfrastructureServiceRequestMessagePurge.sql" />
     <Build Include="Batch\Stored Procedures\InfrastructureServiceBusInsertIntoArchive.sql" />
     <Build Include="Batch\Stored Procedures\InfrastructureServiceBusEventArchivePurge.sql" />
+    <Build Include="dbo\Tables\PriorApprenticeshipQualification.sql" />
     <Build Include="dbo\Stored Procedures\ApprenticeBasicSearch.sql" />
   </ItemGroup>
 </Project>

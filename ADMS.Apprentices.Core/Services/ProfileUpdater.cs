@@ -47,7 +47,8 @@ namespace ADMS.Apprentices.Core.Services
             profile.ProfileTypeCode = message.ProfileType.SanitiseUpper();
             profile.EmailAddress = message.EmailAddress.Sanitise();
 
-            UpdatePhone(profile, message.PhoneNumbers);
+            UpdatePhone(profile, message.Phone1, PhoneType.PHONE1.ToString());
+            UpdatePhone(profile, message.Phone2, PhoneType.PHONE2.ToString());
 
             //if no addresses specified clear address if exists.
             if (message.ResidentialAddress == null)
@@ -66,7 +67,7 @@ namespace ADMS.Apprentices.Core.Services
                 //update the existing postal address if exist or add new address                
                 UpdateAddress(profile, message.PostalAddress, AddressType.POST.ToString());
             }
-            profile.PreferredContactType = message.PreferredContactType.SanitiseUpper();
+            profile.PreferredContactTypeCode = message.PreferredContactTypeCode.SanitiseUpper();
 
             //school details
             profile.HighestSchoolLevelCode = message.HighestSchoolLevelCode.Sanitise();
@@ -93,6 +94,26 @@ namespace ADMS.Apprentices.Core.Services
                 usiVerify.Verify(profile);
 
             return profile;
+        }
+
+        public void UpdatePhone(Profile profile, string newPhoneNumber, string phoneTypeCode)
+        {
+            var currentPhone = profile.Phones.SingleOrDefault(x => x.PhoneTypeCode == phoneTypeCode);
+            
+            if (newPhoneNumber.IsNullOrEmpty())  //new phone is null, so remove if exist.
+                profile.Phones.Remove(profile.Phones.SingleOrDefault(x => x.PhoneTypeCode == phoneTypeCode));
+            else if (currentPhone == null) // newPhone not null and current phone is null, add new phone
+            {
+                profile.Phones.Add(new Phone
+                {
+                    PhoneNumber = newPhoneNumber.Sanitise(),
+                    PhoneTypeCode = phoneTypeCode
+                });
+            }
+            else //current phone is not null and new phone number not null, so update existing.
+            {
+                currentPhone.PhoneNumber = newPhoneNumber.Sanitise();
+            }             
         }
 
         public void UpdateAddress(Profile profile, ProfileAddressMessage addressMessage, string addressTypeCode)
@@ -151,47 +172,48 @@ namespace ADMS.Apprentices.Core.Services
             }
         }
 
-        public void UpdatePhone(Profile profile, List<UpdatePhoneNumberMessage> phoneMessage)
-        {
-            if (phoneMessage == null || phoneMessage.Count == 0)
-            {
-                //if no phones message passed, remove existing phones
-                profile.Phones.Clear();
-            }
-            else if (profile.Phones.Count == 0)
-            {
-                //if no phone details for the profile , add the new ones
-                foreach (PhoneNumberMessage phone in phoneMessage)
-                {
-                    profile.Phones.Add(new Phone
-                    {
-                        PhoneNumber = phone.PhoneNumber,
-                        PhoneTypeCode = phone.PhoneTypeCode,
-                        PreferredPhoneFlag = phone.PreferredPhoneFlag
-                    });
-                }
-            }
-            else
-            {
-                //update the existing ones, add new ones and remove the ones not in message                
+        //******************NOT IN USE**********************
+        //public void UpdatePhone(Profile profile, List<UpdatePhoneNumberMessage> phoneMessage)
+        //{
+        //    if (phoneMessage == null || phoneMessage.Count == 0)
+        //    {
+        //        //if no phones message passed, remove existing phones
+        //        profile.Phones.Clear();
+        //    }
+        //    else if (profile.Phones.Count == 0)
+        //    {
+        //        //if no phone details for the profile , add the new ones
+        //        foreach (PhoneNumberMessage phone in phoneMessage)
+        //        {
+        //            profile.Phones.Add(new Phone
+        //            {
+        //                PhoneNumber = phone.PhoneNumber,
+        //                PhoneTypeCode = phone.PhoneTypeCode,
+        //                PreferredPhoneFlag = phone.PreferredPhoneFlag
+        //            });
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //update the existing ones, add new ones and remove the ones not in message                
 
-                var profilePhoneIds = profile.Phones.Select(x => x.Id).ToList();
-                var messagePhoneIds = phoneMessage.Select(x => x.Id).ToList();
+        //        var profilePhoneIds = profile.Phones.Select(x => x.Id).ToList();
+        //        var messagePhoneIds = phoneMessage.Select(x => x.Id).ToList();
 
-                var toAdd = phoneMessage.Where(x => x.Id == 0).ToList();
-                var toRemove = profile.Phones.Where(x => !messagePhoneIds.Contains(x.Id)).ToList();
-                var toUpdate = phoneMessage.Where(x => profilePhoneIds.Contains(x.Id)).ToList();
+        //        var toAdd = phoneMessage.Where(x => x.Id == 0).ToList();
+        //        var toRemove = profile.Phones.Where(x => !messagePhoneIds.Contains(x.Id)).ToList();
+        //        var toUpdate = phoneMessage.Where(x => profilePhoneIds.Contains(x.Id)).ToList();
 
-                toAdd.ForEach(x => profile.Phones.Add(new Phone() {PhoneNumber = x.PhoneNumber, PreferredPhoneFlag = x.PreferredPhoneFlag, PhoneTypeCode = x.PhoneTypeCode}));
-                toRemove.ForEach(x => profile.Phones.Remove(x));
-                toUpdate.ForEach(x =>
-                {
-                    profile.Phones.SingleOrDefault(y => y.Id == x.Id).PhoneNumber = x.PhoneNumber;
-                    profile.Phones.SingleOrDefault(y => y.Id == x.Id).PreferredPhoneFlag = x.PreferredPhoneFlag;
-                    profile.Phones.SingleOrDefault(y => y.Id == x.Id).PhoneTypeCode = x.PhoneTypeCode;
-                });
-            }
-        }
+        //        toAdd.ForEach(x => profile.Phones.Add(new Phone() { PhoneNumber = x.PhoneNumber, PreferredPhoneFlag = x.PreferredPhoneFlag, PhoneTypeCode = x.PhoneTypeCode }));
+        //        toRemove.ForEach(x => profile.Phones.Remove(x));
+        //        toUpdate.ForEach(x =>
+        //        {
+        //            profile.Phones.SingleOrDefault(y => y.Id == x.Id).PhoneNumber = x.PhoneNumber;
+        //            profile.Phones.SingleOrDefault(y => y.Id == x.Id).PreferredPhoneFlag = x.PreferredPhoneFlag;
+        //            profile.Phones.SingleOrDefault(y => y.Id == x.Id).PhoneTypeCode = x.PhoneTypeCode;
+        //        });
+        //    }
+        //}
 
 
         public void UpdateCRN(Profile profile, ServiceAustraliaUpdateMessage message)

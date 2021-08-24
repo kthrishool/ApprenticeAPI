@@ -23,19 +23,19 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
         public async Task<ValidationExceptionBuilder> ValidateAsync(Guardian guardian)
         {
-            var exceptionBuilder = new ValidationExceptionBuilder();
-            PhoneValidation(exceptionBuilder, guardian);
+            var exceptionBuilder = new ValidationExceptionBuilder();            
             EmailValidation(exceptionBuilder, guardian);
             await AddressValidation(exceptionBuilder, guardian);
             return exceptionBuilder;
         }
 
-        private void PhoneValidation(ValidationExceptionBuilder exceptionBuilder, Guardian guardian)
-        {
-            guardian.HomePhoneNumber = phoneValidator.ValidatePhone(exceptionBuilder, guardian.HomePhoneNumber, ValidationExceptionType.InvalidGuardianNumber);
-            guardian.Mobile = phoneValidator.ValidatePhone(exceptionBuilder, guardian.Mobile, ValidationExceptionType.InvalidGuardianNumber);
-            guardian.WorkPhoneNumber = phoneValidator.ValidatePhone(exceptionBuilder, guardian.WorkPhoneNumber, ValidationExceptionType.InvalidGuardianNumber);
-        }
+        //****NOT REMOVING. IT MAY COME BACK ******
+        //private void PhoneValidation(ValidationExceptionBuilder exceptionBuilder, Guardian guardian)
+        //{
+        //    guardian.HomePhoneNumber = phoneValidator.ValidatePhone(exceptionBuilder, guardian.HomePhoneNumber, ValidationExceptionType.InvalidGuardianNumber);
+        //    guardian.Mobile = phoneValidator.ValidatePhone(exceptionBuilder, guardian.Mobile, ValidationExceptionType.InvalidGuardianNumber);
+        //    guardian.WorkPhoneNumber = phoneValidator.ValidatePhone(exceptionBuilder, guardian.WorkPhoneNumber, ValidationExceptionType.InvalidGuardianNumber);
+        //}
 
         private void EmailValidation(ValidationExceptionBuilder exceptionBuilder, Guardian guardian)
         {

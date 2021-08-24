@@ -31,7 +31,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
                 ProfileType = ProfileConstants.Profiletype,
-                PhoneNumbers = ProfileConstants.PhoneNumbers,
+                Phone1 = ProfileConstants.Phone1,
+                Phone2 = ProfileConstants.Phone2,
                 ResidentialAddress = ProfileConstants.ResidentialAddress,
                 PostalAddress = ProfileConstants.PostalAddress,
                 IndigenousStatusCode = ProfileConstants.IndigenousStatusCode,
@@ -40,7 +41,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 GenderCode = ProfileConstants.GenderCode,
                 InterpretorRequiredFlag = ProfileConstants.InterpretorRequiredFlag,
                 LanguageCode = ProfileConstants.LanguageCode,
-                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
+                PreferredContactTypeCode = ProfileConstants.PreferredContactType.ToString(),
                 CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolDate = ProfileConstants.LeftSchoolDate,
@@ -138,7 +139,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldSetPhoneNumber()
         {
-            profile.Phones.Select(c => c.PhoneNumber).Should().Contain(message.PhoneNumbers[0].PhoneNumber);
+            profile.Phones.Select(c => c.PhoneNumber).Should().Contain(message.Phone1);
         }
 
         [TestMethod]
@@ -198,7 +199,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldSetPreferredContactCode()
         {
-            profile.PreferredContactType.Should().Contain(ProfileConstants.PreferredContactType.ToString());
+            profile.PreferredContactTypeCode.Should().Contain(ProfileConstants.PreferredContactType.ToString());
         }
 
         [TestMethod]
@@ -230,7 +231,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
                 ProfileType = ProfileConstants.Profiletype,
-                PhoneNumbers = null
+                Phone1 = null,
+                Phone2 = null
             };
             profile = await ClassUnderTest.CreateAsync(message);
             profile.Phones.Should().BeEmpty();
@@ -245,8 +247,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
-                ProfileType = ProfileConstants.Profiletype,
-                PhoneNumbers = null
+                ProfileType = ProfileConstants.Profiletype
             };
             profile = await ClassUnderTest.CreateAsync(message);
             profile.USIs.Select(c => c.USI = ProfileConstants.USI);

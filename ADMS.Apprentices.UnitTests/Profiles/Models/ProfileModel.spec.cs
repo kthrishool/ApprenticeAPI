@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Models;
 using ADMS.Apprentices.UnitTests.Constants;
@@ -48,7 +47,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             addresses.Add(RestAddress);
             addresses.Add(postal);
 
-            ICollection<Qualification> qualifications = new List<Qualification>();
+            ICollection<PriorQualification> qualifications = new List<PriorQualification>();
             qualifications.Add(ProfileConstants.Qualification);
 
             profile = new Profile
@@ -69,22 +68,24 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
                 HighestSchoolLevelCode = ProfileConstants.HighestSchoolLevelCode,
                 LeftSchoolDate = ProfileConstants.LeftSchoolDate,
                 DeceasedFlag = ProfileConstants.DeceasedFlag,
-                ActiveFlag = ProfileConstants.ActiveFlag,                
+                ActiveFlag = ProfileConstants.ActiveFlag,
                 CountryOfBirthCode = ProfileConstants.CountryOfBirthCode,
                 CreatedOn = ProfileConstants.Createdon,
                 CreatedBy = ProfileConstants.Createdby,
                 UpdatedOn = ProfileConstants.Updatedon,
-                UpdatedBy = ProfileConstants.Updatedby,                
+                UpdatedBy = ProfileConstants.Updatedby,
                 LanguageCode = ProfileConstants.LanguageCode,
-                PreferredContactType = ProfileConstants.PreferredContactType.ToString(),
+                PreferredContactTypeCode = ProfileConstants.PreferredContactType.ToString(),
                 VisaNumber = ProfileConstants.VisaNumber,
                 CustomerReferenceNumber = ProfileConstants.CustomerReferenceNumber
             };
             profile.Addresses.Add(postal);
             profile.Addresses.Add(RestAddress);
-            profile.Phones.Add(new Phone() { PhoneNumber = ProfileConstants.PhoneNumbers.FirstOrDefault().PhoneNumber, PreferredPhoneFlag = ProfileConstants.PhoneNumbers.FirstOrDefault().PreferredPhoneFlag });
-            profile.Qualifications.Add(ProfileConstants.Qualification);
-            profile.USIs.Add(new ApprenticeUSI() { USI = ProfileConstants.USI, ActiveFlag = true, USIStatus = "test" });
+            profile.Phones.Add(new Phone() {PhoneNumber = ProfileConstants.Phone1, PhoneTypeCode = PhoneType.PHONE1.ToString()});
+            profile.Phones.Add(new Phone() {PhoneNumber = ProfileConstants.Phone2, PhoneTypeCode = PhoneType.PHONE2.ToString()});
+            profile.PriorQualifications.Add(ProfileConstants.Qualification);
+            profile.PriorApprenticeshipQualifications.Add(ProfileConstants.PriorApprenticeshipQualification);
+            profile.USIs.Add(new ApprenticeUSI() {USI = ProfileConstants.USI, ActiveFlag = true, USIStatus = "test"});
         }
 
         protected override void When()
@@ -122,17 +123,18 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             model.GenderCode.Should().Be(ProfileConstants.GenderCode);
             model.IndigenousStatusCode.Should().Be(ProfileConstants.IndigenousStatusCode);
             model.InterpretorRequiredFlag.Should().Be(ProfileConstants.InterpretorRequiredFlag);
-            model.PhoneNumbers[0].PhoneNumber.Should().Be(ProfileConstants.PhoneNumbers[0].PhoneNumber);
             model.PreferredName.Should().Be(ProfileConstants.PreferredName);
             model.SelfAssessedDisabilityCode.Should().Be(ProfileConstants.SelfAssessedDisabilityCode);
             model.LanguageCode.Should().Be(ProfileConstants.LanguageCode);
-            model.PreferredContactType.Should().Be(ProfileConstants.PreferredContactType.ToString());
+            model.PreferredContactTypeCode.Should().Be(ProfileConstants.PreferredContactType.ToString());
             model.HighestSchoolLevelCode.Should().Be(ProfileConstants.HighestSchoolLevelCode);
             model.LeftSchoolDate.Should().Be(ProfileConstants.LeftSchoolDate);
             model.VisaNumber.Should().Be(ProfileConstants.VisaNumber);
             model.USIVerificationResult.USI.Should().Be(ProfileConstants.USI);
             model.USIVerificationResult.USIStatus.Should().Be("test");
             model.CRNViewFlag.Should().Be(ProfileConstants.CustomerReferenceNumber != null);
+            model.Phone1.Should().Be(ProfileConstants.Phone1);
+            model.Phone2.Should().Be(ProfileConstants.Phone2);
         }
 
         [TestMethod]
@@ -149,7 +151,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
         {
             profile.Phones.Clear();
             model = new ProfileModel(profile);
-            model.PhoneNumbers.Should().BeNull();
+            model.Phone1.Should().BeNull();
+            model.Phone2.Should().BeNull();
         }
     }
 

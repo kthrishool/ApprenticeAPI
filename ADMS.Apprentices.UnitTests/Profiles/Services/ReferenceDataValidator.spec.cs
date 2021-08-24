@@ -18,7 +18,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     public class WhenValidatingReferenceDataValidator : GivenWhenThen<ReferenceDataValidator>
     {
         private Profile newProfile;
-        private Qualification qualification;
+        private PriorQualification qualification;
 
         protected override void Given()
         {
@@ -26,12 +26,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
             list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-        }
-
-        private void ResetExceptionforExceptionValidation(ValidationExceptionType exception, Profile newProfile)
-        {
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(this.newProfile)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
         }
 
         private void MockReferenceData(string MethodName, IList<ListCodeResponseV1> returnvalue, ValidationExceptionType exception)
@@ -140,7 +134,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public void DoesNothingIfUSIExemptionReasonCodeIsValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "NOUSI", Description = "test", });
+            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "NOUSI", Description = "test",});
 
             MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidNotProvidingUSIReasonCode);
 
@@ -206,183 +200,6 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public void DoesNothingIfPreferredCodeTypeIsValid()
-        {
-            newProfile = new Profile();
-            newProfile.PreferredContactType = ProfileConstants.PreferredContactType.ToString();
-            newProfile.Phones.Add(new Phone() {PhoneNumber = "0411111111"});
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
-        }
-
-        [TestMethod]
-        public void ThrowValidationExceptionWhenMobileContactTypeIsInvalid()
-        {
-            newProfile = new Profile();
-            newProfile.PreferredContactType = ProfileConstants.PreferredContactType.ToString();
-
-            ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
-        }
-
-        [TestMethod]
-        public void ThrowValidationExceptionWhenMobileContactTypeIsNotInCode()
-        {
-            newProfile = new Profile();
-            newProfile.PreferredContactType = "test";
-
-            ResetExceptionforExceptionValidation(ValidationExceptionType.InvalidPreferredContactCode, newProfile);
-        }
-
-        [TestMethod]
-        public void ThrowValidationExceptionWhenMobileContactTypeHasNoMobileNo()
-        {
-            newProfile = new Profile();
-            newProfile.PreferredContactType = ProfileConstants.PreferredContactType.ToString();
-
-            newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
-
-            ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
-        }
-
-        [TestMethod]
-        public void DoNothingWhenPhoneContactTypeIsValidAsync()
-        {
-            newProfile = new Profile();
-            newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
-            newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
-        }
-
-        [TestMethod]
-        public void DoNothingWhenEmailContactTypeIsValid()
-        {
-            newProfile = new Profile();
-            newProfile.PreferredContactType = PreferredContactType.EMAIL.ToString();
-            newProfile.EmailAddress = ProfileConstants.Emailaddress;
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
-        }
-
-        [TestMethod]
-        public void DoNothingWhenMailContactTypeIsValid()
-        {
-            newProfile = new Profile();
-            newProfile.PreferredContactType = PreferredContactType.MAIL.ToString();
-            newProfile.Addresses.Add(new Address()
-            {
-                StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
-                Postcode = ProfileConstants.ResidentialAddress.Postcode,
-                Locality = ProfileConstants.ResidentialAddress.Locality,
-                StateCode = ProfileConstants.ResidentialAddress.StateCode
-            });
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
-        }
-
-        [TestMethod]
-        public void ThrowValidationExceptionWhenPhoneContactTypeIsInvalid()
-        {
-            newProfile = new Profile();
-            newProfile.PreferredContactType = PreferredContactType.PHONE.ToString();
-
-            ResetExceptionforExceptionValidation(ValidationExceptionType.PhonePreferredContactIsInvalid, newProfile);
-        }
-
-        #region PreferredContactType
-
-        [TestMethod]
-        public void DOnothingIfPhoneIsPrefferedContactType()
-        {
-            newProfile = new Profile {PreferredContactType = PreferredContactType.PHONE.ToString()};
-
-            newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
-
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(this.newProfile)).ThrowAnyExceptions())
-                .Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void DOnothingIfEmailIsPrefferedContactType()
-        {
-            newProfile = new Profile {PreferredContactType = PreferredContactType.EMAIL.ToString(), EmailAddress = ProfileConstants.Emailaddress};
-
-
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(this.newProfile)).ThrowAnyExceptions())
-                .Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void DOnothingIfMailIsPrefferedContactType()
-        {
-            newProfile = new Profile {PreferredContactType = PreferredContactType.MAIL.ToString()};
-            var localAddress = new Address()
-            {
-                StreetAddress1 = ProfileConstants.ResidentialAddress.StreetAddress1,
-                StreetAddress2 = ProfileConstants.ResidentialAddress.StreetAddress2,
-                StreetAddress3 = ProfileConstants.ResidentialAddress.StreetAddress3,
-                Locality = ProfileConstants.ResidentialAddress.Locality,
-                Postcode = ProfileConstants.ResidentialAddress.Postcode,
-                StateCode = ProfileConstants.ResidentialAddress.StateCode,
-                AddressTypeCode = AddressType.RESD.ToString()
-            };
-            newProfile.Addresses.Add(localAddress);
-
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(this.newProfile)).ThrowAnyExceptions())
-                .Should().NotThrow();
-        }
-
-        #endregion
-
-
-        [TestMethod]
-        public void ThrowValidationExceptionWhenMobileContactTypeAndNoPhoneDetails()
-        {
-            newProfile = new Profile {PreferredContactType = PreferredContactType.MOBILE.ToString()};
-            newProfile.Phones.Add(new Phone {PhoneNumber = null});
-            ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
-        }
-
-        [TestMethod]
-        public void ThrowValidationExceptionWhenSMSContactTypeIsInvalid()
-        {
-            newProfile = new Profile {PreferredContactType = PreferredContactType.SMS.ToString()};
-            newProfile.Phones.Add(new Phone() {PhoneNumber = "0211111111"});
-
-            ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
-        }
-
-        [TestMethod]
-        public void ThrowValidationExceptionWhenSMSContactTypeAndNoPhone()
-        {
-            newProfile = new Profile {PreferredContactType = PreferredContactType.SMS.ToString()};
-            newProfile.Phones.Clear();
-
-            ResetExceptionforExceptionValidation(ValidationExceptionType.MobilePreferredContactIsInvalid, newProfile);
-        }
-
-        [TestMethod]
-        public void ThrowValidationExceptionWhenEmailContactTypeIsInvalid()
-        {
-            newProfile = new Profile {PreferredContactType = PreferredContactType.EMAIL.ToString(), EmailAddress = null};
-
-            ResetExceptionforExceptionValidation(ValidationExceptionType.EmailPreferredContactIsInvalid, newProfile);
-        }
-
-        [TestMethod]
-        public void ThrowValidationExceptionWhenAddressContactTypeIsInvalid()
-        {
-            newProfile = new Profile {PreferredContactType = PreferredContactType.MAIL.ToString()};
-            newProfile.Addresses.Clear();
-
-            ResetExceptionforExceptionValidation(ValidationExceptionType.MailPreferredContactIsInvalid, newProfile);
-        }
-
-        [TestMethod]
-        public void ThrowValidationExceptionWhenAddressContactTypeAndNoAddress()
-        {
-            newProfile = new Profile {PreferredContactType = PreferredContactType.MAIL.ToString()};
-
-            ResetExceptionforExceptionValidation(ValidationExceptionType.MailPreferredContactIsInvalid, newProfile);
-        }
-
-        [TestMethod]
         public void DoesNothingIfSchoolLevelCodeIsValid()
         {
             IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
@@ -422,7 +239,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
 
             qualification = ProfileConstants.Qualification;
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions()).Should().NotThrow();
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationsAsync(qualification)).ThrowAnyExceptions()).Should().NotThrow();
         }
 
         [TestMethod]
@@ -434,9 +251,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            qualification = new Qualification();
+            qualification = new PriorQualification();
             qualification.QualificationLevel = "Invalid";
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationsAsync(qualification)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -448,10 +265,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            qualification = new Qualification();
+            qualification = new PriorQualification();
             qualification.QualificationANZSCOCode = "Invalid";
 
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(qualification)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationsAsync(qualification)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -467,10 +284,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeship;
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
 
 
-            ClassUnderTest.Invoking(async c => (await c.PriorApprenticeshipValidator(priorApprenticeship)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -483,10 +300,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeship;
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
             priorApprenticeship.CountryCode = "2222";
 
-            ClassUnderTest.Invoking(async c => (await c.PriorApprenticeshipValidator(priorApprenticeship)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -500,10 +317,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeship;
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
             priorApprenticeship.CountryCode = "1101";
 
-            ClassUnderTest.Invoking(async c => (await c.PriorApprenticeshipValidator(priorApprenticeship)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -517,10 +334,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeship;
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
             priorApprenticeship.CountryCode = "1101";
             priorApprenticeship.StateCode = "ACT";
-            ClassUnderTest.Invoking(async c => (await c.PriorApprenticeshipValidator(priorApprenticeship)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
                 .Should().NotThrow<AdmsValidationException>();
         }
 
@@ -534,10 +351,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .GetMock<IReferenceDataClient>()
                 .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
                 .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeship;
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
             priorApprenticeship.CountryCode = "1101";
             priorApprenticeship.StateCode = "ACTa";
-            ClassUnderTest.Invoking(async c => (await c.PriorApprenticeshipValidator(priorApprenticeship)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 

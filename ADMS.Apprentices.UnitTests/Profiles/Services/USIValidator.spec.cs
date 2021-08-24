@@ -36,10 +36,19 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public void ThrowsExceptionIfUSIIsNullAndNoExemptionReason()
         {            
             profile = new Profile();
+            profile.ProfileTypeCode = ProfileType.APPR.ToString();
             ClassUnderTest.Invoking(c => ( c.Validate(profile)).HasExceptions().Should().BeTrue());
             ClassUnderTest
                 .Invoking(c => c.Validate(profile).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void NoExceptionIfUSIIsNullAndNoExemptionReasonForINIT()
+        {
+            profile = new Profile();
+            profile.ProfileTypeCode = ProfileType.INIT.ToString();
+            ClassUnderTest.Invoking(c => (c.Validate(profile)).HasExceptions().Should().BeFalse());            
         }
 
         [TestMethod]

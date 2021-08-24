@@ -12,74 +12,54 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     #region WhenValidatingAPriorApprenticeship
 
     [TestClass]
-    public class WhenValidatingAPriorApprenticeship : GivenWhenThen<PriorApprenticeshipValidator>
+    public class WhenValidatingAPriorApprenticeship : GivenWhenThen<PriorApprenticeshipQualificationValidator>
     {
-        private PriorApprenticeship priorApprenticeship;
+        private PriorApprenticeshipQualification priorApprenticeship;
         private Profile profile;
-
-        private ValidationExceptionBuilder exceptionBuilder;
 
         protected override void Given()
         {
             profile = new Profile();
-            priorApprenticeship = new PriorApprenticeship()
+            priorApprenticeship = new PriorApprenticeshipQualification
             {
                 QualificationCode = "QCode",
                 QualificationDescription = "QDescription",
                 QualificationLevel = "524",
                 QualificationANZSCOCode = "ANZS",
                 StartDate = new DateTime(2010, 1, 1),
-                EndDate = new DateTime(2020, 1, 1)
+                ApprenticeshipReference = "apprenticeship-reference"
             };
-            profile.PriorApprenticeships.Add(priorApprenticeship);
+            profile.PriorApprenticeshipQualifications.Add(priorApprenticeship);
             profile.BirthDate = ProfileConstants.Birthdate;
 
             Container.GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidateAsync(It.IsAny<IQualificationAttributes>()))
+                .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<PriorQualification>()))
                 .ReturnsAsync(() => new ValidationExceptionBuilder());
+            Container.GetMock<IReferenceDataValidator>()
+                .Setup(s => s.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship))
+                .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
         protected override async void When()
         {
-            exceptionBuilder = await ClassUnderTest.ValidateAsync(priorApprenticeship, profile);
+            await ClassUnderTest.ValidateAsync(priorApprenticeship, profile);
         }
 
         [TestMethod]
         public void NoExceptionIfStartDateIsNull()
         {
-            profile.PriorApprenticeships.Clear();
+            profile.PriorApprenticeshipQualifications.Clear();
             priorApprenticeship.StartDate = null;
-            profile.PriorApprenticeships.Add(priorApprenticeship);
+            profile.PriorApprenticeshipQualifications.Add(priorApprenticeship);
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(priorApprenticeship, profile)).HasExceptions().Should().BeFalse());
         }
 
         [TestMethod]
-        public void NoExceptionIfEndDateIsNull()
+        public void DoesNotThrowExceptionIfStartDateIsGreaterThanDateofBirthPlus12Years()
         {
-            profile.PriorApprenticeships.Clear();
-            priorApprenticeship.EndDate = null;
-            profile.PriorApprenticeships.Add(priorApprenticeship);
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(priorApprenticeship, profile)).HasExceptions().Should().BeFalse());
-        }
-
-        [TestMethod]
-        public void NotThrowExceptionIfStartDateEndDateIsGreaterThanDateofBirthPlus12Years()
-        {
-            profile.Qualifications.Clear();
+            profile.PriorQualifications.Clear();
             priorApprenticeship.StartDate = ProfileConstants.Birthdate.AddYears(13);
-            priorApprenticeship.EndDate = ProfileConstants.Birthdate.AddYears(14);
-            profile.PriorApprenticeships.Add(priorApprenticeship);
-
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(priorApprenticeship, profile)).ThrowAnyExceptions())
-                .Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void NotThrowExceptionIfEndDateIsGreaterThanDateofBirthPlus12Years()
-        {
-            profile.PriorApprenticeships.Clear();
-            priorApprenticeship.EndDate = ProfileConstants.Birthdate.AddYears(14);
-            profile.PriorApprenticeships.Add(priorApprenticeship);
+            profile.PriorApprenticeshipQualifications.Add(priorApprenticeship);
 
             ClassUnderTest.Invoking(async c => (await c.ValidateAsync(priorApprenticeship, profile)).ThrowAnyExceptions())
                 .Should().NotThrow();

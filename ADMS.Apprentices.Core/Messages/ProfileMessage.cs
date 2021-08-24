@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ADMS.Apprentices.Core.Messages
@@ -13,7 +12,7 @@ namespace ADMS.Apprentices.Core.Messages
 
         [Required(ErrorMessage = "First name is required")]
         [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "First name must contain only letters, spaces, hyphens and apostrophes")]
-        [MaxLength(50, ErrorMessage = "First nme cannot have more than 50 characters")]
+        [MaxLength(50, ErrorMessage = "First name cannot have more than 50 characters")]
         public string FirstName { get; init; }
 
         [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Other names must contain only letters, spaces, hyphens and apostrophes")]
@@ -36,8 +35,13 @@ namespace ADMS.Apprentices.Core.Messages
         [Required(ErrorMessage = "Profile Type is required")]
         public string ProfileType { get; init; }
 
-        [Display(Name = "Phone number")]
-        public List<PhoneNumberMessage> PhoneNumbers { get; init; }
+        [MaxLength(15, ErrorMessage = "Phone1 cannot have more than 15 characters")]
+        [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Phone1 must contain only numbers, spaces or plus sign")]
+        public string Phone1 { get; init; }
+
+        [MaxLength(15, ErrorMessage = "Phone2 cannot have more than 15 characters")]
+        [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Phone2 must contain only numbers, spaces or plus sign")]
+        public string Phone2 { get; init; }
 
         [Display(Name = "Residential Address")]
         public ProfileAddressMessage ResidentialAddress { get; init; }
@@ -48,14 +52,14 @@ namespace ADMS.Apprentices.Core.Messages
         [MaxLength(10, ErrorMessage = "Indigenous status code cannot have more than 10 characters")]
         public string IndigenousStatusCode { get; init; }
 
-        [RegularExpression("[@NYny]", ErrorMessage = "Invalid Self assessed disability code. Valid values are @ - Not stated, N - No, Y - Yes")]
+        [RegularExpression("[@NYny]", ErrorMessage = "Invalid self assessed disability code")]
         public string SelfAssessedDisabilityCode { get; init; }
 
         [MaxLength(10, ErrorMessage = "Citizenship code cannot have more than 10 characters")]
         public string CitizenshipCode { get; init; }
 
         [Display(Name = "Gender")]
-        [RegularExpression("[MFXmfx]", ErrorMessage = "Gender Code is invalid")]
+        [RegularExpression("[MFXmfx]", ErrorMessage = "Invalid gender code")]
         public String GenderCode { get; init; }
 
         [Display(Name = "InterpretorRequired")]
@@ -69,9 +73,9 @@ namespace ADMS.Apprentices.Core.Messages
         [MaxLength(10, ErrorMessage = "Language code cannot have more than 10 characters")]
         public string LanguageCode { get; init; }
 
-        [Display(Name = "PreferredContactType")]
-        [MaxLength(10, ErrorMessage = "Preferred contact type cannot have more than 10 characters")]
-        public string PreferredContactType { get; init; }
+        [Display(Name = "PreferredContactTypeCode")]
+        [MaxLength(10, ErrorMessage = "Preferred contact type code cannot have more than 10 characters")]
+        public string PreferredContactTypeCode { get; init; }
 
         [Display(Name = "HighestSchoolLevelCode")]
         [MaxLength(10, ErrorMessage = "Highest school level code cannot have more than 10 characters")]

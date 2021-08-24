@@ -13,8 +13,7 @@ resources:
   repositories:
     - repository: templates
       type: git
-      name: ADMS/pipeline-templates
-      ref: chore/get-latest-pipeline
+      name: ADMS/pipeline-templates      
 
     - repository: db-templates
       type: git

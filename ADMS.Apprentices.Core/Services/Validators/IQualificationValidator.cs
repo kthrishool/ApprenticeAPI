@@ -7,10 +7,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
     /* NOTE: Do not use [RegisterWithIocContainer] as this interface has two implementations */
     public interface IQualificationValidator
     {
-        //Task<ValidationExceptionBuilder> ValidateAsync(List<Qualification> qualifications);
-        Task<ValidationExceptionBuilder> ValidateAsync(IQualificationAttributes qualification, Profile profile);
-
-        ValidationExceptionBuilder CheckForDuplicates(List<Qualification> qualifications);
-        //  ValidationExceptionBuilder ValidateAgainstApprenticeshipQualification(Qualification qualification, Registration registration,Profile profile);
+        ValidationExceptionBuilder CheckForDuplicates(List<PriorQualification> qualifications);
+        Task<ValidationExceptionBuilder> ValidatePriorQualificationAsync(PriorQualification qualification, Profile profile);
     }
 }

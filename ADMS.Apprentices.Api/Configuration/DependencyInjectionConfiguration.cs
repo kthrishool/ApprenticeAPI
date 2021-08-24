@@ -40,7 +40,7 @@ namespace ADMS.Apprentices.Api.Configuration
             services.AddScoped<ITYIMSRepository, TYIMSRepository>();
             services.AddScoped<IApprenticeRepository, Repository>();
             /* NOTE: IQualificationValidator has two implementations, have to be registered manually here */
-            services.AddTransient<IQualificationValidator, QualificationValidator>();
+            services.AddTransient<IQualificationValidator, PriorQualificationValidator>();
             var usiSettings = new OurUsiSettings();
             configuration.GetSection(nameof(OurUsiSettings)).Bind(usiSettings);
             if (usiSettings.USIVerifyDisabled)

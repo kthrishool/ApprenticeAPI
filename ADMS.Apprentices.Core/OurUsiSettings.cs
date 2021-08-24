@@ -9,5 +9,6 @@
         public string AdfsDomainName { get; set; }
         public bool USIVerifyDisabled { get; set; }
         public string HttpProxyUrl { get; set; }
+        public bool AdfsUseProxy { get; set; }
     }
 }

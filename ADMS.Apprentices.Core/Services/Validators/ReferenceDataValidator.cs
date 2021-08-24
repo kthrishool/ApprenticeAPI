@@ -5,22 +5,16 @@ using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Exceptions;
 using ADMS.Apprentices.Core.HttpClients.ReferenceDataApi;
-using Adms.Shared;
 using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentices.Core.Services.Validators
 {
     public class ReferenceDataValidator : IReferenceDataValidator
     {
-        private readonly IRepository repository;
         private readonly IReferenceDataClient referenceDataClient;
 
-        public ReferenceDataValidator(
-            IRepository repository,
-            IReferenceDataClient referenceDataClient
-        )
+        public ReferenceDataValidator(IReferenceDataClient referenceDataClient)
         {
-            this.repository = repository;
             this.referenceDataClient = referenceDataClient;
         }
 
@@ -32,42 +26,6 @@ namespace ADMS.Apprentices.Core.Services.Validators
             {
                 exceptionBuilder.AddException(exception);
             }
-        }
-
-        private void ValidatePreferredContactType(ValidationExceptionBuilder exceptionBuilder, Profile profile)
-        {
-            // if preferredContactType is Mobile we need atleast one mobile phone.
-            switch (profile.PreferredContactType)
-            {
-                case nameof(PreferredContactType.MOBILE) or nameof(PreferredContactType.SMS):
-                    if (profile.Phones.Any(c => !c.PhoneNumber.IsNullOrEmpty() && c.PhoneNumber.StartsWith("04")) == false)
-                    {
-                        exceptionBuilder.AddException(ValidationExceptionType.MobilePreferredContactIsInvalid);
-                    }
-                    break;
-                case nameof(PreferredContactType.PHONE):
-                    if (profile.Phones.Any() == false)
-                    {
-                        exceptionBuilder.AddException(ValidationExceptionType.PhonePreferredContactIsInvalid);
-                    }
-                    break;
-                case nameof(PreferredContactType.EMAIL):
-                    if (string.IsNullOrEmpty(profile.EmailAddress))
-                    {
-                        exceptionBuilder.AddException(ValidationExceptionType.EmailPreferredContactIsInvalid);
-                    }
-                    break;
-                case nameof(PreferredContactType.MAIL):
-                    if (profile.Addresses.Any() == false)
-                    {
-                        exceptionBuilder.AddException(ValidationExceptionType.MailPreferredContactIsInvalid);
-                    }
-                    break;
-                default:
-                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPreferredContactCode);
-                    break;
-            }
-            // validate rules based on the type of contact
         }
 
         public async Task<ValidationExceptionBuilder> ValidateAsync(Profile profile)
@@ -99,37 +57,26 @@ namespace ADMS.Apprentices.Core.Services.Validators
             {
                 tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.USIExemptionCode, profile.NotProvidingUSIReasonCode, ValidationExceptionType.InvalidNotProvidingUSIReasonCode));
             }
-            if (!string.IsNullOrEmpty(profile.PreferredContactType))
-            {
-                ValidatePreferredContactType(exceptionBuilder, profile);
-            }
             await tasks.WaitAndThrowAnyExceptionFound();
             return exceptionBuilder;
         }
 
-        public async Task<ValidationExceptionBuilder> PriorApprenticeshipValidator(PriorApprenticeship priorApprenticeship)
+        public async Task<ValidationExceptionBuilder> ValidatePriorApprenticeshipQualificationsAsync(PriorApprenticeshipQualification priorApprenticeship)
         {
             var exceptionBuilder = new ValidationExceptionBuilder();
 
-            if (!priorApprenticeship.CountryCode.IsNullOrEmpty())
+            await ValidateCodeAsync(exceptionBuilder, CodeTypes.Country, priorApprenticeship.CountryCode, ValidationExceptionType.InvalidPriorApprenticeshipCountryCode);
+            if (priorApprenticeship.CountryCode == "1101")
             {
-                await ValidateCodeAsync(exceptionBuilder, CodeTypes.Country, priorApprenticeship.CountryCode, ValidationExceptionType.InvalidPriorApprenticeshipCountryCode);
-                if (priorApprenticeship.CountryCode == "1101")
-                {
-                    if (priorApprenticeship.StateCode.IsNullOrEmpty())
-                        exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipAustralianStateCode);
-                    else if (!Enum.IsDefined(typeof(StateCode), priorApprenticeship.StateCode.ToUpper()))
-                        exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipAustralianStateCode);
-                }
+                if (priorApprenticeship.StateCode.IsNullOrEmpty())
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipAustralianStateCode);
+                else if (!Enum.IsDefined(typeof(StateCode), priorApprenticeship.StateCode.ToUpper()))
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipAustralianStateCode);
             }
-            else
-                exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipCountryCode);
-
-            exceptionBuilder.ThrowAnyExceptions();
             return exceptionBuilder;
         }
 
-        public async Task<ValidationExceptionBuilder> ValidateAsync(IQualificationAttributes qualification)
+        public async Task<ValidationExceptionBuilder> ValidatePriorQualificationsAsync(PriorQualification qualification)
         {
             var exceptionBuilder = new ValidationExceptionBuilder();
             var tasks = new List<Task>();

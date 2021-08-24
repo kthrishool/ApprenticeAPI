@@ -5,8 +5,11 @@ VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D6BC9D08-270A-4264-A028-4A3F64D6E8C3}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		GitVersion.yml = GitVersion.yml
 		Pipeline.yml = Pipeline.yml
+		README.md = README.md
+		run.bat = run.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7A406BB8-9FC9-4703-8E3D-B82BE8CF6C49}"
@@ -26,7 +29,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database.ADMSApprentice", "
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database.TYIMS", "Database.TYIMS\Database.TYIMS.sqlproj", "{7154A70A-4F09-46AC-9878-27C2D837B4B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADMS.Apprentices.IntegrationTests", "ADMS.Apprentices.IntegrationTests\ADMS.Apprentices.IntegrationTests.csproj", "{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADMS.Apprentices.IntegrationTests", "ADMS.Apprentices.IntegrationTests\ADMS.Apprentices.IntegrationTests.csproj", "{E05FA14D-EB1F-40FA-AE73-9E3CDF1E40ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

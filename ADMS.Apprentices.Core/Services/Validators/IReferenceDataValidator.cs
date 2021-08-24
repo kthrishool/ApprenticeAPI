@@ -8,7 +8,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
     public interface IReferenceDataValidator
     {
         Task<ValidationExceptionBuilder> ValidateAsync(Profile profile);
-        Task<ValidationExceptionBuilder> ValidateAsync(IQualificationAttributes qualification);
-        Task<ValidationExceptionBuilder> PriorApprenticeshipValidator(PriorApprenticeship priorApprenticeship);
+        Task<ValidationExceptionBuilder> ValidatePriorQualificationsAsync(PriorQualification qualification);
+        Task<ValidationExceptionBuilder> ValidatePriorApprenticeshipQualificationsAsync(PriorApprenticeshipQualification priorApprenticeship);
     }
 }
