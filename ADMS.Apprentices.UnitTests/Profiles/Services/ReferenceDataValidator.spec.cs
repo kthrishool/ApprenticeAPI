@@ -358,6 +358,117 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .Should().Throw<AdmsValidationException>();
         }
 
+
+        [TestMethod]
+        public void throwExceptionWhenQualLEvelisInvalid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+
+            Container
+                .GetMock<IReferenceDataClient>()
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(list1);
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
+            priorApprenticeship.QualificationManualReasonCode = null;
+
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
+                .Should().Throw<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void throwExceptionWhenQualLevelisNull()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+
+            Container
+                .GetMock<IReferenceDataClient>()
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(list1);
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
+            priorApprenticeship.QualificationManualReasonCode = null;
+            priorApprenticeship.QualificationLevel = null;
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
+                .Should().Throw<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void ShouldnotThrowExceptionWhenAValidQualLevelIsEntered()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
+
+            Container
+                .GetMock<IReferenceDataClient>()
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(list1);
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
+            priorApprenticeship.QualificationManualReasonCode = null;
+
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
+                .Should().NotThrow<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void throwExceptionWheQualificationANZSCOCodeisNull()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+
+            Container
+                .GetMock<IReferenceDataClient>()
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(list1);
+
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
+            priorApprenticeship.QualificationManualReasonCode = null;
+            priorApprenticeship.QualificationANZSCOCode = null;
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
+                .Should().Throw<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void throwExceptionWheQualificationANZSCOCodeisInvalid()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+
+            Container
+                .GetMock<IReferenceDataClient>()
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(list1);
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
+            priorApprenticeship.QualificationManualReasonCode = null;
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
+                .Should().Throw<AdmsValidationException>();
+        }
+
+        [TestMethod]
+        public void ShouldnotThrowExceptionWhenAQualificationANZSCOCodeLevelIsEntered()
+        {
+            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
+            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
+
+            Container
+                .GetMock<IReferenceDataClient>()
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(list1);
+
+
+            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
+            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
+            priorApprenticeship.QualificationManualReasonCode = null;
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
+                .Should().NotThrow<AdmsValidationException>();
+        }
+
         #endregion
     }
 

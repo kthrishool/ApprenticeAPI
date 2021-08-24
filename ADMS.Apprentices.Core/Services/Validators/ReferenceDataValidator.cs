@@ -64,7 +64,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
         public async Task<ValidationExceptionBuilder> ValidatePriorApprenticeshipQualificationsAsync(PriorApprenticeshipQualification priorApprenticeship)
         {
             var exceptionBuilder = new ValidationExceptionBuilder();
-
+            var tasks = new List<Task>();
             await ValidateCodeAsync(exceptionBuilder, CodeTypes.Country, priorApprenticeship.CountryCode, ValidationExceptionType.InvalidPriorApprenticeshipCountryCode);
             if (priorApprenticeship.CountryCode == "1101")
             {
@@ -73,6 +73,18 @@ namespace ADMS.Apprentices.Core.Services.Validators
                 else if (!Enum.IsDefined(typeof(StateCode), priorApprenticeship.StateCode.ToUpper()))
                     exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipAustralianStateCode);
             }
+            if (priorApprenticeship.QualificationManualReasonCode == null)
+            {
+                if (!priorApprenticeship.QualificationLevel.IsNullOrEmpty())
+                    tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.QualificationLevel, priorApprenticeship.QualificationLevel, ValidationExceptionType.InvalidQualificationLevel));
+                else
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidQualificationLevel);
+                if (!priorApprenticeship.QualificationANZSCOCode.IsNullOrEmpty())
+                    tasks.Add(ValidateCodeAsync(exceptionBuilder, CodeTypes.ANZSCOCode, priorApprenticeship.QualificationANZSCOCode, ValidationExceptionType.InvalidQualificationANZSCO));
+                else
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidQualificationANZSCO);
+            }
+            await tasks.WaitAndThrowAnyExceptionFound();
             return exceptionBuilder;
         }
 
