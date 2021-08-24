@@ -29,7 +29,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         protected override void Given()
         {
             profile = new Profile();
-            qualification = new PriorQualification()
+            qualification = new PriorQualification
             {
                 QualificationCode = "QCode",
                 QualificationDescription = "QDescription",
@@ -47,31 +47,44 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public void NoExceptionIfStartDateIsNull()
+        public async Task NoExceptionIfStartDateIsNull()
         {
-            profile.PriorQualifications.Clear();
             qualification.StartDate = null;
-            profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).HasExceptions().Should().BeFalse());
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
+            eb.HasExceptions().Should().BeFalse();
         }
 
         [TestMethod]
-        public void NoExceptionIfEndDateIsNull()
+        public async Task NoExceptionIfEndDateIsNull()
         {
-            profile.PriorQualifications.Clear();
             qualification.EndDate = null;
-            profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).HasExceptions().Should().BeFalse());
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
+            eb.HasExceptions().Should().BeFalse();
         }
 
         [TestMethod]
-        public void NoExceptionIfStartAndEndDateIsNull()
+        public async Task NoExceptionIfStartAndEndDateIsNull()
         {
-            profile.PriorQualifications.Clear();
             qualification.EndDate = null;
             qualification.StartDate = null;
-            profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).HasExceptions().Should().BeFalse());
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
+            eb.HasExceptions().Should().BeFalse();
+        }
+
+        [TestMethod]
+        public async Task NoExceptionIfAnzscoMissing()
+        {
+            qualification.QualificationANZSCOCode = null;
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
+            eb.HasExceptions().Should().BeFalse();
+        }
+
+        [TestMethod]
+        public async Task NoExceptionIfLevelMissing()
+        {
+            qualification.QualificationLevel = null;
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
+            eb.HasExceptions().Should().BeFalse();
         }
 
         [TestMethod]
@@ -89,6 +102,24 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.QualificationManualReasonCode = "INVALID";
             ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
             eb.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidQualificationManualReasonCode);
+        }
+
+        [TestMethod]
+        public async Task ErrorsIfManuallyEnteredAndAnzscoMissing()
+        {
+            qualification.QualificationManualReasonCode = PriorQualification.ManuallyEnteredCode;
+            qualification.QualificationANZSCOCode = null;
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
+            eb.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidPriorQualificationMissingAnzscoCode);
+        }
+
+        [TestMethod]
+        public async Task ErrorsIfManuallyEnteredAndLevelMissing()
+        {
+            qualification.QualificationManualReasonCode = PriorQualification.ManuallyEnteredCode;
+            qualification.QualificationLevel = null;
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
+            eb.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidPriorQualificationMissingLevelCode);
         }
 
         [TestMethod]
@@ -228,7 +259,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         protected override void Given()
         {
             profile = new Profile();
-            qualification = new PriorQualification()
+            qualification = new PriorQualification
             {
                 QualificationCode = "QCode",
                 QualificationDescription = "QDescription",
@@ -243,7 +274,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.BirthDate = ProfileConstants.Birthdate;
             validationException = new ValidationException(null, (ValidationError) null);
 
-            registration = new Registration()
+            registration = new Registration
             {
                 CurrentEndReasonCode = "CMPS",
                 StartDate = new DateTime(2010, 1, 1),

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ADMS.Services.Infrastructure.Model.Interface;
 using Adms.Shared;
 
@@ -37,28 +38,24 @@ namespace ADMS.Apprentices.Core.Entities
         public byte[] Version { get; set; }
         public long AuditEventId { get; set; }
 
-
         public virtual ICollection<Phone> Phones { get; }
         public virtual ICollection<Address> Addresses { get; }
         public virtual ICollection<ApprenticeTFN> TFNs { get; }
-
-        /// <summary>The Qualifications the apprentice has completed.</summary>
         public virtual ICollection<PriorQualification> PriorQualifications { get; }
-
         public virtual ICollection<PriorApprenticeshipQualification> PriorApprenticeshipQualifications { get; }
-        public virtual Guardian Guardian { get; set; }
         public virtual ICollection<ApprenticeUSI> USIs { get; }
+        public virtual Guardian Guardian { get; set; }
 
         public Profile()
         {
             ActiveFlag = true;
             DeceasedFlag = false;
-            Phones = new List<Phone>();
-            Addresses = new List<Address>();
-            TFNs = new List<ApprenticeTFN>();
-            PriorQualifications = new List<PriorQualification>();
-            USIs = new List<ApprenticeUSI>();
-            PriorApprenticeshipQualifications = new List<PriorApprenticeshipQualification>();
+            Phones = new Collection<Phone>();
+            Addresses = new Collection<Address>();
+            TFNs = new Collection<ApprenticeTFN>();
+            PriorQualifications = new Collection<PriorQualification>();
+            PriorApprenticeshipQualifications = new Collection<PriorApprenticeshipQualification>();
+            USIs = new Collection<ApprenticeUSI>();
         }
     }
 }

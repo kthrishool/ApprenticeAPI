@@ -17,11 +17,9 @@ namespace ADMS.Apprentices.Core.Messages
         [Adms.Shared.Attributes.MaxLength(200, "Qualification description")]
         public string QualificationDescription { get; init; }
 
-        [Required]
         [Adms.Shared.Attributes.MaxLength(10, "Qualification level")]
         public string QualificationLevel { get; init; }
 
-        [Required]
         [Adms.Shared.Attributes.MaxLength(10, "ANZSCO code")]
         public string QualificationANZSCOCode { get; init; }
 

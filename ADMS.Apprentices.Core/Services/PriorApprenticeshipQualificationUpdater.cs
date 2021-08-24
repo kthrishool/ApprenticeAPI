@@ -14,6 +14,7 @@ namespace ADMS.Apprentices.Core.Services
     [RegisterWithIocContainer]
     public class PriorApprenticeshipQualificationUpdater : IPriorApprenticeshipQualificationUpdater
     {
+        private const string australia = "1101";
         private readonly IPriorApprenticeshipQualificationValidator priorApprenticeshipValidator;
 
         public PriorApprenticeshipQualificationUpdater(IPriorApprenticeshipQualificationValidator priorApprenticeshipValidator)
@@ -35,7 +36,7 @@ namespace ADMS.Apprentices.Core.Services
             priorApprenticeship.QualificationManualReasonCode = message.QualificationManualReasonCode.Sanitise();
             priorApprenticeship.StartDate = message.StartDate;
             priorApprenticeship.CountryCode = message.CountryCode;
-            priorApprenticeship.StateCode = message.StateCode;
+            priorApprenticeship.StateCode = priorApprenticeship.CountryCode == australia ? message.StateCode : null;
             priorApprenticeship.ApprenticeshipReference = message.ApprenticeshipReference;
 
             var exceptionBuilder = await priorApprenticeshipValidator.ValidateAsync(priorApprenticeship, profile);

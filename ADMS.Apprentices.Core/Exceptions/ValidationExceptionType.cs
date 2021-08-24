@@ -185,6 +185,18 @@ namespace ADMS.Apprentices.Core.Exceptions
         InvalidNotProvidingUSIReasonCode,
 
         [ExceptionDetails("AP-VAL-0060", "QualificationManualReasonCode can only be null or MANUAL")]
-        InvalidQualificationManualReasonCode
+        InvalidQualificationManualReasonCode,
+
+        [ExceptionDetails("AP-VAL-0061", "QualificationAnzscoCode must be supplied when QualificationManualReasonCode is MANUAL")]
+        InvalidPriorApprenticeshipMissingAnzscoCode,
+
+        [ExceptionDetails("AP-VAL-0062", "QualificationLevelCode must be supplied when QualificationManualReasonCode is MANUAL")]
+        InvalidPriorApprenticeshipMissingLevelCode,
+
+        [ExceptionDetails("AP-VAL-0063", "QualificationAnzscoCode must be supplied when QualificationManualReasonCode is MANUAL")]
+        InvalidPriorQualificationMissingAnzscoCode,
+
+        [ExceptionDetails("AP-VAL-0064", "QualificationLevelCode must be supplied when QualificationManualReasonCode is MANUAL")]
+        InvalidPriorQualificationMissingLevelCode
     }
 }

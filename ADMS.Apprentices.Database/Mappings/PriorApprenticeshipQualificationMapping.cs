@@ -38,11 +38,11 @@ namespace ADMS.Apprentices.Database.Mappings
             entity.Property(e => e.QualificationLevel)
                 .HasColumnName("QualificationLevel")
                 .HasMaxLength(10)
-                .IsRequired();
+                .IsRequired(false);
             entity.Property(e => e.QualificationANZSCOCode)
                 .HasColumnName("QualificationANZSCOCode")
                 .HasMaxLength(10)
-                .IsRequired();
+                .IsRequired(false);
             entity.Property(e => e.QualificationManualReasonCode)
                 .HasColumnName("QualificationManualReasonCode")
                 .IsRequired(false)

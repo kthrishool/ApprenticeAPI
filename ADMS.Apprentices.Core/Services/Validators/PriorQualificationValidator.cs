@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Exceptions;
+using Adms.Shared.Extensions;
 
 namespace ADMS.Apprentices.Core.Services.Validators
 {
@@ -49,6 +50,15 @@ namespace ADMS.Apprentices.Core.Services.Validators
             if (qualification.QualificationManualReasonCode != null && qualification.QualificationManualReasonCode != PriorQualification.ManuallyEnteredCode)
             {
                 exceptionBuilder.AddException(ValidationExceptionType.InvalidQualificationManualReasonCode);
+            }
+
+            // ANZSCO and level codes are required for a manually entered qualification code
+            if (qualification.QualificationManualReasonCode == PriorQualification.ManuallyEnteredCode)
+            {
+                if (qualification.QualificationANZSCOCode.IsNullOrWhitespace())
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorQualificationMissingAnzscoCode);
+                if (qualification.QualificationLevel.IsNullOrWhitespace())
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorQualificationMissingLevelCode);
             }
 
             exceptionBuilder.AddExceptions(await referenceDataValidator.ValidatePriorQualificationsAsync(qualification));

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Exceptions;
+using Adms.Shared.Extensions;
 
 // ReSharper disable PossibleInvalidOperationException
 
@@ -29,9 +30,16 @@ namespace ADMS.Apprentices.Core.Services.Validators
                 exceptionBuilder.AddException(ValidationExceptionType.InvalidDate);
 
             // at this time we only accept a single qualification manual reason code
-            if (priorApprenticeship.QualificationManualReasonCode != null && priorApprenticeship.QualificationManualReasonCode != PriorQualification.ManuallyEnteredCode)
-            {
+            if (priorApprenticeship.QualificationManualReasonCode != null && priorApprenticeship.QualificationManualReasonCode != PriorApprenticeshipQualification.ManuallyEnteredCode)
                 exceptionBuilder.AddException(ValidationExceptionType.InvalidQualificationManualReasonCode);
+
+            // ANZSCO and level codes are required for a manually entered qualification code
+            if (priorApprenticeship.QualificationManualReasonCode == PriorApprenticeshipQualification.ManuallyEnteredCode)
+            {
+                if (priorApprenticeship.QualificationANZSCOCode.IsNullOrWhitespace())
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipMissingAnzscoCode);
+                if (priorApprenticeship.QualificationLevel.IsNullOrWhitespace())
+                    exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipMissingLevelCode);
             }
 
             exceptionBuilder.AddExceptions(await referenceDataValidator.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship));

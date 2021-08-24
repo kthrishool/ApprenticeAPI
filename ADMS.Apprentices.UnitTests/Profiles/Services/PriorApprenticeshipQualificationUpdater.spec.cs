@@ -40,7 +40,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 QualificationCode = q.QualificationCode,
                 QualificationDescription = q.QualificationDescription,
                 StartDate = q.StartDate,
-                QualificationManualReasonCode = PriorApprenticeshipQualification.ManuallyEnteredCode
+                QualificationManualReasonCode = PriorApprenticeshipQualification.ManuallyEnteredCode,
+                CountryCode = "1101",
+                StateCode = "NSW"
             };
 
             profile = new Profile();
@@ -72,10 +74,20 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.QualificationANZSCOCode.Should().Be(message.QualificationANZSCOCode);
             qualification.QualificationLevel.Should().Be(message.QualificationLevel);
             qualification.QualificationManualReasonCode.Should().Be(PriorApprenticeshipQualification.ManuallyEnteredCode);
+            qualification.CountryCode.Should().Be("1101");
+            qualification.StateCode.Should().Be("NSW");
         }
 
         [TestMethod]
-        public void WhenQualificationIdIsDifferent_ThenAnExceptionShouldOccur()
+        public async Task SetsStateToNullIfCountryIsNotAustralia()
+        {
+            qualification = await ClassUnderTest.Update(10, qualificationId, message with {CountryCode = "8403"}, profile);
+            qualification.CountryCode.Should().Be("8403");
+            qualification.StateCode.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void ErrorsIfQualificationIdCannotBeFound()
         {
             ClassUnderTest.Invoking(c => c.Update(10, qualificationId + 1, message, profile))
                 .Should().Throw<AdmsNotFoundException>();
