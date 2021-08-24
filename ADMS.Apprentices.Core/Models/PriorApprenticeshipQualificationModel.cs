@@ -13,6 +13,9 @@ namespace ADMS.Apprentices.Core.Models
         public string QualificationANZSCOCode { get; }
         public string QualificationManualReasonCode { get; }
         public DateTime? StartDate { get; }
+        public string CountryCode { get; }
+
+        public string StateCode { get; }
         public string ApprenticeshipReference { get; }
 
         public DateTime? CreatedOn { get; }
@@ -32,7 +35,8 @@ namespace ADMS.Apprentices.Core.Models
             QualificationManualReasonCode = priorApprenticeship.QualificationManualReasonCode;
             StartDate = priorApprenticeship.StartDate;
             ApprenticeshipReference = priorApprenticeship.ApprenticeshipReference;
-
+            CountryCode = priorApprenticeship.CountryCode;
+            StateCode = priorApprenticeship.StateCode;
             CreatedOn = priorApprenticeship.CreatedOn;
             CreatedBy = priorApprenticeship.CreatedBy;
             UpdatedOn = priorApprenticeship.UpdatedOn;

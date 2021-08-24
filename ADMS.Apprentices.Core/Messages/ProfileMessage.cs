@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ADMS.Apprentices.Core.Messages
@@ -13,7 +12,7 @@ namespace ADMS.Apprentices.Core.Messages
 
         [Required(ErrorMessage = "First name is required")]
         [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "First name must contain only letters, spaces, hyphens and apostrophes")]
-        [MaxLength(50, ErrorMessage = "First nme cannot have more than 50 characters")]
+        [MaxLength(50, ErrorMessage = "First name cannot have more than 50 characters")]
         public string FirstName { get; init; }
 
         [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Other names must contain only letters, spaces, hyphens and apostrophes")]
@@ -23,8 +22,8 @@ namespace ADMS.Apprentices.Core.Messages
         [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Preferred name must contain only letters, spaces, hyphens and apostrophes")]
         [MaxLength(50, ErrorMessage = "Preferred name cannot have more than 50 characters")]
         public string PreferredName { get; init; }
-        
-        [Required(ErrorMessage = "Birth date is required")]        
+
+        [Required(ErrorMessage = "Birth date is required")]
         public DateTime? BirthDate { get; init; }
 
         [Display(Name = "Email address")]
