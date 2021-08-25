@@ -75,16 +75,16 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0022", "Invalid citizenship code")]
         InvalidCitizenshipCode,
 
-        [ExceptionDetails("AP-VAL-0023", "Missing mobile phone details for preferred contact")]
+        [ExceptionDetails("AP-VAL-0023", "Preferred contact type requires a valid mobile phone number")]
         MobilePreferredContactIsInvalid,
 
-        [ExceptionDetails("AP-VAL-0024", "Missing email address for preferred contact")]
+        [ExceptionDetails("AP-VAL-0024", "Preferred contact type requires an email address")]
         EmailPreferredContactIsInvalid,
 
-        [ExceptionDetails("AP-VAL-0025", "Missing phone details for preferred contact")]
+        [ExceptionDetails("AP-VAL-0025", "Preferred contact type requires a phone number")]
         PhonePreferredContactIsInvalid,
 
-        [ExceptionDetails("AP-VAL-0026", "Missing address details for preferred contact")]
+        [ExceptionDetails("AP-VAL-0026", "Preferred contact type requires a valid address")]
         MailPreferredContactIsInvalid,
 
         [ExceptionDetails("AP-VAL-0027", "Invalid preferred contact type code")]
@@ -105,7 +105,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0034", "Duplicate qualification identified")]
         DuplicateQualification,
 
-        [ExceptionDetails("AP-VAL-0035", "Invalid USI code")]
+        [ExceptionDetails("AP-VAL-0035", "Invalid USI")]
         InvalidUSI,
 
         [ExceptionDetails("AP-VAL-0036", "CRN exceeds 10 characters")]
@@ -118,7 +118,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0038", "Invalid guardian phone number")]
         InvalidGuardianNumber,
 
-        [ExceptionDetails("AP-VAL-0039", "Minimum 8 numbers if searching only by phonenumber")]
+        [ExceptionDetails("AP-VAL-0039", "Minimum 8 numbers if searching only by phone number")]
         InvalidPhonenumberSearch,
 
         [ExceptionDetails("AP-VAL-0040", "Minimum 5 characters if searching only by email address")]
@@ -133,14 +133,14 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0043", "Invalid phone type code")]
         InvalidPhoneTypeCode,
 
-        [ExceptionDetails("AP-VAL-0044", "The apprenticeship referenced by the qualification does not exist")]
-        QualificationApprenticeshipDoesNotExist,
+        //[ExceptionDetails("AP-VAL-0044", "The apprenticeship referenced by the qualification does not exist")]
+        //QualificationApprenticeshipDoesNotExist,
 
-        [ExceptionDetails("AP-VAL-0045", "The apprenticeship referenced by the qualification has a different qualification code")]
-        QualificationApprenticeshipQualificationCodeDoesNotMatch,
+        //[ExceptionDetails("AP-VAL-0045", "The apprenticeship referenced by the qualification has a different qualification code")]
+        //QualificationApprenticeshipQualificationCodeDoesNotMatch,
 
-        [ExceptionDetails("AP-VAL-0046", "The apprenticeship referenced by the qualification is not yet complete")]
-        QualificationApprenticeshipIsNotComplete,
+        //[ExceptionDetails("AP-VAL-0046", "The apprenticeship referenced by the qualification is not yet complete")]
+        //QualificationApprenticeshipIsNotComplete,
 
         [ExceptionDetails("AP-VAL-0047", "End date cannot be before start date")]
         DateMismatch,
@@ -154,7 +154,7 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0050", "Apprenticeship qualification start and end dates are required")]
         InvalidApprenticeshipQualification,
 
-        [ExceptionDetails("AP-VAL-0051", "ApprenticeshipId does not belong to the apprentice")]
+        [ExceptionDetails("AP-VAL-0051", "Apprenticeship Id does not belong to the apprentice")]
         InvalidApprenticeshipIDForQualification,
 
         [ExceptionDetails("AP-VAL-0052", "Nothing to search. Please add your search criteria")]
