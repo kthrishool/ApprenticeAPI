@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[ApprenticePhone] (
     [ApprenticePhoneId]  INT             IDENTITY (1, 1) NOT NULL,
     [ApprenticeId]       INT             NOT NULL,
-    [PhoneTypeCode]      VARCHAR (10)    NOT NULL,
+    [PhoneTypeCode]      VARCHAR (10)    NOT NULL,    
     [PhoneNumber]        VARCHAR (15)    NOT NULL,
     [CountryCode]       VARCHAR (10)    NOT NULL DEFAULT 'AUS',
     [PreferredPhoneFlag] BIT             NULL ,

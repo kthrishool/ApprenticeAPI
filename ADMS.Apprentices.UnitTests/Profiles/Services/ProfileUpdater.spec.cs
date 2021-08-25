@@ -205,6 +205,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 BirthDate = ProfileConstants.Birthdate,
                 ProfileType = ProfileConstants.Profiletype,
                 Phone1 = ProfileConstants.Phone1,
+                Phone1CountryCode = ProfileConstants.Phone1CountryCode,
                 Phone2 = ProfileConstants.Phone2,
             };
 
@@ -214,6 +215,28 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             //then
             profile.Phones.Count.Should().Be(2);            
             profile.Phones.Where(x => x.PhoneTypeCode == PhoneType.PHONE1.ToString()).FirstOrDefault().PhoneNumber.Should().Be(ProfileConstants.Phone1);
+            profile.Phones.Where(x => x.PhoneTypeCode == PhoneType.PHONE2.ToString()).FirstOrDefault().PhoneNumber.Should().Be(ProfileConstants.Phone2);
+        }
+
+        [TestMethod]
+        public async Task AddNewPhoneNumbers()
+        {
+            profile.Phones.Clear();            
+            message = new UpdateProfileMessage
+            {
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                ProfileType = ProfileConstants.Profiletype,  
+                Phone2CountryCode = ProfileConstants.Phone2CountryCode,
+                Phone2 = ProfileConstants.Phone2,
+            };
+
+            //when
+            profile = await ClassUnderTest.Update(profile, message);
+
+            //then
+            profile.Phones.Count.Should().Be(1);
             profile.Phones.Where(x => x.PhoneTypeCode == PhoneType.PHONE2.ToString()).FirstOrDefault().PhoneNumber.Should().Be(ProfileConstants.Phone2);
         }
 

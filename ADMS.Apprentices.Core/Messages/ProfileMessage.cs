@@ -35,9 +35,17 @@ namespace ADMS.Apprentices.Core.Messages
         [Required(ErrorMessage = "Profile Type is required")]
         public string ProfileType { get; init; }
 
+        [MaxLength(5, ErrorMessage = "Phone1 country code cannot have more than 5 characters")]
+        [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Phone1 country code must contain only numbers, spaces or plus sign")]
+        public string Phone1CountryCode { get; init; }
+
         [MaxLength(15, ErrorMessage = "Phone1 cannot have more than 15 characters")]
         [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Phone1 must contain only numbers, spaces or plus sign")]
         public string Phone1 { get; init; }
+
+        [MaxLength(5, ErrorMessage = "Phone2 country code cannot have more than 5 characters")]
+        [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Phone2 country code must contain only numbers, spaces or plus sign")]
+        public string Phone2CountryCode { get; init; }
 
         [MaxLength(15, ErrorMessage = "Phone2 cannot have more than 15 characters")]
         [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Phone2 must contain only numbers, spaces or plus sign")]

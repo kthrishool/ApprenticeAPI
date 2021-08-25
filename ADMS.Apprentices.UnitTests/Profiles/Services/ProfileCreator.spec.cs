@@ -21,6 +21,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     {
         private Profile profile;
         private ProfileMessage message;
+        private const string defaultCountryCode = "+61";
 
         protected override void Given()
         {
@@ -31,7 +32,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
                 ProfileType = ProfileConstants.Profiletype,
+                Phone1CountryCode = ProfileConstants.Phone1CountryCode,
                 Phone1 = ProfileConstants.Phone1,
+                Phone2CountryCode = ProfileConstants.Phone2CountryCode,
                 Phone2 = ProfileConstants.Phone2,
                 ResidentialAddress = ProfileConstants.ResidentialAddress,
                 PostalAddress = ProfileConstants.PostalAddress,
@@ -139,7 +142,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldSetPhoneNumber()
         {
-            profile.Phones.Select(c => c.PhoneNumber).Should().Contain(message.Phone1);
+            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE1.ToString()).PhoneNumber.Should().Be(ProfileConstants.Phone1);
+            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE1.ToString()).CountryCode.Should().Be(ProfileConstants.Phone1CountryCode);
+            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE2.ToString()).PhoneNumber.Should().Be(ProfileConstants.Phone2);
+            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE2.ToString()).CountryCode.Should().Be(ProfileConstants.Phone2CountryCode);
         }
 
         [TestMethod]
@@ -230,14 +236,29 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 Surname = ProfileConstants.Surname,
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
-                ProfileType = ProfileConstants.Profiletype,
-                Phone1 = null,
-                Phone2 = null
+                ProfileType = ProfileConstants.Profiletype
             };
             profile = await ClassUnderTest.CreateAsync(message);
             profile.Phones.Should().BeEmpty();
         }
 
+        [TestMethod]
+        public async Task ShouldSetDefaultCountryCodeIfCountryCodeIsNull()
+        {
+            message = new ProfileMessage
+            {
+                Surname = ProfileConstants.Surname,
+                FirstName = ProfileConstants.Firstname,
+                BirthDate = ProfileConstants.Birthdate,
+                ProfileType = ProfileConstants.Profiletype,                
+                Phone1 = ProfileConstants.Phone1,
+                Phone2 = ProfileConstants.Phone2
+            };
+            profile = await ClassUnderTest.CreateAsync(message);
+            profile.Phones.Count().Should().Be(2);
+            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE1.ToString()).CountryCode.Should().Be(defaultCountryCode);
+            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE2.ToString()).CountryCode.Should().Be(defaultCountryCode);
+        }
 
         [TestMethod]
         public async Task ShouldSetUSI()
