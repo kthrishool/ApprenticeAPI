@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ADMS.Apprentices.Core.Entities;
-using ADMS.Apprentices.Core.Exceptions;
 using ADMS.Apprentices.Core.HttpClients.ReferenceDataApi;
 using ADMS.Apprentices.Core.Services.Validators;
-using ADMS.Apprentices.UnitTests.Constants;
-using Adms.Shared.Exceptions;
 using Adms.Shared.Testing;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,464 +10,304 @@ using Moq;
 
 namespace ADMS.Apprentices.UnitTests.Profiles.Services
 {
-    #region WhenValidatingReferenceData
+    #region WhenValidatingAnApprenticeProfileWithTheReferenceDataValidator
 
     [TestClass]
-    public class WhenValidatingReferenceDataValidator : GivenWhenThen<ReferenceDataValidator>
+    public class WhenValidatingAnApprenticeProfileWithTheReferenceDataValidator : GivenWhenThen<ReferenceDataValidator>
     {
-        private Profile newProfile;
+        private const string validCode = "valid-code";
+        private const string invalidCode = "invalid-code";
+
+        protected override void Given()
+        {
+            var validCodes = new List<ListCodeResponseV1> {new() {Code = validCode}};
+            Container
+                .GetMock<IReferenceDataClient>()
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), validCode, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(validCodes);
+            Container
+                .GetMock<IReferenceDataClient>()
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), invalidCode, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(new List<ListCodeResponseV1>());
+        }
+
+        [TestMethod]
+        public async Task DoesNothingIfCountryofBirthIsValid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {CountryOfBirthCode = validCode});
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task ReturnsExceptionIfCountryofBirthIsInvalid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {CountryOfBirthCode = invalidCode});
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
+        }
+
+        [TestMethod]
+        public async Task DoesNothingIfLanguageCodeIsValid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {LanguageCode = validCode});
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task ReturnsExceptionIfLanguageCodeIsInvalid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {LanguageCode = invalidCode});
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
+        }
+
+        [TestMethod]
+        public async Task DoesNothingIfIndigenousStatusCodeIsValid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {IndigenousStatusCode = validCode});
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task ReturnsExceptionIfIndigenousStatusCodeIsInvalid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {IndigenousStatusCode = invalidCode});
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
+        }
+
+        [TestMethod]
+        public async Task DoesNothingIfNotProvidingUSIReasonCodeIsValid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {NotProvidingUSIReasonCode = validCode});
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task ReturnsExceptionIfNotProvidingUSIReasonCodeIsInvalid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {NotProvidingUSIReasonCode = invalidCode});
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
+        }
+
+        [TestMethod]
+        public async Task DoesNothingIfCitizenshipCodeIsValid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {CitizenshipCode = validCode});
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task ReturnsExceptionIfCitizenshipCodeIsInvalid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {CitizenshipCode = invalidCode});
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
+        }
+
+        [TestMethod]
+        public async Task DoesNothingIfCountryOfBirthCodeIsValid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {CountryOfBirthCode = validCode});
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task ReturnsExceptionIfCountryOfBirthCodeIsInvalid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {CountryOfBirthCode = invalidCode});
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
+        }
+
+        [TestMethod]
+        public async Task DoesNothingIfHighestSchoolLevelCodeIsValid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {HighestSchoolLevelCode = validCode});
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task ReturnsExceptionIfHighestSchoolLevelCodeIsInvalid()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(new Profile {HighestSchoolLevelCode = invalidCode});
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
+        }
+    }
+
+    #endregion
+
+    #region WhenValidatingPriorQualificationsWithTheReferenceDataValidator
+
+    [TestClass]
+    public class WhenValidatingPriorQualificationsWithTheReferenceDataValidator : GivenWhenThen<ReferenceDataValidator>
+    {
+        private const string validCode = "valid-code";
+        private const string invalidCode = "invalid-code";
         private PriorQualification qualification;
 
         protected override void Given()
         {
-            newProfile = new Profile();
-
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-        }
-
-        private void MockReferenceData(string MethodName, IList<ListCodeResponseV1> returnvalue, ValidationExceptionType exception)
-        {
-            switch (MethodName)
-            {
-                case "GetListCodes":
-                    Container
-                        .GetMock<IReferenceDataClient>()
-                        .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                        .ReturnsAsync(returnvalue);
-                    break;
-            }
-        }
-
-        [TestMethod]
-        public void DoesNothingIfCountryofBirthIsValid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidCountryCode);
-
-
-            newProfile = new Profile();
-            newProfile.CountryOfBirthCode = "1101";
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
-        }
-
-
-        [TestMethod]
-        public void ThrowsValidationExceptionIfCountryofBirthIsInvalid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidCountryCode);
-
-
-            newProfile = new Profile();
-            newProfile.CountryOfBirthCode = "dasdas";
-
-
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
-        }
-
-        [TestMethod]
-        public void ThrowsValidationExceptionIfLanguageisInValid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidLanguageCode);
-
-
-            newProfile = new Profile();
-            newProfile.LanguageCode = "dasdas";
-
-
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
-        }
-
-        [TestMethod]
-        public void DoNothingIfLanguageCodeIsValid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1201", Description = "test",});
-
-
+            var validCodes = new List<ListCodeResponseV1> {new() {Code = validCode}};
             Container
                 .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-
-            newProfile = new Profile();
-            newProfile.LanguageCode = "1201";
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
-        }
-
-        [TestMethod]
-        public void DoesNothingIfIndegenousStatusIsValid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidIndigenousStatusCode);
-
-            newProfile = new Profile();
-            newProfile.IndigenousStatusCode = "1101";
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
-        }
-
-
-        [TestMethod]
-        public void ThrowsValidationExceptionIfIndegenousStatusIsInvalid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidIndigenousStatusCode);
-
-            newProfile = new Profile();
-            newProfile.IndigenousStatusCode = "dasdas";
-
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
-        }
-
-        [TestMethod]
-        public void DoesNothingIfUSIExemptionReasonCodeIsValid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "NOUSI", Description = "test",});
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidNotProvidingUSIReasonCode);
-
-            newProfile = new Profile();
-            newProfile.NotProvidingUSIReasonCode = "NOUSI";
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
-        }
-
-
-        [TestMethod]
-        public void ThrowsValidationExceptionIfUSIExemptionReasonCodeIsInvalid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            //list1.Add(new ListCodeResponseV1() { ShortDescription = "test", Code = "NOUSI", Description = "test", });
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidNotProvidingUSIReasonCode);
-
-            newProfile = new Profile();
-            newProfile.NotProvidingUSIReasonCode = "dasdas";
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeTrue());
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
-        }
-
-        [TestMethod]
-        public void DoesNothingIfCitizenshipCodeIsValid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidCitizenshipCode);
-
-            newProfile = new Profile();
-            newProfile.CitizenshipCode = "1101";
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
-        }
-
-
-        [TestMethod]
-        public void ThrowsValidationExceptionIfCitizenshipCodeIsInvalid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidCitizenshipCode);
-
-            newProfile = new Profile();
-            newProfile.CitizenshipCode = "dasdas";
-
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
-        }
-
-        [TestMethod]
-        public void DoesNothingIfLanguageIsValid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1200", Description = "test",});
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidCountryCode);
-
-
-            newProfile = new Profile();
-            newProfile.CountryOfBirthCode = "1200";
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).HasExceptions().Should().BeFalse());
-        }
-
-        [TestMethod]
-        public void DoesNothingIfSchoolLevelCodeIsValid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "99", Description = "test",});
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidHighestSchoolLevelCode);
-
-            newProfile = new Profile();
-            newProfile.HighestSchoolLevelCode = "99";
-
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
-                .Should().NotThrow();
-        }
-
-
-        [TestMethod]
-        public void ThrowsValidationExceptionIfSchoolLevelCodeIsInvalid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidHighestSchoolLevelCode);
-
-            newProfile = new Profile {HighestSchoolLevelCode = "invalidCode"};
-
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(newProfile)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
-        }
-
-
-        #region QualificationValidationUsingReferenceData
-
-        [TestMethod]
-        public void DoesNothingIfQualificationIsValid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
-
-            qualification = ProfileConstants.Qualification;
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationsAsync(qualification)).ThrowAnyExceptions()).Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void ThrowsExceptionIfQualificationLevelIsInvalid()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), validCode, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(validCodes);
             Container
                 .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), invalidCode, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(new List<ListCodeResponseV1>());
             qualification = new PriorQualification();
-            qualification.QualificationLevel = "Invalid";
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationsAsync(qualification)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
         }
 
         [TestMethod]
-        public void ThrowsExceptionIfQualificationANZSCIsInvalid()
+        public async Task DoesNothingIfQualificationLevelIsValid()
         {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            Container
-                .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-            qualification = new PriorQualification();
-            qualification.QualificationANZSCOCode = "Invalid";
-
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationsAsync(qualification)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
-        }
-
-        #endregion
-
-        #region PriorApprenticeshipValidations
-
-        [TestMethod]
-        public void ThrowsExceptionIfCountryIsNull()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            Container
-                .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
-
-
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
-        }
-
-
-        [TestMethod]
-        public void ThrowsExceptionIfCountryIsNotInReferenceData()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            Container
-                .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
-            priorApprenticeship.CountryCode = "2222";
-
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
+            qualification.QualificationLevel = validCode;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
         }
 
         [TestMethod]
-        public void ThrowsExceptionIfCountryIsAustraliaAndStateIsNull()
+        public async Task ReturnsExceptionIfQualificationLevelIsInvalid()
         {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-
-            Container
-                .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
-            priorApprenticeship.CountryCode = "1101";
-
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
+            qualification.QualificationLevel = invalidCode;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
         }
 
         [TestMethod]
-        public void SHouldNotThrowExceptionWhenValidStateCode()
+        public async Task DoesNothingIfQualificationANZSCOCodeIsValid()
         {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-
-            Container
-                .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
-            priorApprenticeship.CountryCode = "1101";
-            priorApprenticeship.StateCode = "ACT";
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
-                .Should().NotThrow<AdmsValidationException>();
+            qualification.QualificationANZSCOCode = validCode;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
         }
 
         [TestMethod]
-        public void throwExceptionWhenStateCodeIsInvalid()
+        public async Task ReturnsExceptionIfQualificationANZSCOCodeIsInvalid()
         {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-
-            Container
-                .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
-            priorApprenticeship.CountryCode = "1101";
-            priorApprenticeship.StateCode = "ACTa";
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
+            qualification.QualificationANZSCOCode = invalidCode;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
         }
+    }
 
+    #endregion
 
-        [TestMethod]
-        public void throwExceptionWhenQualLEvelisInvalid()
+    #region WhenValidatingPriorApprenticeshipQualificationsWithTheReferenceDataValidator
+
+    [TestClass]
+    public class WhenValidatingPriorApprenticeshipQualificationsWithTheReferenceDataValidator : GivenWhenThen<ReferenceDataValidator>
+    {
+        private const string validCode = "valid-code";
+        private const string invalidCode = "invalid-code";
+        private PriorApprenticeshipQualification qualification;
+
+        protected override void Given()
         {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-
+            var validCodes = new List<ListCodeResponseV1> {new() {Code = validCode}};
             Container
                 .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
-            priorApprenticeship.QualificationManualReasonCode = null;
-
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
-        }
-
-        [TestMethod]
-        public void throwExceptionWhenQualLevelisNull()
-        {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), validCode, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(validCodes);
             Container
                 .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
-            priorApprenticeship.QualificationManualReasonCode = null;
-            priorApprenticeship.QualificationLevel = null;
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
+                .Setup(r => r.GetListCodes(It.IsAny<string>(), invalidCode, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
+                .ReturnsAsync(new List<ListCodeResponseV1>());
+            qualification = new PriorApprenticeshipQualification();
         }
 
         [TestMethod]
-        public void ShouldnotThrowExceptionWhenAValidQualLevelIsEntered()
+        public async Task DoesNothingIfCountryCodeIsValid()
         {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-
-            Container
-                .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
-            priorApprenticeship.QualificationManualReasonCode = null;
-
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
-                .Should().NotThrow<AdmsValidationException>();
+            qualification.CountryCode = validCode;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorApprenticeshipQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
         }
 
         [TestMethod]
-        public void throwExceptionWheQualificationANZSCOCodeisNull()
+        public async Task DoesNothingIfCountryCodeIsEmpty()
         {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-
-            Container
-                .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
-            priorApprenticeship.QualificationManualReasonCode = null;
-            priorApprenticeship.QualificationANZSCOCode = null;
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
+            qualification.CountryCode = null;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorApprenticeshipQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
         }
 
         [TestMethod]
-        public void throwExceptionWheQualificationANZSCOCodeisInvalid()
+        public async Task ReturnsExceptionIfCountryCodeIsInvalid()
         {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-
-            Container
-                .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
-            priorApprenticeship.QualificationManualReasonCode = null;
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
-                .Should().Throw<AdmsValidationException>();
+            qualification.CountryCode = invalidCode;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorApprenticeshipQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
         }
 
         [TestMethod]
-        public void ShouldnotThrowExceptionWhenAQualificationANZSCOCodeLevelIsEntered()
+        public async Task DoesNothingIfStateCodeIsValid()
         {
-            IList<ListCodeResponseV1> list1 = new List<ListCodeResponseV1>();
-            list1.Add(new ListCodeResponseV1() {ShortDescription = "test", Code = "1101", Description = "test",});
-
-            Container
-                .GetMock<IReferenceDataClient>()
-                .Setup(r => r.GetListCodes(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool?>()))
-                .ReturnsAsync(list1);
-
-
-            MockReferenceData("GetListCodes", list1, ValidationExceptionType.InvalidQualificationLevel);
-            var priorApprenticeship = ProfileConstants.PriorApprenticeshipQualification;
-            priorApprenticeship.QualificationManualReasonCode = null;
-            ClassUnderTest.Invoking(async c => (await c.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship)).ThrowAnyExceptions())
-                .Should().NotThrow<AdmsValidationException>();
+            qualification.StateCode = "ACT";
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorApprenticeshipQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
         }
 
-        #endregion
+        [TestMethod]
+        public async Task DoesNothingIfStateCodeIsEmpty()
+        {
+            qualification.StateCode = null;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorApprenticeshipQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task ReturnsExceptionIfStateCodeIsInvalid()
+        {
+            qualification.StateCode = invalidCode;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorApprenticeshipQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
+        }
+
+        [TestMethod]
+        public async Task DoesNothingIfQualificationLevelIsValid()
+        {
+            qualification.QualificationLevel = validCode;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorApprenticeshipQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task DoesNothingIfQualificationLevelIsEmpty()
+        {
+            qualification.QualificationLevel = null;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorApprenticeshipQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task ReturnsExceptionIfQualificationLevelIsInvalid()
+        {
+            qualification.QualificationLevel = invalidCode;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorApprenticeshipQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
+        }
+
+        [TestMethod]
+        public async Task DoesNothingIfQualificationANZSCOCodeIsValid()
+        {
+            qualification.QualificationANZSCOCode = validCode;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorApprenticeshipQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task DoesNothingIfQualificationANZSCOCodeIsEmpty()
+        {
+            qualification.QualificationANZSCOCode = null;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorApprenticeshipQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task ReturnsExceptionIfQualificationANZSCOCodeIsInvalid()
+        {
+            qualification.QualificationANZSCOCode = invalidCode;
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidatePriorApprenticeshipQualificationsAsync(qualification);
+            exceptionBuilder.GetValidationExceptions().Should().NotBeEmpty();
+        }
     }
 
     #endregion

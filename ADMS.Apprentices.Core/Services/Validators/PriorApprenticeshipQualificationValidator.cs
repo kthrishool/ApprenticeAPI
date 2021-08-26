@@ -42,6 +42,10 @@ namespace ADMS.Apprentices.Core.Services.Validators
                     exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipMissingLevelCode);
             }
 
+            // state code is required for australia
+            if (priorApprenticeship.CountryCode == "1101" && priorApprenticeship.StateCode.IsNullOrWhitespace())
+                exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorQualificationMissingStateCode);
+
             exceptionBuilder.AddExceptions(await referenceDataValidator.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship));
             return exceptionBuilder;
         }

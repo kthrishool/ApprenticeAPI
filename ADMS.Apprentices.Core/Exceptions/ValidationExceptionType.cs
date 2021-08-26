@@ -197,6 +197,9 @@ namespace ADMS.Apprentices.Core.Exceptions
         InvalidPriorQualificationMissingAnzscoCode,
 
         [ExceptionDetails("AP-VAL-0064", "QualificationLevelCode must be supplied when QualificationManualReasonCode is MANUAL")]
-        InvalidPriorQualificationMissingLevelCode
+        InvalidPriorQualificationMissingLevelCode,
+
+        [ExceptionDetails("AP-VAL-0065", "StateCode must be supplied when country is Australia")]
+        InvalidPriorQualificationMissingStateCode
     }
 }

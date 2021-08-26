@@ -24,10 +24,12 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         private PriorApprenticeshipQualification invalidMissingLevel;
         private PriorApprenticeshipQualification validManuallyEntered;
         private readonly DateTime validStartDate = new DateTime(2015, 3, 23);
+        private PriorApprenticeshipQualification invalidMissingState;
+        private PriorApprenticeshipQualification validOverseas;
 
         protected override void Given()
         {
-            valid = new PriorApprenticeshipQualification {StartDate = validStartDate};
+            valid = new PriorApprenticeshipQualification {StartDate = validStartDate, CountryCode = "1101", StateCode = "ACT"};
             invalidTooYoung = new PriorApprenticeshipQualification {StartDate = new DateTime(1991, 12, 31)};
             invalidFuture = new PriorApprenticeshipQualification {StartDate = new DateTime(2030, 1, 3)};
             invalidRefCodes = new PriorApprenticeshipQualification {StartDate = new DateTime(2015, 3, 2)};
@@ -50,6 +52,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 QualificationANZSCOCode = "anzsco",
                 QualificationLevel = "level"
             };
+            invalidMissingState = new PriorApprenticeshipQualification {StartDate = validStartDate, CountryCode = "1101", StateCode = null};
+            validOverseas = new PriorApprenticeshipQualification {StartDate = validStartDate, CountryCode = "999", StateCode = null};
             apprentice = new Profile {BirthDate = new DateTime(1980, 1, 1)};
             Container
                 .GetMock<IReferenceDataValidator>()
@@ -74,6 +78,14 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             Container
                 .GetMock<IReferenceDataValidator>()
                 .Setup(r => r.ValidatePriorApprenticeshipQualificationsAsync(validManuallyEntered))
+                .ReturnsAsync(new ValidationExceptionBuilder());
+            Container
+                .GetMock<IReferenceDataValidator>()
+                .Setup(r => r.ValidatePriorApprenticeshipQualificationsAsync(invalidMissingState))
+                .ReturnsAsync(new ValidationExceptionBuilder());
+            Container
+                .GetMock<IReferenceDataValidator>()
+                .Setup(r => r.ValidatePriorApprenticeshipQualificationsAsync(validOverseas))
                 .ReturnsAsync(new ValidationExceptionBuilder());
             var builder = new ValidationExceptionBuilder();
             builder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipAustralianStateCode);
@@ -138,6 +150,20 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         {
             ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(invalidMissingLevel, apprentice);
             exceptionBuilder.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidPriorApprenticeshipMissingLevelCode);
+        }
+
+        [TestMethod]
+        public async Task IsValidIfOverseasAndMissingState()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(validOverseas, apprentice);
+            exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task IsNotValidIfAustraliaAndMissingState()
+        {
+            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(invalidMissingState, apprentice);
+            exceptionBuilder.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidPriorQualificationMissingStateCode);
         }
     }
 
