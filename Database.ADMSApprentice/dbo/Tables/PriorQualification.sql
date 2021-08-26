@@ -1,7 +1,6 @@
 ﻿CREATE TABLE [dbo].[PriorQualification] (
     [PriorQualificationId] INT             IDENTITY (1, 1) NOT NULL,
-    [ApprenticeId]              INT             NOT NULL,
-    [ApprenticeshipId]          INT             NULL,
+    [ApprenticeId]              INT             NOT NULL,    
     [QualificationCode]         VARCHAR (10)    NOT NULL,
     [QualificationDescription]  VARCHAR (200)   NULL,
     [QualificationLevel]        VARCHAR (10)    NULL,

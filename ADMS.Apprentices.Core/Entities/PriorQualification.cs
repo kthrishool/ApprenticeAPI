@@ -10,9 +10,6 @@ namespace ADMS.Apprentices.Core.Entities
     {
         public int Id { get; set; }
         public int ApprenticeId { get; set; }
-
-        public int? ApprenticeshipId { get; set; }
-
         public string QualificationCode { get; set; }
         public string QualificationDescription { get; set; }
         public string QualificationLevel { get; set; }

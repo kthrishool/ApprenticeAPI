@@ -266,8 +266,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 QualificationLevel = "524",
                 QualificationANZSCOCode = "ANZS",
                 StartDate = new DateTime(2010, 1, 1),
-                EndDate = new DateTime(2020, 1, 1),
-                ApprenticeshipId = 20,
+                EndDate = new DateTime(2020, 1, 1),                
                 Id = ProfileConstants.Id
             };
             profile.PriorQualifications.Add(qualification);
@@ -278,8 +277,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             {
                 CurrentEndReasonCode = "CMPS",
                 StartDate = new DateTime(2010, 1, 1),
-                EndDate = new DateTime(2020, 1, 1),
-                RegistrationId = qualification.ApprenticeshipId.Value,
+                EndDate = new DateTime(2020, 1, 1),                
                 QualificationCode = "QCode",
                 TrainingContractId = 100,
                 ClientId = ProfileConstants.Id
