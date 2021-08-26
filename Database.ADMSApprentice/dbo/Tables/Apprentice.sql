@@ -25,6 +25,7 @@
     [DuplicateDate]                   DATETIME2 (0)   NULL,
     [DuplicateApprovedBy]             NVARCHAR (1024) NULL,
     [DeceasedFlag]                    BIT             NOT NULL,
+    [DeceasedDate]                    DATETIME2 (0)   NULL,
     [ActiveFlag]                      BIT             NOT NULL,
     [InactiveDate]                    DATETIME2 (0)   NULL,
     [CreatedBy]                       NVARCHAR (1024) NOT NULL,
