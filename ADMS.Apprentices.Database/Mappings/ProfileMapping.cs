@@ -60,8 +60,12 @@ namespace ADMS.Apprentices.Database.Mappings
                 .HasColumnName("VisaNumber");
             entity.Property(e => e.ActiveFlag)
                 .HasColumnName("ActiveFlag");
+            entity.Property(e => e.InactiveDate)
+                .HasColumnName("InactiveDate");
             entity.Property(e => e.DeceasedFlag)
                 .HasColumnName("DeceasedFlag");
+            entity.Property(e => e.DeceasedDate)
+                .HasColumnName("DeceasedDate");
             entity.Property(e => e.NotProvidingUSIReasonCode)
                 .HasColumnName("NotProvidingUSIReasonCode");
             entity.Property(x => x.Version)

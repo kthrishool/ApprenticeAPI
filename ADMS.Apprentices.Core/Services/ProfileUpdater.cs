@@ -15,25 +15,33 @@ namespace ADMS.Apprentices.Core.Services
     public class ProfileUpdater : IProfileUpdater
     {
         private readonly IProfileValidator profileValidator;
+        private readonly IDeceasedValidator deceasedValidator;
         private readonly IUSIVerify usiVerify;
         bool triggerUsiVerification = false;
         private const string defaultCountryCode = "+61";
 
-        public ProfileUpdater(IProfileValidator profileValidator, IUSIVerify usiVerify)
+        public ProfileUpdater(IProfileValidator profileValidator, IDeceasedValidator deceasedValidator, IUSIVerify usiVerify)
         {
             this.profileValidator = profileValidator;
+            this.deceasedValidator = deceasedValidator;
             this.usiVerify = usiVerify;
         }
 
-        public void UpdateDeceasedFlag(Profile profile, bool deceased)
+        public void UpdateDeceasedFlag(Profile profile, bool deceased, DateTime? deceasedDate)
         {
-            profile.DeceasedFlag = deceased;            
+            profile.DeceasedFlag = deceased;
+            profile.DeceasedDate = deceasedDate;
+            profile.ActiveFlag = !deceased;
+            //No need to update the Inactive date if InactiveDate is already set ie scenario when setting deceased flag to true or updating the deceased date of an already inactive record
+            profile.InactiveDate = profile.ActiveFlag ? null : profile.InactiveDate.HasValue? profile.InactiveDate : System.DateTime.Now.Date;
+            deceasedValidator.Validate(profile);
             //Need to think about ending any TCs that are active and therefore any TSL instalments pending. 
         }
 
         public void Update(Profile profile, AdminUpdateMessage message)
         {
-            profile.DeceasedFlag = message.DeceasedFlag; //or call UpdateDeceasedFlag function??             
+            if (message.DeceasedFlag.HasValue)
+                UpdateDeceasedFlag(profile, message.DeceasedFlag.Value, message.DeceasedDate);
         }
 
         public async Task<Profile> Update(Profile profile, UpdateProfileMessage message)

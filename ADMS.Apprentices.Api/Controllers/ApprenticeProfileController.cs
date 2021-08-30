@@ -11,6 +11,7 @@ using Adms.Shared.Filters;
 using Adms.Shared.Paging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace ADMS.Apprentices.Api.Controllers
 {
@@ -144,12 +145,13 @@ namespace ADMS.Apprentices.Api.Controllers
         /// Updates an existing apprentice deceased flag to true.
         /// </summary>
         /// <param name="id">ID of the apprentice</param>
+        /// <param name="deceasedDate"></param>
         [Authorize(Policy = AuthorisationConfiguration.AUTH_Apprentice_Management)]
         [HttpPut("{id}/deceased")]
-        public async Task<ActionResult<ProfileModel>> Deceased(int id)
+        public async Task<ActionResult<ProfileModel>> Deceased(int id, [FromQuery][Required] DateTime? deceasedDate)
         {
             Profile profile = await repository.GetAsync<Profile>(id);
-            profileUpdater.UpdateDeceasedFlag(profile, true);
+            profileUpdater.UpdateDeceasedFlag(profile, true, deceasedDate);
             await repository.SaveAsync();
             return Ok(new ProfileModel(profile));
         }

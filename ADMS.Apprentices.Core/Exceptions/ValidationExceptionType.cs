@@ -133,19 +133,22 @@ namespace ADMS.Apprentices.Core.Exceptions
         [ExceptionDetails("AP-VAL-0043", "Invalid phone type code")]
         InvalidPhoneTypeCode,
 
-        //[ExceptionDetails("AP-VAL-0044", "The apprenticeship referenced by the qualification does not exist")]
-        //QualificationApprenticeshipDoesNotExist,
+        [ExceptionDetails("AP-VAL-0044", "Deceased date is required")]
+        DeceasedDateRequired,
 
-        //[ExceptionDetails("AP-VAL-0045", "The apprenticeship referenced by the qualification has a different qualification code")]
-        //QualificationApprenticeshipQualificationCodeDoesNotMatch,
+        [ExceptionDetails("AP-VAL-0045", "Deceased date cannot be later than current date")]
+        DeceasedDateCurrentDateMismatch,
 
-        //[ExceptionDetails("AP-VAL-0046", "The apprenticeship referenced by the qualification is not yet complete")]
-        //QualificationApprenticeshipIsNotComplete,
+        [ExceptionDetails("AP-VAL-0046", "Deceased date cannot be before apprentice's birth date")]
+        DeceasedDateDOBMismatch,
+
+        [ExceptionDetails("AP-VAL-0046", "Deceased date is not permitted when deceased flag is false")]
+        DeceasedFlagDeceasedDateMismatch,
 
         [ExceptionDetails("AP-VAL-0047", "End date cannot be before start date")]
         DateMismatch,
 
-        [ExceptionDetails("AP-VAL-0048", "Date commenced and Date completed cannot be before apprentice DOB +12 years")]
+        [ExceptionDetails("AP-VAL-0048", "Apprentice must be at least 12 years old at the date of commencement and completion")]
         DOBDateMismatch,
 
         [ExceptionDetails("AP-VAL-0049", "Start and end date cannot be later than current date")]

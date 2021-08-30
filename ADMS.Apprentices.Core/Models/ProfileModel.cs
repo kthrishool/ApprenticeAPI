@@ -25,7 +25,9 @@ namespace ADMS.Apprentices.Core.Models
         public DateTime? LeftSchoolDate { get; }
         public string ProfileType { get; }
         public bool DeceasedFlag { get; }
+        public DateTime? DeceasedDate { get; }
         public bool ActiveFlag { get; }
+        public DateTime? InactiveDate { get; }
         public string CountryOfBirthCode { get; }
         public string LanguageCode { get; }
         public string HighestSchoolLevelCode { get; }
@@ -72,6 +74,8 @@ namespace ADMS.Apprentices.Core.Models
             HighestSchoolLevelCode = apprentice.HighestSchoolLevelCode;
             VisaNumber = apprentice.VisaNumber;
             DeceasedFlag = apprentice.DeceasedFlag;
+            DeceasedDate = apprentice.DeceasedDate;
+            InactiveDate = apprentice.InactiveDate;
             CRNViewFlag = apprentice.CustomerReferenceNumber != null;
             ActiveFlag = apprentice.ActiveFlag;
             CreatedOn = apprentice.CreatedOn;

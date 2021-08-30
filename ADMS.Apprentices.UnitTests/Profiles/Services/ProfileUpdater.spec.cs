@@ -465,21 +465,43 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     public class WhenUpdatingDeceasedFlag : GivenWhenThen<ProfileUpdater>
     {
         private Profile profile;
+        private DateTime? deceasedDate;
 
         protected override void Given()
         {
             profile = new Profile {Surname = ProfileConstants.Surname, FirstName = ProfileConstants.Firstname};
+            deceasedDate = DateTime.Now.AddYears(-1).Date;
         }
 
         protected override void When()
         {
-            ClassUnderTest.UpdateDeceasedFlag(profile, true);
+            ClassUnderTest.UpdateDeceasedFlag(profile, true, deceasedDate);
         }
 
         [TestMethod]
-        public void DeceasedFlagShouldBeTrue()
+        public void ShouldSetDeceasedDetails()
         {
             profile.DeceasedFlag.Should().Be(true);
+            profile.DeceasedDate.Should().Be(deceasedDate);
+            profile.ActiveFlag.Should().Be(false);
+            profile.InactiveDate.Should().HaveValue();
+        }
+
+        [TestMethod]
+        public void ShouldSetInactiveDateToNullIfNotDeceased()
+        {
+            profile.DeceasedFlag = false;
+            ClassUnderTest.UpdateDeceasedFlag(profile, false, deceasedDate);
+            profile.InactiveDate.Should().NotHaveValue();
+        }
+
+        [TestMethod]
+        public void ShouldNotUpdateInactiveDateIfInactiveDateIsSet()
+        {
+            profile.DeceasedFlag = true;
+            profile.InactiveDate = DateTime.Now.AddDays(-1).Date;
+            ClassUnderTest.UpdateDeceasedFlag(profile, true, deceasedDate);
+            profile.InactiveDate.Should().Be(DateTime.Now.AddDays(-1).Date);
         }
     }
 

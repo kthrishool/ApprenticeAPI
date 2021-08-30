@@ -28,9 +28,11 @@ namespace ADMS.Apprentices.Core.Entities
         public string LanguageCode { get; set; }
         public bool? InterpretorRequiredFlag { get; set; }
         public bool DeceasedFlag { get; set; }
+        public DateTime? DeceasedDate { get; set; }
         public string NotProvidingUSIReasonCode { get; set; }
         public string CustomerReferenceNumber { get; set; }
         public bool ActiveFlag { get; set; }
+        public DateTime? InactiveDate { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
