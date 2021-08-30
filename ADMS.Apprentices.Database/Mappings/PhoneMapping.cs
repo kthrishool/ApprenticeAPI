@@ -23,7 +23,7 @@ namespace ADMS.Apprentices.Database.Mappings
                 .HasMaxLength(50)
                 .IsRequired();
             entity.Property(e => e.CountryCode)
-                .HasColumnName("CountryCode")
+                .HasColumnName("InternationalPrefix")
                 .HasMaxLength(5)
                 .IsRequired();
             entity.Property(e => e.PhoneNumber)

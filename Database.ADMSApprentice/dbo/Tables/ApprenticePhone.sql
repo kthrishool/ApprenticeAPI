@@ -3,7 +3,7 @@
     [ApprenticeId]       INT             NOT NULL,
     [PhoneTypeCode]      VARCHAR (10)    NOT NULL,    
     [PhoneNumber]        VARCHAR (15)    NOT NULL,
-    [CountryCode]       VARCHAR (10)    NOT NULL DEFAULT 'AUS',
+    [InternationalPrefix]       VARCHAR (10)    NOT NULL DEFAULT '61',
     [PreferredPhoneFlag] BIT             NULL ,
     [CreatedBy]          NVARCHAR (1024) NOT NULL,
     [CreatedOn]          DATETIME2 (7)   NOT NULL,
