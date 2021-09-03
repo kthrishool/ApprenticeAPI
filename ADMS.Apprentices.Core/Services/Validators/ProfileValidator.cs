@@ -105,7 +105,7 @@ namespace ADMS.Apprentices.Core.Services.Validators
         {
             if (emailAddress.IsNullOrEmpty())
                 return true;
-            if (!(new EmailAddressAttribute().IsValid(emailAddress)))
+            if (!new EmailAddressAttribute().IsValid(emailAddress))
                 return false;
 
             // check domain name in Email

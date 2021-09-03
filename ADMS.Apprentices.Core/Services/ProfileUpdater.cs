@@ -18,7 +18,7 @@ namespace ADMS.Apprentices.Core.Services
         private readonly IDeceasedValidator deceasedValidator;
         private readonly IUSIVerify usiVerify;
         bool triggerUsiVerification = false;
-        private const string defaultCountryCode = "+61";
+        private const string defaultCountryCode = "61";
 
         public ProfileUpdater(IProfileValidator profileValidator, IDeceasedValidator deceasedValidator, IUSIVerify usiVerify)
         {
@@ -56,8 +56,8 @@ namespace ADMS.Apprentices.Core.Services
             profile.ProfileTypeCode = message.ProfileType.SanitiseUpper();
             profile.EmailAddress = message.EmailAddress.Sanitise();
 
-            UpdatePhone(profile, message.Phone1, message.Phone1CountryCode, PhoneType.PHONE1.ToString());
-            UpdatePhone(profile, message.Phone2, message.Phone2CountryCode, PhoneType.PHONE2.ToString());
+            UpdatePhone(profile, message.Phone1, message.Phone1InternationalPrefix, PhoneType.PHONE1.ToString());
+            UpdatePhone(profile, message.Phone2, message.Phone2InternationalPrefix, PhoneType.PHONE2.ToString());
 
             //if no addresses specified clear address if exists.
             if (message.ResidentialAddress == null)
@@ -115,15 +115,15 @@ namespace ADMS.Apprentices.Core.Services
             {
                 profile.Phones.Add(new Phone()
                 {
-                    PhoneNumber = newPhoneNumber.Sanitise(),
-                    CountryCode = newCountryCode.Sanitise().IsNullOrEmpty() ? defaultCountryCode : newCountryCode.Sanitise(),
+                    PhoneNumber = newPhoneNumber.SanitiseForPhoneNumber(),
+                    InternationalPrefix = newCountryCode.SanitiseForPhoneNumber().IsNullOrEmpty() ? defaultCountryCode : newCountryCode.SanitiseForPhoneNumber(),
                     PhoneTypeCode = phoneTypeCode
                 });
             }
             else //current phone is not null and new phone number not null, so update existing.
             {
-                currentPhone.PhoneNumber = newPhoneNumber.Sanitise();
-                currentPhone.CountryCode = newCountryCode.Sanitise().IsNullOrEmpty() ? defaultCountryCode : newCountryCode.Sanitise();
+                currentPhone.PhoneNumber = newPhoneNumber.SanitiseForPhoneNumber();
+                currentPhone.InternationalPrefix = newCountryCode.SanitiseForPhoneNumber().IsNullOrEmpty() ? defaultCountryCode : newCountryCode.SanitiseForPhoneNumber();
             }             
         }
 

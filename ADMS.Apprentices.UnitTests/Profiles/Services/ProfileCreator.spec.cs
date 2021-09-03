@@ -21,7 +21,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
     {
         private Profile profile;
         private ProfileMessage message;
-        private const string defaultCountryCode = "+61";
+        private const string defaultCountryCode = "61";
 
         protected override void Given()
         {
@@ -32,9 +32,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 BirthDate = ProfileConstants.Birthdate,
                 EmailAddress = ProfileConstants.Emailaddress,
                 ProfileType = ProfileConstants.Profiletype,
-                Phone1CountryCode = ProfileConstants.Phone1CountryCode,
+                Phone1InternationalPrefix = ProfileConstants.Phone1InternationalPrefix,
                 Phone1 = ProfileConstants.Phone1,
-                Phone2CountryCode = ProfileConstants.Phone2CountryCode,
+                Phone2InternationalPrefix = ProfileConstants.Phone2InternationalPrefix,
                 Phone2 = ProfileConstants.Phone2,
                 ResidentialAddress = ProfileConstants.ResidentialAddress,
                 PostalAddress = ProfileConstants.PostalAddress,
@@ -143,9 +143,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public void ShouldSetPhoneNumber()
         {
             profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE1.ToString()).PhoneNumber.Should().Be(ProfileConstants.Phone1);
-            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE1.ToString()).CountryCode.Should().Be(ProfileConstants.Phone1CountryCode);
+            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE1.ToString()).InternationalPrefix.Should().Be(ProfileConstants.Phone1InternationalPrefix);
             profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE2.ToString()).PhoneNumber.Should().Be(ProfileConstants.Phone2);
-            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE2.ToString()).CountryCode.Should().Be(ProfileConstants.Phone2CountryCode);
+            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE2.ToString()).InternationalPrefix.Should().Be(ProfileConstants.Phone2InternationalPrefix);
         }
 
         [TestMethod]
@@ -256,8 +256,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             };
             profile = await ClassUnderTest.CreateAsync(message);
             profile.Phones.Count().Should().Be(2);
-            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE1.ToString()).CountryCode.Should().Be(defaultCountryCode);
-            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE2.ToString()).CountryCode.Should().Be(defaultCountryCode);
+            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE1.ToString()).InternationalPrefix.Should().Be(defaultCountryCode);
+            profile.Phones.FirstOrDefault(c => c.PhoneTypeCode == PhoneType.PHONE2.ToString()).InternationalPrefix.Should().Be(defaultCountryCode);
         }
 
         [TestMethod]

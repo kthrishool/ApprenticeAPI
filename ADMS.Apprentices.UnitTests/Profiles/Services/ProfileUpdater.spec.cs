@@ -205,7 +205,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 BirthDate = ProfileConstants.Birthdate,
                 ProfileType = ProfileConstants.Profiletype,
                 Phone1 = ProfileConstants.Phone1,
-                Phone1CountryCode = ProfileConstants.Phone1CountryCode,
+                Phone1InternationalPrefix = ProfileConstants.Phone1InternationalPrefix,
                 Phone2 = ProfileConstants.Phone2,
             };
 
@@ -228,7 +228,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 FirstName = ProfileConstants.Firstname,
                 BirthDate = ProfileConstants.Birthdate,
                 ProfileType = ProfileConstants.Profiletype,  
-                Phone2CountryCode = ProfileConstants.Phone2CountryCode,
+                Phone2InternationalPrefix = ProfileConstants.Phone2InternationalPrefix,
                 Phone2 = ProfileConstants.Phone2,
             };
 

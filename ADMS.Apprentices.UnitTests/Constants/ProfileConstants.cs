@@ -17,10 +17,10 @@ namespace ADMS.Apprentices.UnitTests.Constants
         public static DateTime Birthdate = DateTime.Now.AddYears(-25);
         public static string Emailaddress = "test@test.com";
         public static string Emailaddressmax256 = RandomString(247) + "@test.com";
-        public static string Phone1CountryCode = "+61";
+        public static string Phone1InternationalPrefix = "61";
         public static string Phone1 = "1234567890";
-        public static string Phone2CountryCode = "+91";
-        public static string Phone2 = "+123456 789";
+        public static string Phone2InternationalPrefix = "91";
+        public static string Phone2 = "123456789";
 
         public static List<PhoneNumberMessage> PhoneNumbers => new()
         {

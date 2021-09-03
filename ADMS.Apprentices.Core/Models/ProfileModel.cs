@@ -32,9 +32,9 @@ namespace ADMS.Apprentices.Core.Models
         public string LanguageCode { get; }
         public string HighestSchoolLevelCode { get; }
         public string VisaNumber { get; }
-        public string Phone1CountryCode { get; }        
+        public string Phone1InternationalPrefix { get; }        
         public string Phone1 { get; }
-        public string Phone2CountryCode { get; }
+        public string Phone2InternationalPrefix { get; }
         public string Phone2 { get; }
         public string PreferredContactTypeCode { get; set; }
         public ProfileAddressModel ResidentialAddress { get; set; }
@@ -88,9 +88,9 @@ namespace ADMS.Apprentices.Core.Models
             {
                 PreferredContactTypeCode = apprentice.PreferredContactTypeCode;
                 EmailAddress = apprentice.EmailAddress;
-                Phone1CountryCode = apprentice.Phones.SingleOrDefault(x => x.PhoneTypeCode == PhoneType.PHONE1.ToString())?.CountryCode;
+                Phone1InternationalPrefix = apprentice.Phones.SingleOrDefault(x => x.PhoneTypeCode == PhoneType.PHONE1.ToString())?.InternationalPrefix;
                 Phone1 = apprentice.Phones.SingleOrDefault(x => x.PhoneTypeCode == PhoneType.PHONE1.ToString())?.PhoneNumber;
-                Phone2CountryCode = apprentice.Phones.SingleOrDefault(x => x.PhoneTypeCode == PhoneType.PHONE2.ToString())?.CountryCode;
+                Phone2InternationalPrefix = apprentice.Phones.SingleOrDefault(x => x.PhoneTypeCode == PhoneType.PHONE2.ToString())?.InternationalPrefix;
                 Phone2 = apprentice.Phones.SingleOrDefault(x => x.PhoneTypeCode == PhoneType.PHONE2.ToString())?.PhoneNumber;
 
                 if (apprentice.Addresses.Count > 0 && apprentice.Addresses.Any(c => c.AddressTypeCode == AddressType.RESD.ToString()))

@@ -6,7 +6,7 @@ namespace ADMS.Apprentices.Core.Entities
     {
         public string PhoneTypeCode { get; set; }
         public string PhoneNumber { get; set; }
-        public string CountryCode { get; set; }
+        public string InternationalPrefix { get; set; }
         public Boolean? PreferredPhoneFlag { get; set; }
 
         public DateTime? CreatedOn { get; set; }

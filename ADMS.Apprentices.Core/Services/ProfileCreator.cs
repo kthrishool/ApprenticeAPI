@@ -14,7 +14,7 @@ namespace ADMS.Apprentices.Core.Services
         private readonly IRepository repository;
         private readonly IProfileValidator profileValidator;
         private readonly IUSIVerify usiVerify;
-        private const string defaultCountryCode = "+61";
+        private const string defaultCountryCode = "61";
         public ProfileCreator(IRepository repository,
             IProfileValidator profileValidator,
             IUSIVerify usiVerify)
@@ -51,8 +51,8 @@ namespace ADMS.Apprentices.Core.Services
             {                
                 profile.Phones.Add(new Phone
                 {
-                    PhoneNumber = message.Phone1.Sanitise(),
-                    CountryCode = message.Phone1CountryCode.Sanitise().IsNullOrEmpty() ? defaultCountryCode : message.Phone1CountryCode.Sanitise(),
+                    PhoneNumber = message.Phone1.SanitiseForPhoneNumber(),
+                    InternationalPrefix = message.Phone1InternationalPrefix.SanitiseForPhoneNumber().IsNullOrEmpty() ? defaultCountryCode : message.Phone1InternationalPrefix.SanitiseForPhoneNumber(),
                     PhoneTypeCode = PhoneType.PHONE1.ToString()                    
                 });                
             }
@@ -60,8 +60,8 @@ namespace ADMS.Apprentices.Core.Services
             {
                 profile.Phones.Add(new Phone
                 {
-                    PhoneNumber = message.Phone2.Sanitise(),
-                    CountryCode = message.Phone2CountryCode.Sanitise().IsNullOrEmpty() ? defaultCountryCode : message.Phone2CountryCode.Sanitise(),
+                    PhoneNumber = message.Phone2.SanitiseForPhoneNumber(),
+                    InternationalPrefix = message.Phone2InternationalPrefix.SanitiseForPhoneNumber().IsNullOrEmpty() ? defaultCountryCode : message.Phone2InternationalPrefix.SanitiseForPhoneNumber(),
                     PhoneTypeCode = PhoneType.PHONE2.ToString()
                 });
             }
