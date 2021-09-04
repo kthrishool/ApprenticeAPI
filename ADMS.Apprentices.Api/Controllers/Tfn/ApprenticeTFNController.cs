@@ -12,8 +12,8 @@ namespace ADMS.Apprentices.Api.Controllers.Tfn
     /// <summary>
     /// Apprentice TFN endpoints.
     /// </summary>
-    [Route("api/v1/apprentices/{apprenticeId}/TFN")]
-    [Route("api/apprentices/{apprenticeId}/TFN")]
+    [Route("v1/apprentices/{apprenticeId}/TFN")]
+    [Route("apprentices/{apprenticeId}/TFN")]
     [ApiController]
     //[ApiDescription(Summary = "Apprentice TFN endpoints", Description = "")]
     [Produces("application/json", "text/xml")]
