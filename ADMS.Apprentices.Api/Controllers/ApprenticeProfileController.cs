@@ -19,8 +19,8 @@ namespace ADMS.Apprentices.Api.Controllers
     /// Apprentice endpoints.
     /// </summary>
     [ApiController]
-    [Route("api/v1/apprentices")]
-    [Route("api/apprentices")]
+    [Route("v1/apprentices")]
+    [Route("apprentices")]
     [Produces("application/json")]
     [Consumes("application/json")]
     public class ApprenticeProfileController : ControllerBase

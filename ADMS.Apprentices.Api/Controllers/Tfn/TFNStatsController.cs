@@ -14,8 +14,8 @@ using ADMS.Apprentices.Api.Configuration;
 namespace ADMS.Apprentices.Api.Controllers.Tfn
 {
     /// <summary>TFNStats endpoints</summary>
-    [Route("api/v1/tfnstats")]
-    [Route("api/tfnstats")]
+    [Route("v1/tfnstats")]
+    [Route("tfnstats")]
     [ApiController]
     //[ApiDescription(Summary = "TFNStats endpoints", Description = "")]
     [Produces("application/json")]

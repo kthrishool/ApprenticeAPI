@@ -15,8 +15,8 @@ namespace ADMS.Apprentices.Api.Controllers
     /// <summary>
     /// Apprentice usi endpoints.
     /// </summary>
-    [Route("api/v1/apprentices/{apprenticeId}/usi")]
-    [Route("api/apprentices/{apprenticeId}/usi")]
+    [Route("v1/apprentices/{apprenticeId}/usi")]
+    [Route("apprentices/{apprenticeId}/usi")]
     [ApiController]
     //[ApiDescription(Summary = "Apprentice usi endpoints", Description = "")]
     [Produces("application/json")]

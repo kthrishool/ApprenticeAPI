@@ -64,7 +64,7 @@ stages:
       variables:
           - template: /Variables/Adms/${{ env }}_API_Variables.yml@templates
           - name: admsApplicationName
-            value: "apprenticeapi"
+            value: "apprentice"
           - name: webAppPoolUsername
             value: "$(ApprenticeAPI_ENETDEV)"
           - name: webAppPoolPassword
@@ -113,8 +113,8 @@ stages:
           pool: common
           steps:
             - powershell: |
-                $uri = "https://${{variables.hostname}}/apprenticeapi/swagger/default/swagger.json"
-                echo "https://${{variables.hostname}}/apprenticeapi/swagger/index.html"
+                $uri = "https://${{variables.hostname}}/apprentice/swagger/default/swagger.json"
+                echo "https://${{variables.hostname}}/apprentice/swagger/index.html"
                 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
                 Invoke-RestMethod -Uri $uri -Method Get
               displayName: Fetch Swagger

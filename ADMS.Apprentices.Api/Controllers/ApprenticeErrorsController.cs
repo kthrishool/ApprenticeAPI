@@ -17,8 +17,8 @@ namespace ADMS.Apprentices.Api.Controllers
     /// <summary>
     /// List all the error messages available.
     /// </summary>
-    [Route("api/v1/apprentices/errors")]
-    [Route("api/apprentices/errors")]
+    [Route("v1/apprentices/errors")]
+    [Route("apprentices/errors")]
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]

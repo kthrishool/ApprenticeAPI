@@ -16,8 +16,8 @@ namespace ADMS.Apprentices.Api.Controllers
     /// Apprentice prior apprenticeship endpoints of a given apprentice.
     /// </summary>
     [ApiController]
-    [Route("api/v1/apprentices/{apprenticeId}/prior-apprenticeship-qualifications")]
-    [Route("api/apprentices/{apprenticeId}/prior-apprenticeship-qualifications")]
+    [Route("v1/apprentices/{apprenticeId}/prior-apprenticeship-qualifications")]
+    [Route("apprentices/{apprenticeId}/prior-apprenticeship-qualifications")]
     [Produces("application/json")]
     [Consumes("application/json")]
     public class ApprenticePriorApprenticeshipQualificationController : ControllerBase

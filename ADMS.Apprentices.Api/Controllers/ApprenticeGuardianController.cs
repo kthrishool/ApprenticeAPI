@@ -14,8 +14,8 @@ namespace ADMS.Apprentices.Api.Controllers
     /// <summary>
     /// Apprentice guardian endpoints of a given apprentice.
     /// </summary>
-    [Route("api/v1/apprentices/{apprenticeId}/guardian")]
-    [Route("api/apprentices/{apprenticeId}/guardian")]
+    [Route("v1/apprentices/{apprenticeId}/guardian")]
+    [Route("apprentices/{apprenticeId}/guardian")]
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]
