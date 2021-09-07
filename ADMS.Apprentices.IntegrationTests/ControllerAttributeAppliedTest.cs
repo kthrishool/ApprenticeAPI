@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Adms.Shared.Extensions;
+using ADMS.Apprentices.Api.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,8 +15,11 @@ namespace ADMS.Employers.IntegrationTests
         [TestMethod]    
         public void CheckApiControllerAuthorisationAttributeIsNotAppliedAtControllerLevel()
         {
-            var asc = typeof(ADMS.Apprentices.Api.Controllers.ApprenticeProfileController).Assembly;    
-            var controllers = asc.GetTypes().Where(t => t.IsPublic && t.IsClass && t.IsSubclassOf(typeof(ControllerBase)));
+            var asc = typeof(ADMS.Apprentices.Api.Controllers.ApprenticeProfileController).Assembly;
+            var controllers = asc.GetTypes()
+                .Where(t => t.IsPublic && t.IsClass
+                            && t.IsSubclassOf(typeof(ControllerBase))
+                            && !(t == typeof(HomeController)));
             
             controllers.Each(c => {
                 var controllerHasAuthoriseAttribute = c.CustomAttributes.Any(a => a.AttributeType == typeof(ApiControllerAttribute));

@@ -21,7 +21,7 @@ namespace ADMS.Apprentices.IntegrationTests
         {
             Fixture = new ApprenticesFixture();
             ControllerType = typeof(ApprenticeUSIController);
-            Url = "api/v1/apprentices";
+            Url = "v1/apprentices";
         }
 
         /// <summary> A valid departmental user with DAD access. </summary>

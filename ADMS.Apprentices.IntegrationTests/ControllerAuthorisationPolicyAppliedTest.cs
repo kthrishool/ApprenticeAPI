@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Reflection;
 using Adms.Shared.Extensions;
+using ADMS.Apprentices.Api.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,7 +15,10 @@ namespace ADMS.Apprentices.IntegrationTests
         public void CheckAuthorisationAttributeForAllPublicControllerMethods()
         {
             var asc = typeof(ADMS.Apprentices.Api.Controllers.ApprenticeProfileController).Assembly;    
-            var controllers = asc.GetTypes().Where(t => t.IsPublic && t.IsClass && t.IsSubclassOf(typeof(ControllerBase)));
+            var controllers = asc.GetTypes()
+                .Where(t => t.IsPublic && t.IsClass
+                            && t.IsSubclassOf(typeof(ControllerBase))
+                            && !(t == typeof(HomeController)));
             
             controllers.Each(c => {
                 var methods = c.GetMethods(BindingFlags.Public|BindingFlags.Instance|BindingFlags.DeclaredOnly);
