@@ -8,6 +8,6 @@ namespace ADMS.Apprentices.Core.Services
     [RegisterWithIocContainer]
     public interface IPriorApprenticeshipQualificationUpdater
     {
-        Task<PriorApprenticeshipQualification> Update(int apprenticeId, int priorApprenticeshipQualificationId, PriorApprenticeshipQualificationMessage message, Profile profile);
+        PriorApprenticeshipQualification Update(int apprenticeId, int priorApprenticeshipQualificationId, PriorApprenticeshipQualificationMessage message, Profile profile);
     }
 }

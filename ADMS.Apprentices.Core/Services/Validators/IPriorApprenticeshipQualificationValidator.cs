@@ -7,6 +7,6 @@ namespace ADMS.Apprentices.Core.Services.Validators
     [RegisterWithIocContainer]
     public interface IPriorApprenticeshipQualificationValidator
     {
-        Task<ValidationExceptionBuilder> ValidateAsync(PriorApprenticeshipQualification priorApprenticeship, Profile profile);
+        ValidationExceptionBuilder Validate(PriorApprenticeshipQualification priorApprenticeship, Profile profile);
     }
 }

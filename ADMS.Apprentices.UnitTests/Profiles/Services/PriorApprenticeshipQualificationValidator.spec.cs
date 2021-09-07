@@ -55,114 +55,72 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             invalidMissingState = new PriorApprenticeshipQualification {StartDate = validStartDate, CountryCode = "1101", StateCode = null};
             validOverseas = new PriorApprenticeshipQualification {StartDate = validStartDate, CountryCode = "999", StateCode = null};
             apprentice = new Profile {BirthDate = new DateTime(1980, 1, 1)};
-            Container
-                .GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorApprenticeshipQualificationsAsync(valid))
-                .ReturnsAsync(new ValidationExceptionBuilder());
-            Container
-                .GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorApprenticeshipQualificationsAsync(invalidTooYoung))
-                .ReturnsAsync(new ValidationExceptionBuilder());
-            Container
-                .GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorApprenticeshipQualificationsAsync(invalidFuture))
-                .ReturnsAsync(new ValidationExceptionBuilder());
-            Container
-                .GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorApprenticeshipQualificationsAsync(invalidMissingAnzsco))
-                .ReturnsAsync(new ValidationExceptionBuilder());
-            Container
-                .GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorApprenticeshipQualificationsAsync(invalidMissingLevel))
-                .ReturnsAsync(new ValidationExceptionBuilder());
-            Container
-                .GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorApprenticeshipQualificationsAsync(validManuallyEntered))
-                .ReturnsAsync(new ValidationExceptionBuilder());
-            Container
-                .GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorApprenticeshipQualificationsAsync(invalidMissingState))
-                .ReturnsAsync(new ValidationExceptionBuilder());
-            Container
-                .GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorApprenticeshipQualificationsAsync(validOverseas))
-                .ReturnsAsync(new ValidationExceptionBuilder());
+            
             var builder = new ValidationExceptionBuilder();
             builder.AddException(ValidationExceptionType.InvalidPriorApprenticeshipAustralianStateCode);
-            Container
-                .GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorApprenticeshipQualificationsAsync(invalidRefCodes))
-                .ReturnsAsync(builder);
         }
 
         [TestMethod]
-        public async Task IsValidIfStartDateIsSensible()
+        public void IsValidIfStartDateIsSensible()
         {
-            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(valid, apprentice);
+            ValidationExceptionBuilder exceptionBuilder = ClassUnderTest.Validate(valid, apprentice);
             exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
         }
 
         [TestMethod]
-        public async Task IsValidIfManuallyEntered()
+        public void IsValidIfManuallyEntered()
         {
-            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(validManuallyEntered, apprentice);
+            ValidationExceptionBuilder exceptionBuilder = ClassUnderTest.Validate(validManuallyEntered, apprentice);
             exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
         }
 
         [TestMethod]
-        public async Task IsNotValidIfManualReasonCodeIsSomethingElse()
+        public void IsNotValidIfManualReasonCodeIsSomethingElse()
         {
             valid.QualificationManualReasonCode = "BLAH";
-            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(valid, apprentice);
+            ValidationExceptionBuilder exceptionBuilder = ClassUnderTest.Validate(valid, apprentice);
             exceptionBuilder.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidQualificationManualReasonCode);
         }
 
         [TestMethod]
-        public async Task IsNotValidIfApprenticeWouldHaveBeenUnder12AtTheSpecifiedStartDate()
+        public void IsNotValidIfApprenticeWouldHaveBeenUnder12AtTheSpecifiedStartDate()
         {
-            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(invalidTooYoung, apprentice);
+            ValidationExceptionBuilder exceptionBuilder = ClassUnderTest.Validate(invalidTooYoung, apprentice);
             exceptionBuilder.GetValidationExceptions().Should().Contain(ValidationExceptionType.DOBDateMismatch);
         }
 
         [TestMethod]
-        public async Task IsNotValidIfStartDateIsInTheFuture()
+        public void IsNotValidIfStartDateIsInTheFuture()
         {
-            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(invalidFuture, apprentice);
+            ValidationExceptionBuilder exceptionBuilder = ClassUnderTest.Validate(invalidFuture, apprentice);
             exceptionBuilder.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidDate);
         }
 
         [TestMethod]
-        public async Task IsNotValidIfReferenceCodesAreInvalid()
+        public void IsNotValidIfManualEntryAndAnzscoCodeMissing()
         {
-            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(invalidRefCodes, apprentice);
-            exceptionBuilder.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidPriorApprenticeshipAustralianStateCode);
-        }
-
-        [TestMethod]
-        public async Task IsNotValidIfManualEntryAndAnzscoCodeMissing()
-        {
-            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(invalidMissingAnzsco, apprentice);
+            ValidationExceptionBuilder exceptionBuilder = ClassUnderTest.Validate(invalidMissingAnzsco, apprentice);
             exceptionBuilder.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidPriorApprenticeshipMissingAnzscoCode);
         }
 
         [TestMethod]
-        public async Task IsNotValidIfManualEntryAndLevelCodeMissing()
+        public void IsNotValidIfManualEntryAndLevelCodeMissing()
         {
-            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(invalidMissingLevel, apprentice);
+            ValidationExceptionBuilder exceptionBuilder = ClassUnderTest.Validate(invalidMissingLevel, apprentice);
             exceptionBuilder.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidPriorApprenticeshipMissingLevelCode);
         }
 
         [TestMethod]
-        public async Task IsValidIfOverseasAndMissingState()
+        public void IsValidIfOverseasAndMissingState()
         {
-            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(validOverseas, apprentice);
+            ValidationExceptionBuilder exceptionBuilder = ClassUnderTest.Validate(validOverseas, apprentice);
             exceptionBuilder.GetValidationExceptions().Should().BeEmpty();
         }
 
         [TestMethod]
-        public async Task IsNotValidIfAustraliaAndMissingState()
+        public void IsNotValidIfAustraliaAndMissingState()
         {
-            ValidationExceptionBuilder exceptionBuilder = await ClassUnderTest.ValidateAsync(invalidMissingState, apprentice);
+            ValidationExceptionBuilder exceptionBuilder = ClassUnderTest.Validate(invalidMissingState, apprentice);
             exceptionBuilder.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidPriorQualificationMissingStateCode);
         }
     }

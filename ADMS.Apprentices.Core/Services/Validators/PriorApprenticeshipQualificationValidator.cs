@@ -10,14 +10,11 @@ namespace ADMS.Apprentices.Core.Services.Validators
 {
     public class PriorApprenticeshipQualificationValidator : PriorQualificationValidator, IPriorApprenticeshipQualificationValidator
     {
-        private readonly IReferenceDataValidator referenceDataValidator;
-
-        public PriorApprenticeshipQualificationValidator(IReferenceDataValidator referenceDataValidator) : base(referenceDataValidator)
+        public PriorApprenticeshipQualificationValidator() : base()
         {
-            this.referenceDataValidator = referenceDataValidator;
         }
 
-        public async Task<ValidationExceptionBuilder> ValidateAsync(PriorApprenticeshipQualification priorApprenticeship, Profile profile)
+        public ValidationExceptionBuilder Validate(PriorApprenticeshipQualification priorApprenticeship, Profile profile)
         {
             var exceptionBuilder = new ValidationExceptionBuilder();
 
@@ -46,7 +43,6 @@ namespace ADMS.Apprentices.Core.Services.Validators
             if (priorApprenticeship.CountryCode == "1101" && priorApprenticeship.StateCode.IsNullOrWhitespace())
                 exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorQualificationMissingStateCode);
 
-            exceptionBuilder.AddExceptions(await referenceDataValidator.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship));
             return exceptionBuilder;
         }
     }

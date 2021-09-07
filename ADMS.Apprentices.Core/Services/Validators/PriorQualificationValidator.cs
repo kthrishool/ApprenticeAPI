@@ -11,15 +11,10 @@ namespace ADMS.Apprentices.Core.Services.Validators
 {
     public class PriorQualificationValidator : IQualificationValidator
     {
-        private readonly IReferenceDataValidator referenceDataValidator;
+        public PriorQualificationValidator()
+        { }
 
-        public PriorQualificationValidator(IReferenceDataValidator referenceDataValidator)
-        {
-            this.referenceDataValidator = referenceDataValidator;
-        }
-
-
-        public async Task<ValidationExceptionBuilder> ValidatePriorQualificationAsync(PriorQualification qualification, [NotNull] Profile profile)
+        public ValidationExceptionBuilder ValidatePriorQualification(PriorQualification qualification, [NotNull] Profile profile)
         {
             var exceptionBuilder = new ValidationExceptionBuilder();
 
@@ -61,10 +56,8 @@ namespace ADMS.Apprentices.Core.Services.Validators
                     exceptionBuilder.AddException(ValidationExceptionType.InvalidPriorQualificationMissingLevelCode);
             }
 
-            exceptionBuilder.AddExceptions(await referenceDataValidator.ValidatePriorQualificationsAsync(qualification));
             return exceptionBuilder;
         }
-
 
         public ValidationExceptionBuilder CheckForDuplicates(List<PriorQualification> qualifications)
         {

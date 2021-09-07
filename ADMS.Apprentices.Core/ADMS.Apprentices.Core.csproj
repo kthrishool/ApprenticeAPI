@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Adms.Shared" Version="4.3.7" />
+    <PackageReference Include="Adms.Shared" Version="4.3.9" />
   </ItemGroup>
 
 </Project>

@@ -51,7 +51,7 @@ namespace ADMS.Apprentices.Core.Services
             // Need to throw an error if profile cannot be found as qualification validator doesn't support a profile with a null value.
             var profile = await repository.GetAsync<Profile>(apprenticeId, true);
 
-            var exceptionBuilder = await priorApprenticeshipValidator.ValidateAsync(priorApprenticeship, profile);
+            var exceptionBuilder = priorApprenticeshipValidator.Validate(priorApprenticeship, profile);
             exceptionBuilder.ThrowAnyExceptions();
 
             return profile;

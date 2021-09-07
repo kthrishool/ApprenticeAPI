@@ -32,7 +32,14 @@ namespace ADMS.Apprentices.UnitTests.Helpers
         {
             await tasks.WaitAndThrowAnyExceptionFound();
         }
-        
+
+        [TestMethod]        
+        public async Task NotThrowAnything()
+        {
+            tasks = new List<Task>();
+            await tasks.WaitAndThrowAnyExceptionFound() ;
+        }
+
         protected async Task SimpleTaskWithDelay(TimeSpan timeSpan)
         {
             await Task.Delay(timeSpan);

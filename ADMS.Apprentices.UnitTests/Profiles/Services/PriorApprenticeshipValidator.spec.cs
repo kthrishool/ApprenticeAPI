@@ -32,17 +32,11 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.PriorApprenticeshipQualifications.Add(priorApprenticeship);
             profile.BirthDate = ProfileConstants.Birthdate;
 
-            Container.GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<PriorQualification>()))
-                .ReturnsAsync(() => new ValidationExceptionBuilder());
-            Container.GetMock<IReferenceDataValidator>()
-                .Setup(s => s.ValidatePriorApprenticeshipQualificationsAsync(priorApprenticeship))
-                .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
-        protected override async void When()
+        protected override void When()
         {
-            await ClassUnderTest.ValidateAsync(priorApprenticeship, profile);
+            ClassUnderTest.Validate(priorApprenticeship, profile);
         }
 
         [TestMethod]
@@ -51,7 +45,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.PriorApprenticeshipQualifications.Clear();
             priorApprenticeship.StartDate = null;
             profile.PriorApprenticeshipQualifications.Add(priorApprenticeship);
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(priorApprenticeship, profile)).HasExceptions().Should().BeFalse());
+            ClassUnderTest.Invoking(c => (c.Validate(priorApprenticeship, profile)).HasExceptions().Should().BeFalse());
         }
 
         [TestMethod]
@@ -61,7 +55,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             priorApprenticeship.StartDate = ProfileConstants.Birthdate.AddYears(13);
             profile.PriorApprenticeshipQualifications.Add(priorApprenticeship);
 
-            ClassUnderTest.Invoking(async c => (await c.ValidateAsync(priorApprenticeship, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(c => (c.Validate(priorApprenticeship, profile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
     }

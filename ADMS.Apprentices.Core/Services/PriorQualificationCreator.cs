@@ -45,8 +45,7 @@ namespace ADMS.Apprentices.Core.Services
             Profile profile = await repository.GetAsync<Profile>(apprenticeId, true);
 
             // WaitAll will throw any exceptions so we don't need to look for them.
-            var exceptionBuilder = await qualificationValidator.ValidatePriorQualificationAsync(qualification, profile);
-
+            var exceptionBuilder = qualificationValidator.ValidatePriorQualification(qualification, profile);
 
             exceptionBuilder.ThrowAnyExceptions();
 

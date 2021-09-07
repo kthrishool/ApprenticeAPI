@@ -52,13 +52,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .ReturnsAsync(new ValidationExceptionBuilder());
             
             Container.GetMock<IPhoneValidator>()
-                .Setup(a => a.ValidatePhonewithType(It.IsAny<ValidationExceptionBuilder>(), It.IsAny<Phone>()))
-            ;
-            
-            Container.GetMock<IReferenceDataValidator>()
-                .Setup(r => r.ValidateAsync(It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidationExceptionBuilder());
-
+                .Setup(a => a.ValidatePhonewithType(It.IsAny<ValidationExceptionBuilder>(), It.IsAny<Phone>()));
         }
 
         [TestMethod]
