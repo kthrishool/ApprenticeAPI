@@ -16,22 +16,19 @@ namespace ADMS.Apprentices.Core.Messages
         public string FirstName { get; init; }
 
         [Display(Name = "Email address")]
-        [MaxLength(256, ErrorMessage = "Email address exceeds 256 characters")]
+        [Adms.Shared.Attributes.Email(256)]
         public string EmailAddress { get; init; }
 
         [Display(Name = "Home phone number")]
-        [MaxLength(15, ErrorMessage = "Home phone number cannot have more than 15 characters")]
-        [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Home phone number must contain only numbers, spaces or plus sign")]
+        [Adms.Shared.Attributes.PhoneNumber]
         public string HomePhoneNumber { get; init; }
 
-        [Display(Name = "Mobile phone number")]
-        [MaxLength(15, ErrorMessage = "Mobile phone number cannot have more than 15 characters")]
-        [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Mobile phone number must contain only numbers, spaces or plus sign")]
+        [Display(Name = "Mobile phone number")]        
+        [Adms.Shared.Attributes.PhoneNumber]
         public string Mobile { get; init; }
 
         [Display(Name = "Work phone number")]
-        [MaxLength(15, ErrorMessage = "Work phone number cannot have more than 15 characters")]
-        [RegularExpression(@"^\s*\+?[0-9 ]+$", ErrorMessage = "Work phone number must contain only numbers, spaces or plus sign")]
+        [Adms.Shared.Attributes.PhoneNumber]
         public string WorkPhoneNumber { get; init; } 
 
         [Display(Name = "Guardian address")]

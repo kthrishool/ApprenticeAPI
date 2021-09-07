@@ -91,7 +91,7 @@ namespace ADMS.Apprentices.Api.Controllers
         {
             // Need to throw an error if profile cannot be found as prior apprenticeship validator doesn't support a profile with a null value.
             var profile = await repository.GetAsync<Profile>(apprenticeId, true);
-            var priorApprenticeship = await priorApprenticeshipUpdater.Update(apprenticeId, id, message, profile);
+            var priorApprenticeship = priorApprenticeshipUpdater.Update(apprenticeId, id, message, profile);
             await repository.SaveAsync();
             return Ok(new PriorApprenticeshipQualificationModel(priorApprenticeship));
         }

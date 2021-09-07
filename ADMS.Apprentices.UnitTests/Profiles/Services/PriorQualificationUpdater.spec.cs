@@ -55,8 +55,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .ReturnsAsync(profile);
             ChangeRegistrationDetails(ProfileConstants.Id);
             Container.GetMock<IQualificationValidator>()
-                .Setup(s => s.ValidatePriorQualificationAsync(It.IsAny<PriorQualification>(), It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidationExceptionBuilder());
+                .Setup(s => s.ValidatePriorQualification(It.IsAny<PriorQualification>(), It.IsAny<Profile>()))
+                .Returns(new ValidationExceptionBuilder());
         }
 
         private void ChangeRegistrationDetails(int id)
@@ -81,7 +81,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         public async Task ShouldValidatesTheRequest()
         {
             qualification = await ClassUnderTest.Update(10, qualificationId, message);
-            Container.GetMock<IQualificationValidator>().Verify(r => r.ValidatePriorQualificationAsync(qualification, profile));
+            Container.GetMock<IQualificationValidator>().Verify(r => r.ValidatePriorQualification(qualification, profile));
         }
 
         [TestMethod]

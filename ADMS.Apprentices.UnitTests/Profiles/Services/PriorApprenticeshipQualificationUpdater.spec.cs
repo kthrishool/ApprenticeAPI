@@ -54,8 +54,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .ReturnsAsync(profile);
             ChangeRegistrationDetails(ProfileConstants.Id);
             Container.GetMock<IPriorApprenticeshipQualificationValidator>()
-                .Setup(s => s.ValidateAsync(It.IsAny<PriorApprenticeshipQualification>(), It.IsAny<Profile>()))
-                .ReturnsAsync(new ValidationExceptionBuilder());
+                .Setup(s => s.Validate(It.IsAny<PriorApprenticeshipQualification>(), It.IsAny<Profile>()))
+                .Returns(new ValidationExceptionBuilder());
         }
 
         private void ChangeRegistrationDetails(int id)
@@ -66,9 +66,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task SetsQualificationDetails()
+        public void SetsQualificationDetails()
         {
-            qualification = await ClassUnderTest.Update(10, qualificationId, message, profile);
+            qualification = ClassUnderTest.Update(10, qualificationId, message, profile);
             qualification.QualificationCode.Should().Be(message.QualificationCode);
             qualification.QualificationDescription.Should().Be(message.QualificationDescription);
             qualification.QualificationANZSCOCode.Should().Be(message.QualificationANZSCOCode);
@@ -79,9 +79,9 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         }
 
         [TestMethod]
-        public async Task SetsStateToNullIfCountryIsNotAustralia()
+        public void SetsStateToNullIfCountryIsNotAustralia()
         {
-            qualification = await ClassUnderTest.Update(10, qualificationId, message with {CountryCode = "8403"}, profile);
+            qualification = ClassUnderTest.Update(10, qualificationId, message with {CountryCode = "8403"}, profile);
             qualification.CountryCode.Should().Be("8403");
             qualification.StateCode.Should().BeNull();
         }

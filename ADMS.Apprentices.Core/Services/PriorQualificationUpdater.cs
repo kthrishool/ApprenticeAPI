@@ -41,7 +41,7 @@ namespace ADMS.Apprentices.Core.Services
             priorQualification.StartDate = message.StartDate;
             priorQualification.EndDate = message.EndDate;
 
-            var exceptionBuilder = await qualificationValidator.ValidatePriorQualificationAsync(priorQualification, profile);
+            var exceptionBuilder = qualificationValidator.ValidatePriorQualification(priorQualification, profile);
 
             exceptionBuilder.ThrowAnyExceptions();
 

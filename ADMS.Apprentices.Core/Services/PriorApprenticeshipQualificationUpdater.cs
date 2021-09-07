@@ -22,7 +22,7 @@ namespace ADMS.Apprentices.Core.Services
             this.priorApprenticeshipValidator = priorApprenticeshipValidator;
         }
 
-        public async Task<PriorApprenticeshipQualification> Update(int apprenticeId, int qualificationId, PriorApprenticeshipQualificationMessage message, Profile profile)
+        public PriorApprenticeshipQualification Update(int apprenticeId, int qualificationId, PriorApprenticeshipQualificationMessage message, Profile profile)
         {
             PriorApprenticeshipQualification priorApprenticeship = profile.PriorApprenticeshipQualifications.SingleOrDefault(x => x.Id == qualificationId);
             if (priorApprenticeship == null)
@@ -39,7 +39,7 @@ namespace ADMS.Apprentices.Core.Services
             priorApprenticeship.StateCode = priorApprenticeship.CountryCode == australia ? message.StateCode : null;
             priorApprenticeship.ApprenticeshipReference = message.ApprenticeshipReference;
 
-            var exceptionBuilder = await priorApprenticeshipValidator.ValidateAsync(priorApprenticeship, profile);
+            var exceptionBuilder = priorApprenticeshipValidator.Validate(priorApprenticeship, profile);
 
             exceptionBuilder.ThrowAnyExceptions();
 
