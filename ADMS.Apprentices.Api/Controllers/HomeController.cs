@@ -46,7 +46,7 @@ namespace ADMS.Apprentices.Api.Controllers
             string swaggerUrl = $"{root}/{ourEnvironmentSettings.Value.SwaggerPath}";            
             Dictionary<string, object> summary = new()
             {
-                { "apprentices_url", $"{root}{Request.Path}/apprentices" },
+                { "apprentices_url", $"{root}{Request.Path}apprentices" },
                 { "swagger_url", $"{swaggerUrl}" },
                 { "file_version", typeof(HomeController).Assembly.GetName().Version.ToString() },
                 { "product_version", FileVersionInfo.GetVersionInfo(typeof(HomeController).Assembly.Location).ProductVersion },

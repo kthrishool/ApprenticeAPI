@@ -13,16 +13,19 @@ namespace ADMS.Apprentices.Core.Services.Validators
 {
     public class ProfileValidator : IProfileValidator
     {
-        private readonly IAddressValidator addressValidator;        
+        private readonly IAddressValidator addressValidator;
+        private readonly IReferenceDataValidator referenceDataValidator;
         private readonly IUSIValidator usiValidator;
         private readonly IPhoneValidator phoneValidator;
 
         public ProfileValidator(
-            IAddressValidator addressValidator,            
+            IAddressValidator addressValidator,
+            IReferenceDataValidator referenceDataValidator,
             IUSIValidator usiValidator,
             IPhoneValidator phoneValidator)
         {
-            this.addressValidator = addressValidator;            
+            this.addressValidator = addressValidator;
+            this.referenceDataValidator = referenceDataValidator;
             this.usiValidator = usiValidator;
             this.phoneValidator = phoneValidator;
         }
@@ -66,7 +69,13 @@ namespace ADMS.Apprentices.Core.Services.Validators
 
             // USI Validator
             exceptionBuilder.AddExceptions(USIValidation(profile));
-           
+
+            // Codes validation
+            // Country of Birth
+            // language
+            // Completed School level
+            // Preferred Contact            
+            tasks.Add(referenceDataValidator.ValidateAsync(profile));
             exceptionBuilder.AddExceptions(await tasks.WaitAndReturnExceptionBuilder());
 
             return exceptionBuilder;

@@ -24,9 +24,9 @@ namespace ADMS.Apprentices.Core.Services
             guardian.Surname = message.Surname;
             guardian.FirstName = message.FirstName;
             guardian.EmailAddress = message.EmailAddress.Sanitise();
-            guardian.HomePhoneNumber = message.HomePhoneNumber.SanitiseForPhoneNumber();
-            guardian.Mobile = message.Mobile.SanitiseForPhoneNumber();
-            guardian.WorkPhoneNumber = message.WorkPhoneNumber.SanitiseForPhoneNumber();
+            guardian.HomePhoneNumber = message.HomePhoneNumber.Sanitise();
+            guardian.Mobile = message.Mobile.Sanitise();
+            guardian.WorkPhoneNumber = message.WorkPhoneNumber.Sanitise();
             
             guardian.SingleLineAddress = message.Address?.SingleLineAddress.Sanitise();
             guardian.StreetAddress1 = message.Address?.StreetAddress1.Sanitise();

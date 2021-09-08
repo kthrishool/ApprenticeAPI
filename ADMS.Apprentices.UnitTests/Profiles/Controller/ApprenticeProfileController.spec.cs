@@ -139,19 +139,37 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
         [TestMethod]
         public void ShouldReturnValidationErrorIfNameNotValid()
         {
-            message = CreateNewProfileMessage("Bob$", ProfileConstants.Firstname, DateTime.Now.AddYears(-25));
+            message = CreateNewProfileMessage("Bob$", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
             var lstErrors = ValidateModel(message);
-            lstErrors.Should().HaveCount(2);
+            lstErrors.Should().HaveCount(1);
             lstErrors[0].ErrorMessage.Should().StartWith("Surname must contain only letters, spaces, hyphens and apostrophes");
         }
 
         [TestMethod]
         public void ShouldReturnValidationErrorIfDefaultValuesareNull()
         {
-            message = CreateNewProfileMessage(null, ProfileConstants.Firstname, DateTime.Now.AddYears(-25));
+            message = CreateNewProfileMessage(null, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
             var lstErrors = ValidateModel(message);
-            lstErrors.Should().HaveCount(2);
+            lstErrors.Should().HaveCount(1);
             lstErrors[0].ErrorMessage.Should().StartWith("Surname is required");
+        }
+
+
+        [TestMethod]
+        public void ShouldReturnNoValidationErrorIfNameIsValid()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        [TestMethod]
+        public void ShouldReturnValidationErrorIfDisabiliyyStatusCodeNotValid()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, "@", "InvalidCode");
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(1);
+            lstErrors[0].ErrorMessage.Should().StartWith("Invalid self assessed disability code");
         }
 
         public IList<ValidationResult> ValidateModel(object model)
@@ -162,7 +180,75 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             return validationResults;
         }
 
+        #region EmailAddressTests
+
+        [TestMethod]
+        public void ShouldReturnNoValidationErrorIfEmailIsEmpty()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        public void ShouldReturnNoValidationErrorIfEmailIsNull()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), "", ProfileConstants.Profiletype);
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        [TestMethod]
+        public void ShouldReturnValidationErrorIfEmailLenghtExceedsMax()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname,
+                ProfileConstants.Birthdate, ProfileConstants.Emailaddressmax256 + ProfileConstants.RandomString(100), ProfileConstants.Profiletype);
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(1);
+            lstErrors[0].ErrorMessage.Should().StartWith("Email address cannot have more than 256 characters");
+        }
+
+        [TestMethod]
+        public void ShouldReturnNoErrorPhoneNumberisNull()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname,
+                ProfileConstants.Birthdate, "", ProfileConstants.Profiletype);
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        #endregion
+
+        #region Gender
+
+        [TestMethod]
+        public void DoNothingWhenGenderIsValid()
+        {
+            message = GetValidMessage();
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        [TestMethod]
+        public void ShowValidationExceptionWhenGenderIsInvalid()
+        {
+            message = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype, null, null, null, "mq");
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(1);
+            lstErrors[0].ErrorMessage.Should().StartWith("Invalid gender code");
+        }
+
+        #endregion
+
         #region Autovalidator
+
+        [TestMethod]
+        public void SetNullForManditoryProfileFiled() //where T : ProfileMessage, new()
+        {
+            //ProfileMessage result = CreateNewProfileMessage(ProfileConstants.Surname, ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
+            //Tuple<int, string, Boolean> length , variable type and is mandatory 
+            SetNullForManditoryFiled(message, profileFieldDefinition);
+        }
+
 
         private void SetNullForManditoryFiled<T>(T result, Dictionary<string, Tuple<int, string, bool>> fieldDefinition) //where T : ProfileMessage, new()
         {
@@ -295,6 +381,58 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
 
         #endregion
 
+        #region CountryofBirth
+
+        [TestMethod]
+        public void DoNothingWhenCountryOfBirthIsValid()
+        {
+            message = message = CreateNewProfileMessage("Bob", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null, ProfileConstants.Profiletype);
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        #endregion
+
+        #region Language
+
+        [TestMethod]
+        public void DoNothingWhenLanguageIsValid()
+        {
+            message = message = CreateNewProfileMessage("Bob", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null,
+                ProfileConstants.Profiletype,
+                null, null, null,
+                null, "X", null, "111");
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        #endregion
+
+
+        #region USI
+
+        [TestMethod]
+        public void DoNothingWhenUSIIsNull()
+        {
+            message = message = CreateNewProfileMessage("Bob", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null,
+                ProfileConstants.Profiletype,
+                null, null, null,
+                null, "X", null, "");
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        [TestMethod]
+        public void DoNothingWhenUSIIsNotNull()
+        {
+            message = message = CreateNewProfileMessage("Bob", ProfileConstants.Firstname, DateTime.Now.AddYears(-25), null,
+                ProfileConstants.Profiletype,
+                null, null, "X", null, "", "Test");
+            var lstErrors = ValidateModel(message);
+            lstErrors.Should().HaveCount(0);
+        }
+
+        #endregion
     }
 
     #endregion
