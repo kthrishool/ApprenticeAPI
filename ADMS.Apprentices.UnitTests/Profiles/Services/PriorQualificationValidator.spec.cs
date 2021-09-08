@@ -41,81 +41,84 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.PriorQualifications.Add(qualification);
             profile.BirthDate = ProfileConstants.Birthdate;
 
+            Container.GetMock<IReferenceDataValidator>()
+                .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<PriorQualification>()))
+                .ReturnsAsync(() => new ValidationExceptionBuilder());
         }
 
         [TestMethod]
-        public void NoExceptionIfStartDateIsNull()
+        public async Task NoExceptionIfStartDateIsNull()
         {
             qualification.StartDate = null;
-            ValidationExceptionBuilder eb = ClassUnderTest.ValidatePriorQualification(qualification, profile);
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
             eb.HasExceptions().Should().BeFalse();
         }
 
         [TestMethod]
-        public void NoExceptionIfEndDateIsNull()
+        public async Task NoExceptionIfEndDateIsNull()
         {
             qualification.EndDate = null;
-            ValidationExceptionBuilder eb = ClassUnderTest.ValidatePriorQualification(qualification, profile);
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
             eb.HasExceptions().Should().BeFalse();
         }
 
         [TestMethod]
-        public void NoExceptionIfStartAndEndDateIsNull()
+        public async Task NoExceptionIfStartAndEndDateIsNull()
         {
             qualification.EndDate = null;
             qualification.StartDate = null;
-            ValidationExceptionBuilder eb = ClassUnderTest.ValidatePriorQualification(qualification, profile);
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
             eb.HasExceptions().Should().BeFalse();
         }
 
         [TestMethod]
-        public void NoExceptionIfAnzscoMissing()
+        public async Task NoExceptionIfAnzscoMissing()
         {
             qualification.QualificationANZSCOCode = null;
-            ValidationExceptionBuilder eb = ClassUnderTest.ValidatePriorQualification(qualification, profile);
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
             eb.HasExceptions().Should().BeFalse();
         }
 
         [TestMethod]
-        public void NoExceptionIfLevelMissing()
+        public async Task NoExceptionIfLevelMissing()
         {
             qualification.QualificationLevel = null;
-            ValidationExceptionBuilder eb = ClassUnderTest.ValidatePriorQualification(qualification, profile);
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
             eb.HasExceptions().Should().BeFalse();
         }
 
         [TestMethod]
-        public void NoExceptionIfManuallyEntered()
+        public async Task NoExceptionIfManuallyEntered()
         {
             qualification.QualificationManualReasonCode = PriorQualification.ManuallyEnteredCode;
-            ValidationExceptionBuilder eb = ClassUnderTest.ValidatePriorQualification(qualification, profile);
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
             eb.HasExceptions().Should().BeFalse();
         }
 
         [TestMethod]
-        public void ErrorsIfManualReasonCodeNotValid()
+        public async Task ErrorsIfManualReasonCodeNotValid()
         {
             // we only accept a single "MANUAL" code; all other codes are for legacy migrated data only
             qualification.QualificationManualReasonCode = "INVALID";
-            ValidationExceptionBuilder eb = ClassUnderTest.ValidatePriorQualification(qualification, profile);
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
             eb.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidQualificationManualReasonCode);
         }
 
         [TestMethod]
-        public void ErrorsIfManuallyEnteredAndAnzscoMissing()
+        public async Task ErrorsIfManuallyEnteredAndAnzscoMissing()
         {
             qualification.QualificationManualReasonCode = PriorQualification.ManuallyEnteredCode;
             qualification.QualificationANZSCOCode = null;
-            ValidationExceptionBuilder eb = ClassUnderTest.ValidatePriorQualification(qualification, profile);
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
             eb.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidPriorQualificationMissingAnzscoCode);
         }
 
         [TestMethod]
-        public void ErrorsIfManuallyEnteredAndLevelMissing()
+        public async Task ErrorsIfManuallyEnteredAndLevelMissing()
         {
             qualification.QualificationManualReasonCode = PriorQualification.ManuallyEnteredCode;
             qualification.QualificationLevel = null;
-            ValidationExceptionBuilder eb = ClassUnderTest.ValidatePriorQualification(qualification, profile);
+            ValidationExceptionBuilder eb = await ClassUnderTest.ValidatePriorQualificationAsync(qualification, profile);
             eb.GetValidationExceptions().Should().Contain(ValidationExceptionType.InvalidPriorQualificationMissingLevelCode);
         }
 
@@ -147,7 +150,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.StartDate = new DateTime(2020, 1, 2);
             qualification.EndDate = new DateTime(2020, 1, 1);
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking(c => (c.ValidatePriorQualification(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -158,7 +161,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.PriorQualifications.Clear();
             qualification.StartDate = DateTime.Now.AddDays(+1);
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking( c => (c.ValidatePriorQualification(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -168,7 +171,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.PriorQualifications.Clear();
             qualification.EndDate = DateTime.Now.AddDays(+1);
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking( c => (c.ValidatePriorQualification(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -179,7 +182,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.StartDate = DateTime.Now.AddDays(+1);
             qualification.EndDate = DateTime.Now.AddDays(+1);
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking( c => (c.ValidatePriorQualification(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -189,7 +192,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             profile.PriorQualifications.Clear();
             qualification.StartDate = ProfileConstants.Birthdate.AddYears(11);
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking( c => (c.ValidatePriorQualification(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -200,7 +203,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.StartDate = null;
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(11);
             profile.PriorQualifications.Add(qualification);
-            ClassUnderTest.Invoking( c => (c.ValidatePriorQualification(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -212,8 +215,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(11);
 
             profile.PriorQualifications.Add(qualification);
-            var b = ClassUnderTest.Invoking( c => (c.ValidatePriorQualification(qualification, profile)));
-            ClassUnderTest.Invoking( c => (c.ValidatePriorQualification(qualification, profile)).ThrowAnyExceptions())
+            var b = ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)));
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().Throw<AdmsValidationException>();
         }
 
@@ -225,7 +228,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(14);
             profile.PriorQualifications.Add(qualification);
 
-            ClassUnderTest.Invoking( c => (c.ValidatePriorQualification(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
 
@@ -236,7 +239,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
             qualification.EndDate = ProfileConstants.Birthdate.AddYears(14);
             profile.PriorQualifications.Add(qualification);
 
-            ClassUnderTest.Invoking( c => (c.ValidatePriorQualification(qualification, profile)).ThrowAnyExceptions())
+            ClassUnderTest.Invoking(async c => (await c.ValidatePriorQualificationAsync(qualification, profile)).ThrowAnyExceptions())
                 .Should().NotThrow();
         }
     }
@@ -279,7 +282,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 TrainingContractId = 100,
                 ClientId = ProfileConstants.Id
             };
-            
+
+            Container.GetMock<IReferenceDataValidator>()
+                .Setup(r => r.ValidatePriorQualificationsAsync(It.IsAny<PriorQualification>()))
+                .ReturnsAsync(() => new ValidationExceptionBuilder());
         }
     }
 

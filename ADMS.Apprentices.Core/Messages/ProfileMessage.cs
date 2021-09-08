@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using AdmsAttribute =  Adms.Shared.Attributes;
 
 namespace ADMS.Apprentices.Core.Messages
 {
@@ -8,44 +7,44 @@ namespace ADMS.Apprentices.Core.Messages
     {
         [Required(ErrorMessage = "Surname is required")]
         [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Surname must contain only letters, spaces, hyphens and apostrophes")]
-        [AdmsAttribute.MaxLength(50)]
+        [MaxLength(50, ErrorMessage = "Surname cannot have more than 50 characters")]
         public string Surname { get; init; }
 
         [Required(ErrorMessage = "First name is required")]
-        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "First name must contain only letters, spaces, hyphens and apostrophes")]        
-        [AdmsAttribute.MaxLength(50)]
+        [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "First name must contain only letters, spaces, hyphens and apostrophes")]
+        [MaxLength(50, ErrorMessage = "First name cannot have more than 50 characters")]
         public string FirstName { get; init; }
 
         [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Other names must contain only letters, spaces, hyphens and apostrophes")]
-        [AdmsAttribute.MaxLength(50)]
+        [MaxLength(50, ErrorMessage = "Other names cannot have more than 50 characters")]
         public string OtherNames { get; init; }
 
         [RegularExpression("^(?i)[a-z-' ]+$", ErrorMessage = "Preferred name must contain only letters, spaces, hyphens and apostrophes")]
-        [AdmsAttribute.MaxLength(50)]
+        [MaxLength(50, ErrorMessage = "Preferred name cannot have more than 50 characters")]
         public string PreferredName { get; init; }
 
         [Required(ErrorMessage = "Birth date is required")]
         public DateTime? BirthDate { get; init; }
 
         [Display(Name = "Email address")]
-        [AdmsAttribute.Email(256)]
+        [MaxLength(256, ErrorMessage = "Email address cannot have more than 256 characters")]
         public string EmailAddress { get; init; }
 
-        [Display(Name = "Profile Type")]        
+        [Display(Name = "Profile Type")]
+        [MaxLength(10, ErrorMessage = "Profile type cannot have more than 10 characters")]
         [Required(ErrorMessage = "Profile Type is required")]
-        [AdmsAttribute.ReferenceCode(AdmsAttribute.ReferenceCodeType.APPR)]
         public string ProfileType { get; init; }
 
-        [AdmsAttribute.PhoneNumberInternationalPrefix]
+        [Adms.Shared.Attributes.PhoneNumberInternationalPrefix]
         public string Phone1InternationalPrefix { get; init; }
 
-        [AdmsAttribute.PhoneNumber]
+        [Adms.Shared.Attributes.PhoneNumber]
         public string Phone1 { get; init; }
         
-        [AdmsAttribute.PhoneNumberInternationalPrefix]
+        [Adms.Shared.Attributes.PhoneNumberInternationalPrefix]
         public string Phone2InternationalPrefix { get; init; }
         
-        [AdmsAttribute.PhoneNumber]
+        [Adms.Shared.Attributes.PhoneNumber]
         public string Phone2 { get; init; }
 
         [Display(Name = "Residential Address")]
@@ -54,28 +53,28 @@ namespace ADMS.Apprentices.Core.Messages
         [Display(Name = "Postal Address")]
         public ProfileAddressMessage PostalAddress { get; init; }
 
-        [AdmsAttribute.ReferenceCode(AdmsAttribute.ReferenceCodeType.INDS)]
+        [MaxLength(10, ErrorMessage = "Indigenous status code cannot have more than 10 characters")]
         public string IndigenousStatusCode { get; init; }
 
-        [AdmsAttribute.ReferenceCode(AdmsAttribute.ReferenceCodeType.YSNO)]
+        [RegularExpression("[@NYny]", ErrorMessage = "Invalid self assessed disability code")]
         public string SelfAssessedDisabilityCode { get; init; }
 
-        [AdmsAttribute.ReferenceCode(AdmsAttribute.ReferenceCodeType.CITZ)]
+        [MaxLength(10, ErrorMessage = "Citizenship code cannot have more than 10 characters")]
         public string CitizenshipCode { get; init; }
 
         [Display(Name = "Gender")]
-        [AdmsAttribute.ReferenceCode(AdmsAttribute.ReferenceCodeType.GNDR)]
+        [RegularExpression("[MFXmfx]", ErrorMessage = "Invalid gender code")]
         public String GenderCode { get; init; }
 
         [Display(Name = "InterpretorRequired")]
         public bool? InterpretorRequiredFlag { get; init; }
 
         [Display(Name = "CountryOfBirthCode")]
-        [AdmsAttribute.ReferenceCodeAttribute(AdmsAttribute.ReferenceCodeType.CNTY)]
+        [MaxLength(10, ErrorMessage = "Country of birth code cannot have more than 10 characters")]
         public string CountryOfBirthCode { get; init; }
 
         [Display(Name = "LanguageCode")]
-        [AdmsAttribute.ReferenceCode(AdmsAttribute.ReferenceCodeType.LANG)]
+        [MaxLength(10, ErrorMessage = "Language code cannot have more than 10 characters")]
         public string LanguageCode { get; init; }
 
         [Display(Name = "PreferredContactTypeCode")]
@@ -83,7 +82,7 @@ namespace ADMS.Apprentices.Core.Messages
         public string PreferredContactTypeCode { get; init; }
 
         [Display(Name = "HighestSchoolLevelCode")]
-        [AdmsAttribute.ReferenceCode(AdmsAttribute.ReferenceCodeType.SLVL)]
+        [MaxLength(10, ErrorMessage = "Highest school level code cannot have more than 10 characters")]
         public string HighestSchoolLevelCode { get; init; }
 
         public DateTime? LeftSchoolDate { get; init; }
@@ -94,7 +93,7 @@ namespace ADMS.Apprentices.Core.Messages
         [Display(Name = "Apprentice USI")]
         public string USI { get; init; }
 
-        [AdmsAttribute.ReferenceCode(AdmsAttribute.ReferenceCodeType.USIE)]
+        [MaxLength(10, ErrorMessage = "Reason code for not providing USI cannot have more than 10 characters")]
         public string NotProvidingUSIReasonCode { get; init; }
     }
 }

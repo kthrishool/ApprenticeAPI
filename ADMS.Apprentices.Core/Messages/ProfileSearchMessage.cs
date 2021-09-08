@@ -15,8 +15,7 @@ namespace ADMS.Apprentices.Core.Messages
         public string EmailAddress { get; init; }
 
         public string USI { get; init; }
-        
-        [Adms.Shared.Attributes.PhoneNumber]
+
         public string Phonenumber { get; init; }
 
         public string Address { get; init; }
