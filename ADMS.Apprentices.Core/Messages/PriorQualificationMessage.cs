@@ -12,10 +12,10 @@ namespace ADMS.Apprentices.Core.Messages
         [MaxLength(200, ErrorMessage = "Qualification description cannot exceed 200 characters in length")]
         public string QualificationDescription { get; init; }
 
-        [Adms.Shared.Attributes.ReferenceCode(Adms.Shared.Attributes.ReferenceCodeType.QLFL)]
+        [MaxLength(10, ErrorMessage = "Qualification level cannot exceed 10 characters in length")]
         public string QualificationLevel { get; init; }
 
-        [Adms.Shared.Attributes.ReferenceCode(Adms.Shared.Attributes.ReferenceCodeType.ANZS)]
+        [MaxLength(10, ErrorMessage = "ANZSCO code cannot exceed 10 characters in length")]
         public string QualificationANZSCOCode { get; init; }
 
         [Adms.Shared.Attributes.MaxLength(10, "Qualification manual reason code")]

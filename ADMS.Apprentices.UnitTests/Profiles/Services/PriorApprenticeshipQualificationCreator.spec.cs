@@ -59,8 +59,8 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Services
                 .Setup(s => s.GetAsync<Profile>(apprenticeId, true))
                 .ReturnsAsync(profile);
             Container.GetMock<IPriorApprenticeshipQualificationValidator>()
-                .Setup(s => s.Validate(It.IsAny<PriorApprenticeshipQualification>(), It.IsAny<Profile>()))
-                .Returns(new ValidationExceptionBuilder());
+                .Setup(s => s.ValidateAsync(It.IsAny<PriorApprenticeshipQualification>(), It.IsAny<Profile>()))
+                .ReturnsAsync(new ValidationExceptionBuilder());
         }
 
         [TestMethod]

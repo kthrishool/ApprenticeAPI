@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using Adms.Shared.Helpers;
 using ADMS.Apprentices.Core;
 using ADMS.Apprentices.Core.HttpClients.ReferenceDataApi;
 using ADMS.Apprentices.Core.HttpClients.USI;
@@ -31,11 +30,6 @@ namespace ADMS.Apprentices.Api.HttpClients
             services
                 .AddHttpClient("referenceData", c => { c.BaseAddress = new Uri(settings.ReferenceDataEndpointBaseUrl); })
                 .AddTypedClient(RestService.For<IReferenceDataClient>)
-                .AddHttpMessageHandler<ApiClientDelegatingHandler>();
-
-            services
-                .AddHttpClient("reference-data-cache", c => { c.BaseAddress = new Uri(settings.ReferenceDataEndpointBaseUrl); })
-                .AddTypedClient(RestService.For<IReferenceCodeCacheClient>)
                 .AddHttpMessageHandler<ApiClientDelegatingHandler>();
 
             services

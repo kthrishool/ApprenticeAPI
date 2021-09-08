@@ -17,10 +17,10 @@ namespace ADMS.Apprentices.Core.Messages
         [Adms.Shared.Attributes.MaxLength(200, "Qualification description")]
         public string QualificationDescription { get; init; }
 
-        [Adms.Shared.Attributes.ReferenceCode(Adms.Shared.Attributes.ReferenceCodeType.QLFL)]
+        [Adms.Shared.Attributes.MaxLength(10, "Qualification level")]
         public string QualificationLevel { get; init; }
 
-        [Adms.Shared.Attributes.ReferenceCode(Adms.Shared.Attributes.ReferenceCodeType.ANZS)]
+        [Adms.Shared.Attributes.MaxLength(10, "ANZSCO code")]
         public string QualificationANZSCOCode { get; init; }
 
         [Adms.Shared.Attributes.MaxLength(10, "Qualification manual reason code")]
@@ -29,7 +29,6 @@ namespace ADMS.Apprentices.Core.Messages
         [Required]
         public DateTime? StartDate { get; init; }
 
-        [Adms.Shared.Attributes.ReferenceCode(Adms.Shared.Attributes.ReferenceCodeType.STAT)]
         public string StateCode { get; init; }
 
         [Required]
