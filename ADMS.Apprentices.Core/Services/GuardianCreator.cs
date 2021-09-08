@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Adms.Shared;
 using Adms.Shared.Exceptions;
+using Adms.Shared.Extensions;
 using ADMS.Apprentices.Core.Entities;
 using ADMS.Apprentices.Core.Exceptions;
 using ADMS.Apprentices.Core.Helpers;
@@ -31,9 +32,9 @@ namespace ADMS.Apprentices.Core.Services
                 Surname = message.Surname,
                 FirstName = message.FirstName,
                 EmailAddress = message.EmailAddress.Sanitise(),
-                HomePhoneNumber = message.HomePhoneNumber.Sanitise(),
-                Mobile = message.Mobile.Sanitise(),
-                WorkPhoneNumber = message.WorkPhoneNumber.Sanitise()
+                HomePhoneNumber = message.HomePhoneNumber.SanitiseForPhoneNumber(),
+                Mobile = message.Mobile.SanitiseForPhoneNumber(),
+                WorkPhoneNumber = message.WorkPhoneNumber.SanitiseForPhoneNumber(),
             };
             if (message.Address != null)
             {
