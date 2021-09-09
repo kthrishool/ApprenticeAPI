@@ -31,6 +31,22 @@ stages:
       buildQualityCheckWarnings: true
       buildQualityCheckCodeCoverage: true
 
+  # uncomment this section to run any appcmd commands
+  - stage: RestartAppPool
+    displayName: Start app pool
+    jobs:
+    - deployment: 
+      environment:
+        name: Backend_Test
+        resourceType: VirtualMachine
+      strategy:
+        runOnce:
+          deploy: 
+            steps:
+              - task: CmdLine@2
+                displayName: "Start app pool"
+                inputs:
+                  script: 'C:\Windows\system32\inetsrv\appcmd.exe start apppool "apprentice"'
   - stage: BuildDatabase
     dependsOn: BuildApplication
     displayName: Build Database
