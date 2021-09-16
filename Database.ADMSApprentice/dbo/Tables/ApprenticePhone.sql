@@ -23,3 +23,6 @@ CREATE NONCLUSTERED INDEX [IX_ApprenticePhone_ApprenticeId]
 GO
 CREATE NONCLUSTERED INDEX [IX_ApprenticePhone_PhoneNumber]
     ON [dbo].[ApprenticePhone]([PhoneNumber] ASC) WITH (FILLFACTOR = 90);
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UIX_ApprenticePhone_ApprenticeIdPhoneTypeCode]
+    ON [dbo].[ApprenticePhone]([ApprenticeId] ASC, [PhoneTypeCode] ASC);
