@@ -85,8 +85,6 @@ AS
 			,@Iteration tinyint = 1   
 			,@GenderCodeFilter	  varchar(10) = ''
 			,@BirthYearFilter varchar(1000)   = ''
-			--,@AddressStateOnly bit = 0
-			--,@StateCode varchar(10)
 
 		IF @USI = '' AND @EmailAddress = '' AND @PhoneNumber = '' AND (@BirthDate IS NULL OR (@Surname = '' AND @FirstName = ''))
 			RAISERROR ('If USI, EmailAddres and PhoneNumber is not provided then BirthDate and a name must be provided.',16,1)
@@ -119,8 +117,10 @@ AS
 			,[BirthDate] DATE
 			,[PreferredName] VARCHAR(50)
 			,[EmailAddress] VARCHAR(320)
-			,[MobilePhoneNumber] VARCHAR(150)
-			,[OtherPhoneNumber] VARCHAR(150)
+			,[Phone1InternationalPrefix] VARCHAR(10)
+			,[Phone1] VARCHAR(15)
+			,[Phone2InternationalPrefix] VARCHAR(10)
+			,[Phone2] VARCHAR(15)
 			,[USI] VARCHAR(10)
 			,[AddressMatchFlag] BIT
 			,[ResidentialAddress] VARCHAR(350)
@@ -162,10 +162,6 @@ AS
 
 		DECLARE @NamesTable TABLE
 			([Name] VARCHAR(50))
-
-		--DECLARE @ResultNamesTable TABLE
-		--	([ApprenticeId] INT
-		--	,[Name] VARCHAR(50))
 
 		IF OBJECT_ID ('TEMPDB..#ResultNamesTable') IS NOT NULL
 			DROP TABLE #ResultNamesTable; 
@@ -252,8 +248,10 @@ AS
 		,[BirthDate]
 		,[PreferredName]
 		,[EmailAddress]
-		,[MobilePhoneNumber]
-		,[OtherPhoneNumber]
+		,[Phone1InternationalPrefix]
+		,[Phone1]
+		,[Phone2InternationalPrefix]
+		,[Phone2]
 		,[USI]
 		,QualitySortOrder
 		,SequenceNo
@@ -270,6 +268,8 @@ AS
 			,A.[BirthDate]
 			,A.[PreferredName]
 			,A.[EmailAddress]
+			,NULL
+			,NULL
 			,NULL
 			,NULL
 			,AU.[USI]
@@ -320,9 +320,6 @@ AS
 					END   
 				,@Names = LTRIM(RTRIM(@Names))
    
-			--SELECT @FTFilter   
-			--DECLARE @FTSearchResults TABLE ( [Key] int primary Key, [Rank] int, [SearchType] tinyint, Iteration tinyint )   
-
 			IF OBJECT_ID ('TEMPDB..#FTSearchResults') IS NOT NULL
 				DROP TABLE #FTSearchResults; 
 
@@ -366,9 +363,6 @@ AS
    
 			IF LEN(@FuzzyConsonantCriteria) = 0 SET @FuzzyConsonantCriteria = @TermCriteria   
    
-			--SET @CandidateRows = @MaxRows * 1000   
-			--select @TermCriteria, @CandidateRows
-
 			-- Search on word matches first   
 			INSERT INTO #FTSearchResults   
 			SELECT    
@@ -529,14 +523,12 @@ AS
 
 			UPDATE X
 			SET ScoreValue = ScoreValue +3
-				--,[SurnameMatch] = 1
 			FROM #InterimResults X
 			WHERE [NamesMatchFlag] = 1
 				AND REPLACE([Surname],' ','') LIKE '%'+REPLACE(@Names,' ','')+'%'
 
 			UPDATE X
 			SET ScoreValue = ScoreValue +3
-				--,[FirstNameMatch] = 1
 			FROM #InterimResults X
 			WHERE [NamesMatchFlag] = 1
 				AND REPLACE([FirstName],' ','') LIKE '%'+REPLACE(@Names,' ','')+'%'
@@ -584,66 +576,35 @@ AS
 			ON X.ApprenticeId = AA.ApprenticeId
 			AND AA.AddressTypeCode = 'RESD' 
 
-		--UPDATE X
-		--SET [PostalAddress] = CONCAT_WS(' ',AA.StreetAddress1,AA.StreetAddress2,AA.StreetAddress3,AA.Locality,AA.Postcode,AA.StateCode)
-		--	,[PostalStateCode] = AA.StateCode
-		--FROM #InterimResults X
-		--INNER JOIN dbo.ApprenticeAddress AA
-		--	ON X.ApprenticeId = AA.ApprenticeId
-		--	AND AA.AddressTypeCode = 'POST'
+		UPDATE X
+		SET [Phone1InternationalPrefix] = AP.[InternationalPrefix]
+			,[Phone1] = AP.[PhoneNumber]
+		FROM #InterimResults X
+		INNER JOIN dbo.ApprenticePhone AP
+			ON X.ApprenticeId = AP.ApprenticeId
+			AND AP.PhoneTypeCode = 'PHONE1';
 
 		UPDATE X
-		SET MobilePhoneNumber = (SELECT LEFT( STRING_AGG (PhoneNumber,', ') WITHIN GROUP (ORDER BY ApprenticePhoneId DESC),100)
-							FROM dbo.ApprenticePhone AP
-							WHERE ApprenticePhoneId IN (SELECT TOP 10 ApprenticePhoneId 
-														FROM dbo.ApprenticePhone 
-														WHERE PhoneTypeCode = 'MOBILE' 
-															AND ApprenticeId = X.ApprenticeId 
-														ORDER BY ApprenticePhoneId DESC)
-							GROUP BY ApprenticeId)
+		SET [Phone2InternationalPrefix] = AP.[InternationalPrefix]
+			,[Phone2] = AP.[PhoneNumber]
 		FROM #InterimResults X
-
-		UPDATE X
-		SET OtherPhoneNumber = (SELECT LEFT( STRING_AGG (PhoneNumber,', ') WITHIN GROUP (ORDER BY ApprenticePhoneId DESC),100)
-							FROM dbo.ApprenticePhone AP
-							WHERE ApprenticePhoneId IN (SELECT TOP 10 ApprenticePhoneId 
-														FROM dbo.ApprenticePhone 
-														WHERE PhoneTypeCode IN ('OTHER','LANDLINE') 
-															AND ApprenticeId = X.ApprenticeId 
-														ORDER BY ApprenticePhoneId DESC)
-							GROUP BY ApprenticeId)
-		FROM #InterimResults X
-
-		--UPDATE X
-		--SET MobilePhoneNumber = AP1.PhoneNumber
-		--	,OtherPhoneNumber = AP2.PhoneNumber
-		--FROM #InterimResults X
-		--LEFT JOIN  [dbo].[ApprenticePhone] AP1
-		--	ON AP1.ApprenticePhoneId = (SELECT TOP 1 ApprenticePhoneId
-		--								FROM [ADMSApprentice].[dbo].[ApprenticePhone] AP3
-		--								WHERE X.ApprenticeId = AP3.ApprenticeId
-		--									AND AP3.PhoneTypeCode = 'MOBILE'
-		--								ORDER BY AP3.ApprenticePhoneId DESC)
-		--LEFT JOIN  [dbo].[ApprenticePhone] AP2
-		--	ON AP2.ApprenticePhoneId = (SELECT TOP 1 ApprenticePhoneId
-		--								FROM [ADMSApprentice].[dbo].[ApprenticePhone] AP4
-		--								WHERE X.ApprenticeId = AP4.ApprenticeId
-		--									AND AP4.PhoneTypeCode IN ('OTHER','LANDLINE')
-		--								ORDER BY AP4.ApprenticePhoneId DESC)
+		INNER JOIN dbo.ApprenticePhone AP
+			ON X.ApprenticeId = AP.ApprenticeId
+			AND AP.PhoneTypeCode = 'PHONE2';
 
 		SELECT TOP (@MaxRows)   
 			Results.[ApprenticeId]   
-			--,Results.[ProfileTypeCode]   
 			,Results.[FirstName]   
 			,Results.[OtherNames] 
 			,Results.[Surname]   
 			,Results.[BirthDate]
 			,Results.[EmailAddress]
 			,Results.USI
-			,Results.MobilePhoneNumber
-			,Results.OtherPhoneNumber
+			,Results.Phone1InternationalPrefix
+			,Results.Phone1
+			,Results.Phone2InternationalPrefix
+			,Results.Phone2
 			,Results.ResidentialAddress
---			,Results.PostalAddress
 			,ScoreValue
 			,CAST(ISNULL([USIMatch],0) AS BIT) AS [USIMatch]
 			,CAST(ISNULL([PhoneNumberMatch],0) AS BIT) AS [PhoneNumberMatch]

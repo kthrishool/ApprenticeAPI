@@ -11,8 +11,10 @@ namespace ADMS.Apprentices.Core.Models
         public DateTime BirthDate { get; init; }
         public string EmailAddress { get; init; }
         public string USI { get; init; }
-        public string MobilePhoneNumber { get; init; }
-        public string OtherPhoneNumber { get; init; }
+        public string Phone1InternationalPrefix { get; init; }
+        public string Phone1 { get; init; }
+        public string Phone2InternationalPrefix { get; init; }
+        public string Phone2 { get; init; }
         public string ResidentialAddress { get; init; }
         public int ScoreValue { get; init; }
         public bool USIMatch { get; init; }
