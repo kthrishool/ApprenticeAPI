@@ -43,7 +43,7 @@ namespace ADMS.Apprentices.UnitTests.httpClients.ReferenceDataApi
             model.StartDate.Should().Be(Convert.ToDateTime("01-01-2021"));
             model.Code.Should().Be("01");
             model.Description.Should().Be("test Desc");
-            model.EndDate.Should().BeCloseTo(Convert.ToDateTime("01-01-2021"));
+            model.EndDate.Should().Be(Convert.ToDateTime("01-01-2021"));
         }
     }
 

@@ -10,20 +10,21 @@ using Adms.Shared.Database;
 using Adms.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Au.Gov.Infrastructure.EntityFramework.Services;
 
 namespace ADMS.Apprentices.Database
 {
     public class Repository : RepositoryBase, IApprenticeRepository
     {
-        private readonly IOptions<OurDatabaseSettings> ourDatabaseSettings;
 
-        public Repository(IOptions<OurDatabaseSettings> ourDatabaseSettings, IContextRetriever contextRetriever, IAuditEventHelper auditEventHelper)
-            : base(contextRetriever, auditEventHelper)
+        public Repository(
+            IContextRetriever contextRetriever,
+            IDbContextConfigurator dbContextConfigurator,
+            IAuditInformationUpdater auditInformationUpdater,
+            IAuditEventService auditEventService
+        ) : base(contextRetriever, dbContextConfigurator, auditInformationUpdater, auditEventService)
         {
-            this.ourDatabaseSettings = ourDatabaseSettings;
         }
-
-        protected override string DatabaseConnectionString => ourDatabaseSettings.Value.DatabaseConnectionString;
 
         public async Task<ICollection<ProfileSearchResultModel>> GetProfilesAsync(ProfileSearchMessage searchMessage)
         {

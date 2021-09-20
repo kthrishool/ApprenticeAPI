@@ -109,10 +109,10 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             model.FirstName.Should().Be(ProfileConstants.Surname);
             model.Surname.Should().Be(ProfileConstants.Firstname);
             model.OtherNames.Should().Be(ProfileConstants.Secondname);
-            model.BirthDate.Should().BeCloseTo(ProfileConstants.Birthdate);
+            model.BirthDate.Should().Be(ProfileConstants.Birthdate);
             model.EmailAddress.Should().Be(ProfileConstants.Emailaddress);
-            model.CreatedOn.Should().BeCloseTo(ProfileConstants.Createdon);
-            model.UpdatedOn.Should().BeCloseTo(ProfileConstants.Updatedon);
+            model.CreatedOn.Should().Be(ProfileConstants.Createdon);
+            model.UpdatedOn.Should().Be(ProfileConstants.Updatedon);
             model.CreatedBy.Should().Be(ProfileConstants.Createdby);
             model.UpdatedBy.Should().Be(ProfileConstants.Updatedby);
             model.PostalAddress.StreetAddress1.Should().Be(postal.StreetAddress1);

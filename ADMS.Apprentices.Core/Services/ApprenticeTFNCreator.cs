@@ -64,7 +64,7 @@ namespace ADMS.Apprentices.Core.Services
             if (tfnEntity != null)
             {
                 isolatedRepository.Insert(serviceBusEventHelper.GetServiceBusEvent(new { tfnEntity.ApprenticeId }, "TFNRecordingFailed"));
-                isolatedRepository.Save();
+                await isolatedRepository.SaveAsync();
 
                 throw AdmsValidationException.Create(ValidationExceptionType.TFNAlreadyExists);
             }

@@ -10,18 +10,23 @@ using Microsoft.Extensions.Options;
 
 namespace ADMS.Apprentices.Database
 {
-    public class TYIMSRepository : RepositoryBase, ITYIMSRepository
+    public class TYIMSRepository : DbContext, ITYIMSRepository
     {
         private readonly IOptions<OurDatabaseSettings> ourDatabaseSettings;
 
-        public TYIMSRepository(IOptions<OurDatabaseSettings> ourDatabaseSettings, IContextRetriever contextRetriever, IAuditEventHelper auditEventHelper)
-            : base(contextRetriever, auditEventHelper)
+        public TYIMSRepository(IOptions<OurDatabaseSettings> ourDatabaseSettings)
         {
             this.ourDatabaseSettings = ourDatabaseSettings;
         }
 
-        protected override string DatabaseConnectionString => ourDatabaseSettings.Value.TYIMSConnectionString;
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(ourDatabaseSettings.Value.TYIMSConnectionString);
+            }
+        }
 
         public async Task<Registration> GetCompletedRegistrationsByApprenticeIdAsync(int apprenticeId)
         {
@@ -32,7 +37,7 @@ namespace ADMS.Apprentices.Database
             return registrations.SingleOrDefault();
         }
 
-        protected override void ApplyMappings(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new RegistrationMapping());
         }

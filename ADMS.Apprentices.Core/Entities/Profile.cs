@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ADMS.Services.Infrastructure.Model.Interface;
 using Adms.Shared;
+using Au.Gov.Infrastructure.EntityFramework.Entities;
 
 namespace ADMS.Apprentices.Core.Entities
 {
-    public class Profile : IAmAnAggregateRoot<int>, IAuditableIdentifier, ITimestampEnabled
+    public class Profile : IAmAnAggregateRoot<int>, IAuditedIdentifier, ITimestampEntity
     {
         public int Id { get; set; }
         public string Surname { get; set; }
@@ -33,9 +34,9 @@ namespace ADMS.Apprentices.Core.Entities
         public string CustomerReferenceNumber { get; set; }
         public bool ActiveFlag { get; set; }
         public DateTime? InactiveDate { get; set; }
-        public DateTime? CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
-        public DateTime? UpdatedOn { get; set; }
+        public DateTime UpdatedOn { get; set; }
         public string UpdatedBy { get; set; }
         public byte[] Version { get; set; }
         public long AuditEventId { get; set; }

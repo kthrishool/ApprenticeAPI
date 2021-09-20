@@ -55,7 +55,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             model.FirstName.Should().Be(ProfileConstants.Surname);
             model.Surname.Should().Be(ProfileConstants.Firstname);
             model.OtherNames.Should().Be(ProfileConstants.Secondname);
-            model.BirthDate.Should().BeCloseTo(ProfileConstants.Birthdate);
+            model.BirthDate.Should().Be(ProfileConstants.Birthdate);
             model.EmailAddress.Should().Be(ProfileConstants.Emailaddress);            
             model.ProfileType.Should().Be(ProfileType.APPR.ToString());            
         }
@@ -115,7 +115,7 @@ namespace ADMS.Apprentices.UnitTests.Profiles.Models
             model.FirstName.Should().Be(ProfileConstants.Firstname);
             model.Surname.Should().Be(ProfileConstants.Surname);
             model.OtherNames.Should().Be(ProfileConstants.Secondname);
-            model.BirthDate.Should().BeCloseTo(ProfileConstants.Birthdate);
+            model.BirthDate.Should().Be(ProfileConstants.Birthdate);
             model.EmailAddress.Should().Be(ProfileConstants.Emailaddress);
             model.ProfileType.Should().Be(ProfileType.APPR.ToString());
         }
